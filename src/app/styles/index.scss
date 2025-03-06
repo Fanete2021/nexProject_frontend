@@ -1,0 +1,10 @@
+@forward "reset";
+@forward "fonts";
+
+* {
+  font-family: 'PTSans', sans-serif;
+}
+
+#app {
+  width: 100vw;
+}

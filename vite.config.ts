@@ -1,7 +1,27 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import svgr from 'vite-plugin-svgr';
+import path from 'path';
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    svgr({
+      include: "**/*.svg",
+      svgrOptions: {
+        exportType: "default",
+      }
+    }),
+  ],
+  css: {
+    modules: {
+      generateScopedName: "[name]__[local]___[hash:base64:5]",
+      hashPrefix: "prefix",
+    }
+  },
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "src")
+    }
+  }
 })
