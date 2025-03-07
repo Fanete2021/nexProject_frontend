@@ -15,10 +15,10 @@ const ThemeSwitcher = memo(({ className }: ThemeSwitcherProps) => {
       className={classNames('', [ className ])}
       onClick={toggleTheme}
     >
-      {theme === Theme.MINIMALISTIC_LIGHT
-        ? <SvgIcon iconName={icons.MOON} />
-        : <SvgIcon iconName={icons.SUN} />
-      }
+      <SvgIcon
+        iconName={theme === Theme.MINIMALISTIC_LIGHT ? icons.MOON : icons.SUN}
+        important={true}
+      />
     </button>
   );
 });

@@ -11,7 +11,13 @@ const AuthPage = () => {
       </div>
 
       <div className={styles.container}>
-        <SvgIcon className={styles.logo} iconName={icons.LOGO} />
+        <SvgIcon
+          className={styles.logo}
+          iconName={icons.LOGO}
+          important
+          applyStroke
+          applyFill={false}
+        />
 
         <div className={styles.title}>
           Вход
