@@ -2,11 +2,14 @@ import { createRoot } from 'react-dom/client'
 import App from './app/App.tsx'
 import { BrowserRouter } from "react-router-dom";
 import { StoreProvider } from "@/app/providers/store-provider";
+import { ThemeProvider } from "@/app/providers/theme-provider";
 
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
     <StoreProvider>
-      <App />
+      <ThemeProvider>
+        <App />
+      </ThemeProvider>
     </StoreProvider>
   </BrowserRouter>,
 )

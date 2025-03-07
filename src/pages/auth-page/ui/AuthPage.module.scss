@@ -1,13 +1,22 @@
 .AuthPage {
+  position: relative;
 }
 
 .container {
-  margin-top: 45px;
+  padding-top: 45px;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.settings {
+  position: absolute;
+  display: flex;
+  gap: 30px;
+  right: 15px;
+  top: 15px;
 }
 
 .logo {
