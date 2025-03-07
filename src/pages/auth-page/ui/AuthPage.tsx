@@ -1,12 +1,17 @@
 import {icons, SvgIcon} from "@/shared/ui";
 import styles from './AuthPage.module.scss';
- import {LoginForm} from "@/features/auth";
+import {LoginForm} from "@/features/auth";
 import {ThemeSwitcher} from "@/widgets/ThemeSwitcher";
+import {useTranslation} from "react-i18next";
+import {LanguageSwitcher} from "@/widgets/LanguageSwitcher";
 
 const AuthPage = () => {
+  const { t } = useTranslation();
+
   return (
     <div className={styles.AuthPage}>
       <div className={styles.settings}>
+        <LanguageSwitcher />
         <ThemeSwitcher />
       </div>
 
@@ -17,10 +22,11 @@ const AuthPage = () => {
           important
           applyStroke
           applyFill={false}
+          applyHover={false}
         />
 
         <div className={styles.title}>
-          Вход
+          {t('Вход')}
         </div>
 
         <LoginForm />

@@ -4,6 +4,7 @@ import {FormControl, InputAdornment, OutlinedInput} from "@mui/material";
 import {useAppDispatch} from "@/shared/lib/hooks/useAppDispatch.ts";
 import styles from './LoginForm.module.scss';
 import {login} from "@/features/auth/ui/model/service/login.ts";
+import {useTranslation} from "react-i18next";
 
 const validationSchema = yup.object({
   phoneNumberOrMail: yup.string().required('Почта или телефон обязателены'),
@@ -12,6 +13,7 @@ const validationSchema = yup.object({
 
 const LoginForm = () => {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   const formik = useFormik({
     initialValues: {
@@ -39,7 +41,7 @@ const LoginForm = () => {
         fullWidth
         className={styles.InputWrapper}
       >
-        <div className={styles.label}>Почта / телефон</div>
+        <div className={styles.label}>{t("Почта / телефон")}</div>
         <OutlinedInput
           endAdornment={
             <InputAdornment position="end">
@@ -47,7 +49,7 @@ const LoginForm = () => {
             </InputAdornment>
           }
           id="phoneNumberOrMail"
-          placeholder="Почта или телефон"
+          placeholder={t("Почта или телефон")}
           fullWidth
           name="phoneNumberOrMail"
           classes={{
@@ -62,7 +64,7 @@ const LoginForm = () => {
         fullWidth
         className={styles.InputWrapper}
       >
-        <div className={styles.label}>Пароль</div>
+        <div className={styles.label}>{t("Пароль")}</div>
         <OutlinedInput
           endAdornment={
             <InputAdornment position="end">
@@ -70,7 +72,7 @@ const LoginForm = () => {
             </InputAdornment>
           }
           id="password"
-          placeholder="Пароль"
+          placeholder={t("Пароль")}
           fullWidth
           name="password"
           classes={{
@@ -87,7 +89,7 @@ const LoginForm = () => {
         type={'submit'}
         onClick={onSubmit}
       >
-        Войти
+        {t("Войти")}
       </button>
     </form>
   );

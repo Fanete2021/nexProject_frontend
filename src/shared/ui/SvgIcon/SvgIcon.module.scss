@@ -13,3 +13,7 @@
 .applyImportantStroke {
   stroke: var(--icon-important-color);
 }
+
+.applyHover:hover {
+  fill: var(--icon-hover-color);
+}

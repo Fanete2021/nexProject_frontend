@@ -2,6 +2,7 @@ import React, {memo} from 'react';
 import {Theme, useTheme} from "@/app/providers/theme-provider";
 import {classNames} from "@/shared/lib/utils/classNames.ts";
 import {icons, SvgIcon} from "@/shared/ui";
+import styles from "./ThemeSwitcher.module.scss";
 
 interface ThemeSwitcherProps {
   className?: string;
@@ -12,7 +13,7 @@ const ThemeSwitcher = memo(({ className }: ThemeSwitcherProps) => {
 
   return (
     <button
-      className={classNames('', [ className ])}
+      className={classNames(styles.iconWrapper, [ className ])}
       onClick={toggleTheme}
     >
       <SvgIcon

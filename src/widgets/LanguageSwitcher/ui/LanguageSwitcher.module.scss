@@ -1,0 +1,29 @@
+.iconWrapper {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popover {
+  box-shadow: none !important;
+  display: flex;
+  flex-direction: column;
+  padding: 2px;
+  gap: 10px;
+  background: none !important;
+  margin-top: 3px;
+}
+
+.flagWrapper {
+  width: 20px;
+  height: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.disabledFlag {
+  opacity: 50%;
+}

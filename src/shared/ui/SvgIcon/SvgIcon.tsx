@@ -11,6 +11,7 @@ export interface SvgIconProps {
   important?: boolean;
   applyFill?: boolean;
   applyStroke?: boolean;
+  applyHover?: boolean;
 }
 
 const SvgIcon: React.FC<SvgIconProps> = memo((props) => {
@@ -21,6 +22,7 @@ const SvgIcon: React.FC<SvgIconProps> = memo((props) => {
     important = false,
     applyFill = true,
     applyStroke = false,
+    applyHover = true,
   } = props;
   const { loading, Icon } = useDynamicSvgImport(iconName);
 
@@ -29,6 +31,7 @@ const SvgIcon: React.FC<SvgIconProps> = memo((props) => {
     [styles.applyStroke]: applyStroke && !important,
     [styles.applyImportantFill]: applyFill && important,
     [styles.applyImportantStroke]: applyStroke && important,
+    [styles.applyHover]: applyHover,
   };
 
   return (
