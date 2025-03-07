@@ -3,10 +3,14 @@ import { AuthPage } from "@/pages/auth-page/index.ts";
 import './styles/index.scss';
 import { Loader } from "@/shared/ui";
 import AppRouter from "./providers/router/AppRouter.tsx";
+import { useTheme } from "@/app/providers/theme-provider";
+import { classNames } from "@/shared/lib/utils/classNames.ts";
 
 const App = () => {
+  const { theme } = useTheme();
+
   return (
-    <div id="app">
+    <div className={classNames('app', [ theme ])}>
       <Suspense fallback={<Loader />}>
         <AppRouter />
       </Suspense>
