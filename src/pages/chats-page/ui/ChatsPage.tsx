@@ -2,7 +2,7 @@ import React from 'react';
 import { PageLayout } from '@/widgets/PageLayout';
 import { useTranslation } from 'react-i18next';
 
-const MainPage = () => {
+const ChatsPage = () => {
     const { t } = useTranslation();
 
     return (
@@ -14,4 +14,4 @@ const MainPage = () => {
     );
 };
 
-export default MainPage;
+export default ChatsPage;

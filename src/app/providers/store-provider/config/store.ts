@@ -5,9 +5,9 @@ import { NavigateOptions, To } from 'react-router-dom';
 import { $api } from '@/shared/api/api.ts';
 
 export function createReduxStore(
-  initialState?: StateSchema,
-  asyncReducers?: ReducersMapObject<StateSchema>,
-  navigate?: (to: To, options?: NavigateOptions) => void
+    initialState?: StateSchema,
+    asyncReducers?: ReducersMapObject<StateSchema>,
+    navigate?: (to: To, options?: NavigateOptions) => void
 ) {
     const rootReducers: ReducersMapObject<StateSchema> = {
         ...asyncReducers,
@@ -30,7 +30,8 @@ export function createReduxStore(
         })
     });
 
-    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     store.reducerManager = reducerManager;
 
     return store;
