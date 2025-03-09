@@ -2,9 +2,9 @@ import Loader from './Loader.tsx';
 import { LoaderProps } from './Loader.tsx';
 
 export {
-  Loader,
-}
+    Loader,
+};
 
 export type {
-  LoaderProps
-}
+    LoaderProps
+};

@@ -1,11 +1,11 @@
 import React from 'react';
 
 const MainPage = () => {
-  return (
-    <div>
+    return (
+        <div>
       Матвей гений!
-    </div>
-  );
+        </div>
+    );
 };
 
 export default MainPage;

@@ -1,6 +1,6 @@
-import { AnyAction, EnhancedStore, Reducer, ReducersMapObject } from "@reduxjs/toolkit";
-import { AxiosInstance } from "axios";
-import { NavigateOptions, To } from "react-router-dom";
+import { AnyAction, EnhancedStore, Reducer, ReducersMapObject } from '@reduxjs/toolkit';
+import { AxiosInstance } from 'axios';
+import { NavigateOptions, To } from 'react-router-dom';
 
 export interface StateSchema {
 }
