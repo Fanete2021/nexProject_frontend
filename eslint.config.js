@@ -23,10 +23,13 @@ export default [
         rules: {
             semi: ['error', 'always'],
             quotes: ['error', 'single'],
-            indent: ['error', 4],
+            indent: ['error', 4, { SwitchCase: 1 }],
             'react/react-in-jsx-scope': 'off',
             '@typescript-eslint/explicit-module-boundary-types': 'off',
-            '@typescript-eslint/no-unused-vars': 'warn',
+            '@typescript-eslint/no-unused-vars': 'off',
+            'no-unused-vars': 'off',
+            'object-curly-spacing': ['error', 'always'],
+            'max-len': ['error', { code: 120, ignoreComments: true }],
         },
         settings: {
             react: {

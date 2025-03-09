@@ -1,5 +1,5 @@
-import {LoginFormAsync} from "./ui/login-form/LoginForm.async.tsx";
+import { LoginFormAsync } from './ui/login-form/LoginForm.async.tsx';
 
 export {
-  LoginFormAsync as LoginForm
-}
+    LoginFormAsync as LoginForm
+};

@@ -3,13 +3,13 @@ import { AppDispatch, createReduxStore } from './config/store';
 import { StoreProvider } from './ui/StoreProvider.tsx';
 
 export {
-  StoreProvider,
-  createReduxStore,
-  StateSchema,
-  ReduxStoreWithManager,
-  ThunkConfig
+    StoreProvider,
+    createReduxStore,
+    StateSchema,
+    ReduxStoreWithManager,
+    ThunkConfig
 };
 
 export type {
-  AppDispatch
-}
+    AppDispatch
+};

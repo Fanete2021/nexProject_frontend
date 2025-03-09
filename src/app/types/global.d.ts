@@ -1,3 +1,6 @@
+import {AnyAction, AsyncThunkAction} from "@reduxjs/toolkit";
+import 'i18next';
+
 declare module '*.module.scss' {
   interface IClassNames {
     [className: string]: string
@@ -18,3 +21,11 @@ declare module '*.svg' {
 type DeepPartial<T> = T extends object ? {
   [P in keyof T]?: DeepPartial<T[P]>
 } : T;
+
+declare module 'redux' {
+  interface Dispatch<A extends AnyAction = AnyAction> {
+    <ReturnType = any, State = any, ExtraThunkArg = any>(
+      asyncAction: AsyncThunkAction<ReturnType, State, ExtraThunkArg>
+    ): any;
+  }
+}
