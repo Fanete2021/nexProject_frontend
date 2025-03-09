@@ -1,7 +1,35 @@
 .app_minimalistic_dark_theme {
   --bg-color: #000000;
   --text-color: #FFFFFF;
+  --line-color: #4D4D4D;
+  --error-text-color: #FF5252;
+  --success-text-color: #4CAF50;
+
   --icon-color: #B3B3B3;
-  --icon-important-color: #FFFFFF;
   --icon-hover-color: #808080;
+  --icon-important-color: #FFFFFF;
+
+  --input-bg-color: #1A1A1A;
+  --input-stroke-color: #333333;
+  --input-error-stroke-color: #D32F2F;
+  --input-text-color: #FFFFFF;
+  --input-placeholder-color: #808080;
+
+  --button-bg-color: #333333;
+  --button-bg-hover-color: #4D4D4D;
+  --button-text-color: #FFFFFF;
+  --button-text-disabled-color: #A0A0A0;
+
+  --link-text-color: #808080;
+  --link-text-hover-color: #FFFFFF;
+
+  --checkbox-stroke-color: #4D4D4D;
+  --checkbox-stroke-hover-color: #B3B3B3;
+  --checkbox-active-stroke-color: #808080;
+  --checkbox-bg-color: #1A1A1A;
+  --checkbox-bg-hover-color: #4D4D4D;
+  --checkbox-active-bg-color: #333333;
+
+  --sidebar-bg-color: #303030;
+  --sidebar-selected-link-bg-color: #393939;
 }
