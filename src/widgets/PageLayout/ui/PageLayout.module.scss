@@ -1,0 +1,15 @@
+.PageLayout {
+  display: flex;
+  position: relative;
+}
+
+.sidebar {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  top: 0;
+}
+
+.content {
+  margin-left: 90px;
+}

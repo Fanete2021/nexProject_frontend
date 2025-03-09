@@ -4,5 +4,15 @@ export enum icons {
   SUN = 'sun',
   LANGUAGE = 'language',
   RU = 'ru',
-  EN = 'en'
+  EN = 'en',
+  LOGOUT = 'logout',
+  CHANGES = 'changes',
+  SETTINGS = 'settings',
+  EMAIL = 'email',
+  NOTIFICATIONS = 'notifications',
+  DOCS = 'docs',
+  CALENDAR = 'calendar',
+  TEAMS = 'teams',
+  CHATS = 'chats',
+  MAIN = 'main'
 }
