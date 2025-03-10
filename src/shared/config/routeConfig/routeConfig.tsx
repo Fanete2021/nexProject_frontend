@@ -8,12 +8,14 @@ import { NotificationsPage } from '@/pages/notifications-page';
 import { EmailPage } from '@/pages/email-page';
 import { ChangesPage } from '@/pages/changes-page';
 import { DocsPage } from '@/pages/docs-page';
+import {RegistrationPage} from "@/pages/registration-page";
 
 export type AppRoutesProps = PathRouteProps & {
 };
 
 export enum AppRoutes {
   AUTH = 'auth',
+  REGISTRATION = 'registration',
   MAIN = 'main',
   CHATS = 'chats',
   TEAMS = 'teams',
@@ -26,6 +28,7 @@ export enum AppRoutes {
 
 export const RoutePath: Record<AppRoutes, string> = {
     [AppRoutes.AUTH]: '/',
+    [AppRoutes.REGISTRATION]: `/${AppRoutes.REGISTRATION}`,
     [AppRoutes.MAIN]: `/${AppRoutes.MAIN}`,
     [AppRoutes.CHATS]: `/${AppRoutes.CHATS}`,
     [AppRoutes.TEAMS]: `/${AppRoutes.TEAMS}`,
@@ -40,6 +43,10 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
     [AppRoutes.AUTH]: {
         path: `${RoutePath.auth}`,
         element: <AuthPage />,
+    },
+    [AppRoutes.REGISTRATION]: {
+        path: `${RoutePath.registration}`,
+        element: <RegistrationPage />,
     },
     [AppRoutes.MAIN]: {
         path: `${RoutePath.main}`,

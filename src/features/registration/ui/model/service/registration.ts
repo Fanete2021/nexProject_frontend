@@ -2,27 +2,29 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
 import { ThunkConfig } from '@/app/providers/store-provider';
 
-interface LoginProps {
-  phoneNumberOrMail: string;
-  password: string;
+interface RegistrationProps {
+    email: string;
+    username: string;
+    password: string;
+    confirmPassword: string;
 }
 
-export const login = createAsyncThunk<void, LoginProps, ThunkConfig<string>> (
-    'auth/login',
-    async (authData, thunkAPI) => {
+export const registration = createAsyncThunk<void, RegistrationProps, ThunkConfig<string>> (
+    'registration/registration',
+    async (registrationData, thunkAPI) => {
         const {
             extra,
             rejectWithValue
         } = thunkAPI;
 
         try {
-            const response = await extra.api.post('/auth/signin', authData);
+            const response = await extra.api.post('/auth/signup', registrationData);
 
             if (!response.data) {
                 throw new Error();
             }
 
-            extra.navigate?.(RoutePath.main);
+            extra.navigate?.(RoutePath.auth);
         } catch (e) {
             return rejectWithValue('error');
         }

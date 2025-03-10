@@ -1,14 +1,5 @@
-.AuthPage {
+.GuestPageLayout {
   position: relative;
-}
-
-.container {
-  padding-top: 45px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
 
 .settings {
@@ -19,8 +10,13 @@
   top: 15px;
 }
 
-.logo {
-
+.container {
+  padding-top: 45px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .title {
