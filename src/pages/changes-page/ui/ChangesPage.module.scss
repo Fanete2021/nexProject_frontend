@@ -1,0 +1,31 @@
+.title, .back {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.postsList {
+  margin-left: 20px;
+
+  .title {
+    text-decoration: underline;
+  }
+}
+
+.header {
+  display: flex;
+
+  .back {
+  }
+
+  .title {
+
+  }
+}
+
+.changesList {
+  margin-left: 40px;
+
+  .change {
+
+  }
+}
