@@ -1,0 +1,52 @@
+.CustomCheckbox {
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  font-size: 16px;
+  user-select: none;
+}
+
+.input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+
+  &:checked ~ .checkmark {
+    background-color: var(--checkbox-active-bg-color);
+    border-color: var(--checkbox-active-stroke-color);
+
+    .check {
+      display: block;
+    }
+  }
+}
+
+.checkmark {
+  position: relative;
+  height: 20px;
+  width: 20px;
+  background-color: var(--checkbox-bg-color);
+  border: 2px solid var(--checkbox-stroke-color);
+  border-radius: 6px;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:after {
+    display: none;
+  }
+
+  .check {
+    display: none;
+  }
+}
+
+.label {
+  font-size: 14px;
+  color: var(--text-color);
+  line-height: 18px;
+}
