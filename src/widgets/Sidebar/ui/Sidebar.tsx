@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import styles from './Sidebar.module.scss';
-import { icons, SvgIcon } from '@/shared/ui';
+import {icons, Logo, SvgIcon} from '@/shared/ui';
 import { SidebarItemsList } from '../model/items.ts';
 import { Link, useLocation } from 'react-router-dom';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
@@ -60,14 +60,7 @@ const Sidebar: React.FC<SidebarProps> = (props: SidebarProps) => {
             onMouseEnter={() => setExpanded(true)}
             onMouseLeave={() => setExpanded(false)}
         >
-            <SvgIcon 
-                iconName={icons.LOGO} 
-                applyHover={false} 
-                applyFill={false} 
-                applyStroke
-                important
-                className={styles.logo}
-            />
+            <Logo className={styles.logo}/>
 
             <div className={styles.linksWrapper}>
                 {links}
@@ -106,7 +99,7 @@ const Sidebar: React.FC<SidebarProps> = (props: SidebarProps) => {
                     }
                 </Link>
 
-                <div className={styles.linkWrapper}>
+                <Link to={RoutePath.auth} className={styles.linkWrapper}>
                     <SvgIcon
                         className={classNames(styles.icon,[styles.applyIconFill])}
                         iconName={icons.LOGOUT}
@@ -117,7 +110,7 @@ const Sidebar: React.FC<SidebarProps> = (props: SidebarProps) => {
                             {t('Выйти')}
                         </div>
                     }
-                </div>
+                </Link>
             </div>
         </div>
     );
