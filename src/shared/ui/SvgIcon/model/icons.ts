@@ -14,5 +14,8 @@ export enum icons {
   CALENDAR = 'calendar',
   TEAMS = 'teams',
   CHATS = 'chats',
-  MAIN = 'main'
+  MAIN = 'main',
+  PASSWORD = 'password',
+  PASSWORD_OFF = 'passwordOff',
+  CHECK = 'check'
 }

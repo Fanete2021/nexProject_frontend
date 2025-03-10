@@ -1,10 +1,14 @@
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { FormControl, InputAdornment, OutlinedInput } from '@mui/material';
+import { Checkbox, FormControl, FormControlLabel, InputAdornment, OutlinedInput } from '@mui/material';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import styles from './LoginForm.module.scss';
 import { login } from '@/features/auth/ui/model/service/login.ts';
 import { useTranslation } from 'react-i18next';
+import { CustomCheckbox, icons, SvgIcon } from '@/shared/ui';
+import { useState } from 'react';
+import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
+import { Link } from 'react-router-dom';
 
 const validationSchema = yup.object({
     phoneNumberOrMail: yup.string().required('Почта или телефон обязателены'),
@@ -14,6 +18,7 @@ const validationSchema = yup.object({
 const LoginForm = () => {
     const dispatch = useAppDispatch();
     const { t } = useTranslation();
+    const [showPassword, setShowPassword] = useState(false);
 
     const formik = useFormik({
         initialValues: {
@@ -35,6 +40,14 @@ const LoginForm = () => {
         formik.handleSubmit();
     };
 
+    const handleClickShowPassword = () => {
+        setShowPassword(!showPassword);
+    };
+
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+    };
+
     return (
         <form className={styles.form} onSubmit={onSubmit}>
             <FormControl
@@ -45,7 +58,12 @@ const LoginForm = () => {
                 <OutlinedInput
                     endAdornment={
                         <InputAdornment position="end">
-                            <></>
+                            <SvgIcon
+                                className={styles.emailIcon}
+                                iconName={icons.EMAIL}
+                                applyHover={false}
+                                important={false}
+                            />
                         </InputAdornment>
                     }
                     id="phoneNumberOrMail"
@@ -53,7 +71,9 @@ const LoginForm = () => {
                     fullWidth
                     name="phoneNumberOrMail"
                     classes={{
-                        root: styles.input
+                        root: styles.wrapperInput,
+                        notchedOutline: styles.notchedOutline,
+                        input: styles.input
                     }}
                     value={formik.values.phoneNumberOrMail}
                     onChange={formik.handleChange}
@@ -68,7 +88,13 @@ const LoginForm = () => {
                 <OutlinedInput
                     endAdornment={
                         <InputAdornment position="end">
-                            <></>
+                            <button type="button" onClick={handleClickShowPassword} className={styles.showPassword}>
+                                <SvgIcon
+                                    iconName={showPassword ? icons.PASSWORD : icons.PASSWORD_OFF}
+                                    applyHover={false}
+                                    important={false}
+                                />
+                            </button>
                         </InputAdornment>
                     }
                     id="password"
@@ -76,13 +102,25 @@ const LoginForm = () => {
                     fullWidth
                     name="password"
                     classes={{
-                        root: styles.input
+                        root: styles.wrapperInput,
+                        notchedOutline: styles.notchedOutline,
+                        input: styles.input,
                     }}
                     value={formik.values.password}
                     onChange={formik.handleChange}
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                 />
             </FormControl>
+
+            <div className={styles.rememberForgot}>
+                <CustomCheckbox 
+                    label={'Оставаться в системе'}
+                />
+
+                <Link to={RoutePath.registration} className={styles.forgot}>
+                    {t('Забыли пароль?')}
+                </Link>
+            </div>
 
             <button
                 className={styles.submit}

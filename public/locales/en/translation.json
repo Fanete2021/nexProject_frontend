@@ -14,13 +14,15 @@
   "Настройки": "Settings",
   "Изменения": "Changes",
   "Выйти": "Log out",
-  "Нет аккаунта?": "Нет аккаунта?",
+  "Нет аккаунта?": "Don't have an account?",
   "Создание аккаунта": "Create your account",
   "Уже есть аккаунт?": "Already have an account?",
   "Имя пользователя": "Username",
   "Подтверждение пароля": "Confirm password",
   "Повторите пароль": "Repeat password",
   "Создать": "Create",
+  "Забыли пароль?": "Forgot password?",
+  "Оставаться в системе": "Stay signed in",
 
 
 
