@@ -23,5 +23,13 @@ export default defineConfig({
         alias: {
             '@': path.resolve(__dirname, 'src')
         }
-    }
+    },
+    server: {
+        open: true,
+        allowedHosts: [
+            '.ngrok-free.app', // Разрешает все поддомены ngrok
+        ],
+        host: '0.0.0.0',
+        port: 5173,
+    },
 });
