@@ -3,6 +3,7 @@ import { icons } from './model/icons.ts';
 import React, { memo } from 'react';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import styles from './SvgIcon.module.scss';
+import { Tooltip } from '@mui/material';
 
 export interface SvgIconProps {
   iconName: icons;
@@ -37,7 +38,7 @@ const SvgIcon: React.FC<SvgIconProps> = memo((props) => {
     return (
         <>
             {Icon && (
-                <Icon className={classNames('', [className], mods)}/>
+                <Icon className={classNames('', [className], mods)} />
             )}
         </>
     );

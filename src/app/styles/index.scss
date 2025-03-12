@@ -2,6 +2,7 @@
 @forward "fonts";
 @forward "./themes/minimalisticDark";
 @forward "./themes/minimalisticLight";
+@forward "./variables/global";
 
 * {
   font-family: 'PTSans', sans-serif;
@@ -10,6 +11,7 @@
 .app {
   width: 100vw;
   height: 100vh;
+  min-height: 100vh;
   background: var(--bg-color);
   color: var(--text-color);
   transition: background-color 0.5s, color 0.5s;

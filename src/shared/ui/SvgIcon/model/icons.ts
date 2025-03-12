@@ -17,5 +17,6 @@ export enum icons {
   MAIN = 'main',
   PASSWORD = 'password',
   PASSWORD_OFF = 'passwordOff',
-  CHECK = 'check'
+  CHECK = 'check',
+  PHONE = 'phone'
 }

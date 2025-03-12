@@ -18,13 +18,9 @@ export const login = createAsyncThunk<void, LoginProps, ThunkConfig<string>> (
         try {
             const response = await extra.api.post('/auth/signin', authData);
 
-            if (!response.data) {
-                throw new Error();
-            }
-
             extra.navigate?.(RoutePath.main);
         } catch (e) {
-            return rejectWithValue('error');
+            return rejectWithValue(e.response.data.message);
         }
     }
 );
