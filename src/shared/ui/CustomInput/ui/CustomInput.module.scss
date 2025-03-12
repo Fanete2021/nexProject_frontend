@@ -1,0 +1,28 @@
+.wrapperInput {
+  border-radius: 12px !important;
+  background: var(--input-bg-color);
+  padding-right: 10px !important;
+
+  .input {
+    font-size: 16px !important;
+    line-height: 18px;
+    color: var(--input-text-color) !important;
+    background: none !important;
+
+    &::placeholder {
+      color: var(--input-placeholder-color) !important;
+    }
+  }
+
+  .notchedOutline {
+    border-color: var(--input-stroke-color) !important;
+    border-width: 1px !important;
+  }
+
+  &:focus-within {
+    .notchedOutline {
+      border-color: var(--input-stroke-hover-color) !important;
+      border-width: 2px !important;
+    }
+  }
+}
