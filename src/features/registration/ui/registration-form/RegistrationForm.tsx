@@ -5,6 +5,8 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import styles from './RegistrationForm.module.scss';
 import { useTranslation } from 'react-i18next';
 import { registration } from '@/features/registration/ui/model/service/registration.ts';
+import { CustomInput, icons, SvgIcon } from '@/shared/ui';
+import { useCallback, useState } from 'react';
 
 const validationSchema = yup.object({
     email: yup.string().required('Почта обязателены'),
@@ -16,6 +18,10 @@ const validationSchema = yup.object({
 const RegistrationForm = () => {
     const dispatch = useAppDispatch();
     const { t } = useTranslation();
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [error, setError] = useState<string>('');
+
 
     const formik = useFormik({
         initialValues: {
@@ -27,38 +33,52 @@ const RegistrationForm = () => {
         validationSchema,
         onSubmit: async (values) => {
             try {
-                await dispatch(registration(values));
+                await dispatch(registration(values)).unwrap();
             } catch (error) {
-                console.error(error);
+                setError(error);
             }
         },
     });
 
-    const onSubmit = (e) => {
+    const onSubmit = useCallback((e) => {
         e.preventDefault();
         formik.handleSubmit();
-    };
+    }, [formik.handleSubmit]);
+
+    const handleClickShowPassword = useCallback(() => {
+        setShowPassword(prev => !prev);
+    }, []);
+
+    const handleClickShowConfirmPassword = useCallback(() => {
+        setShowConfirmPassword(prev => !prev);
+    }, []);
 
     return (
         <form className={styles.form} onSubmit={onSubmit}>
+            {error &&
+                <div className={styles.error}>{error}</div>
+            }
+
             <FormControl
                 fullWidth
                 className={styles.InputWrapper}
             >
                 <div className={styles.label}>{t('Почта')}</div>
-                <OutlinedInput
+                <CustomInput
                     endAdornment={
                         <InputAdornment position="end">
-                            <></>
+                            <SvgIcon
+                                className={styles.emailIcon}
+                                iconName={icons.EMAIL}
+                                applyHover={false}
+                                important={false}
+                            />
                         </InputAdornment>
                     }
                     id="email"
                     placeholder={t('Почта')}
                     fullWidth
                     name="email"
-                    classes={{
-                        root: styles.input
-                    }}
                     value={formik.values.email}
                     onChange={formik.handleChange}
                 />
@@ -69,19 +89,20 @@ const RegistrationForm = () => {
                 className={styles.InputWrapper}
             >
                 <div className={styles.label}>{t('Имя пользователя')}</div>
-                <OutlinedInput
+                <CustomInput
                     endAdornment={
                         <InputAdornment position="end">
-                            <></>
+                            <SvgIcon
+                                iconName={icons.USERNAME}
+                                applyHover={false}
+                                important={false}
+                            />
                         </InputAdornment>
                     }
                     id="username"
                     placeholder={t('Имя пользователя')}
                     fullWidth
                     name="username"
-                    classes={{
-                        root: styles.input
-                    }}
                     value={formik.values.username}
                     onChange={formik.handleChange}
                 />
@@ -92,22 +113,23 @@ const RegistrationForm = () => {
                 className={styles.InputWrapper}
             >
                 <div className={styles.label}>{t('Пароль')}</div>
-                <OutlinedInput
+                <CustomInput
                     endAdornment={
-                        <InputAdornment position="end">
-                            <></>
-                        </InputAdornment>
+                        <button type="button" onClick={handleClickShowPassword} className={styles.showPassword}>
+                            <SvgIcon
+                                iconName={showPassword ? icons.PASSWORD : icons.PASSWORD_OFF}
+                                applyHover={false}
+                                important={false}
+                            />
+                        </button>
                     }
                     id="password"
                     placeholder={t('Пароль')}
                     fullWidth
                     name="password"
-                    classes={{
-                        root: styles.input
-                    }}
                     value={formik.values.password}
                     onChange={formik.handleChange}
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                 />
             </FormControl>
 
@@ -116,22 +138,23 @@ const RegistrationForm = () => {
                 className={styles.InputWrapper}
             >
                 <div className={styles.label}>{t('Подтверждение пароля')}</div>
-                <OutlinedInput
+                <CustomInput
                     endAdornment={
-                        <InputAdornment position="end">
-                            <></>
-                        </InputAdornment>
+                        <button type="button" onClick={handleClickShowConfirmPassword} className={styles.showPassword}>
+                            <SvgIcon
+                                iconName={showConfirmPassword ? icons.PASSWORD : icons.PASSWORD_OFF}
+                                applyHover={false}
+                                important={false}
+                            />
+                        </button>
                     }
                     id="confirmPassword"
                     placeholder={t('Повторите пароль')}
                     fullWidth
                     name="confirmPassword"
-                    classes={{
-                        root: styles.input
-                    }}
                     value={formik.values.confirmPassword}
                     onChange={formik.handleChange}
-                    type="password"
+                    type={showConfirmPassword ? 'text' : 'password'}
                 />
             </FormControl>
 

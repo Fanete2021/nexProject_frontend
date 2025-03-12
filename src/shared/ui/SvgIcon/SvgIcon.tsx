@@ -3,11 +3,9 @@ import { icons } from './model/icons.ts';
 import React, { memo } from 'react';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import styles from './SvgIcon.module.scss';
-import { Tooltip } from '@mui/material';
 
 export interface SvgIconProps {
   iconName: icons;
-  svgProp?: React.SVGProps<SVGSVGElement>;
   className?: string;
   important?: boolean;
   applyFill?: boolean;
@@ -18,7 +16,6 @@ export interface SvgIconProps {
 const SvgIcon: React.FC<SvgIconProps> = memo((props) => {
     const {
         iconName,
-        svgProp,
         className,
         important = false,
         applyFill = true,
@@ -44,4 +41,5 @@ const SvgIcon: React.FC<SvgIconProps> = memo((props) => {
     );
 });
 
+SvgIcon.displayName = 'SvgIcon';
 export default SvgIcon;

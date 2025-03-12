@@ -1,25 +1,25 @@
-import React, { memo } from 'react';
+import React, { memo, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Popover } from '@mui/material';
 import { icons, SvgIcon } from '@/shared/ui';
 import styles from './LanguageSwitcher.module.scss';
 
-export const LanguageSwitcher = memo(() => {
+const LanguageSwitcher = memo(() => {
     const { i18n } = useTranslation();
 
     const toggle = (language: string) => {
         i18n.changeLanguage(language);
     };
 
-    const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+    const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
-    const openPopover = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const openPopover = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
-    };
+    }, []);
 
-    const closePopover = () => {
+    const closePopover = useCallback(() => {
         setAnchorEl(null);
-    };
+    }, []);
 
     const open = Boolean(anchorEl);
 
@@ -64,3 +64,6 @@ export const LanguageSwitcher = memo(() => {
         </>
     );
 });
+
+LanguageSwitcher.displayName = 'LanguageSwitcher';
+export default LanguageSwitcher;

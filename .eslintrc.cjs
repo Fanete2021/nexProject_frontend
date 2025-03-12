@@ -32,6 +32,7 @@ module.exports = {
         'no-unused-vars': 'off',
         'object-curly-spacing': ['error', 'always'],
         'max-len': ['error', { code: 120, ignoreComments: true }],
+        'react/prop-types': 'off'
     },
     settings: {
         react: {

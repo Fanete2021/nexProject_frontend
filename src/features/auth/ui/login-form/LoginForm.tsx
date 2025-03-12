@@ -6,7 +6,7 @@ import styles from './LoginForm.module.scss';
 import { login } from '@/features/auth/ui/model/service/login.ts';
 import { useTranslation } from 'react-i18next';
 import { CustomCheckbox, CustomInput, icons, SvgIcon } from '@/shared/ui';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
 import { Link } from 'react-router-dom';
 import { getInputType } from '@/shared/lib/utils/getInputType.ts';
@@ -39,14 +39,14 @@ const LoginForm = () => {
 
     const currentInputType = getInputType(formik.values.phoneNumberOrMail);
 
-    const onSubmit = (e) => {
+    const onSubmit = useCallback((e) => {
         e.preventDefault();
         formik.handleSubmit();
-    };
+    }, [formik.handleSubmit]);
 
-    const handleClickShowPassword = () => {
+    const handleClickShowPassword = useCallback(() => {
         setShowPassword(!showPassword);
-    };
+    }, []);
 
     return (
         <form className={styles.form} onSubmit={onSubmit}>
