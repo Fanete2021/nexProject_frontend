@@ -1,13 +1,11 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { icons, SvgIcon } from '@/shared/ui';
 
 export interface LogoProps {
     className?: string;
 }
 
-const Logo: React.FC<LogoProps> = (props) => {
-    const { className } = props;
-
+const Logo: React.FC<LogoProps> = memo(({ className }) => {
     return (
         <SvgIcon
             className={className}
@@ -18,6 +16,7 @@ const Logo: React.FC<LogoProps> = (props) => {
             applyHover={false}
         />
     );
-};
+});
 
+Logo.displayName = 'Logo';
 export default Logo;

@@ -24,4 +24,5 @@ const ThemeSwitcher = memo(({ className }: ThemeSwitcherProps) => {
     );
 });
 
+ThemeSwitcher.displayName = 'ThemeSwitcher';
 export default ThemeSwitcher;

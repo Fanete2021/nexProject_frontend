@@ -20,13 +20,9 @@ export const registration = createAsyncThunk<void, RegistrationProps, ThunkConfi
         try {
             const response = await extra.api.post('/auth/signup', registrationData);
 
-            if (!response.data) {
-                throw new Error();
-            }
-
             extra.navigate?.(RoutePath.auth);
         } catch (e) {
-            return rejectWithValue('error');
+            return rejectWithValue(e.response.data.message);
         }
     }
 );
