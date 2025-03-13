@@ -12,7 +12,11 @@ import { Link } from 'react-router-dom';
 import { getInputType } from '@/shared/lib/utils/getInputType.ts';
 
 const validationSchema = yup.object({
-    phoneNumberOrMail: yup.string().required('Почта или телефон обязателены'),
+    phoneNumberOrMail: yup.string()
+        .required('Почта или телефон обязателены')
+        .test('isValidPhoneOrEmail', 'Введите корректное значение', (value) => {
+            return Boolean(getInputType(value));
+        }),
     password: yup.string().required('Пароль обязателен'),
 });
 
@@ -37,6 +41,10 @@ const LoginForm = () => {
         },
     });
 
+    const isShowError = (field: string): boolean => {
+        return (formik.touched[field] || formik.submitCount > 0) && Boolean(formik.errors[field]);
+    };
+
     const currentInputType = getInputType(formik.values.phoneNumberOrMail);
 
     const onSubmit = useCallback((e) => {
@@ -45,7 +53,7 @@ const LoginForm = () => {
     }, [formik.handleSubmit]);
 
     const handleClickShowPassword = useCallback(() => {
-        setShowPassword(!showPassword);
+        setShowPassword(prev => !prev);
     }, []);
 
     return (
@@ -56,9 +64,15 @@ const LoginForm = () => {
 
             <FormControl
                 fullWidth
-                className={styles.InputWrapper}
+                className={styles.FieldWrapper}
             >
-                <div className={styles.label}>{t('Почта / телефон')}</div>
+                <div className={styles.label}>
+                    {t('Почта / телефон')}<br/>
+                    {isShowError('phoneNumberOrMail') &&
+                        <div className={styles.error}>{t(formik.errors.phoneNumberOrMail)}</div>
+                    }
+                </div>
+
                 <CustomInput
                     endAdornment={
                         currentInputType && (
@@ -82,14 +96,22 @@ const LoginForm = () => {
                     name="phoneNumberOrMail"
                     value={formik.values.phoneNumberOrMail}
                     onChange={formik.handleChange}
+                    isError={isShowError('phoneNumberOrMail')}
+                    onBlur={formik.handleBlur}
                 />
             </FormControl>
 
             <FormControl
                 fullWidth
-                className={styles.InputWrapper}
+                className={styles.FieldWrapper}
             >
-                <div className={styles.label}>{t('Пароль')}</div>
+                <div className={styles.label}>
+                    {t('Пароль')}<br/>
+                    {isShowError('password') &&
+                        <div className={styles.error}>{t(formik.errors.password)}</div>
+                    }
+                </div>
+
                 <CustomInput
                     endAdornment={
                         <InputAdornment position="end">
@@ -109,6 +131,8 @@ const LoginForm = () => {
                     value={formik.values.password}
                     onChange={formik.handleChange}
                     type={showPassword ? 'text' : 'password'}
+                    isError={isShowError('password')}
+                    onBlur={formik.handleBlur}
                 />
             </FormControl>
 
