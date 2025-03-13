@@ -23,6 +23,20 @@
   "Создать": "Create",
   "Забыли пароль?": "Forgot password?",
   "Оставаться в системе": "Stay signed in",
+  "Почта невалидна": "Invalid e-mail address",
+  "Почта обязательна": "E-mail is required",
+  "Имя пользователя обязательно": "Username is required",
+  "Не соответствует шаблону": "Does not match the pattern",
+  "Подтверждение пароля обязательно": "Password confirmation is required",
+  "Пароль обязателен": "Password is required",
+  "Почта или телефон обязателены": "E-mail / Phone is required",
+  "Пароли не совпадают": "Passwords do not match",
+  "От 3 до 15 символов": "3 to 15 characters",
+  "Используются только латинские буквы, цифры и специальные символы ( - _ )": "Only Latin letters, numbers and special characters ( -_ )",
+  "Начинается с буквы": "Starts with a letter",
+  "От 6 до 15 символов": "6 to 15 characters",
+  "Используются только латинские буквы, цифры и специальные символы (!@#$%^&*)": "Only Latin letters, numbers, special characters (!@#$%^&*)",
+  "Введите корректное значение": "Enter a valid value",
 
 
 

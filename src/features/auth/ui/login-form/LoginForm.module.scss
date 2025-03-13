@@ -6,15 +6,16 @@
   width: 300px;
 }
 
-.InputWrapper {
+.FieldWrapper {
   display: flex;
-  gap: 10px;
   align-items: start;
 }
 
 .label {
   font-size: 16px;
-  line-height: 20.7px;
+  line-height: 21px;
+  text-align: left;
+  margin-bottom: 10px;
 }
 
 .emailIcon {
@@ -62,6 +63,6 @@
 
 .error {
   font-size: 16px;
-  line-height: 18px;
+  line-height: 21px;
   color: var(--error-text-color);
 }
