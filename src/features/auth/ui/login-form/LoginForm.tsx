@@ -3,13 +3,14 @@ import * as yup from 'yup';
 import { FormControl, InputAdornment } from '@mui/material';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import styles from './LoginForm.module.scss';
-import { login } from '@/features/auth/ui/model/service/login.ts';
+import { login } from '@/features/auth/model/service/login.ts';
 import { useTranslation } from 'react-i18next';
 import { CustomCheckbox, CustomInput, icons, SvgIcon } from '@/shared/ui';
-import { useCallback, useState } from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import { getInputType } from '@/shared/lib/utils/getInputType.ts';
+import {useSelector} from "react-redux";
 
 const validationSchema = yup.object({
     phoneNumberOrMail: yup.string()
@@ -25,16 +26,20 @@ const LoginForm = () => {
     const { t } = useTranslation();
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState<string>('');
+    const d = useSelector(state => state.auth);
+    const navigate = useNavigate();
 
     const formik = useFormik({
         initialValues: {
             phoneNumberOrMail: '',
             password: '',
+            rememberMe: false
         },
         validationSchema,
         onSubmit: async (values) => {
             try {
                 await dispatch(login(values)).unwrap();
+                navigate(RoutePath.main);
             } catch (error) {
                 setError(error);
             }
@@ -137,8 +142,11 @@ const LoginForm = () => {
             </FormControl>
 
             <div className={styles.rememberForgot}>
-                <CustomCheckbox 
+                <CustomCheckbox
+                    name="rememberMe"
                     label={'Оставаться в системе'}
+                    checked={formik.values.rememberMe}
+                    onChange={formik.handleChange}
                 />
 
                 <Link to={RoutePath.registration} className={styles.forgot}>
