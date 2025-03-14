@@ -2,6 +2,7 @@ import { memo, Suspense, useCallback } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { routeConfig, AppRoutesProps } from '@/shared/config/routeConfig/routeConfig.tsx';
 import { Loader } from '@/shared/ui/Loader';
+import RequireAuth from '@/app/providers/router/RequireAuth.tsx';
 
 const AppRouter = () => {
     const renderWithWrapper = useCallback((route: AppRoutesProps) => {
@@ -17,7 +18,10 @@ const AppRouter = () => {
             <Route
                 key={route.path}
                 path={route.path}
-                element={children}
+                element={route.authOnly
+                    ? <RequireAuth>{children}</RequireAuth>
+                    : element
+                }
             />
         );
     }, []);

@@ -3,12 +3,10 @@ import { OutlinedInput, OutlinedInputProps } from '@mui/material';
 import styles from './CustomInput.module.scss';
 
 export interface CustomInputProps extends OutlinedInputProps {
-  isError?: boolean;
+    isError?: boolean;
 }
 
-const CustomInput: React.FC<CustomInputProps> = (props) => {
-    const { classes, isError } = props;
-
+const CustomInput: React.FC<CustomInputProps> = ({ isError, ...props }) => {
     return (
         <OutlinedInput
             {...props}
@@ -16,7 +14,7 @@ const CustomInput: React.FC<CustomInputProps> = (props) => {
                 root: styles.wrapperInput,
                 notchedOutline: isError ? styles.error : styles.notchedOutline,
                 input: styles.input,
-                ...classes
+                ...props.classes,
             }}
         />
     );

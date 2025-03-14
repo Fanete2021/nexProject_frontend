@@ -3,6 +3,7 @@ import { StateSchema, ThunkExtraArg } from './StateSchema.ts';
 import { createReducerManager } from './reducerManager.ts';
 import { NavigateOptions, To } from 'react-router-dom';
 import { $api } from '@/shared/api/api.ts';
+import { authReducer } from '@/features/auth';
 
 export function createReduxStore(
     initialState?: StateSchema,
@@ -11,6 +12,7 @@ export function createReduxStore(
 ) {
     const rootReducers: ReducersMapObject<StateSchema> = {
         ...asyncReducers,
+        auth: authReducer
     };
 
     const reducerManager = createReducerManager(rootReducers);
@@ -27,6 +29,9 @@ export function createReduxStore(
             thunk: {
                 extraArgument: extraArg
             }
+        }).concat((store) => (next) => (action) => {
+            console.log('Dispatching action:', action); // Логируем все действия
+            return next(action);
         })
     });
 

@@ -8,9 +8,10 @@ import { NotificationsPage } from '@/pages/notifications-page';
 import { EmailPage } from '@/pages/email-page';
 import { ChangesPage } from '@/pages/changes-page';
 import { DocsPage } from '@/pages/docs-page';
-import {RegistrationPage} from "@/pages/registration-page";
+import { RegistrationPage } from '@/pages/registration-page';
 
 export type AppRoutesProps = PathRouteProps & {
+    authOnly?: boolean;
 };
 
 export enum AppRoutes {
@@ -27,9 +28,9 @@ export enum AppRoutes {
 }
 
 export const RoutePath: Record<AppRoutes, string> = {
-    [AppRoutes.AUTH]: '/',
+    [AppRoutes.AUTH]: '/auth',
     [AppRoutes.REGISTRATION]: `/${AppRoutes.REGISTRATION}`,
-    [AppRoutes.MAIN]: `/${AppRoutes.MAIN}`,
+    [AppRoutes.MAIN]: '/',
     [AppRoutes.CHATS]: `/${AppRoutes.CHATS}`,
     [AppRoutes.TEAMS]: `/${AppRoutes.TEAMS}`,
     [AppRoutes.CALENDAR]: `/${AppRoutes.CALENDAR}`,
@@ -51,33 +52,41 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
     [AppRoutes.MAIN]: {
         path: `${RoutePath.main}`,
         element: <MainPage />,
+        authOnly: true,
     },
     [AppRoutes.CHATS]: {
         path: `${RoutePath.chats}`,
         element: <ChatsPage />,
+        authOnly: true,
     },
     [AppRoutes.TEAMS]: {
         path: `${RoutePath.teams}`,
         element: <TeamsPage />,
+        authOnly: true,
     },
     [AppRoutes.CALENDAR]: {
         path: `${RoutePath.calendar}`,
         element: <CalendarPage />,
+        authOnly: true,
     },
     [AppRoutes.DOCS]: {
         path: `${RoutePath.docs}`,
         element: <DocsPage />,
+        authOnly: true,
     },
     [AppRoutes.NOTIFICATIONS]: {
         path: `${RoutePath.notifications}`,
         element: <NotificationsPage />,
+        authOnly: true,
     },
     [AppRoutes.EMAIL]: {
         path: `${RoutePath.email}`,
         element: <EmailPage />,
+        authOnly: true,
     },
     [AppRoutes.CHANGES]: {
         path: `${RoutePath.changes}`,
         element: <ChangesPage />,
+        authOnly: true,
     },
 };
