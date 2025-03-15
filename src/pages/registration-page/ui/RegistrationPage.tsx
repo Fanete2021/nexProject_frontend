@@ -5,6 +5,7 @@ import { RegistrationForm } from '@/features/registration';
 import { GuestPageLayout } from '@/widgets/GuestPageLayout';
 import { useTranslation } from 'react-i18next';
 import styles from './RegistrationPage.module.scss';
+import {classNames} from "@/shared/lib/utils/classNames.ts";
 
 const RegistrationPage = () => {
     const { t } = useTranslation();
@@ -13,7 +14,10 @@ const RegistrationPage = () => {
         <GuestPageLayout title="Создание аккаунта" >
             <RegistrationForm />
 
-            <Link to={RoutePath.auth} className={styles.footer}>
+            <Link
+                to={RoutePath.auth}
+                className={classNames(styles.guestLink, ['guestLink'])}
+            >
                 {t('Уже есть аккаунт?')}
             </Link>
         </GuestPageLayout>

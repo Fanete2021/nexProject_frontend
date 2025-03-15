@@ -1,18 +1,5 @@
-.footer {
+.guestLink {
   margin-top: 20px;
-  color: var(--link-text-color);
-  line-height: 18px;
-  font-size: 14px;
-
-  &:hover {
-    color: var(--link-text-hover-color);
-  }
-
-  &:focus-within {
-    .error, .notchedOutline {
-      border-width: 2px !important;
-    }
-  }
 }
 
 .subtitle {
