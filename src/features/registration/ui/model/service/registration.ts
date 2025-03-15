@@ -1,6 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
 import { ThunkConfig } from '@/app/providers/store-provider';
+import {User, userActions} from "@/entities/user";
+import {authActions} from "@/features/auth";
 
 interface RegistrationProps {
     email: string;
@@ -9,18 +11,29 @@ interface RegistrationProps {
     confirmPassword: string;
 }
 
-export const registration = createAsyncThunk<void, RegistrationProps, ThunkConfig<string>> (
+interface RegistrationResponse {
+    jwtToken: string;
+    user: User;
+}
+
+export const registration = createAsyncThunk<RegistrationResponse, RegistrationProps, ThunkConfig<string>> (
     'registration/registration',
     async (registrationData, thunkAPI) => {
         const {
             extra,
-            rejectWithValue
+            rejectWithValue,
+            dispatch
         } = thunkAPI;
 
         try {
             const response = await extra.api.post('/auth/signup', registrationData);
 
-            extra.navigate?.(RoutePath.auth);
+            dispatch(authActions.setToken(response.data.jwtToken));
+            dispatch(userActions.setData(response.data.user));
+
+            extra.navigate?.(RoutePath.emailConfirm);
+
+            return response.data;
         } catch (e) {
             return rejectWithValue(e.response.data.message);
         }

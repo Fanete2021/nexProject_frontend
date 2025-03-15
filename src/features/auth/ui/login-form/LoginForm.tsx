@@ -6,11 +6,10 @@ import styles from './LoginForm.module.scss';
 import { login } from '@/features/auth/model/service/login.ts';
 import { useTranslation } from 'react-i18next';
 import { CustomCheckbox, CustomInput, icons, SvgIcon } from '@/shared/ui';
-import {useCallback, useEffect, useState} from 'react';
+import { useCallback, useState } from 'react';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
-import {Link, useNavigate} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getInputType } from '@/shared/lib/utils/getInputType.ts';
-import {useSelector} from "react-redux";
 
 const validationSchema = yup.object({
     phoneNumberOrMail: yup.string()
@@ -26,7 +25,6 @@ const LoginForm = () => {
     const { t } = useTranslation();
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState<string>('');
-    const d = useSelector(state => state.auth);
     const navigate = useNavigate();
 
     const formik = useFormik({
@@ -38,8 +36,13 @@ const LoginForm = () => {
         validationSchema,
         onSubmit: async (values) => {
             try {
-                await dispatch(login(values)).unwrap();
-                navigate(RoutePath.main);
+                const response = await dispatch(login(values)).unwrap();
+
+                if (response.user.verify) {
+                    navigate(RoutePath.main);
+                } else {
+                    navigate(RoutePath.emailConfirm);
+                }
             } catch (error) {
                 setError(error);
             }

@@ -1,7 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
 import { ThunkConfig } from '@/app/providers/store-provider';
-import {authActions} from "@/features/auth";
+import {User, userActions} from "@/entities/user";
 
 interface LoginProps {
   phoneNumberOrMail: string;
@@ -11,6 +10,7 @@ interface LoginProps {
 
 interface LoginResponse {
     jwtToken: string;
+    user: User;
 }
 
 export const login = createAsyncThunk<LoginResponse, LoginProps, ThunkConfig<string>> (
@@ -18,11 +18,14 @@ export const login = createAsyncThunk<LoginResponse, LoginProps, ThunkConfig<str
     async (authData, thunkAPI) => {
         const {
             extra,
-            rejectWithValue
+            rejectWithValue,
+            dispatch
         } = thunkAPI;
 
         try {
             const response = await extra.api.post('/auth/signin', authData);
+
+            dispatch(userActions.setData(response.data.user));
 
             return response.data;
         } catch (e) {

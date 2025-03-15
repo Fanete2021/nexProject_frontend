@@ -37,7 +37,12 @@
   "От 6 до 15 символов": "6 to 15 characters",
   "Используются только латинские буквы, цифры и специальные символы (!@#$%^&*)": "Only Latin letters, numbers, special characters (!@#$%^&*)",
   "Введите корректное значение": "Enter a valid value",
-
+  "Пожалуйста, проверьте вашу электронную почту": "Please check your e-mail",
+  "Мы отправили код на": "We’ve sent a code to",
+  "Я не получил(а) код": "I didn’t receive a code",
+  "Вернуться назад": "Go back",
+  "Неверный код": "Wrong code",
+  "Отправить код повторно": "Send code again",
 
 
   "Матвей гений!": "Mooootvey is a genius!"

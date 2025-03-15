@@ -2,8 +2,10 @@ import { configureStore, Reducer, ReducersMapObject } from '@reduxjs/toolkit';
 import { StateSchema, ThunkExtraArg } from './StateSchema.ts';
 import { createReducerManager } from './reducerManager.ts';
 import { NavigateOptions, To } from 'react-router-dom';
-import { $api } from '@/shared/api/api.ts';
+import { $api, configureApi } from '@/shared/api/api.ts';
 import { authReducer } from '@/features/auth';
+import { userReducer } from '@/entities/user';
+import { tokenMiddleware } from './middleware';
 
 export function createReduxStore(
     initialState?: StateSchema,
@@ -12,7 +14,8 @@ export function createReduxStore(
 ) {
     const rootReducers: ReducersMapObject<StateSchema> = {
         ...asyncReducers,
-        auth: authReducer
+        auth: authReducer,
+        user: userReducer,
     };
 
     const reducerManager = createReducerManager(rootReducers);
@@ -30,14 +33,16 @@ export function createReduxStore(
                 extraArgument: extraArg
             }
         }).concat((store) => (next) => (action) => {
-            console.log('Dispatching action:', action); // Логируем все действия
+            console.log('Dispatching action:', action);
             return next(action);
-        })
+        }).concat(tokenMiddleware)
     });
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     store.reducerManager = reducerManager;
+
+    configureApi(store);
 
     return store;
 }

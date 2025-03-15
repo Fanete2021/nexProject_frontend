@@ -2,9 +2,11 @@ import { AnyAction, EnhancedStore, Reducer, ReducersMapObject } from '@reduxjs/t
 import { AxiosInstance } from 'axios';
 import { NavigateOptions, To } from 'react-router-dom';
 import { AuthSchema } from '@/features/auth';
+import { UserSchema } from '@/entities/user';
 
 export interface StateSchema {
   auth: AuthSchema;
+  user: UserSchema;
 }
 
 export type StateSchemaKey = keyof StateSchema;
