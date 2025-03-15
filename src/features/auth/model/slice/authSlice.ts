@@ -1,4 +1,4 @@
-import {createSlice, current, PayloadAction} from '@reduxjs/toolkit';
+import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
 import { AuthSchema } from '../types/authSchema.ts';
 import { login } from '../service/login.ts';
 import { refreshToken } from '@/features/auth';

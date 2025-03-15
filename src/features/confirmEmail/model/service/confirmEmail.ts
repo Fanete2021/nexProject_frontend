@@ -1,20 +1,21 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ThunkConfig } from '@/app/providers/store-provider';
 
-interface RefreshTokenResponse {
-    jwtToken: string;
+interface ConfirmEmailProps {
+    code: string;
 }
 
-export const refreshToken = createAsyncThunk<RefreshTokenResponse, void, ThunkConfig<string>> (
-    'auth/refreshToken',
-    async (authData, thunkAPI) => {
+export const confirmEmail = createAsyncThunk<void, ConfirmEmailProps, ThunkConfig<string>> (
+    'confirmEmail/confirmEmail',
+    async (confirmEmailData, thunkAPI) => {
         const {
             extra,
             rejectWithValue
         } = thunkAPI;
 
         try {
-            const response = await extra.api.post('/auth/refresh-token');
+
+            const response = await extra.api.post('/auth/signup/confirm', confirmEmailData);
 
             return response.data;
         } catch (e) {

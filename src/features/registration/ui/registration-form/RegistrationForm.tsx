@@ -183,15 +183,15 @@ const RegistrationForm = () => {
                             [Boolean(formik.errors.username) && styles.errorValidationList]
                         )
                     }>
-                        <li className={usernameLengthValid && styles.valid}>
+                        <li className={usernameLengthValid ? styles.valid : ''}>
                             <CheckIcon />
                             {t('От 3 до 15 символов')}
                         </li>
-                        <li className={usernameCharsValid && styles.valid}>
+                        <li className={usernameCharsValid ? styles.valid : ''}>
                             <CheckIcon />
                             {t('Используются только латинские буквы, цифры и специальные символы ( - _ )')}
                         </li>
-                        <li className={usernameStartsWithLetter && styles.valid}>
+                        <li className={usernameStartsWithLetter ? styles.valid : ''}>
                             <CheckIcon />
                             {t('Начинается с буквы')}
                         </li>
@@ -238,11 +238,11 @@ const RegistrationForm = () => {
                             [Boolean(formik.errors.password) && styles.errorValidationList]
                         )
                     }>
-                        <li className={passwordLengthValid && styles.valid}>
+                        <li className={passwordLengthValid ? styles.valid : ''}>
                             <CheckIcon />
                             {t('От 6 до 15 символов')}
                         </li>
-                        <li className={passwordCharsValid && styles.valid}>
+                        <li className={passwordCharsValid ? styles.valid : ''}>
                             <CheckIcon />
                             {t('Используются только латинские буквы, цифры и специальные символы (!@#$%^&*)')}
                         </li>

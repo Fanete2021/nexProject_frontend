@@ -9,6 +9,7 @@ import { EmailPage } from '@/pages/email-page';
 import { ChangesPage } from '@/pages/changes-page';
 import { DocsPage } from '@/pages/docs-page';
 import { RegistrationPage } from '@/pages/registration-page';
+import { EmailConfirmPage } from '@/pages/email-confirm-page';
 
 export type AppRoutesProps = PathRouteProps & {
     authOnly?: boolean;
@@ -17,6 +18,7 @@ export type AppRoutesProps = PathRouteProps & {
 export enum AppRoutes {
   AUTH = 'auth',
   REGISTRATION = 'registration',
+  EMAIL_CONFIRM = 'emailConfirm',
   MAIN = 'main',
   CHATS = 'chats',
   TEAMS = 'teams',
@@ -30,6 +32,7 @@ export enum AppRoutes {
 export const RoutePath: Record<AppRoutes, string> = {
     [AppRoutes.AUTH]: '/auth',
     [AppRoutes.REGISTRATION]: `/${AppRoutes.REGISTRATION}`,
+    [AppRoutes.EMAIL_CONFIRM]: `/${AppRoutes.EMAIL_CONFIRM}`,
     [AppRoutes.MAIN]: '/',
     [AppRoutes.CHATS]: `/${AppRoutes.CHATS}`,
     [AppRoutes.TEAMS]: `/${AppRoutes.TEAMS}`,
@@ -48,6 +51,10 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
     [AppRoutes.REGISTRATION]: {
         path: `${RoutePath.registration}`,
         element: <RegistrationPage />,
+    },
+    [AppRoutes.EMAIL_CONFIRM]: {
+        path: `${RoutePath.emailConfirm}`,
+        element: <EmailConfirmPage />,
     },
     [AppRoutes.MAIN]: {
         path: `${RoutePath.main}`,
