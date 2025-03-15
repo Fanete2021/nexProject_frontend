@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
 import { GuestPageLayout } from '@/widgets/GuestPageLayout';
 import styles from './EmailConfirmPage.module.scss';
-import { EmailConfirmForm } from '@/features/confirmEmail';
 import { useSelector } from 'react-redux';
 import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
-import {classNames} from "@/shared/lib/utils/classNames.ts";
+import { classNames } from '@/shared/lib/utils/classNames.ts';
+import { EmailConfirmForm } from '@/features/confirm-email';
 
 const EmailConfirmPage = () => {
     const { t } = useTranslation();
