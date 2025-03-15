@@ -26,10 +26,6 @@ export const StoreProvider: FC<StoreProviderProps> = (props) => {
         navigate
     ));
 
-    useEffect(() => {
-        console.log('update')
-    }, [store.current]);
-
     return (
         <Provider store={store.current}>
             {children}

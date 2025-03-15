@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
 import { GuestPageLayout } from '@/widgets/GuestPageLayout';
 import styles from './AuthPage.module.scss';
+import {classNames} from "@/shared/lib/utils/classNames.ts";
 
 const AuthPage = () => {
     const { t } = useTranslation();
@@ -12,7 +13,10 @@ const AuthPage = () => {
         <GuestPageLayout title={'Вход'}>
             <LoginForm />
 
-            <Link to={RoutePath.registration} className={styles.footer}>
+            <Link 
+                to={RoutePath.registration} 
+                className={classNames(styles.guestLink, ['guestLink'])}
+            >
                 {t('Нет аккаунта?')}
             </Link>
         </GuestPageLayout>
