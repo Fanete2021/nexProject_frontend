@@ -2,14 +2,14 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { FormControl } from '@mui/material';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
-import styles from './ChangePasswordForm.module.scss';
 import { useTranslation } from 'react-i18next';
-import { CustomInput, icons, SvgIcon } from '@/shared/ui';
-import { memo, useCallback, useState } from 'react';
-import { classNames } from '@/shared/lib/utils/classNames.ts';
+import { CustomInput, icons, SvgIcon, ValidationList, ValidationListItem } from '@/shared/ui';
+import { useCallback, useState } from 'react';
 import { newPassword } from '@/features/change-password';
 import { useNavigate } from 'react-router-dom';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
+import { isPasswordValid } from '@/shared/lib/utils/validation.ts';
+import { isFormikErrorVisible } from '@/shared/lib/utils/isFormikErrorVisible.ts';
 
 const validationSchema = yup.object({
     newPassword: yup.string()
@@ -19,27 +19,6 @@ const validationSchema = yup.object({
         .required('Подтверждение пароля обязательно')
         .oneOf([yup.ref('newPassword')], 'Пароли не совпадают'),
 });
-
-const isPasswordValid = (password) => {
-    const lengthValid = password.length >= 6 && password.length <= 15;
-    const charsValid = /^[a-zA-Z0-9!@#$%^&*]+$/.test(password);
-    return { lengthValid, charsValid };
-};
-
-const CheckIcon = memo(() => (
-    <div className={styles.iconWrapper}>
-        <SvgIcon
-            iconName={icons.CHECK}
-            important
-            applyFill={false}
-            applyStroke
-            applyHover={false}
-            className={styles.icon}
-        />
-    </div>
-));
-
-CheckIcon.displayName = 'CheckIcon';
 
 export interface RegistrationFormProps {
     token: string;
@@ -78,13 +57,22 @@ const RegistrationForm: React.FC<RegistrationFormProps> = (props) => {
     });
 
     const {
-        lengthValid: passwordLengthValid,
-        charsValid: passwordCharsValid
+        passwordLengthValid,
+        passwordLengthValidText,
+        passwordCharsValid,
+        passwordCharsValidText
     } = isPasswordValid(formik.values.newPassword);
 
-    const isShowError = (field: string): boolean => {
-        return (formik.touched[field] || formik.submitCount > 0) && Boolean(formik.errors[field]);
-    };
+    const newPasswordValidationListItems: ValidationListItem[] = [
+        {
+            text: passwordLengthValidText,
+            isError: !passwordLengthValid
+        },
+        {
+            text: passwordCharsValidText,
+            isError: !passwordCharsValid
+        },
+    ];
 
     const onSubmit = useCallback((e) => {
         e.preventDefault();
@@ -100,26 +88,29 @@ const RegistrationForm: React.FC<RegistrationFormProps> = (props) => {
     }, []);
 
     return (
-        <form className={styles.form} onSubmit={onSubmit}>
+        <form className="form" onSubmit={onSubmit}>
             {error &&
-                <div className={styles.error}>{error}</div>
+                <div className="error">{error}</div>
             }
 
             <FormControl
                 fullWidth
-                className={styles.FieldWrapper}
+                className="FieldWrapper"
             >
-                <div className={styles.label}>
+                <div className="label">
                     {t('Новый пароль')}<br/>
-                    {isShowError('newPassword') &&
-                        <div className={styles.error}>{t(formik.errors.newPassword)}</div>
+                    {isFormikErrorVisible(formik,'newPassword') &&
+                        <div className="error">{t(formik.errors.newPassword)}</div>
                     }
                 </div>
 
-                <div className={styles.InputWrapper}>
+                <ValidationList
+                    items={newPasswordValidationListItems}
+                    hasError={isFormikErrorVisible(formik, 'newPassword')}
+                >
                     <CustomInput
                         endAdornment={
-                            <button type="button" onClick={handleClickShowPassword} className={styles.showPassword}>
+                            <button type="button" onClick={handleClickShowPassword} className="showPassword">
                                 <SvgIcon
                                     iconName={showPassword ? icons.PASSWORD : icons.PASSWORD_OFF}
                                     applyHover={false}
@@ -134,41 +125,25 @@ const RegistrationForm: React.FC<RegistrationFormProps> = (props) => {
                         value={formik.values.newPassword}
                         onChange={formik.handleChange}
                         type={showPassword ? 'text' : 'password'}
-                        isError={isShowError('newPassword')}
+                        isError={isFormikErrorVisible(formik, 'newPassword')}
                         onBlur={formik.handleBlur}
                     />
-
-                    <ul className={
-                        classNames(
-                            styles.validationList,
-                            [formik.errors.newPassword ? styles.errorValidationList : '']
-                        )
-                    }>
-                        <li className={passwordLengthValid ? styles.valid : ''}>
-                            <CheckIcon />
-                            {t('От 6 до 15 символов')}
-                        </li>
-                        <li className={passwordCharsValid ? styles.valid : ''}>
-                            <CheckIcon />
-                            {t('Используются только латинские буквы, цифры и специальные символы (!@#$%^&*)')}
-                        </li>
-                    </ul>
-                </div>
+                </ValidationList>
             </FormControl>
 
             <FormControl
                 fullWidth
-                className={styles.FieldWrapper}
+                className="FieldWrapper"
             >
-                <div className={styles.label}>
+                <div className="label">
                     {t('Подтверждение пароля')}<br/>
-                    {isShowError('confirmPassword') &&
-                        <div className={styles.error}>{t(formik.errors.confirmPassword)}</div>
+                    {isFormikErrorVisible(formik, 'confirmPassword') &&
+                        <div className="error">{t(formik.errors.confirmPassword)}</div>
                     }
                 </div>
                 <CustomInput
                     endAdornment={
-                        <button type="button" onClick={handleClickShowConfirmPassword} className={styles.showPassword}>
+                        <button type="button" onClick={handleClickShowConfirmPassword} className="showPassword">
                             <SvgIcon
                                 iconName={showConfirmPassword ? icons.PASSWORD : icons.PASSWORD_OFF}
                                 applyHover={false}
@@ -183,13 +158,13 @@ const RegistrationForm: React.FC<RegistrationFormProps> = (props) => {
                     value={formik.values.confirmPassword}
                     onChange={formik.handleChange}
                     type={showConfirmPassword ? 'text' : 'password'}
-                    isError={isShowError('confirmPassword')}
+                    isError={isFormikErrorVisible(formik, 'confirmPassword')}
                     onBlur={formik.handleBlur}
                 />
             </FormControl>
 
             <button
-                className={styles.submit}
+                className="submit"
                 type={'submit'}
                 onClick={onSubmit}
             >

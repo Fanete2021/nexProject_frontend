@@ -1,18 +1,16 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
-import { GuestPageLayout } from '@/widgets/GuestPageLayout';
 import styles from './EmailConfirmPage.module.scss';
 import { useSelector } from 'react-redux';
 import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { EmailConfirmForm } from '@/features/confirm-email';
+import { GuestPageLayout } from '@/widgets/guest-page-layout';
 
 const EmailConfirmPage = () => {
     const { t } = useTranslation();
     const user = useSelector(getUserData);
-
-    console.log(user);
 
     return (
         <GuestPageLayout

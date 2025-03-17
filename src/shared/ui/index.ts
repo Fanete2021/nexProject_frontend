@@ -1,15 +1,18 @@
-import { icons, SvgIcon, SvgIconProps } from './SvgIcon';
-import { Loader, LoaderProps } from './Loader';
-import { Logo, LogoProps } from './Logo';
-import { CustomCheckbox, CustomCheckboxProps } from './CustomCheckbox';
-import { CustomInput, CustomInputProps } from './CustomInput';
+import { icons, SvgIcon, SvgIconProps } from './svg-icon';
+import { Loader, LoaderProps } from './loader';
+import { Logo, LogoProps } from './logo';
+import { CustomCheckbox, CustomCheckboxProps } from './custom-checkbox';
+import { CustomInput, CustomInputProps } from './custom-input';
+import { ValidationList, ValidationListProps, ValidationListItem } from './validation-list';
 
 export type {
     SvgIconProps,
     LoaderProps,
     LogoProps,
     CustomCheckboxProps,
-    CustomInputProps
+    CustomInputProps,
+    ValidationListProps,
+    ValidationListItem
 };
 
 export {
@@ -18,5 +21,6 @@ export {
     Loader,
     Logo,
     CustomCheckbox,
-    CustomInput
+    CustomInput,
+    ValidationList
 };

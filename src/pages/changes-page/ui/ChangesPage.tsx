@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { AuthenticatedPageLayout } from '@/widgets/AuthenticatedPageLayout';
 import { useTranslation } from 'react-i18next';
 import data from '../model/data/posts.json';
 import { IPost } from '../model/types/post.ts';
 import styles from './ChangesPage.module.scss';
+import { AuthenticatedPageLayout } from '@/widgets/authenticated-page-layout';
 
 const posts: IPost[] = data;
 

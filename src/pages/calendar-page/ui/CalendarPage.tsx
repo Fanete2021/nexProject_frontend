@@ -1,6 +1,6 @@
 import React from 'react';
-import { AuthenticatedPageLayout } from '@/widgets/AuthenticatedPageLayout';
 import { useTranslation } from 'react-i18next';
+import { AuthenticatedPageLayout } from '@/widgets/authenticated-page-layout';
 
 const CalendarPage = () => {
     const { t } = useTranslation();
