@@ -8,7 +8,7 @@ import { ThemeSwitcher } from '@/widgets/theme-switcher';
 
 export interface GuestPageLayoutProps {
     children?: ReactNode;
-    title: string;
+    title?: string;
     className?: string;
 }
 
@@ -26,9 +26,11 @@ const GuestPageLayout: React.FC<GuestPageLayoutProps> = (props) => {
             <div className={styles.container}>
                 <Logo />
 
-                <div className={styles.title}>
-                    {t(title)}
-                </div>
+                {title &&
+                    <div className={styles.title}>
+                        {t(title)}
+                    </div>
+                }
 
                 {children}
             </div>

@@ -20,5 +20,6 @@ export enum icons {
   CHECK = 'check',
   PHONE = 'phone',
   USERNAME = 'username',
-  CROSS = 'cross'
+  CROSS = 'cross',
+  NOT_FOUND = '404'
 }

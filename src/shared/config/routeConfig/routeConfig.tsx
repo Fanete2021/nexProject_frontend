@@ -12,6 +12,7 @@ import { RegistrationPage } from '@/pages/registration-page';
 import { EmailConfirmPage } from '@/pages/email-confirm-page';
 import { NewPasswordPage } from '@/pages/new-password-page';
 import { PasswordChangePage } from '@/pages/password-change-page';
+import {NotFoundPage} from "@/pages/not-found-page";
 
 export type AppRoutesProps = PathRouteProps & {
     authOnly?: boolean;
@@ -31,6 +32,7 @@ export enum AppRoutes {
   CHANGES  = 'changes',
   NEW_PASSWORD = 'newPassword',
   PASSWORD_CHANGE = 'passwordChange',
+  NOT_FOUND = 'notFound',
 }
 
 export const RoutePath: Record<AppRoutes, string> = {
@@ -47,6 +49,7 @@ export const RoutePath: Record<AppRoutes, string> = {
     [AppRoutes.NOTIFICATIONS]: `/${AppRoutes.NOTIFICATIONS}`,
     [AppRoutes.EMAIL]: `/${AppRoutes.EMAIL}`,
     [AppRoutes.CHANGES]: `/${AppRoutes.CHANGES}`,
+    [AppRoutes.NOT_FOUND]: '*',
 };
 
 export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
@@ -109,5 +112,9 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
         path: `${RoutePath.changes}`,
         element: <ChangesPage />,
         authOnly: true,
+    },
+    [AppRoutes.NOT_FOUND]: {
+        path: `${RoutePath.notFound}`,
+        element: <NotFoundPage />,
     },
 };
