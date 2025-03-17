@@ -66,19 +66,19 @@ const LoginForm = () => {
     }, []);
 
     return (
-        <form className={styles.form} onSubmit={onSubmit}>
+        <form className="form" onSubmit={onSubmit}>
             {error &&
-              <div className={styles.error}>{error}</div>
+              <div className="error">{error}</div>
             }
 
             <FormControl
                 fullWidth
-                className={styles.FieldWrapper}
+                className="FieldWrapper"
             >
-                <div className={styles.label}>
+                <div className="label">
                     {t('Почта / телефон')}<br/>
                     {isShowError('phoneNumberOrMail') &&
-                        <div className={styles.error}>{t(formik.errors.phoneNumberOrMail)}</div>
+                        <div className="error">{t(formik.errors.phoneNumberOrMail)}</div>
                     }
                 </div>
 
@@ -87,7 +87,7 @@ const LoginForm = () => {
                         currentInputType && (
                             <InputAdornment position="end">
                                 <SvgIcon
-                                    className={currentInputType === 'email' && styles.emailIcon}
+                                    className={currentInputType === 'email' ? 'emailIcon' : ''}
                                     iconName={
                                         currentInputType === 'email'
                                             ? icons.EMAIL
@@ -112,19 +112,19 @@ const LoginForm = () => {
 
             <FormControl
                 fullWidth
-                className={styles.FieldWrapper}
+                className="FieldWrapper"
             >
-                <div className={styles.label}>
+                <div className="label">
                     {t('Пароль')}<br/>
                     {isShowError('password') &&
-                        <div className={styles.error}>{t(formik.errors.password)}</div>
+                        <div className="error">{t(formik.errors.password)}</div>
                     }
                 </div>
 
                 <CustomInput
                     endAdornment={
                         <InputAdornment position="end">
-                            <button type="button" onClick={handleClickShowPassword} className={styles.showPassword}>
+                            <button type="button" onClick={handleClickShowPassword} className="showPassword">
                                 <SvgIcon
                                     iconName={showPassword ? icons.PASSWORD : icons.PASSWORD_OFF}
                                     applyHover={false}
@@ -162,7 +162,7 @@ const LoginForm = () => {
             </div>
 
             <button
-                className={styles.submit}
+                className="submit"
                 type={'submit'}
                 onClick={onSubmit}
             >

@@ -2,9 +2,9 @@ import { LoginForm } from '@/features/auth';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
-import { GuestPageLayout } from '@/widgets/GuestPageLayout';
 import styles from './AuthPage.module.scss';
-import {classNames} from "@/shared/lib/utils/classNames.ts";
+import { classNames } from '@/shared/lib/utils/classNames.ts';
+import { GuestPageLayout } from '@/widgets/guest-page-layout';
 
 const AuthPage = () => {
     const { t } = useTranslation();

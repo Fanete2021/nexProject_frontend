@@ -18,8 +18,8 @@ const EmailConfirmForm = () => {
     const navigate = useNavigate();
 
     const [error, setError] = useState<string>('');
-    const [timer, setTimer] = useState<number>(0); // Таймер в секундах
-    const [isTimerActive, setIsTimerActive] = useState<boolean>(false); // Активен ли таймер
+    const [timer, setTimer] = useState<number>(0);
+    const [isTimerActive, setIsTimerActive] = useState<boolean>(false);
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
     const formik = useFormik({
@@ -47,7 +47,7 @@ const EmailConfirmForm = () => {
     }, [startTimer]);
 
     useEffect(() => {
-        let interval: NodeJS.Timeout;
+        let interval: number;
 
         if (isTimerActive && timer > 0) {
             interval = setInterval(() => {

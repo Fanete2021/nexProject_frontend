@@ -2,12 +2,12 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { FormControl, InputAdornment } from '@mui/material';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
-import styles from './RegistrationForm.module.scss';
 import { useTranslation } from 'react-i18next';
 import { registration } from '@/features/registration/ui/model/service/registration.ts';
-import { CustomInput, icons, SvgIcon } from '@/shared/ui';
-import { memo, useCallback, useState } from 'react';
-import { classNames } from '@/shared/lib/utils/classNames.ts';
+import { CustomInput, icons, SvgIcon, ValidationList, ValidationListItem } from '@/shared/ui';
+import { useCallback, useState } from 'react';
+import { isPasswordValid, isUsernameValid } from '@/shared/lib/utils/validation.ts';
+import { isFormikErrorVisible } from '@/shared/lib/utils/isFormikErrorVisible.ts';
 
 const validationSchema = yup.object({
     email: yup.string().email('Почта невалидна').required('Почта обязательна'),
@@ -21,34 +21,6 @@ const validationSchema = yup.object({
         .required('Подтверждение пароля обязательно')
         .oneOf([yup.ref('password')], 'Пароли не совпадают'),
 });
-
-const isUsernameValid = (username) => {
-    const lengthValid = username.length >= 3 && username.length <= 15;
-    const charsValid = /^[a-zA-Z0-9-_]+$/.test(username);
-    const startsWithLetter = /^[a-zA-Z]/.test(username);
-    return { lengthValid, charsValid, startsWithLetter };
-};
-
-const isPasswordValid = (password) => {
-    const lengthValid = password.length >= 6 && password.length <= 15;
-    const charsValid = /^[a-zA-Z0-9!@#$%^&*]+$/.test(password);
-    return { lengthValid, charsValid };
-};
-
-const CheckIcon = memo(() => (
-    <div className={styles.iconWrapper}>
-        <SvgIcon
-            iconName={icons.CHECK}
-            important
-            applyFill={false}
-            applyStroke
-            applyHover={false}
-            className={styles.icon}
-        />
-    </div>
-));
-
-CheckIcon.displayName = 'CheckIcon';
 
 const RegistrationForm = () => {
     const dispatch = useAppDispatch();
@@ -77,18 +49,44 @@ const RegistrationForm = () => {
     });
 
     const {
-        lengthValid: usernameLengthValid,
-        charsValid: usernameCharsValid,
-        startsWithLetter: usernameStartsWithLetter
+        usernameLengthValid,
+        usernameLengthValidText,
+        usernameStartsWithLetter,
+        usernameStartsWithLetterText,
+        usernameCharsValid,
+        usernameCharsValidText
     } = isUsernameValid(formik.values.username);
-    const {
-        lengthValid: passwordLengthValid,
-        charsValid: passwordCharsValid
-    } = isPasswordValid(formik.values.password);
+    const usernameValidationListItems: ValidationListItem[] = [
+        {
+            text: usernameLengthValidText,
+            isError: !usernameLengthValid
+        },
+        {
+            text: usernameStartsWithLetterText,
+            isError: !usernameStartsWithLetter
+        },
+        {
+            text: usernameCharsValidText,
+            isError: !usernameCharsValid
+        },
+    ];
 
-    const isShowError = (field: string): boolean => {
-        return (formik.touched[field] || formik.submitCount > 0) && Boolean(formik.errors[field]);
-    };
+    const {
+        passwordLengthValid,
+        passwordLengthValidText,
+        passwordCharsValid,
+        passwordCharsValidText
+    } = isPasswordValid(formik.values.password);
+    const passwordValidationListItems: ValidationListItem[] = [
+        {
+            text: passwordLengthValidText,
+            isError: !passwordLengthValid
+        },
+        {
+            text: passwordCharsValidText,
+            isError: !passwordCharsValid
+        },
+    ];
 
     const onSubmit = useCallback((e) => {
         e.preventDefault();
@@ -104,19 +102,19 @@ const RegistrationForm = () => {
     }, []);
 
     return (
-        <form className={styles.form} onSubmit={onSubmit}>
+        <form className="form" onSubmit={onSubmit}>
             {error &&
-                <div className={styles.error}>{error}</div>
+                <div className="error">{error}</div>
             }
 
             <FormControl
                 fullWidth
-                className={styles.FieldWrapper}
+                className="FieldWrapper"
             >
-                <div className={styles.label}>
+                <div className="label">
                     {t('Почта')}<br/>
-                    {isShowError('email') &&
-                        <div className={styles.error}>{t(formik.errors.email)}</div>
+                    {isFormikErrorVisible(formik, 'email') &&
+                        <div className="error">{t(formik.errors.email)}</div>
                     }
                 </div>
 
@@ -124,7 +122,7 @@ const RegistrationForm = () => {
                     endAdornment={
                         <InputAdornment position="end">
                             <SvgIcon
-                                className={styles.emailIcon}
+                                className="emailIcon"
                                 iconName={icons.EMAIL}
                                 applyHover={false}
                                 important={false}
@@ -138,23 +136,23 @@ const RegistrationForm = () => {
                     name="email"
                     value={formik.values.email}
                     onChange={formik.handleChange}
-                    isError={isShowError('email')}
+                    isError={isFormikErrorVisible(formik, 'email')}
                     onBlur={formik.handleBlur}
                 />
             </FormControl>
 
             <FormControl
                 fullWidth
-                className={styles.FieldWrapper}
+                className="FieldWrapper"
             >
-                <div className={styles.label}>
+                <div className="label">
                     {t('Имя пользователя')} <br/>
-                    {isShowError('username') &&
-                        <div className={styles.error}>{t(formik.errors.username)}</div>
+                    {isFormikErrorVisible(formik, 'username') &&
+                        <div className="error">{t(formik.errors.username)}</div>
                     }
                 </div>
 
-                <div className={styles.InputWrapper}>
+                <ValidationList items={usernameValidationListItems} isError={Boolean(formik.errors.username)}>
                     <CustomInput
                         endAdornment={
                             <InputAdornment position="end">
@@ -171,49 +169,29 @@ const RegistrationForm = () => {
                         name="username"
                         value={formik.values.username}
                         onChange={formik.handleChange}
-                        isError={isShowError('username')}
+                        isError={isFormikErrorVisible(formik, 'username')}
                         autoComplete={'off'}
                         onBlur={formik.handleBlur}
                         type="text"
                     />
-
-                    <ul className={
-                        classNames(
-                            styles.validationList,
-                            [Boolean(formik.errors.username) && styles.errorValidationList]
-                        )
-                    }>
-                        <li className={usernameLengthValid ? styles.valid : ''}>
-                            <CheckIcon />
-                            {t('От 3 до 15 символов')}
-                        </li>
-                        <li className={usernameCharsValid ? styles.valid : ''}>
-                            <CheckIcon />
-                            {t('Используются только латинские буквы, цифры и специальные символы ( - _ )')}
-                        </li>
-                        <li className={usernameStartsWithLetter ? styles.valid : ''}>
-                            <CheckIcon />
-                            {t('Начинается с буквы')}
-                        </li>
-                    </ul>
-                </div>
+                </ValidationList>
             </FormControl>
 
             <FormControl
                 fullWidth
-                className={styles.FieldWrapper}
+                className="FieldWrapper"
             >
-                <div className={styles.label}>
+                <div className="label">
                     {t('Пароль')}<br/>
-                    {isShowError('password') &&
-                        <div className={styles.error}>{t(formik.errors.password)}</div>
+                    {isFormikErrorVisible(formik,'password') &&
+                        <div className="error">{t(formik.errors.password)}</div>
                     }
                 </div>
 
-                <div className={styles.InputWrapper}>
+                <ValidationList items={passwordValidationListItems} isError={Boolean(formik.errors.password)}>
                     <CustomInput
                         endAdornment={
-                            <button type="button" onClick={handleClickShowPassword} className={styles.showPassword}>
+                            <button type="button" onClick={handleClickShowPassword} className="showPassword">
                                 <SvgIcon
                                     iconName={showPassword ? icons.PASSWORD : icons.PASSWORD_OFF}
                                     applyHover={false}
@@ -228,41 +206,25 @@ const RegistrationForm = () => {
                         value={formik.values.password}
                         onChange={formik.handleChange}
                         type={showPassword ? 'text' : 'password'}
-                        isError={isShowError('password')}
+                        isError={isFormikErrorVisible(formik, 'password')}
                         onBlur={formik.handleBlur}
                     />
-
-                    <ul className={
-                        classNames(
-                            styles.validationList,
-                            [Boolean(formik.errors.password) && styles.errorValidationList]
-                        )
-                    }>
-                        <li className={passwordLengthValid ? styles.valid : ''}>
-                            <CheckIcon />
-                            {t('От 6 до 15 символов')}
-                        </li>
-                        <li className={passwordCharsValid ? styles.valid : ''}>
-                            <CheckIcon />
-                            {t('Используются только латинские буквы, цифры и специальные символы (!@#$%^&*)')}
-                        </li>
-                    </ul>
-                </div>
+                </ValidationList>
             </FormControl>
 
             <FormControl
                 fullWidth
-                className={styles.FieldWrapper}
+                className="FieldWrapper"
             >
-                <div className={styles.label}>
+                <div className="label">
                     {t('Подтверждение пароля')}<br/>
-                    {isShowError('confirmPassword') &&
-                        <div className={styles.error}>{t(formik.errors.confirmPassword)}</div>
+                    {isFormikErrorVisible(formik, 'confirmPassword') &&
+                        <div className="error">{t(formik.errors.confirmPassword)}</div>
                     }
                 </div>
                 <CustomInput
                     endAdornment={
-                        <button type="button" onClick={handleClickShowConfirmPassword} className={styles.showPassword}>
+                        <button type="button" onClick={handleClickShowConfirmPassword} className="showError">
                             <SvgIcon
                                 iconName={showConfirmPassword ? icons.PASSWORD : icons.PASSWORD_OFF}
                                 applyHover={false}
@@ -277,13 +239,13 @@ const RegistrationForm = () => {
                     value={formik.values.confirmPassword}
                     onChange={formik.handleChange}
                     type={showConfirmPassword ? 'text' : 'password'}
-                    isError={isShowError('confirmPassword')}
+                    isError={isFormikErrorVisible(formik, 'confirmPassword')}
                     onBlur={formik.handleBlur}
                 />
             </FormControl>
 
             <button
-                className={styles.submit}
+                className="submit"
                 type={'submit'}
                 onClick={onSubmit}
             >

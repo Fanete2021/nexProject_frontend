@@ -1,10 +1,10 @@
 import React, { ReactNode } from 'react';
 import styles from './GuestPageLayout.module.scss';
-import { LanguageSwitcher } from '@/widgets/LanguageSwitcher';
-import { ThemeSwitcher } from '@/widgets/ThemeSwitcher';
 import { Logo } from '@/shared/ui';
 import { useTranslation } from 'react-i18next';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
+import { LanguageSwitcher } from '@/widgets/language-switcher';
+import { ThemeSwitcher } from '@/widgets/theme-switcher';
 
 export interface GuestPageLayoutProps {
     children?: ReactNode;

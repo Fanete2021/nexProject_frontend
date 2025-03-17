@@ -1,6 +1,6 @@
-import { GuestPageLayout } from '@/widgets/GuestPageLayout';
 import { ChangePasswordForm } from '@/features/change-password';
-import {useParams} from "react-router-dom";
+import { useParams } from 'react-router-dom';
+import { GuestPageLayout } from '@/widgets/guest-page-layout';
 
 const PasswordChangePage = () => {
     const { token } = useParams<{ token: string }>();

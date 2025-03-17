@@ -1,0 +1,73 @@
+.wrapper {
+  width: 100%;
+  position: relative;
+
+  .validationList {
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    transform: translate(0, -50%);
+    margin-top: 0;
+    margin-left: 10px;
+    width: 100%;
+    list-style: none;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    user-select: none;
+
+    .iconWrapper {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 5px;
+      flex-shrink: 0;
+    }
+
+    .valid {
+      color: var(--success-text-color);
+
+      .icon {
+        stroke: var(--success-text-color);
+      }
+    }
+
+    li {
+      display: flex;
+      align-items: center;
+      margin-top: 2px;
+      font-size: 14px;
+      line-height: 17px;
+      text-align: left;
+    }
+  }
+
+  &:focus-within .validationList {
+    opacity: 1;
+    max-height: 999px;
+  }
+
+  @media screen and (max-width: 1000px) {
+    .validationList {
+      position: relative;
+      margin-left: 0;
+      margin-top: 5px;
+      top: 0;
+      left: 0;
+      transform: unset;
+    }
+  }
+}
+
+.errorValidationList {
+  li {
+    color: var(--error-text-color);
+
+    .icon {
+      stroke: var(--error-text-color);
+    }
+  }
+}

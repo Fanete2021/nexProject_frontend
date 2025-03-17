@@ -2,11 +2,11 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { FormControl, InputAdornment } from '@mui/material';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
-import styles from './EmailForm.module.scss';
 import { useTranslation } from 'react-i18next';
 import { CustomInput, icons, SvgIcon } from '@/shared/ui';
 import { useCallback, useState } from 'react';
 import { changePassword } from '../../model/service/changePassword.ts';
+import { isFormikErrorVisible } from '@/shared/lib/utils/isFormikErrorVisible.ts';
 
 const validationSchema = yup.object({
     email: yup.string().email('Почта невалидна').required('Почта обязательна'),
@@ -36,32 +36,28 @@ const EmailForm = () => {
         },
     });
 
-    const isShowError = (field: string): boolean => {
-        return (formik.touched[field] || formik.submitCount > 0) && Boolean(formik.errors[field]);
-    };
-
     const onSubmit = useCallback((e) => {
         e.preventDefault();
         formik.handleSubmit();
     }, [formik.handleSubmit]);
 
     return (
-        <form className={styles.form} onSubmit={onSubmit}>
+        <form className="form" onSubmit={onSubmit}>
             {successText &&
-                <div className={styles.success}>{t(successText)}</div>
+                <div className="success">{t(successText)}</div>
             }
             {error &&
-                <div className={styles.error}>{error}</div>
+                <div className="error">{error}</div>
             }
 
             <FormControl
                 fullWidth
-                className={styles.FieldWrapper}
+                className="FieldWrapper"
             >
-                <div className={styles.label}>
+                <div className="label">
                     {t('Почта')}<br/>
-                    {isShowError('email') &&
-                        <div className={styles.error}>{t(formik.errors.email)}</div>
+                    {isFormikErrorVisible(formik, 'email') &&
+                        <div className="error">{t(formik.errors.email)}</div>
                     }
                 </div>
 
@@ -69,7 +65,7 @@ const EmailForm = () => {
                     endAdornment={
                         <InputAdornment position="end">
                             <SvgIcon
-                                className={styles.emailIcon}
+                                className="emailIcon"
                                 iconName={icons.EMAIL}
                                 applyHover={false}
                                 important={false}
@@ -83,13 +79,13 @@ const EmailForm = () => {
                     name="email"
                     value={formik.values.email}
                     onChange={formik.handleChange}
-                    isError={isShowError('email')}
+                    isError={isFormikErrorVisible(formik, 'email')}
                     onBlur={formik.handleBlur}
                 />
             </FormControl>
 
             <button
-                className={styles.submit}
+                className="submit"
                 type={'submit'}
                 onClick={onSubmit}
             >
