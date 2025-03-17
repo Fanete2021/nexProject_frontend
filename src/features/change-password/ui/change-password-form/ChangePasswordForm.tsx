@@ -106,7 +106,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = (props) => {
 
                 <ValidationList
                     items={newPasswordValidationListItems}
-                    isError={Boolean(formik.errors.newPassword)}
+                    hasError={isFormikErrorVisible(formik, 'newPassword')}
                 >
                     <CustomInput
                         endAdornment={

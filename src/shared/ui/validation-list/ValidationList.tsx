@@ -19,23 +19,37 @@ const CheckIcon = memo(() => (
 ));
 CheckIcon.displayName = 'CheckIcon';
 
+const CrossIcon = memo(() => (
+    <div className={styles.iconWrapper}>
+        <SvgIcon
+            iconName={icons.CROSS}
+            important
+            applyFill={false}
+            applyStroke
+            applyHover={false}
+            className={styles.icon}
+        />
+    </div>
+));
+CrossIcon.displayName = 'CrossIcon';
+
 export interface ValidationListProps {
     children?: ReactNode;
-    isError?: boolean;
+    hasError?: boolean;
     items: ValidationListItem[];
 }
 
 const ValidationList: React.FC<ValidationListProps> = (props) => {
     const {
         children,
-        isError = false,
+        hasError = false,
         items
     } = props;
     
     const { t } = useTranslation();
 
     const mods: Record<string, boolean> = {
-        [styles.errorValidationList]: isError
+        [styles.errorValidationList]: hasError
     };
 
     return (
@@ -48,7 +62,11 @@ const ValidationList: React.FC<ValidationListProps> = (props) => {
                         className={item.isError ? '' : styles.valid}
                         key={item.text}
                     >
-                        <CheckIcon />
+                        {(item.isError && hasError)
+                            ? <CrossIcon />
+                            : <CheckIcon />
+                        }
+
                         {t(item.text)}
                     </li>
                 ))}

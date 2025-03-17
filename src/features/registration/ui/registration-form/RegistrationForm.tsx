@@ -13,7 +13,7 @@ const validationSchema = yup.object({
     email: yup.string().email('Почта невалидна').required('Почта обязательна'),
     username: yup.string()
         .required('Имя пользователя обязательно')
-        .matches(/^[a-zA-Z0-9-_]{3,15}$/,'Не соответствует шаблону'),
+        .matches(/^[a-zA-Z][a-zA-Z0-9-_]{2,14}$/,'Не соответствует шаблону'),
     password: yup.string()
         .required('Пароль обязателен')
         .matches(/^[a-zA-Z0-9!@#$%^&*]{6,15}$/, 'Не соответствует шаблону'),
@@ -152,7 +152,10 @@ const RegistrationForm = () => {
                     }
                 </div>
 
-                <ValidationList items={usernameValidationListItems} isError={Boolean(formik.errors.username)}>
+                <ValidationList
+                    items={usernameValidationListItems}
+                    hasError={isFormikErrorVisible(formik, 'username')}
+                >
                     <CustomInput
                         endAdornment={
                             <InputAdornment position="end">
@@ -188,7 +191,10 @@ const RegistrationForm = () => {
                     }
                 </div>
 
-                <ValidationList items={passwordValidationListItems} isError={Boolean(formik.errors.password)}>
+                <ValidationList
+                    items={passwordValidationListItems}
+                    hasError={isFormikErrorVisible(formik, 'password')}
+                >
                     <CustomInput
                         endAdornment={
                             <button type="button" onClick={handleClickShowPassword} className="showPassword">
