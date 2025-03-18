@@ -17,7 +17,7 @@ const AuthPage = () => {
                 to={RoutePath.registration} 
                 className={classNames(styles.guestLink, ['guestLink'])}
             >
-                {t('Нет аккаунта?')}
+                <>{t('Нет аккаунта?')}</>
             </Link>
         </GuestPageLayout>
     );

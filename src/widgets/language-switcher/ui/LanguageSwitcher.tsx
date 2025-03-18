@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Popover } from '@mui/material';
 import { icons, SvgIcon } from '@/shared/ui';
 import styles from './LanguageSwitcher.module.scss';
-import {LOCAL_STORAGE_LANGUAGE_KEY} from "@/shared/config/i18n/i18n.ts";
+import { LOCAL_STORAGE_LANGUAGE_KEY } from '@/shared/config/i18n/i18n.ts';
 
 const LanguageSwitcher = memo(() => {
     const { i18n } = useTranslation();

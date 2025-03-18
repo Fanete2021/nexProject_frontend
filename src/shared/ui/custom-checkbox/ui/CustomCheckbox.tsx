@@ -1,7 +1,7 @@
 import React from 'react';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import styles from './CustomCheckbox.module.scss';
-import {icons, SvgIcon} from "@/shared/ui";
+import { icons, SvgIcon } from '@/shared/ui';
 
 export interface CustomCheckboxProps extends React.ComponentPropsWithoutRef<'input'> {
     label?: string;

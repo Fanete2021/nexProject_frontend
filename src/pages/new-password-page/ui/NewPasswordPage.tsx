@@ -19,7 +19,7 @@ const NewPasswordPage = () => {
                 to={RoutePath.auth}
                 className={classNames(styles.guestLink, ['guestLink'])}
             >
-                {t('Вернуться назад')}
+                <>{t('Вернуться назад')}</>
             </Link>
         </GuestPageLayout>
     );

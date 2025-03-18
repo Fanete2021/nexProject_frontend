@@ -12,7 +12,7 @@ import { RegistrationPage } from '@/pages/registration-page';
 import { EmailConfirmPage } from '@/pages/email-confirm-page';
 import { NewPasswordPage } from '@/pages/new-password-page';
 import { PasswordChangePage } from '@/pages/password-change-page';
-import {NotFoundPage} from "@/pages/not-found-page";
+import { NotFoundPage } from '@/pages/not-found-page';
 
 export type AppRoutesProps = PathRouteProps & {
     authOnly?: boolean;
