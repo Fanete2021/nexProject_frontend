@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import styles from './Sidebar.module.scss';
-import {icons, Logo, SvgIcon} from '@/shared/ui';
+import { icons, Logo, SvgIcon } from '@/shared/ui';
 import { SidebarItemsList } from '../model/items.ts';
 import { Link, useLocation } from 'react-router-dom';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';

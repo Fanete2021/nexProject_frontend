@@ -10,7 +10,7 @@ import { useCallback, useState } from 'react';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
 import { Link, useNavigate } from 'react-router-dom';
 import { getInputType } from '@/shared/lib/utils/getInputType.ts';
-import {classNames} from "@/shared/lib/utils/classNames.ts";
+import { classNames } from '@/shared/lib/utils/classNames.ts';
 
 const validationSchema = yup.object({
     phoneNumberOrMail: yup.string()
@@ -157,7 +157,7 @@ const LoginForm = () => {
                     to={RoutePath.newPassword}
                     className={classNames(styles.forgot, ['guestLink'])}
                 >
-                    {t('Забыли пароль?')}
+                    <>{t('Забыли пароль?')}</>
                 </Link>
             </div>
 

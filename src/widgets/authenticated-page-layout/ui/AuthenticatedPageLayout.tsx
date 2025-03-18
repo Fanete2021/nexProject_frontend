@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import styles from './AuthenticatedPageLayout.module.scss';
-import { Sidebar } from '@/widgets/Sidebar';
+import { Sidebar } from '@/widgets/sidebar';
 import { ThemeSwitcher } from '@/widgets/theme-switcher';
 import { LanguageSwitcher } from '@/widgets/language-switcher';
 

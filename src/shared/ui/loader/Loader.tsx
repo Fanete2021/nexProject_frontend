@@ -1,4 +1,4 @@
-import {FC, memo} from 'react';
+import { FC, memo } from 'react';
 import './Loader.scss';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 
