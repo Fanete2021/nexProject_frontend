@@ -1,13 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ThunkConfig } from '@/app/providers/store-provider';
 import { authActions } from '../slice/authSlice.ts';
+import { userActions } from '@/entities/user';
 
-interface RefreshTokenResponse {
-  access_token: string;
-}
-
-export const refreshToken = createAsyncThunk<RefreshTokenResponse, void, ThunkConfig<string>> (
-    'auth/refreshToken',
+export const logout = createAsyncThunk<void, void, ThunkConfig<string>> (
+    'auth/logout',
     async (authData, thunkAPI) => {
         const {
             extra,
@@ -16,11 +13,12 @@ export const refreshToken = createAsyncThunk<RefreshTokenResponse, void, ThunkCo
         } = thunkAPI;
 
         try {
-            const response = await extra.api.post('/auth/refresh-token', null, {
+            const response = await extra.api.post('/logout', null, {
                 withCredentials: true
             });
 
-            await dispatch(authActions.setToken(response.data.access_token));
+            await dispatch(authActions.resetToken());
+            await dispatch(userActions.resetData());
 
             return response.data;
         } catch (e) {

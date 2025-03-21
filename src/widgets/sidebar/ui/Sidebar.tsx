@@ -1,11 +1,13 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import styles from './Sidebar.module.scss';
 import { icons, Logo, SvgIcon } from '@/shared/ui';
 import { SidebarItemsList } from '../model/items.ts';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
 import { useTranslation } from 'react-i18next';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
+import { logout } from '@/features/auth';
 
 export interface SidebarProps {
     className?: string;
@@ -17,6 +19,8 @@ const Sidebar: React.FC<SidebarProps> = (props: SidebarProps) => {
     const { t } = useTranslation();
     const [ expanded, setExpanded ] = useState<boolean>(false);
     const location = useLocation();
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
     const mods: Record<string, boolean> = {
         [styles.expanded]: expanded,
@@ -53,6 +57,16 @@ const Sidebar: React.FC<SidebarProps> = (props: SidebarProps) => {
             }
         </Link>
     )), [expanded, t, location]);
+    
+    const logoutHandler = useCallback(async () => {
+        try {
+            await dispatch(logout()).unwrap();
+
+            navigate(RoutePath.auth);
+        } catch (error) {
+            console.log(error);
+        }
+    }, [navigate, dispatch]);
 
     return (
         <div
@@ -99,7 +113,7 @@ const Sidebar: React.FC<SidebarProps> = (props: SidebarProps) => {
                     }
                 </Link>
 
-                <Link to={RoutePath.auth} className={styles.linkWrapper}>
+                <button className={styles.linkWrapper} onClick={logoutHandler}>
                     <SvgIcon
                         className={classNames(styles.icon,[styles.applyIconFill])}
                         iconName={icons.LOGOUT}
@@ -110,7 +124,7 @@ const Sidebar: React.FC<SidebarProps> = (props: SidebarProps) => {
                             {t('Выйти')}
                         </div>
                     }
-                </Link>
+                </button>
             </div>
         </div>
     );

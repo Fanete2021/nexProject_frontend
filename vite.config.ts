@@ -25,6 +25,7 @@ export default defineConfig({
         }
     },
     server: {
+        host: 'nex.moootvey.ru',
         port: 3000
     }
     // server: {

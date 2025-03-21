@@ -6,11 +6,14 @@ import styles from './LoginForm.module.scss';
 import { login } from '@/features/auth/model/service/login.ts';
 import { useTranslation } from 'react-i18next';
 import { CustomCheckbox, CustomInput, icons, SvgIcon } from '@/shared/ui';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
 import { Link, useNavigate } from 'react-router-dom';
 import { getInputType } from '@/shared/lib/utils/getInputType.ts';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
+import { useSelector } from 'react-redux';
+import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
+import { sendCode } from '@/features/confirm-email';
 
 const validationSchema = yup.object({
     phoneNumberOrMail: yup.string()
@@ -27,6 +30,7 @@ const LoginForm = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState<string>('');
     const navigate = useNavigate();
+    const user = useSelector(getUserData);
 
     const formik = useFormik({
         initialValues: {
@@ -37,18 +41,27 @@ const LoginForm = () => {
         validationSchema,
         onSubmit: async (values) => {
             try {
-                const response = await dispatch(login(values)).unwrap();
-
-                if (response.user.verify) {
-                    navigate(RoutePath.main);
-                } else {
-                    navigate(RoutePath.emailConfirm);
-                }
+                await dispatch(login(values)).unwrap();
             } catch (error) {
                 setError(error);
             }
         },
     });
+
+    useEffect(() => {
+        if (user) {
+            if (user.verify) {
+                navigate(RoutePath.main);
+            } else {
+                try {
+                    dispatch(sendCode()).unwrap();
+                } catch (error) {
+                    console.log(error);
+                }
+                navigate(RoutePath.emailConfirm);
+            }
+        }
+    }, [user]);
 
     const isShowError = (field: string): boolean => {
         return (formik.touched[field] || formik.submitCount > 0) && Boolean(formik.errors[field]);

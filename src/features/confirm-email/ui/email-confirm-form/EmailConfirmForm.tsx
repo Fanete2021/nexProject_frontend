@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { CustomInput } from '@/shared/ui';
 import { useCallback, useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { confirmEmail, sendCode } from '@/features/confirm-email';
+import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
 
 const formatTime = (time: number): string => {
     const minutes = Math.floor(time / 60);
@@ -18,8 +20,8 @@ const EmailConfirmForm = () => {
     const navigate = useNavigate();
 
     const [error, setError] = useState<string>('');
-    const [timer, setTimer] = useState<number>(0);
-    const [isTimerActive, setIsTimerActive] = useState<boolean>(false);
+    const [timer, setTimer] = useState<number>(60);
+    const [isTimerActive, setIsTimerActive] = useState<boolean>(true);
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
     const formik = useFormik({
@@ -28,9 +30,10 @@ const EmailConfirmForm = () => {
         },
         onSubmit: async (values) => {
             try {
-                const confirmCode = { code: values.confirmCode.join('') };
-                setError('error');
-                // await dispatch(confirmEmail(confirmCode)).unwrap();
+                const confirmCode = { confirmCode: values.confirmCode.join('') };
+                await dispatch(confirmEmail(confirmCode)).unwrap();
+
+                navigate(RoutePath.main);
             } catch (error) {
                 setError(error);
             }
@@ -42,8 +45,9 @@ const EmailConfirmForm = () => {
         setTimer(60);
     }, []);
 
-    const sendCode = useCallback(() => {
+    const sendCodeHandler = useCallback(() => {
         startTimer();
+        dispatch(sendCode());
     }, [startTimer]);
 
     useEffect(() => {
@@ -122,7 +126,7 @@ const EmailConfirmForm = () => {
                     :
                     <button
                         className={styles.sendCode}
-                        onClick={sendCode}
+                        onClick={sendCodeHandler}
                     >
                         {t('Я не получил(а) код')}
                     </button>

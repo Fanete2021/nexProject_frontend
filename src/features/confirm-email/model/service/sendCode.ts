@@ -1,12 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ThunkConfig } from '@/app/providers/store-provider';
 
-interface ConfirmEmailProps {
-    confirmCode: string;
-}
-
-export const confirmEmail = createAsyncThunk<void, ConfirmEmailProps, ThunkConfig<string>> (
-    'confirmEmail/confirmEmail',
+export const sendCode = createAsyncThunk<void, void, ThunkConfig<string>> (
+    'confirmEmail/sendCode',
     async (confirmEmailData, thunkAPI) => {
         const {
             extra,
@@ -14,9 +10,8 @@ export const confirmEmail = createAsyncThunk<void, ConfirmEmailProps, ThunkConfi
         } = thunkAPI;
 
         try {
-            const response = await extra.api.post('/confirm', confirmEmailData);
-
-            return response.data;
+            //TODO поменять на post
+            const response = await extra.api.get('/confirm/sendCode');
         } catch (e) {
             return rejectWithValue(e.response.data.message);
         }

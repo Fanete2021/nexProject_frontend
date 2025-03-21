@@ -5,6 +5,7 @@ import { login } from './model/service/login.ts';
 import { refreshToken } from './model/service/refreshToken.ts';
 import { getAuthIsAuth } from './model/selectors/getAuthIsAuth.ts';
 import { getAuthToken } from './model/selectors/getAuthToken.ts';
+import { logout } from './model/service/logout.ts';
 
 export type {
     AuthSchema
@@ -18,6 +19,7 @@ export {
 
     login,
     refreshToken,
+    logout,
 
     getAuthIsAuth,
     getAuthToken

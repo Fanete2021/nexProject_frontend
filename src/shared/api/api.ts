@@ -3,14 +3,9 @@ import { StateSchema } from '@/app/providers/store-provider';
 import { getAuthToken } from '@/features/auth';
 import { Store } from '@reduxjs/toolkit';
 
-let store: Store<StateSchema>;
-
-export const configureApi = (appStore: Store<StateSchema>) => {
-    store = appStore; // Сохраняем store
-
+export const configureApi = (store: Store<StateSchema>) => {
     const api = axios.create({
-        baseURL: import.meta.env.VITE_API,
-        withCredentials: true,
+        baseURL: import.meta.env.VITE_API
     });
 
     api.interceptors.request.use((config) => {
@@ -25,5 +20,3 @@ export const configureApi = (appStore: Store<StateSchema>) => {
 
     return api;
 };
-
-export const $api = configureApi(store);
