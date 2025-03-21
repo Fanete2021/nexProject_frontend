@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
 import { ThunkConfig } from '@/app/providers/store-provider';
-import {User, userActions} from "@/entities/user";
-import {authActions} from "@/features/auth";
+import { fetchUserData } from '@/entities/user';
+import { authActions } from '@/features/auth';
 
 interface RegistrationProps {
     email: string;
@@ -12,8 +12,7 @@ interface RegistrationProps {
 }
 
 interface RegistrationResponse {
-    jwtToken: string;
-    user: User;
+    access_token: string;
 }
 
 export const registration = createAsyncThunk<RegistrationResponse, RegistrationProps, ThunkConfig<string>> (
@@ -28,10 +27,7 @@ export const registration = createAsyncThunk<RegistrationResponse, RegistrationP
         try {
             const response = await extra.api.post('/auth/signup', registrationData);
 
-            dispatch(authActions.setToken(response.data.jwtToken));
-            dispatch(userActions.setData(response.data.user));
-
-            extra.navigate?.(RoutePath.emailConfirm);
+            await dispatch(authActions.setToken(response.data.access_token));
 
             return response.data;
         } catch (e) {

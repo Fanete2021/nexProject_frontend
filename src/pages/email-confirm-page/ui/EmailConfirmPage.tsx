@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
 import styles from './EmailConfirmPage.module.scss';
 import { useSelector } from 'react-redux';
@@ -7,10 +7,26 @@ import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { EmailConfirmForm } from '@/features/confirm-email';
 import { GuestPageLayout } from '@/widgets/guest-page-layout';
+import {useCallback, useEffect} from 'react';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
+import { userActions } from '@/entities/user';
 
 const EmailConfirmPage = () => {
     const { t } = useTranslation();
     const user = useSelector(getUserData);
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+
+    const navigateToAuthPage = useCallback(async () => {
+        await dispatch(userActions.resetData());
+        navigate(RoutePath.auth);
+    }, [navigate, dispatch]);
+
+    useEffect(() => {
+        if (!user) {
+            navigate(RoutePath.auth);
+        }
+    }, [user]);
 
     return (
         <GuestPageLayout
@@ -22,12 +38,12 @@ const EmailConfirmPage = () => {
 
             <EmailConfirmForm />
 
-            <Link
-                to={RoutePath.auth}
+            <button
+                onClick={navigateToAuthPage}
                 className={classNames(styles.guestLink, ['guestLink'])}
             >
                 <>{t('Вернуться назад')}</>
-            </Link>
+            </button>
         </GuestPageLayout>
     );
 };

@@ -15,7 +15,7 @@ export const newPassword = createAsyncThunk<void, NewPasswordProps, ThunkConfig<
             rejectWithValue,
         } = thunkAPI;
         try {
-            const response = await extra.api.post(`/newPassword?token=${token}`, changePasswordData);
+            const response = await extra.api.post(`/newPassword/${token}`, changePasswordData);
 
             return response.data;
         } catch (e) {

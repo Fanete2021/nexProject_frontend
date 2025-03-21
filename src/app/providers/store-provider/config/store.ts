@@ -2,10 +2,10 @@ import { configureStore, Reducer, ReducersMapObject } from '@reduxjs/toolkit';
 import { StateSchema, ThunkExtraArg } from './StateSchema.ts';
 import { createReducerManager } from './reducerManager.ts';
 import { NavigateOptions, To } from 'react-router-dom';
-import { $api, configureApi } from '@/shared/api/api.ts';
+import { configureApi } from '@/shared/api/api.ts';
 import { authReducer } from '@/features/auth';
 import { userReducer } from '@/entities/user';
-import { tokenMiddleware } from './middleware';
+import { tokenMiddleware, userMiddleware } from './middleware';
 
 export function createReduxStore(
     initialState?: StateSchema,
@@ -21,7 +21,6 @@ export function createReduxStore(
     const reducerManager = createReducerManager(rootReducers);
 
     const extraArg: ThunkExtraArg = {
-        api: $api,
         navigate: navigate
     };
 
@@ -32,9 +31,6 @@ export function createReduxStore(
             thunk: {
                 extraArgument: extraArg
             }
-        }).concat((store) => (next) => (action) => {
-            console.log('Dispatching action:', action);
-            return next(action);
         }).concat(tokenMiddleware)
     });
 
@@ -42,7 +38,7 @@ export function createReduxStore(
     // @ts-expect-error
     store.reducerManager = reducerManager;
 
-    configureApi(store);
+    extraArg.api = configureApi(store);
 
     return store;
 }

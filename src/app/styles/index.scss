@@ -4,6 +4,7 @@
 @forward "./themes/minimalisticLight";
 @forward "./variables/global";
 @forward "./common/form";
+@forward "./common/pages";
 
 * {
   font-family: 'PTSans', sans-serif;
@@ -15,20 +16,4 @@
   background: var(--bg-color);
   color: var(--text-color);
   transition: background-color 0.5s, color 0.5s;
-}
-
-.guestLink {
-  color: var(--link-text-color);
-  line-height: 18px;
-  font-size: 14px;
-
-  &:hover {
-    color: var(--link-text-hover-color);
-  }
-
-  &:focus-within {
-    .error, .notchedOutline {
-      border-width: 2px !important;
-    }
-  }
 }

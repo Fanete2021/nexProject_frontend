@@ -8,6 +8,9 @@ import { CustomInput, icons, SvgIcon, ValidationList, ValidationListItem } from 
 import { useCallback, useState } from 'react';
 import { isPasswordValid, isUsernameValid } from '@/shared/lib/utils/validation.ts';
 import { isFormikErrorVisible } from '@/shared/lib/utils/isFormikErrorVisible.ts';
+import {fetchUserData} from "@/entities/user";
+import {RoutePath} from "@/shared/config/routeConfig/routeConfig.tsx";
+import {useNavigate} from "react-router-dom";
 
 const validationSchema = yup.object({
     email: yup.string().email('Почта невалидна').required('Почта обязательна'),
@@ -28,6 +31,7 @@ const RegistrationForm = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [error, setError] = useState<string>('');
+    const navigate = useNavigate();
 
     const formik = useFormik({
         initialValues: {
@@ -42,6 +46,9 @@ const RegistrationForm = () => {
         onSubmit: async (values) => {
             try {
                 await dispatch(registration(values)).unwrap();
+                await dispatch(fetchUserData());
+
+                navigate(RoutePath.emailConfirm);
             } catch (error) {
                 setError(error);
             }
