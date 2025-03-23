@@ -1,31 +1,72 @@
-.title, .back {
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.postsList {
-  margin-left: 20px;
-
-  .title {
-    text-decoration: underline;
-  }
-}
-
 .header {
+  height: 80px;
+  width: 100%;
   display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  font-size: 48px;
+  line-height: 62px;
 
-  .back {
-  }
-
-  .title {
-
+  .icon {
+    width: 50px;
+    height: 50px;
   }
 }
 
-.changesList {
-  margin-left: 40px;
+.posts {
+  margin: 0 20px 20px 20px;
 
-  .change {
+  .post:not(:first-child) {
+    margin-top: 5px;
+  }
 
+  .post:not(:last-child) {
+    border-bottom: 1px solid var(--changelog-line-color);
+    padding-bottom: 5px;
+  }
+
+  .post {
+    .date {
+      font-weight: bold;
+      font-size: 24px;
+      line-height: 31px;
+    }
+
+    .tags {
+      margin-top: 5px;
+      display: flex;
+      gap: 5px;
+
+      .tag {
+        padding: 4px 6px;
+        color: var(--changelog-chip-text-color);
+        border-radius: 10px;
+        font-size: 12px;
+        line-height: 16px;
+      }
+
+      .ui {
+        background: var(--changelog-chip-ui-bg-color);
+      }
+
+      .bugfix {
+        background: var(--changelog-chip-bugfix-bg-color);
+      }
+
+      .functional {
+        background: var(--changelog-chip-functional-bg-color);
+      }
+    }
+
+    .changes {
+      margin-top: 10px;
+      list-style-position: inside;
+
+      .change {
+        font-size: 14px;
+        line-height: 18px;
+      }
+    }
   }
 }

@@ -1,59 +1,71 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import data from '../model/data/posts.json';
-import { IPost } from '../model/types/post.ts';
 import styles from './ChangesPage.module.scss';
 import { AuthenticatedPageLayout } from '@/widgets/authenticated-page-layout';
+import { icons, SvgIcon } from '@/shared/ui';
+import { IPost } from '../model/types/post.ts';
+import { classNames } from '@/shared/lib/utils/classNames.ts';
+import { Namespaces } from '@/shared/config/i18n/i18n.ts';
 
 const posts: IPost[] = data;
 
-const ChangesPage = () => {
-    const { t } = useTranslation();
-
-    const [selectedPost, setSelectedPost] = useState<IPost | null>(null);
-
-    const resetSelectedPost = () => {
-        setSelectedPost(null);
-    };
-
-    if (!selectedPost) {
-        return (
-            <AuthenticatedPageLayout>
-                <ul className={styles.postsList}>
-                    {posts.map(post => (
-                        <li className={styles.title} key={post.id}>
-                            <button onClick={() => setSelectedPost(post)}>
-                                {t(post.title)}
-                            </button>
-                        </li>
-                    ))}
-                </ul>
-            </AuthenticatedPageLayout>
-        );
+const getClassByTag = (tag) => {
+    switch (tag) {
+        case 'UI/UX':
+            return 'ui';
+        case 'Функциональность':
+            return 'functional';
+        case 'Багфикс':
+            return 'bugfix';
+        default:
+            return null;
     }
+};
+
+const ChangesPage = () => {
+    const { t } = useTranslation(Namespaces.CHANGELOG);
 
     return (
         <AuthenticatedPageLayout>
             <div className={styles.header}>
-                <button
-                    onClick={() => resetSelectedPost()}
-                    className={styles.back}
-                >
-                    ←
-                </button>
-
-                <div className={styles.title}>
-                    {t(selectedPost.title)}
-                </div>
+                {t('История обновлений сайта')}
+                <SvgIcon 
+                    iconName={icons.CHANGES}
+                    important
+                    applyHover={false}
+                    className={styles.icon}
+                />
             </div>
 
-            <ul className={styles.changesList}>
-                {selectedPost.changes?.map(change => (
-                    <li className={styles.change} key={change}>
-                        {t(change)}
-                    </li>
+            <div className={styles.posts}>
+                {posts.map((post, index) => (
+                    <div className={styles.post} key={post.date}>
+                        <div className={styles.date}>
+                            {t(post.date)}
+                        </div>
+
+                        <div className={styles.tags}>
+                            {post.tags.map((tag) => (
+                                <div
+                                    className={classNames(styles.tag, [styles[getClassByTag(tag)]])}
+                                    key={tag + index}
+                                >
+                                    {t(tag)}
+                                </div>
+                            ))}
+                        </div>
+
+                        <ul className={styles.changes}>
+                            {post.changes.map((change) => (
+                                <li className={styles.change} key={change + index}>
+                                    {t(change)}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                 ))}
-            </ul>
+            </div>
         </AuthenticatedPageLayout>
     );
 };
