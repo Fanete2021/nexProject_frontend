@@ -7,9 +7,6 @@ const ChatsPage = () => {
 
     return (
         <AuthenticatedPageLayout>
-            <>
-                {t('Матвей гений!')}
-            </>
         </AuthenticatedPageLayout>
     );
 };
