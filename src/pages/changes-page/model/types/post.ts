@@ -1,6 +1,5 @@
 export interface IPost {
-    id: number;
-    title: string;
-    bugs?: string[];
-    changes?: string[];
+    date: string;
+    tags: string[];
+    changes: string[];
 }

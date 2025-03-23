@@ -16,9 +16,6 @@ const AuthenticatedPageLayout: React.FC<AuthenticatedPageLayoutProps> = (props) 
             <Sidebar className={styles.sidebar}/>
 
             <div className={styles.content}>
-                <ThemeSwitcher />
-                <LanguageSwitcher />
-
                 {children}
             </div>
         </div>

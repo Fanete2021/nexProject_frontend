@@ -1,0 +1,21 @@
+{
+  "История обновлений сайта": "Website Update History",
+  "Функциональность": "Functionality",
+  "UI/UX": "UI/UX",
+  "Багфикс": "Bugfix",
+  "Возможность подтвердить почту": "Ability to confirm mail",
+  "Сохранение статуса авторизированного для пользователя при перезагрузке страниц": "Saving the authorized status for a user when reloading pages",
+  "Возможность выйти из аккаунта": "Ability to log out of the account",
+  "Ошибки валидации помечены крестиками": "Validation errors are marked with crosses",
+  "Страница для неправильного пути": "Page for the wrong path",
+  "Выбранный язык сохраняется после перезагрузки страницы": "The selected language is saved after the page reloads",
+  "Страница для смены пароля": "Password reset page",
+  "Нефукциональная страница для подтверждения email’а": "Non-functional page for email confirmation",
+  "Валидация для форм": "Validation for forms",
+  "Разные иконки для поля почты и телефона": "Different icons for mail and phone fields",
+  "Исправлен баг с белым квадратом на черном фоне на телефоне": "Fixed bug with white square on black background on phone",
+  "Выделение при фокусе для полей ввода": "Highlighting on focus for input fields",
+  "Адаптивная вёрстка для форм авторизации и регистрации": "Adaptive layout for authorization and registration forms",
+  "Страницы для регистрации и авторизации": "Pages for registration and authorization",
+  "Пустые страницы и раскрывающееся меню для авторизованных пользователей": "Blank pages and drop-down menu for authorized users"
+}

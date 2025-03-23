@@ -7,9 +7,6 @@ const CalendarPage = () => {
 
     return (
         <AuthenticatedPageLayout>
-            <>
-                {t('Матвей гений!')}
-            </>
         </AuthenticatedPageLayout>
     );
 };

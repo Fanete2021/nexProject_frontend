@@ -7,9 +7,6 @@ const TeamsPage = () => {
 
     return (
         <AuthenticatedPageLayout>
-            <>
-                {t('Матвей гений!')}
-            </>
         </AuthenticatedPageLayout>
     );
 };

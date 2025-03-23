@@ -7,9 +7,6 @@ const EmailPage = () => {
 
     return (
         <AuthenticatedPageLayout>
-            <>
-                {t('Матвей гений!')}
-            </>
         </AuthenticatedPageLayout>
     );
 };

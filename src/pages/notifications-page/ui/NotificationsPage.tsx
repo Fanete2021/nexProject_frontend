@@ -7,9 +7,6 @@ const NotificationsPage = () => {
 
     return (
         <AuthenticatedPageLayout>
-            <>
-                {t('Матвей гений!')}
-            </>
         </AuthenticatedPageLayout>
     );
 };

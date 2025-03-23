@@ -1,0 +1,15 @@
+{
+  "Матвей Слабухин": "Matvey Slabukhin",
+  "Николай Гончаров": "Nikolay Goncharov",
+  "Backend-разработчик": "Backend developer",
+  "Администратор серверов": "Server administrator",
+  "Автор технических заданий": "Author of technical assignments",
+  "Разработчик функциональности": "Functionality Developer",
+  "DevOps-инженер": "DevOps engineer",
+  "Тимлид": "Timlid",
+  "Frontend-разработчик": "Frontend developer",
+  "Принимал активное участие в разработке. Отвечал за создание и поддержку серверной части, начиная с проектирования архитектуры и заканчивая развёртыванием готового решения. Его работа включала разработку API для взаимодействия между клиентской частью и сервером, что позволило обеспечить стабильную и быструю работу платформы даже при высоких нагрузках.": "Actively participated in the development. He was responsible for the creation and support of the server part, from architecture design to the deployment of the final solution. His work included development of APIs for interaction between the client part and the server, which allowed to ensure stable and fast operation of the platform even under high loads.",
+  "Занимался настройкой серверов, оптимизацией производительности и внедрением DevOps-практик. Отдельно стоит отметить его вклад в обеспечение безопасности проекта: внедрял механизмы защиты данных, шифрование.": "He was involved in server configuration, performance optimization, and implementation of DevOps practices. His contribution to the security of the project is also worth mentioning: he implemented data protection mechanisms and encryption.",
+  "Благодаря его усилиям, команда смогла быстро и эффективно реализовать ключевые функции.": "Through his efforts, the team was able to implement key functions quickly and efficiently.",
+  "Занимался вёрсткой сайтов и подготовкой макетов.": "Engaged in website layout and layout preparation."
+}

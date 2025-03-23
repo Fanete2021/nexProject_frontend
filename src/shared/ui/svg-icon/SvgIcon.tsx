@@ -29,7 +29,8 @@ const SvgIcon: React.FC<SvgIconProps> = memo((props) => {
         [styles.applyStroke]: applyStroke && !important,
         [styles.applyImportantFill]: applyFill && important,
         [styles.applyImportantStroke]: applyStroke && important,
-        [styles.applyHover]: applyHover,
+        [styles.applyHoverStroke]: applyHover && applyStroke,
+        [styles.applyHoverFill]: applyHover && applyFill,
     };
 
     return (
