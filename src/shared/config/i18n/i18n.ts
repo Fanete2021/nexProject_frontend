@@ -1,6 +1,5 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-
 import Backend from 'i18next-http-backend';
 
 export enum Namespaces {
@@ -15,7 +14,7 @@ i18n
     .use(Backend)
     .use(initReactI18next)
     .init({
-        fallbackLng: savedLanguage || 'ru',
+        fallbackLng: savedLanguage || 'en',
         interpolation: {
             escapeValue: false
         },
@@ -24,6 +23,11 @@ i18n
         },
         ns: [Namespaces.TRANSLATION, Namespaces.CHANGELOG],
         defaultNS: Namespaces.TRANSLATION,
+        keySeparator: false,
+        nsSeparator: false,
+        parseMissingKeyHandler: (key) => {
+            return key;
+        }
     });
 
 export default i18n;
