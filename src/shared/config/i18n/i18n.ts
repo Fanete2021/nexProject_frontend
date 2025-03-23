@@ -5,6 +5,7 @@ import Backend from 'i18next-http-backend';
 export enum Namespaces {
     TRANSLATION = 'translation',
     CHANGELOG = 'changelog',
+    ABOUT_DEVELOPERS = 'aboutDevelopers',
 }
 
 export const LOCAL_STORAGE_LANGUAGE_KEY = 'language';
@@ -21,7 +22,7 @@ i18n
         backend: {
             loadPath: '/locales/{{lng}}/{{ns}}.json'
         },
-        ns: [Namespaces.TRANSLATION, Namespaces.CHANGELOG],
+        ns: [Namespaces.TRANSLATION, Namespaces.CHANGELOG, Namespaces.ABOUT_DEVELOPERS],
         defaultNS: Namespaces.TRANSLATION,
         keySeparator: false,
         nsSeparator: false,

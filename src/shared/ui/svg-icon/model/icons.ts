@@ -21,5 +21,7 @@ export enum icons {
   PHONE = 'phone',
   USERNAME = 'username',
   CROSS = 'cross',
-  NOT_FOUND = '404'
+  NOT_FOUND = '404',
+  TELEGRAM = 'telegram',
+  GITHUB = 'github'
 }
