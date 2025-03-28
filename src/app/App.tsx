@@ -19,7 +19,7 @@ const App = () => {
                 await dispatch(refreshToken()).unwrap();
                 await dispatch(fetchUserData()).unwrap();
             } catch (error) {
-                console.log(error);
+                console.log('refreshToken: ', error);
             } finally {
                 setIsAppReady(true);
             }

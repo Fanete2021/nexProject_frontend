@@ -15,7 +15,7 @@ i18n
     .use(Backend)
     .use(initReactI18next)
     .init({
-        fallbackLng: savedLanguage || 'en',
+        fallbackLng: savedLanguage || 'ru',
         interpolation: {
             escapeValue: false
         },
