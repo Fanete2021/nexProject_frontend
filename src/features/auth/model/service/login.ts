@@ -2,6 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ThunkConfig } from '@/app/providers/store-provider';
 import { fetchUserData } from '@/entities/user';
 import { authActions } from '@/features/auth';
+import { ApiError } from '@/shared/types/apiError.ts';
 
 interface LoginProps {
   phoneNumberOrMail: string;
@@ -13,7 +14,7 @@ interface LoginResponse {
   access_token: string;
 }
 
-export const login = createAsyncThunk<LoginResponse, LoginProps, ThunkConfig<string>> (
+export const login = createAsyncThunk<LoginResponse, LoginProps, ThunkConfig<ApiError>> (
     'auth/login',
     async (authData, thunkAPI) => {
         const {
@@ -32,7 +33,7 @@ export const login = createAsyncThunk<LoginResponse, LoginProps, ThunkConfig<str
 
             return response.data;
         } catch (e) {
-            return rejectWithValue(e.response.data.message);
+            return rejectWithValue(e.response.data);
         }
     }
 );

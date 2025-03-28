@@ -4,13 +4,14 @@ import { FormControl, InputAdornment } from '@mui/material';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { useTranslation } from 'react-i18next';
 import { registration } from '@/features/registration/ui/model/service/registration.ts';
-import { CustomInput, icons, SvgIcon, ValidationList, ValidationListItem } from '@/shared/ui';
+import { CustomInput, icons, Loader, SvgIcon, ValidationList, ValidationListItem } from '@/shared/ui';
 import { useCallback, useState } from 'react';
 import { isPasswordValid, isUsernameValid } from '@/shared/lib/utils/validation.ts';
 import { isFormikErrorVisible } from '@/shared/lib/utils/isFormikErrorVisible.ts';
-import {fetchUserData} from "@/entities/user";
-import {RoutePath} from "@/shared/config/routeConfig/routeConfig.tsx";
-import {useNavigate} from "react-router-dom";
+import { fetchUserData } from '@/entities/user';
+import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
+import { useNavigate } from 'react-router-dom';
+import { getMessageFromApiError } from '@/shared/lib/utils/getMessageFromApiError.ts';
 
 const validationSchema = yup.object({
     email: yup.string().email('Почта невалидна').required('Почта обязательна'),
@@ -30,8 +31,10 @@ const RegistrationForm = () => {
     const { t } = useTranslation();
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [error, setError] = useState<string>('');
+    const [isSubmitLoading, setIsSubmitLoading] = useState<boolean>(false);
     const navigate = useNavigate();
+    const [emailError, setEmailError] = useState<string>('');
+    const [usernameError, setUsernameError] = useState<string>('');
 
     const formik = useFormik({
         initialValues: {
@@ -44,13 +47,17 @@ const RegistrationForm = () => {
         validateOnChange: true,
         validateOnBlur: true,
         onSubmit: async (values) => {
+            setIsSubmitLoading(true);
             try {
                 await dispatch(registration(values)).unwrap();
                 await dispatch(fetchUserData());
 
                 navigate(RoutePath.emailConfirm);
             } catch (error) {
-                setError(error);
+                setEmailError(getMessageFromApiError(error, 'email'));
+                setUsernameError(getMessageFromApiError(error, 'username'));
+            } finally {
+                setIsSubmitLoading(false);
             }
         },
     });
@@ -108,20 +115,26 @@ const RegistrationForm = () => {
         setShowConfirmPassword(prev => !prev);
     }, []);
 
+    const handleChangeEmail = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        setEmailError('');
+        formik.handleChange(e);
+    }, []);
+
+    const handleChangeUsername = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        setUsernameError('');
+        formik.handleChange(e);
+    }, []);
+
     return (
         <form className="form" onSubmit={onSubmit}>
-            {error &&
-                <div className="error">{error}</div>
-            }
-
             <FormControl
                 fullWidth
                 className="FieldWrapper"
             >
                 <div className="label">
                     {t('Почта')}<br/>
-                    {isFormikErrorVisible(formik, 'email') &&
-                        <div className="error">{t(formik.errors.email)}</div>
+                    {(isFormikErrorVisible(formik, 'email') || emailError) &&
+                        <div className="fieldError">{t(formik.errors.email || emailError)}</div>
                     }
                 </div>
 
@@ -142,8 +155,8 @@ const RegistrationForm = () => {
                     type="email"
                     name="email"
                     value={formik.values.email}
-                    onChange={formik.handleChange}
-                    isError={isFormikErrorVisible(formik, 'email')}
+                    onChange={handleChangeEmail}
+                    isError={isFormikErrorVisible(formik, 'email') || Boolean(emailError)}
                     onBlur={formik.handleBlur}
                 />
             </FormControl>
@@ -154,8 +167,8 @@ const RegistrationForm = () => {
             >
                 <div className="label">
                     {t('Имя пользователя')} <br/>
-                    {isFormikErrorVisible(formik, 'username') &&
-                        <div className="error">{t(formik.errors.username)}</div>
+                    {(isFormikErrorVisible(formik, 'username') || usernameError) &&
+                        <div className="fieldError">{t(formik.errors.username || usernameError)}</div>
                     }
                 </div>
 
@@ -178,8 +191,8 @@ const RegistrationForm = () => {
                         fullWidth
                         name="username"
                         value={formik.values.username}
-                        onChange={formik.handleChange}
-                        isError={isFormikErrorVisible(formik, 'username')}
+                        onChange={handleChangeUsername}
+                        isError={isFormikErrorVisible(formik, 'username') || Boolean(usernameError)}
                         autoComplete={'off'}
                         onBlur={formik.handleBlur}
                         type="text"
@@ -194,7 +207,7 @@ const RegistrationForm = () => {
                 <div className="label">
                     {t('Пароль')}<br/>
                     {isFormikErrorVisible(formik,'password') &&
-                        <div className="error">{t(formik.errors.password)}</div>
+                        <div className="fieldError">{t(formik.errors.password)}</div>
                     }
                 </div>
 
@@ -232,12 +245,12 @@ const RegistrationForm = () => {
                 <div className="label">
                     {t('Подтверждение пароля')}<br/>
                     {isFormikErrorVisible(formik, 'confirmPassword') &&
-                        <div className="error">{t(formik.errors.confirmPassword)}</div>
+                        <div className="fieldError">{t(formik.errors.confirmPassword)}</div>
                     }
                 </div>
                 <CustomInput
                     endAdornment={
-                        <button type="button" onClick={handleClickShowConfirmPassword} className="showError">
+                        <button type="button" onClick={handleClickShowConfirmPassword} className="showPassword">
                             <SvgIcon
                                 iconName={showConfirmPassword ? icons.PASSWORD : icons.PASSWORD_OFF}
                                 applyHover={false}
@@ -261,8 +274,12 @@ const RegistrationForm = () => {
                 className="submit"
                 type={'submit'}
                 onClick={onSubmit}
+                disabled={isSubmitLoading}
             >
-                {t('Создать')}
+                {isSubmitLoading
+                    ? <Loader className="submitLoader" />
+                    : <>{t('Создать')}</>
+                }
             </button>
         </form>
     );

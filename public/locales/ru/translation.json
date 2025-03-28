@@ -1,0 +1,8 @@
+{
+  "Invalid credentials!": "Неправильные данные",
+  "Email already in use.": "Почта уже занята",
+  "Username already in use.": "Имя пользователя уже занято",
+  "too_many_requests": "Слишком много запросов. Попробуйте снова через {{minutes}} минут",
+  "user_not_found": "Пользователь с email '{{email}}' не существует",
+  "New and old passwords match!": "Новый и старый пароли совпадают"
+}

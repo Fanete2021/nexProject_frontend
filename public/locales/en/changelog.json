@@ -17,5 +17,6 @@
   "Выделение при фокусе для полей ввода": "Highlighting on focus for input fields",
   "Адаптивная вёрстка для форм авторизации и регистрации": "Adaptive layout for authorization and registration forms",
   "Страницы для регистрации и авторизации": "Pages for registration and authorization",
-  "Пустые страницы и раскрывающееся меню для авторизованных пользователей": "Blank pages and drop-down menu for authorized users"
+  "Пустые страницы и раскрывающееся меню для авторизованных пользователей": "Blank pages and drop-down menu for authorized users",
+  "Серверные ошибки на формах для неаутентифицированных пользователей": "Server errors on forms for unauthenticated users"
 }

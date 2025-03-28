@@ -13,7 +13,7 @@ export const logout = createAsyncThunk<void, void, ThunkConfig<string>> (
         } = thunkAPI;
 
         try {
-            const response = await extra.api.post('/logout', null, {
+            const response = await extra.api.post('/auth/logout', null, {
                 withCredentials: true
             });
 

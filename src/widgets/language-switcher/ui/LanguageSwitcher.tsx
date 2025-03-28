@@ -9,8 +9,15 @@ const LanguageSwitcher = memo(() => {
     const { i18n } = useTranslation();
 
     const toggle = (language: string) => {
-        i18n.changeLanguage(language);
-        localStorage.setItem(LOCAL_STORAGE_LANGUAGE_KEY, language);
+        i18n.changeLanguage(language, (err) => {
+            if (language === 'ru') {
+                i18n.options.fallbackLng = ['ru'];
+            } else {
+                i18n.options.fallbackLng = ['en'];
+            }
+
+            localStorage.setItem(LOCAL_STORAGE_LANGUAGE_KEY, language);
+        });
     };
 
     const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);

@@ -3,13 +3,14 @@ import * as yup from 'yup';
 import { FormControl } from '@mui/material';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { useTranslation } from 'react-i18next';
-import { CustomInput, icons, SvgIcon, ValidationList, ValidationListItem } from '@/shared/ui';
+import { CustomInput, icons, Loader, SvgIcon, ValidationList, ValidationListItem } from '@/shared/ui';
 import { useCallback, useState } from 'react';
 import { newPassword } from '@/features/change-password';
 import { useNavigate } from 'react-router-dom';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
 import { isPasswordValid } from '@/shared/lib/utils/validation.ts';
 import { isFormikErrorVisible } from '@/shared/lib/utils/isFormikErrorVisible.ts';
+import { ApiError } from '@/shared/types/apiError.ts';
 
 const validationSchema = yup.object({
     newPassword: yup.string()
@@ -31,8 +32,9 @@ const RegistrationForm: React.FC<RegistrationFormProps> = (props) => {
     const { t } = useTranslation();
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [error, setError] = useState<string>('');
+    const [formError, setFormError] = useState<ApiError>(null);
     const navigate = useNavigate();
+    const [isSubmitLoading, setIsSubmitLoading] = useState<boolean>(false);
 
     const formik = useFormik({
         initialValues: {
@@ -43,6 +45,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = (props) => {
         validateOnChange: true,
         validateOnBlur: true,
         onSubmit: async (values) => {
+            setIsSubmitLoading(true);
             try {
                 await dispatch(newPassword({
                     token: token, 
@@ -51,7 +54,9 @@ const RegistrationForm: React.FC<RegistrationFormProps> = (props) => {
 
                 navigate(RoutePath.auth);
             } catch (error) {
-                setError(error);
+                setFormError(error);
+            } finally {
+                setIsSubmitLoading(false);
             }
         },
     });
@@ -89,8 +94,8 @@ const RegistrationForm: React.FC<RegistrationFormProps> = (props) => {
 
     return (
         <form className="form" onSubmit={onSubmit}>
-            {error &&
-                <div className="error">{error}</div>
+            {formError &&
+                <div className="formError">{t(formError.errDetails)}</div>
             }
 
             <FormControl
@@ -100,7 +105,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = (props) => {
                 <div className="label">
                     {t('Новый пароль')}<br/>
                     {isFormikErrorVisible(formik,'newPassword') &&
-                        <div className="error">{t(formik.errors.newPassword)}</div>
+                        <div className="fieldError">{t(formik.errors.newPassword)}</div>
                     }
                 </div>
 
@@ -138,7 +143,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = (props) => {
                 <div className="label">
                     {t('Подтверждение пароля')}<br/>
                     {isFormikErrorVisible(formik, 'confirmPassword') &&
-                        <div className="error">{t(formik.errors.confirmPassword)}</div>
+                        <div className="fieldError">{t(formik.errors.confirmPassword)}</div>
                     }
                 </div>
                 <CustomInput
@@ -167,8 +172,12 @@ const RegistrationForm: React.FC<RegistrationFormProps> = (props) => {
                 className="submit"
                 type={'submit'}
                 onClick={onSubmit}
+                disabled={isSubmitLoading}
             >
-                {t('Изменить')}
+                {isSubmitLoading
+                    ? <Loader className="submitLoader" />
+                    : <>{t('Изменить')}</>
+                }
             </button>
         </form>
     );

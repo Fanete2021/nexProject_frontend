@@ -10,8 +10,7 @@ export const sendCode = createAsyncThunk<void, void, ThunkConfig<string>> (
         } = thunkAPI;
 
         try {
-            //TODO поменять на post
-            const response = await extra.api.get('/confirm/sendCode');
+            const response = await extra.api.post('/confirm/sendCode');
         } catch (e) {
             return rejectWithValue(e.response.data.message);
         }
