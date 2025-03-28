@@ -5,7 +5,7 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import styles from './LoginForm.module.scss';
 import { login } from '@/features/auth/model/service/login.ts';
 import { useTranslation } from 'react-i18next';
-import { CustomCheckbox, CustomInput, icons, SvgIcon } from '@/shared/ui';
+import { CustomCheckbox, CustomInput, icons, Loader, SvgIcon } from '@/shared/ui';
 import { useCallback, useEffect, useState } from 'react';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
 import { Link, useNavigate } from 'react-router-dom';
@@ -14,6 +14,8 @@ import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { useSelector } from 'react-redux';
 import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
 import { sendCode } from '@/features/confirm-email';
+import { ApiError } from '@/shared/types/apiError.ts';
+import { getAuthIsLoading } from '@/features/auth';
 
 const validationSchema = yup.object({
     phoneNumberOrMail: yup.string()
@@ -28,7 +30,8 @@ const LoginForm = () => {
     const dispatch = useAppDispatch();
     const { t } = useTranslation();
     const [showPassword, setShowPassword] = useState(false);
-    const [error, setError] = useState<string>('');
+    const [error, setError] = useState<ApiError>(null);
+    const isAuthLoading = useSelector(getAuthIsLoading);
     const navigate = useNavigate();
     const user = useSelector(getUserData);
 
@@ -81,7 +84,7 @@ const LoginForm = () => {
     return (
         <form className="form" onSubmit={onSubmit}>
             {error &&
-              <div className="error">{error}</div>
+              <div className="formError">{t(error.errDetails)}</div>
             }
 
             <FormControl
@@ -91,7 +94,7 @@ const LoginForm = () => {
                 <div className="label">
                     {t('Почта / телефон')}<br/>
                     {isShowError('phoneNumberOrMail') &&
-                        <div className="error">{t(formik.errors.phoneNumberOrMail)}</div>
+                        <div className="fieldError">{t(formik.errors.phoneNumberOrMail)}</div>
                     }
                 </div>
 
@@ -130,7 +133,7 @@ const LoginForm = () => {
                 <div className="label">
                     {t('Пароль')}<br/>
                     {isShowError('password') &&
-                        <div className="error">{t(formik.errors.password)}</div>
+                        <div className="fieldError">{t(formik.errors.password)}</div>
                     }
                 </div>
 
@@ -178,8 +181,12 @@ const LoginForm = () => {
                 className="submit"
                 type={'submit'}
                 onClick={onSubmit}
+                disabled={isAuthLoading}
             >
-                {t('Войти')}
+                {isAuthLoading
+                    ? <Loader className="submitLoader" />
+                    : <>{t('Войти')}</>
+                }
             </button>
         </form>
     );

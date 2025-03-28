@@ -7,10 +7,4 @@
   &:hover {
     color: var(--link-text-hover-color);
   }
-
-  &:focus-within {
-    .error, .notchedOutline {
-      border-width: 2px !important;
-    }
-  }
 }

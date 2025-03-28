@@ -8,20 +8,9 @@ export interface LoaderProps {
 
 const Loader: FC<LoaderProps> = memo(({ className }) => {
     return (
-        <div className={classNames('lds-spinner',[ className ])}>
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-        </div>
+        <span
+            className={classNames('loader',[ className ])}
+        />
     );
 });
 

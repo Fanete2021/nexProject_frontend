@@ -1,5 +1,4 @@
 import { AnyAction, AsyncThunkAction } from '@reduxjs/toolkit';
-import 'i18next';
 
 declare module '*.module.scss' {
   interface IClassNames {

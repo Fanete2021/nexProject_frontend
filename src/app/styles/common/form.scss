@@ -39,22 +39,36 @@
     border-radius: 25px;
     height: 50px;
 
-    &:hover {
+    &:hover:not(:disabled) {
       background: var(--button-bg-hover-color);
     }
   }
 
-  .error {
+  .fieldError {
     font-size: 16px;
-    line-height: 21px;
+    line-height: 18px;
+  }
+
+  .formError {
+    font-size: 18px;
+    line-height: 23px;
+  }
+
+  .formError, .fieldError {
     color: var(--error-text-color);
   }
 
-  .success {
+  .formSuccess {
     font-weight: bold;
     line-height: 23px;
     font-size: 18px;
     text-align: center;
     color: var(--success-text-color);
+  }
+
+  .submitLoader {
+    width: 30px;
+    height: 30px;
+    margin: 0 auto;
   }
 }

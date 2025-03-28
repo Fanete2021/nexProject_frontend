@@ -1,8 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
 import { ThunkConfig } from '@/app/providers/store-provider';
-import { fetchUserData } from '@/entities/user';
 import { authActions } from '@/features/auth';
+import { ApiError } from '@/shared/types/apiError.ts';
 
 interface RegistrationProps {
     email: string;
@@ -15,7 +14,7 @@ interface RegistrationResponse {
     access_token: string;
 }
 
-export const registration = createAsyncThunk<RegistrationResponse, RegistrationProps, ThunkConfig<string>> (
+export const registration = createAsyncThunk<RegistrationResponse, RegistrationProps, ThunkConfig<ApiError>> (
     'registration/registration',
     async (registrationData, thunkAPI) => {
         const {
@@ -25,13 +24,15 @@ export const registration = createAsyncThunk<RegistrationResponse, RegistrationP
         } = thunkAPI;
 
         try {
-            const response = await extra.api.post('/auth/signup', registrationData);
+            const response = await extra.api.post('/auth/signup', registrationData, {
+                withCredentials: true
+            });
 
             await dispatch(authActions.setToken(response.data.access_token));
 
             return response.data;
         } catch (e) {
-            return rejectWithValue(e.response.data.message);
+            return rejectWithValue(e.response.data);
         }
     }
 );

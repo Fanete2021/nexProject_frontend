@@ -3,7 +3,7 @@ import * as yup from 'yup';
 import { FormControl, InputAdornment } from '@mui/material';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { useTranslation } from 'react-i18next';
-import { CustomInput, icons, SvgIcon } from '@/shared/ui';
+import { CustomInput, icons, Loader, SvgIcon } from '@/shared/ui';
 import { useCallback, useState } from 'react';
 import { changePassword } from '../../model/service/changePassword.ts';
 import { isFormikErrorVisible } from '@/shared/lib/utils/isFormikErrorVisible.ts';
@@ -12,11 +12,28 @@ const validationSchema = yup.object({
     email: yup.string().email('Почта невалидна').required('Почта обязательна'),
 });
 
+function extractMinutes(errorDetails) {
+    const match = errorDetails.match(/Try again after (\d+) minutes?/);
+    if (match && match[1]) {
+        return parseInt(match[1], 10);
+    }
+    return null;
+}
+
+function extractEmail(errorDetails) {
+    const match = errorDetails.match(/User with email '([^']+)' does not exist/);
+    if (match && match[1]) {
+        return match[1];
+    }
+    return null;
+}
+
 const EmailForm = () => {
     const dispatch = useAppDispatch();
     const { t } = useTranslation();
-    const [error, setError] = useState<string>('');
-    const [successText, setSuccessText] = useState<string>('');
+    const [formError, setFormError] = useState<string>('');
+    const [formSuccessText, setFormSuccessText] = useState<string>('');
+    const [isSubmitLoading, setIsSubmitLoading] = useState<boolean>(false);
 
     const formik = useFormik({
         initialValues: {
@@ -26,12 +43,27 @@ const EmailForm = () => {
         validateOnChange: true,
         validateOnBlur: true,
         onSubmit: async (values) => {
+            setIsSubmitLoading(true);
             try {
-                await dispatch(changePassword(values));
+                await dispatch(changePassword(values)).unwrap();
 
-                setSuccessText('Код отправлен');
+                setFormSuccessText('Код отправлен');
+                setFormError('');
             } catch (error) {
-                setError(error);
+                setFormSuccessText('');
+                const { errDetails } = error;
+                const minutes = extractMinutes(errDetails);
+                const email = extractEmail(errDetails);
+
+                if (minutes) {
+                    setFormError(t('too_many_requests', { minutes }));
+                } else if (email) {
+                    setFormError(t('user_not_found', { email }));
+                } else {
+                    setFormError(errDetails);
+                }
+            } finally {
+                setIsSubmitLoading(false);
             }
         },
     });
@@ -43,11 +75,11 @@ const EmailForm = () => {
 
     return (
         <form className="form" onSubmit={onSubmit}>
-            {successText &&
-                <div className="success">{t(successText)}</div>
+            {setFormSuccessText &&
+                <div className="formSuccess">{t(formSuccessText)}</div>
             }
-            {error &&
-                <div className="error">{error}</div>
+            {formError &&
+                <div className="formError">{formError}</div>
             }
 
             <FormControl
@@ -57,7 +89,7 @@ const EmailForm = () => {
                 <div className="label">
                     {t('Почта')}<br/>
                     {isFormikErrorVisible(formik, 'email') &&
-                        <div className="error">{t(formik.errors.email)}</div>
+                        <div className="fieldError">{t(formik.errors.email)}</div>
                     }
                 </div>
 
@@ -88,8 +120,12 @@ const EmailForm = () => {
                 className="submit"
                 type={'submit'}
                 onClick={onSubmit}
+                disabled={isSubmitLoading}
             >
-                {t('Сменить пароль')}
+                {isSubmitLoading
+                    ? <Loader className="submitLoader" />
+                    : <>{t('Сменить пароль')}</>
+                }
             </button>
         </form>
     );
