@@ -10,27 +10,6 @@ import { fetchUserData } from '@/entities/user';
 
 const App = () => {
     const { theme } = useTheme();
-    const dispatch = useAppDispatch();
-    const [isAppReady, setIsAppReady] = useState(false);
-
-    useEffect(() => {
-        const initStore = async () => {
-            try {
-                await dispatch(refreshToken()).unwrap();
-                await dispatch(fetchUserData()).unwrap();
-            } catch (error) {
-                console.log('refreshToken: ', error);
-            } finally {
-                setIsAppReady(true);
-            }
-        };
-
-        initStore();
-    }, []);
-
-    if (!isAppReady) {
-        return <Loader />;
-    }
 
     return (
         <div className={classNames('app', [ theme ])}>
