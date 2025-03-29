@@ -13,7 +13,8 @@ import { EmailConfirmPage } from '@/pages/email-confirm-page';
 import { NewPasswordPage } from '@/pages/new-password-page';
 import { PasswordChangePage } from '@/pages/password-change-page';
 import { NotFoundPage } from '@/pages/not-found-page';
-import {AboutDevelopersPage} from "@/pages/about-developers-page";
+import { AboutDevelopersPage } from '@/pages/about-developers-page';
+import { TestApiPage } from '@/pages/test-api-page';
 
 export type AppRoutesProps = PathRouteProps & {
     authOnly?: boolean;
@@ -34,7 +35,8 @@ export enum AppRoutes {
   NEW_PASSWORD = 'newPassword',
   PASSWORD_CHANGE = 'passwordChange',
   ABOUT_DEVELOPERS = 'aboutDevelopers',
-  NOT_FOUND = 'notFound'
+  NOT_FOUND = 'notFound',
+  TEST_API = 'testApi'
 }
 
 export const RoutePath: Record<AppRoutes, string> = {
@@ -52,7 +54,8 @@ export const RoutePath: Record<AppRoutes, string> = {
     [AppRoutes.EMAIL]: `/${AppRoutes.EMAIL}`,
     [AppRoutes.CHANGES]: `/${AppRoutes.CHANGES}`,
     [AppRoutes.ABOUT_DEVELOPERS]: `/${AppRoutes.ABOUT_DEVELOPERS}`,
-    [AppRoutes.NOT_FOUND]: '*',
+    [AppRoutes.TEST_API]: `/${AppRoutes.TEST_API}`,
+    [AppRoutes.NOT_FOUND]: '*'
 };
 
 export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
@@ -119,6 +122,11 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
     [AppRoutes.ABOUT_DEVELOPERS]: {
         path: `${RoutePath.aboutDevelopers}`,
         element: <AboutDevelopersPage />,
+    },
+    [AppRoutes.TEST_API]: {
+        path: `${RoutePath.testApi}`,
+        element: <TestApiPage />,
+        authOnly: true
     },
     [AppRoutes.NOT_FOUND]: {
         path: `${RoutePath.notFound}`,
