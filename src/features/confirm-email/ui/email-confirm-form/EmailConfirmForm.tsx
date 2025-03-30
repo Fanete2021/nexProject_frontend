@@ -93,6 +93,28 @@ const EmailConfirmForm = () => {
         [formik.values.confirmCode]
     );
 
+    const handlePaste = useCallback((e: React.ClipboardEvent<HTMLInputElement>) => {
+        e.preventDefault();
+        const pasteData = e.clipboardData.getData('text/plain').replace(/\D/g, '');
+        const pasteChars = pasteData.split('').slice(0, 4);
+
+        if (pasteChars.length === 4) {
+            const newValues = [...formik.values.confirmCode];
+            pasteChars.forEach((char, index) => {
+                newValues[index] = char;
+            });
+            formik.setFieldValue('confirmCode', newValues);
+
+            if (newValues.every(char => char)) {
+                formik.handleSubmit();
+            } else {
+                const lastFilledIndex = newValues.findIndex(char => !char);
+                const focusIndex = lastFilledIndex === -1 ? 3 : Math.max(0, lastFilledIndex - 1);
+                inputRefs.current[focusIndex]?.focus();
+            }
+        }
+    }, [formik]);
+
     return (
         <>
             <div className={styles.wrapperCode}>
@@ -109,6 +131,8 @@ const EmailConfirmForm = () => {
                         }}
                         maxLength={1}
                         isError={Boolean(error)}
+                        onPaste={handlePaste}
+                        type='tel'
                     />
                 ))}
             </div>
