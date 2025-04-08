@@ -3,10 +3,12 @@ import { AxiosInstance } from 'axios';
 import { NavigateOptions, To } from 'react-router-dom';
 import { AuthSchema } from '@/features/auth';
 import { UserSchema } from '@/entities/user';
+import { ChatSchema } from '@/features/chat';
 
 export interface StateSchema {
   auth: AuthSchema;
   user: UserSchema;
+  chat: ChatSchema;
 }
 
 export type StateSchemaKey = keyof StateSchema;

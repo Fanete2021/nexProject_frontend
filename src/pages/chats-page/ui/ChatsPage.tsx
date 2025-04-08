@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AuthenticatedPageLayout } from '@/widgets/authenticated-page-layout';
+import SockJS  from 'sockjs-client';
+import { Client } from '@stomp/stompjs';
+import { ChatPanel } from '@/features/chat';
+import styles from './ChatPage.module.scss';
 
 const ChatsPage = () => {
     const { t } = useTranslation();
 
     return (
         <AuthenticatedPageLayout>
+            <ChatPanel className={styles.chat} />
         </AuthenticatedPageLayout>
     );
 };

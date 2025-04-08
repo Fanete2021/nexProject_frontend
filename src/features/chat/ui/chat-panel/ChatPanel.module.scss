@@ -1,0 +1,11 @@
+.ChatPanel {
+  background: var(--chat-bg-color);
+  box-shadow: 0 0 4px 0 var(--chat-shadow-color);
+  border-radius: 10px;
+  display: flex;
+}
+
+.dialogs {
+  width: 220px;
+  height: 100%;
+}
