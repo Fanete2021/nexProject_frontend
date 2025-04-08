@@ -7,7 +7,7 @@ import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { EmailConfirmForm } from '@/features/confirm-email';
 import { GuestPageLayout } from '@/widgets/guest-page-layout';
-import {useCallback, useEffect} from 'react';
+import { useCallback, useEffect } from 'react';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { userActions } from '@/entities/user';
 

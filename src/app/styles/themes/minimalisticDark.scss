@@ -1,6 +1,7 @@
 .app_minimalistic_dark_theme {
-  --bg-color: #000000;
+  --bg-color: #1E1E1E; //1E1E1E #000000
   --text-color: #FFFFFF;
+  --text-secondary-color: #A0A0A0;
   --line-color: #4D4D4D;
   --error-text-color: #FF5252;
   --success-text-color: #4CAF50;
@@ -45,4 +46,27 @@
   --about-developers-box-shadow-color: rgba(255, 255, 255, 0.1);
   --about-developers-border-color: #4D4D4D;
   --about-developers-role-bg-color: #333333;
+
+  --message-my-bg-color: #3A3A3A;
+  --message-bg-color: #2E2E2E;
+  --message-reply-bg-color: #2C2C2C;
+  --message-reply-stroke-color: #808080;
+  --message-new-bg-color: #E0E0E0;
+  --message-new-text-color: #1E1E1E;
+
+  --chat-selected-bg-color: #393939;
+  --chat-divider-line-color: #4D4D4D;
+  --chat-bg-color: #262626;
+  --chat-shadow-color: rgba(255, 255, 255, 0.75);
+
+  --avatar-non-bg-color: #262626;
+  --avatar-non-stroke-color: #4D4D4D;
+  --avatar-non-text-color: #FFFFFF;
+
+  --scroll-bg-color: #373636;
+  --scroll-active-color: #454545;
+
+  --switch-bg-color: #4D4D4D;
+  --switch-active-color: #FFFFFF;
+  --switch-inactive-color: #666666;
 }

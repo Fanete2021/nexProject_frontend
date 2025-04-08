@@ -26,15 +26,9 @@ export default defineConfig({
     },
     server: {
         host: 'nex.moootvey.ru',
-        port: 3000
-    }
-    // server: {
-    //     open: true,
-    //     allowedHosts: [
-    //         '.ngrok-free.app', // Разрешает все поддомены ngrok
-    //     ],
-    //     host: '0.0.0.0',
-    //     port: 5173,
-    //
-    // },
+        port: 3000,
+        // allowedHosts: [
+        //     '.ngrok-free.app',
+        // ],
+    },
 });

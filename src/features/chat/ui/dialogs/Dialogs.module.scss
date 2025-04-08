@@ -1,0 +1,44 @@
+.ChatList {
+
+}
+
+.header {
+  height: 80px;
+  border-bottom: 1px solid var(--chat-divider-line-color);
+  padding: 5px 5px 10px 5px;
+
+  .title {
+    width: 100%;
+    text-align: center;
+    font-size: 20px;
+    line-height: 26px;
+  }
+
+  .search {
+    margin-top: 8px;
+    height: 30px;
+  }
+}
+
+.content {
+  padding: 5px;
+
+  .filter {
+    height: 34px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+
+    .item {
+      font-size: 16px;
+      line-height: 18px;
+      color: var(--button-text-disabled-color);
+    }
+
+    .active {
+      text-decoration: underline;
+      color: var(--button-text-color)
+    }
+  }
+}

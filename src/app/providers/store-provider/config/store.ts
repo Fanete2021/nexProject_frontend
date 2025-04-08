@@ -5,7 +5,8 @@ import { NavigateOptions, To } from 'react-router-dom';
 import { configureApi } from '@/shared/api/api.ts';
 import { authReducer } from '@/features/auth';
 import { userReducer } from '@/entities/user';
-import { tokenMiddleware, userMiddleware } from './middleware';
+import { tokenMiddleware } from './middleware';
+import { chatReducer } from '@/features/chat';
 
 export function createReduxStore(
     initialState?: StateSchema,
@@ -16,6 +17,7 @@ export function createReduxStore(
         ...asyncReducers,
         auth: authReducer,
         user: userReducer,
+        chat: chatReducer
     };
 
     const reducerManager = createReducerManager(rootReducers);
