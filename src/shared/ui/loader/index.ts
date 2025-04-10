@@ -1,5 +1,5 @@
-import Loader from './Loader.tsx';
-import { LoaderProps } from './Loader.tsx';
+import Loader from './ui/Loader.tsx';
+import { LoaderProps } from './ui/Loader.tsx';
 
 export {
     Loader,

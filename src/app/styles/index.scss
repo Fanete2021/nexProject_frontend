@@ -6,14 +6,32 @@
 @forward "./common/form";
 @forward "./common/pages";
 
+//TODO сделать скролл как на макетах
 * {
   font-family: 'PTSans', sans-serif;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scroll-active-color) var(--scroll-bg-color);
 }
 
-.app {
+*::-webkit-scrollbar {
+  width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--scroll-bg-color);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--scroll-active-color); /* Цвет ползунка */
+  border-radius: 5px;
+  border: 2px solid var(--scroll-bg-color);
+}
+
+  .app {
   width: 100%;
   min-height: 100vh;
   background: var(--bg-color);
   color: var(--text-color);
   transition: background-color 0.5s, color 0.5s;
 }
+

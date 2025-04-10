@@ -1,24 +1,25 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ThunkConfig } from '@/app/providers/store-provider';
-import { Chat } from '../../model/types/chat.ts';
+import { Contact } from '../../model/types/contact.ts';
 
-interface FetchChatsResponse {
-  chats: Chat[];
+interface SearchContactsResponse {
+    searchUsers: Contact[];
+    pageCount: number;
 }
 
-export const fetchChats = createAsyncThunk<FetchChatsResponse, void, ThunkConfig<string>> (
-    'chat/fetchChats',
-    async (_, thunkAPI) => {
+export const searchContacts = createAsyncThunk<SearchContactsResponse, string, ThunkConfig<string>> (
+    'chat/searchContacts',
+    async (searchValue, thunkAPI) => {
         const {
             extra,
             rejectWithValue,
         } = thunkAPI;
 
         try {
-            const response = await extra.api.get('/getChats', {
+            const response = await extra.api.get(`/chat/search/${searchValue}`, {
                 params: {
                     pageNumber: 1,
-                    pageSize: 15,
+                    pageSize: 10,
                 }
             });
 

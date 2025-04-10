@@ -1,0 +1,26 @@
+.Header {
+  height: 80px;
+  display: flex;
+  padding: 10px;
+  align-items: center;
+}
+
+.info {
+  margin-left: 10px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  gap: 2px;
+
+  .name {
+    font-size: 16px;
+    line-height: 21px;
+  }
+
+  .online {
+    font-size: 14px;
+    line-height: 18px;
+    color: var(--text-secondary-color);
+  }
+}

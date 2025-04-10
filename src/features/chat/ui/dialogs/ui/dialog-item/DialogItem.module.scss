@@ -1,0 +1,31 @@
+.DialogItem {
+  display: flex;
+  user-select: none;
+  padding: 5px;
+  width: 100%;
+
+  .info {
+    margin-left: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    flex: 1;
+
+    .name {
+      font-size: 14px;
+      line-height: 18px;
+      color: var(--text-color);
+    }
+
+    .message {
+      font-size: 12px;
+      line-height: 16px;
+      color: var(--text-secondary-color);
+    }
+  }
+}
+
+.skeleton {
+  background-color: var(--skeleton-bg-color) !important;
+}

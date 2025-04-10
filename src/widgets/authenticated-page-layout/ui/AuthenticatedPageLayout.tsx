@@ -7,7 +7,7 @@ export interface AuthenticatedPageLayoutProps {
 }
 
 const AuthenticatedPageLayout: React.FC<AuthenticatedPageLayoutProps> = (props) => {
-    const { children, className } = props;
+    const { children } = props;
 
     return (
         <div className={styles.AuthenticatedPageLayout}>

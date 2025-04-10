@@ -1,6 +1,6 @@
 import { icons } from './model/icons.ts';
-import SvgIcon from './SvgIcon.tsx';
-import { SvgIconProps } from './SvgIcon.tsx';
+import SvgIcon from './ui/SvgIcon.tsx';
+import { SvgIconProps } from './ui/SvgIcon.tsx';
 
 export {
     icons,

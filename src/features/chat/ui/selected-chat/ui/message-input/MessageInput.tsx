@@ -4,8 +4,16 @@ import { useSelector } from 'react-redux';
 import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
 import { NewMessage } from '../../../../model/types/newMessage.ts';
 import { getChatSelectedChat } from '../../../../model/selectors/getChatSelectedChat.ts';
+import { classNames } from '@/shared/lib/utils/classNames.ts';
+import styles from './MessageInput.module.scss';
 
-const MessageInput = () => {
+export interface MessageInputProps {
+    className?: string;
+}
+
+const MessageInput: React.FC<MessageInputProps> = (props) => {
+    const { className } = props;
+    
     const [messageText, setMessageText] = useState<string>('');
     const user = useSelector(getUserData)!;
     const selectedChat = useSelector(getChatSelectedChat)!;
@@ -15,17 +23,28 @@ const MessageInput = () => {
             message: messageText,
             senderId: user.userId,
             recipientId: selectedChat.members.find(member => member.memberId !== user.userId)!.memberId,
-            chatId: '1'
+            chatId: selectedChat.chatId
         };
         ChatWebSocketService.sendMessage(newMessage);
         setMessageText('');
     };
 
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            sendHandler();
+        }
+    };
 
     return (
-        <div>
-            <input value={messageText} onChange={e => setMessageText(e.target.value)}/>
-            <button onClick={sendHandler}>Отправить </button>
+        <div className={classNames(styles.MessageInput, [className])}>
+            <input
+                className={styles.input}
+                value={messageText} 
+                onChange={e => setMessageText(e.target.value)}
+                placeholder={'Write a message...'}
+                onKeyDown={handleKeyDown}
+            />
         </div>
     );
 };

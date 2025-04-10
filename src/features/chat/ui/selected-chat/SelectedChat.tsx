@@ -5,24 +5,37 @@ import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
 import Messages from './ui/messages/Messages.tsx';
 import styles from './SelectedChat.module.scss';
 import MessageInput from './ui/message-input/MessageInput.tsx';
+import { classNames } from '@/shared/lib/utils/classNames.ts';
 
-const SelectedChat = () => {
+export interface SelectedChatProps {
+  className?: string;
+}
+
+const SelectedChat: React.FC<SelectedChatProps> = (props) => {
+    const { className } = props;
     const selectedChat = useSelector(getChatSelectedChat);
     const user = useSelector(getUserData)!;
 
     if (!selectedChat) {
         return (
-            <div>
-          Выберите чат
+            <div className={styles.empty}>
+              Select a chat to start messaging
             </div>
         );
     }
   
     return (
-        <div className={styles.SelectedChat}>
-            <Header chatInfo={selectedChat}/>
-            <Messages messages={selectedChat.lastMessages} user={user}/>
-            <MessageInput />
+        <div className={classNames(styles.SelectedChat, [className])}>
+            <Header chatInfo={selectedChat} className={styles.Header}/>
+
+            <Messages
+                messages={selectedChat.lastMessages}
+                user={user}
+                className={styles.Messages}
+                chatId={selectedChat.chatId}
+            />
+
+            <MessageInput className={styles.MessageInput}/>
         </div>
     );
 };

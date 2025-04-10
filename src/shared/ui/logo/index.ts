@@ -1,4 +1,4 @@
-import Logo, { LogoProps } from './Logo.tsx';
+import Logo, { LogoProps } from './ui/Logo.tsx';
 
 export type {
     LogoProps

@@ -1,5 +1,6 @@
-.ChatList {
-
+.Dialogs {
+  display: flex;
+  flex-direction: column;
 }
 
 .header {
@@ -14,31 +15,83 @@
     line-height: 26px;
   }
 
-  .search {
+  .searchWrapper {
     margin-top: 8px;
     height: 30px;
+    padding-left: 10px;
+  }
+
+  .searchInput {
+    margin-left: -3px;
+    padding: 0;
+    padding-right: 10px;
+
+    &::placeholder {
+      color: var(--text-color) !important;
+    }
+  }
+
+  .clearSearch {
+    cursor: pointer;
   }
 }
 
 .content {
   padding: 5px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 
   .filter {
-    height: 34px;
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 10px;
+    height: 34px;
+    flex-shrink: 0;
 
     .item {
+      user-select: none;
+      position: relative;
       font-size: 16px;
       line-height: 18px;
-      color: var(--button-text-disabled-color);
+      color: var(--link-text-color);
+      cursor: pointer;
+      transition: color 0.3s;
+
+      &:hover {
+        color: var(--link-text-hover-color);
+      }
+
+      &.active {
+        color: var(--link-text-hover-color);
+      }
     }
 
-    .active {
-      text-decoration: underline;
-      color: var(--button-text-color)
+    .underline {
+      position: absolute;
+      bottom: 5px;
+      left: 0;
+      height: 2px;
+      background: var(--link-text-hover-color);
+      transition: transform 0.3s ease, width 0.3s ease;
     }
   }
+
+  .dialogs {
+    margin: 5px 0;
+    flex: 1;
+  }
+}
+
+.newChat {
+  background: var(--button-bg-color);
+  height: 30px;
+  color: var(--button-text-color);
+  margin: auto 10px 10px 10px;
+  border-radius: 10px;
+  font-size: 16px;
+  line-height: 21px;
+  font-weight: bold;
 }

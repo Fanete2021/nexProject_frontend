@@ -8,6 +8,7 @@ import SelectedChat from '../selected-chat/SelectedChat.tsx';
 import { useSelector } from 'react-redux';
 import { getAuthToken } from '@/features/auth';
 import ChatWebSocketService from '../../model/service/ChatWebSocketService.ts';
+import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
 
 export interface ChatProps {
     className?: string;
@@ -17,11 +18,17 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
     const { className } = props;
     const dispatch = useAppDispatch();
     const token = useSelector(getAuthToken)!;
+    const user = useSelector(getUserData)!;
 
     useEffect(() => {
         const loadChats = async () => {
             try {
-                await dispatch(fetchChats()).unwrap();
+                const response = await dispatch(fetchChats()).unwrap();
+                const { chats } = response;
+
+                for (const chat of chats) {
+                    ChatWebSocketService.subscribe(chat.chatId);
+                }
             } catch (error) {
                 console.log(error);
             }
@@ -31,7 +38,7 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
     }, []);
 
     useEffect(() => {
-        ChatWebSocketService.connect(token);
+        ChatWebSocketService.connect(token, user.userId);
 
         return () => {
             ChatWebSocketService.disconnect();
@@ -41,7 +48,7 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
     return (
         <div className={classNames(styles.ChatPanel, [className])}>
             <Dialogs className={styles.dialogs} />
-            <SelectedChat />
+            <SelectedChat className={styles.selectedChat}/>
         </div>
     );
 };
