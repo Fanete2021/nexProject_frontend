@@ -1,10 +1,10 @@
 import useDynamicSvgImport from '@/shared/lib/hooks/useDynamicSvgImport.ts';
-import { icons } from './model/icons.ts';
+import { icons } from '../model/icons.ts';
 import React, { memo } from 'react';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import styles from './SvgIcon.module.scss';
 
-export interface SvgIconProps {
+export interface SvgIconProps extends React.SVGAttributes<SVGSVGElement> {
   iconName: icons;
   className?: string;
   important?: boolean;
@@ -21,6 +21,7 @@ const SvgIcon: React.FC<SvgIconProps> = memo((props) => {
         applyFill = true,
         applyStroke = false,
         applyHover = true,
+        ...rest
     } = props;
     const { loading, Icon } = useDynamicSvgImport(iconName);
 
@@ -36,7 +37,10 @@ const SvgIcon: React.FC<SvgIconProps> = memo((props) => {
     return (
         <>
             {Icon && (
-                <Icon className={classNames('', [className], mods)} />
+                <Icon
+                    {...rest}
+                    className={classNames('', [className], mods)}
+                />
             )}
         </>
     );

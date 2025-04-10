@@ -3,13 +3,14 @@ import { Chat, ChatSchema } from './model/types/chat.ts';
 import { ChatInfo } from './model/types/chatInfo.ts';
 import { Message } from './model/types/message.ts';
 import { chatReducer, chatActions } from './model/slice/chatSlice.ts';
-import { getChatData } from './model/selectors/getChatData.ts';
-import { getChatIsLoading } from './model/selectors/getChatIsLoading.ts';
+import { getChatDialogs } from './model/selectors/getChatDialogs.ts';
+import { getChatIsLoadingDialogs } from './model/selectors/getChatIsLoadingDialogs.ts';
 import { fetchChats } from './model/service/fetchChats.ts';
 import { fetchSelectedChatInfo } from './model/service/fetchSelectedChatInfo.ts';
 import { getChatSelectedChat } from './model/selectors/getChatSelectedChat.ts';
 import ChatWebSocketService from './model/service/ChatWebSocketService.ts';
 import { NewMessage } from './model/types/newMessage.ts';
+import { searchContacts } from './model/service/searchContacts.ts';
 
 export {
     ChatPanelAsync as ChatPanel,
@@ -17,13 +18,14 @@ export {
     chatReducer,
     chatActions,
 
-    getChatData,
-    getChatIsLoading,
+    getChatDialogs,
+    getChatIsLoadingDialogs,
     getChatSelectedChat,
 
     fetchChats,
     fetchSelectedChatInfo,
-    ChatWebSocketService
+    ChatWebSocketService,
+    searchContacts
 };
 
 export type {

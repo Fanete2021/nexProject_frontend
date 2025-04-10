@@ -1,6 +1,6 @@
 import { ValidationListItem } from './model/ValidationListItem.ts';
-import { ValidationListProps } from './ValidationList.tsx';
-import ValidationList from './ValidationList.tsx';
+import { ValidationListProps } from './ui/ValidationList.tsx';
+import ValidationList from './ui/ValidationList.tsx';
 
 export type {
     ValidationListItem,

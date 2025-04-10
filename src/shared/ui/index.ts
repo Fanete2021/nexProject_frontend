@@ -4,6 +4,7 @@ import { Logo, LogoProps } from './logo';
 import { CustomCheckbox, CustomCheckboxProps } from './custom-checkbox';
 import { CustomInput, CustomInputProps } from './custom-input';
 import { ValidationList, ValidationListProps, ValidationListItem } from './validation-list';
+import { Avatar, AvatarProps } from './avatar';
 
 export type {
     SvgIconProps,
@@ -12,7 +13,8 @@ export type {
     CustomCheckboxProps,
     CustomInputProps,
     ValidationListProps,
-    ValidationListItem
+    ValidationListItem,
+    AvatarProps
 };
 
 export {
@@ -22,5 +24,6 @@ export {
     Logo,
     CustomCheckbox,
     CustomInput,
-    ValidationList
+    ValidationList,
+    Avatar
 };

@@ -1,6 +1,7 @@
 .app_minimalistic_light_theme {
   --bg-color: #FFFFFF;
   --text-color: #000000;
+  --text-secondary-color: #9E9E9E;
   --line-color: #CCCCCC;
   --error-text-color: #FF5252;
   --success-text-color: #4CAF50;
@@ -45,4 +46,30 @@
   --about-developers-box-shadow-color: rgba(0, 0, 0, 0.1);
   --about-developers-border-color: #e0e0e0;
   --about-developers-role-bg-color: #edf2f7;
- }
+
+  --message-my-bg-color: #E0E0E0;
+  --message-bg-color: #F5F5F5;
+  --message-reply-bg-color: #E5E5E5;
+  --message-reply-stroke-color: #CCCCCC;
+  --message-new-bg-color: #EAEAEA;
+  --message-new-text-color: #212121;
+
+  --chat-selected-bg-color: #E3F2FD;
+  --chat-divider-line-color: #E0E0E0;
+  --chat-bg-color: #FFFFFF;
+  --chat-shadow-color: rgba(0, 0, 0, 0.75);
+
+  --avatar-non-bg-color: #F5F5F5;
+  --avatar-non-stroke-color: #CCCCCC;
+  --avatar-non-text-color: #616161;
+
+  --scroll-bg-color: #EEEEEE;
+  --scroll-active-color: #BDBDBD;
+
+  --switch-bg-color: #E0E0E0;
+  --switch-active-color: #4D4D4D;
+  --switch-inactive-color: #9E9E9E;
+  --scroll-hover-color: #A0A0A0;
+
+  --skeleton-bg-color: #F5F5F5;
+}

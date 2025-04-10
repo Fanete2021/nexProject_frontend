@@ -23,5 +23,6 @@ export enum icons {
   CROSS = 'cross',
   NOT_FOUND = '404',
   TELEGRAM = 'telegram',
-  GITHUB = 'github'
+  GITHUB = 'github',
+  SEARCH = 'search'
 }

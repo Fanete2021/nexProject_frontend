@@ -2,7 +2,7 @@ import React, { memo, ReactNode } from 'react';
 import styles from './ValidationList.module.scss';
 import { icons, SvgIcon } from '@/shared/ui';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
-import { ValidationListItem } from './model/ValidationListItem.ts';
+import { ValidationListItem } from '../model/ValidationListItem.ts';
 import { useTranslation } from 'react-i18next';
 
 const CheckIcon = memo(() => (
