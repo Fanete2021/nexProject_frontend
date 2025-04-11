@@ -1,13 +1,14 @@
-import { Client, IFrame } from '@stomp/stompjs';
+import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { NewMessage } from '../types/newMessage.ts';
 import { Message } from '../types/message.ts';
 
 class ChatWebSocketService {
   private client: Client | null = null;
-  private onMessageCallback: ((message: Message, chatId: string) => void) | null = null;
   private chatSubscriptionsQueue: string[] = []; // Очередь топиков для подписки
   private isConnected: boolean = false;
+
+  public onMessageCallback: ((message: Message, chatId: string) => void) | null = null;
 
   connect(token: string, userId: string) {
     this.client = new Client({
@@ -72,10 +73,6 @@ class ChatWebSocketService {
     this.client?.subscribe(`/queue/user${userId}`, (message) => {
       console.log(JSON.parse(message.body));
     });
-  }
-
-  setOnMessageCallback(callback: (message: Message, chatId: string) => void) {
-    this.onMessageCallback = callback;
   }
 
   sendMessage(newMessage: NewMessage) {

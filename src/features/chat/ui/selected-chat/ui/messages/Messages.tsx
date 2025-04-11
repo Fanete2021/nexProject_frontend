@@ -54,16 +54,20 @@ const Messages: React.FC<MessagesProps> = (props) => {
     setGroupedMessages(grouped);
   }, [props.messages]);
 
-  useEffect(() => {
-    ChatWebSocketService.setOnMessageCallback(
-      (message: Message, chatId: string) => {
-        console.log(message, chatId);
-        if (props.chatId === chatId) {
-          const updatedGroupedMessages = updateGroupedMessages(message, groupedMessages);
-          setGroupedMessages(updatedGroupedMessages);
-        }
-      });
-  }, [groupedMessages]);
+  // useEffect(() => {
+  //   ChatWebSocketService.addOnMessageCallback(
+  //     (message: Message, chatId: string) => {
+  //       if (props.chatId === chatId) {
+  //         const updatedGroupedMessages = updateGroupedMessages(message, groupedMessages);
+  //         setGroupedMessages(updatedGroupedMessages);
+  //       }
+  //     }
+  //   );
+  //
+  //   return () => {
+  //     ChatWebSocketService.removeLastOnMessageCallback();
+  //   };
+  // }, [groupedMessages]);
 
   useLayoutEffect(() => {
     if (isAtBottom) {

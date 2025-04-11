@@ -3,6 +3,7 @@ import { Chat, ChatSchema } from '../types/chat.ts';
 import { ChatInfo } from '../types/chatInfo.ts';
 import { fetchChats } from '../service/fetchChats.ts';
 import { fetchSelectedChatInfo } from '../service/fetchSelectedChatInfo.ts';
+import { Message } from '../types/message.ts';
 
 const initialState: ChatSchema = {
   dialogs: [],
@@ -20,6 +21,23 @@ export const chatSlice = createSlice({
     },
     setSelectedChat: (state, action: PayloadAction<ChatInfo>) => {
       state.selectedChat = action.payload;
+    },
+    addMessage: (state, action: PayloadAction<Message>) => {
+      const newMessage = action.payload;
+
+      const chatIndex = state.dialogs.findIndex((dialog) => dialog.chatId === newMessage.chatId);
+      if (chatIndex !== -1) {
+        const chat = state.dialogs[chatIndex];
+        chat.lastMessage = newMessage;
+        state.dialogs.splice(chatIndex, 1);
+        state.dialogs.unshift(chat);
+      }
+
+
+      if (state.selectedChat?.chatId === newMessage.chatId) {
+        state.selectedChat.lastMessages.unshift(newMessage);
+      }
+
     }
   },
   extraReducers: (builder) => {

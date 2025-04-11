@@ -105,16 +105,16 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
             </InputAdornment>
           }
           endAdornment={searchedValue &&
-                        <InputAdornment position="end">
-                          <SvgIcon
-                            iconName={icons.CROSS}
-                            applyHover={false}
-                            important={Boolean(searchedValue)}
-                            applyStroke
-                            className={styles.clearSearch}
-                            onClick={clearSearch}
-                          />
-                        </InputAdornment>
+            <InputAdornment position="end">
+              <SvgIcon
+                iconName={icons.CROSS}
+                applyHover={false}
+                important={Boolean(searchedValue)}
+                applyStroke
+                className={styles.clearSearch}
+                onClick={clearSearch}
+              />
+            </InputAdornment>
           }
           placeholder="Search"
           fullWidth
@@ -160,35 +160,33 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
 
         <div className={styles.dialogs}>
           {!searchedValue && isLoadingDialogs &&
-                        <>
-                          {Array.from({ length: 15 }).map((_, index) => (
-                            <DialogItemSkeleton key={index} />
-                          ))}
-                        </>
+            <>
+              {Array.from({ length: 15 }).map((_, index) => (
+                <DialogItemSkeleton key={index} />
+              ))}
+            </>
           }
 
           {!searchedValue && !isLoadingDialogs &&
-                        <>
-                          {dialogs.map(dialog => (
-                            <DialogItem key={dialog.chatId} chatData={dialog} />
-                          ))}
-                        </>
+            <>
+              {dialogs.map(dialog => (
+                <DialogItem key={dialog.chatId} chatData={dialog} />
+              ))}
+            </>
           }
 
           {searchedValue &&
-                        <>
-                          {searchedContacts.map(contact => (
-                            <DialogItem key={contact.userId} contactData={contact} />
-                          ))}
-                        </>
+            <>
+              {searchedContacts.map(contact => (
+                <DialogItem key={contact.userId} contactData={contact} />
+              ))}
+            </>
           }
         </div>
       </div>
 
-      <button
-        className={styles.newChat}
-      >
-                New chat
+      <button className={styles.newChat}>
+        New chat
       </button>
     </div>
   );

@@ -9,6 +9,8 @@ import { useSelector } from 'react-redux';
 import { getAuthToken } from '@/features/auth';
 import ChatWebSocketService from '../../model/service/ChatWebSocketService.ts';
 import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
+import { Message } from '../../model/types/message.ts';
+import { chatActions } from '../../model/slice/chatSlice.ts';
 
 export interface ChatProps {
     className?: string;
@@ -23,6 +25,7 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
   useEffect(() => {
     const loadChats = async () => {
       try {
+        //TODO переделать на получение только айдишников
         const response = await dispatch(fetchChats({ filterMode: 'all' })).unwrap();
         const { chats } = response;
 
@@ -35,6 +38,14 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
     };
 
     loadChats();
+
+    ChatWebSocketService.onMessageCallback = (message: Message) => {
+      dispatch(chatActions.addMessage(message));
+    };
+    
+    return () => {
+      ChatWebSocketService.onMessageCallback = () => {};
+    };
   }, []);
 
   useEffect(() => {
