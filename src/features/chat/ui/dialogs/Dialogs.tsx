@@ -1,28 +1,43 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import styles from './Dialogs.module.scss';
-import { classNames } from '@/shared/lib/utils/classNames.ts';
-import { useSelector } from 'react-redux';
-import { getChatDialogs } from '../../model/selectors/getChatDialogs.ts';
+import {classNames} from '@/shared/lib/utils/classNames.ts';
+import {useSelector} from 'react-redux';
+import {getChatDialogs} from '../../model/selectors/getChatDialogs.ts';
 import DialogItem from './ui/dialog-item/DialogItem.tsx';
-import { CustomInput, icons, SvgIcon } from '@/shared/ui';
-import { InputAdornment } from '@mui/material';
+import {CustomInput, icons, SvgIcon} from '@/shared/ui';
+import {InputAdornment} from '@mui/material';
 import DialogItemSkeleton from './ui/dialog-item/DialogItemSkeleton.tsx';
-import { getChatIsLoadingDialogs } from '../../model/selectors/getChatIsLoadingDialogs.ts';
-import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
-import { searchContacts } from '../../model/service/searchContacts.ts';
-import { Contact } from '../../model/types/contact.ts';
+import {getChatIsLoadingDialogs} from '../../model/selectors/getChatIsLoadingDialogs.ts';
+import {useAppDispatch} from '@/shared/lib/hooks/useAppDispatch.ts';
+import {searchContacts} from '../../model/service/searchContacts.ts';
+import {Contact} from '../../model/types/contact.ts';
+import {ChatTypes} from '../../model/types/chatTypes.ts';
+import {fetchChats} from '../../model/service/fetchChats.ts';
 
 export interface ChatListProps {
   className?: string;
 }
 
-const filters = ['All', 'Contacts', 'Group chats'];
+const filters = [
+    {
+        name: 'All',
+        value: ChatTypes.ALL,
+    },
+    {
+        name: 'Contacts',
+        value: ChatTypes.PRIVATE,
+    },
+    {
+        name: 'Group chats',
+        value: ChatTypes.PUBLIC
+    }
+];
 
 const Dialogs: React.FC<ChatListProps> = (props) => {
     const { className } = props;
     
     const [searchedValue, setSearchedValue] = useState<string>('');
-    const [activeFilter, setActiveFilter] = useState(0);
+    const [activeFilter, setActiveFilter] = useState<ChatTypes>(ChatTypes.ALL);
     const underlineRef = useRef<HTMLDivElement>(null);
     const filterRefs = useRef<(HTMLDivElement | null)[]>([]);
     const dispatch = useAppDispatch();
@@ -47,8 +62,8 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
         }
     };
 
-    const handleFilterClick = (index: number, event: React.MouseEvent) => {
-        setActiveFilter(index);
+    const handleFilterClick = (filter: ChatTypes, event: React.MouseEvent) => {
+        setActiveFilter(filter);
 
         const target = event.target as HTMLDivElement;
         if (underlineRef.current && target) {
@@ -67,6 +82,10 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
             underlineRef.current.style.width = `${offsetWidth}px`;
         }
     }, [filterRefs]);
+
+    useEffect(() => {
+        dispatch(fetchChats({ filterMode: activeFilter }));
+    }, [activeFilter]);
 
     return (
         <div className={classNames(styles.Dialogs, [className])}>
@@ -117,7 +136,7 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
                 <div 
                     className={styles.filter}
                     style={{
-                        display: !searchedValue && !isLoadingDialogs ? 'flex' : 'none' //Чтобы корректно устанавливалась underline
+                        display: !searchedValue ? 'flex' : 'none' //Чтобы корректно устанавливалась underline
                     }}
                 >
                     <div
@@ -127,14 +146,14 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
 
                     {filters.map((filter, index) => (
                         <div
-                            key={filter}
+                            key={filter.value}
                             className={classNames(styles.item, [], {
-                                [styles.active]: activeFilter === index,
+                                [styles.active]: activeFilter === filter.value,
                             })}
                             ref={(el) => (filterRefs.current[index] = el)}
-                            onClick={(event) => handleFilterClick(index, event)}
+                            onClick={(event) => handleFilterClick(filter.value, event)}
                         >
-                            {filter}
+                            {filter.name}
                         </div>
                     ))}
                 </div>
