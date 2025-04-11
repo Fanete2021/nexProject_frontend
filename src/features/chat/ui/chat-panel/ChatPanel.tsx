@@ -23,7 +23,7 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
     useEffect(() => {
         const loadChats = async () => {
             try {
-                const response = await dispatch(fetchChats()).unwrap();
+                const response = await dispatch(fetchChats({ filterMode: 'all' })).unwrap();
                 const { chats } = response;
 
                 for (const chat of chats) {

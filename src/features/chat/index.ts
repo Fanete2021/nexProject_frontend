@@ -11,6 +11,7 @@ import { getChatSelectedChat } from './model/selectors/getChatSelectedChat.ts';
 import ChatWebSocketService from './model/service/ChatWebSocketService.ts';
 import { NewMessage } from './model/types/newMessage.ts';
 import { searchContacts } from './model/service/searchContacts.ts';
+import { ChatTypes } from './model/types/chatTypes.ts';
 
 export {
     ChatPanelAsync as ChatPanel,
@@ -33,5 +34,6 @@ export type {
     ChatSchema,
     ChatInfo,
     Message,
-    NewMessage
+    NewMessage,
+    ChatTypes
 };
