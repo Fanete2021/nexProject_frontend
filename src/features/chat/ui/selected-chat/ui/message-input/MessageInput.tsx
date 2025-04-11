@@ -12,41 +12,41 @@ export interface MessageInputProps {
 }
 
 const MessageInput: React.FC<MessageInputProps> = (props) => {
-    const { className } = props;
+  const { className } = props;
     
-    const [messageText, setMessageText] = useState<string>('');
-    const user = useSelector(getUserData)!;
-    const selectedChat = useSelector(getChatSelectedChat)!;
+  const [messageText, setMessageText] = useState<string>('');
+  const user = useSelector(getUserData)!;
+  const selectedChat = useSelector(getChatSelectedChat)!;
     
-    const sendHandler = () => {
-        const newMessage: NewMessage = {
-            message: messageText,
-            senderId: user.userId,
-            recipientId: selectedChat.members.find(member => member.memberId !== user.userId)!.memberId,
-            chatId: selectedChat.chatId
-        };
-        ChatWebSocketService.sendMessage(newMessage);
-        setMessageText('');
+  const sendHandler = () => {
+    const newMessage: NewMessage = {
+      message: messageText,
+      senderId: user.userId,
+      recipientId: selectedChat.members.find(member => member.memberId !== user.userId)!.memberId,
+      chatId: selectedChat.chatId
     };
+    ChatWebSocketService.sendMessage(newMessage);
+    setMessageText('');
+  };
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            sendHandler();
-        }
-    };
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      sendHandler();
+    }
+  };
 
-    return (
-        <div className={classNames(styles.MessageInput, [className])}>
-            <input
-                className={styles.input}
-                value={messageText} 
-                onChange={e => setMessageText(e.target.value)}
-                placeholder={'Write a message...'}
-                onKeyDown={handleKeyDown}
-            />
-        </div>
-    );
+  return (
+    <div className={classNames(styles.MessageInput, [className])}>
+      <input
+        className={styles.input}
+        value={messageText} 
+        onChange={e => setMessageText(e.target.value)}
+        placeholder={'Write a message...'}
+        onKeyDown={handleKeyDown}
+      />
+    </div>
+  );
 };
 
 export default MessageInput;

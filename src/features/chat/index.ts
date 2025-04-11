@@ -14,26 +14,26 @@ import { searchContacts } from './model/service/searchContacts.ts';
 import { ChatTypes } from './model/types/chatTypes.ts';
 
 export {
-    ChatPanelAsync as ChatPanel,
+  ChatPanelAsync as ChatPanel,
 
-    chatReducer,
-    chatActions,
+  chatReducer,
+  chatActions,
 
-    getChatDialogs,
-    getChatIsLoadingDialogs,
-    getChatSelectedChat,
+  getChatDialogs,
+  getChatIsLoadingDialogs,
+  getChatSelectedChat,
 
-    fetchChats,
-    fetchSelectedChatInfo,
-    ChatWebSocketService,
-    searchContacts
+  fetchChats,
+  fetchSelectedChatInfo,
+  ChatWebSocketService,
+  searchContacts
 };
 
 export type {
-    Chat,
-    ChatSchema,
-    ChatInfo,
-    Message,
-    NewMessage,
-    ChatTypes
+  Chat,
+  ChatSchema,
+  ChatInfo,
+  Message,
+  NewMessage,
+  ChatTypes
 };

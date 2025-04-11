@@ -7,23 +7,23 @@ import { ValidationList, ValidationListProps, ValidationListItem } from './valid
 import { Avatar, AvatarProps } from './avatar';
 
 export type {
-    SvgIconProps,
-    LoaderProps,
-    LogoProps,
-    CustomCheckboxProps,
-    CustomInputProps,
-    ValidationListProps,
-    ValidationListItem,
-    AvatarProps
+  SvgIconProps,
+  LoaderProps,
+  LogoProps,
+  CustomCheckboxProps,
+  CustomInputProps,
+  ValidationListProps,
+  ValidationListItem,
+  AvatarProps
 };
 
 export {
-    icons,
-    SvgIcon,
-    Loader,
-    Logo,
-    CustomCheckbox,
-    CustomInput,
-    ValidationList,
-    Avatar
+  icons,
+  SvgIcon,
+  Loader,
+  Logo,
+  CustomCheckbox,
+  CustomInput,
+  ValidationList,
+  Avatar
 };

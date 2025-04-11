@@ -9,20 +9,20 @@ import { getAuthIsLoading } from './model/selectors/getAuthIsLoading.ts';
 import { logout } from './model/service/logout.ts';
 
 export type {
-    AuthSchema
+  AuthSchema
 };
 
 export {
-    LoginFormAsync as LoginForm,
+  LoginFormAsync as LoginForm,
 
-    authReducer,
-    authActions,
+  authReducer,
+  authActions,
 
-    login,
-    refreshToken,
-    logout,
+  login,
+  refreshToken,
+  logout,
 
-    getAuthIsAuth,
-    getAuthToken,
-    getAuthIsLoading
+  getAuthIsAuth,
+  getAuthToken,
+  getAuthIsLoading
 };

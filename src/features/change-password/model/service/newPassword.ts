@@ -9,18 +9,18 @@ interface NewPasswordProps {
 }
 
 export const newPassword = createAsyncThunk<void, NewPasswordProps, ThunkConfig<ApiError>> (
-    'changePassword/newPassword',
-    async ({ token, ...changePasswordData }, thunkAPI) => {
-        const {
-            extra,
-            rejectWithValue,
-        } = thunkAPI;
-        try {
-            const response = await extra.api.post(`/newPassword/${token}`, changePasswordData);
+  'changePassword/newPassword',
+  async ({ token, ...changePasswordData }, thunkAPI) => {
+    const {
+      extra,
+      rejectWithValue,
+    } = thunkAPI;
+    try {
+      const response = await extra.api.post(`/newPassword/${token}`, changePasswordData);
 
-            return response.data;
-        } catch (e) {
-            return rejectWithValue(e.response.data);
-        }
+      return response.data;
+    } catch (e) {
+      return rejectWithValue(e.response.data);
     }
+  }
 );

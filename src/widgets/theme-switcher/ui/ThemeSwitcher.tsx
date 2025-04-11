@@ -9,19 +9,19 @@ interface ThemeSwitcherProps {
 }
 
 const ThemeSwitcher = memo(({ className }: ThemeSwitcherProps) => {
-    const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
 
-    return (
-        <button
-            className={classNames(styles.iconWrapper, [ className ])}
-            onClick={toggleTheme}
-        >
-            <SvgIcon
-                iconName={theme === Theme.MINIMALISTIC_LIGHT ? icons.MOON : icons.SUN}
-                important={true}
-            />
-        </button>
-    );
+  return (
+    <button
+      className={classNames(styles.iconWrapper, [ className ])}
+      onClick={toggleTheme}
+    >
+      <SvgIcon
+        iconName={theme === Theme.MINIMALISTIC_LIGHT ? icons.MOON : icons.SUN}
+        important={true}
+      />
+    </button>
+  );
 });
 
 ThemeSwitcher.displayName = 'ThemeSwitcher';

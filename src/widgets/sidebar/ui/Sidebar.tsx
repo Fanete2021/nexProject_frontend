@@ -14,120 +14,120 @@ export interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = (props: SidebarProps) => {
-    const { className } = props;
+  const { className } = props;
 
-    const { t } = useTranslation();
-    const [ expanded, setExpanded ] = useState<boolean>(false);
-    const location = useLocation();
-    const navigate = useNavigate();
-    const dispatch = useAppDispatch();
+  const { t } = useTranslation();
+  const [ expanded, setExpanded ] = useState<boolean>(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
-    const mods: Record<string, boolean> = {
-        [styles.expanded]: expanded,
-    };
+  const mods: Record<string, boolean> = {
+    [styles.expanded]: expanded,
+  };
 
-    const links = useMemo(() => SidebarItemsList.map((item) => (
-        <Link
-            className={classNames(
-                styles.linkWrapper,
-                [location.pathname === item.path && styles.activeLinkWrapper]
-            )}
-            to={item.path}
-            key={item.path}
-        >
-            <SvgIcon
-                className={classNames(
-                    styles.icon,
-                    [],
-                    {
-                        [styles.applyIconFill]: item.applyIconFill,
-                        [styles.applyIconStroke]: item.applyIconStroke,
-                    }
-                )}
-                iconName={item.icon}
-                applyStroke={false}
-                applyFill={false}
-                applyHover={false}
-            />
+  const links = useMemo(() => SidebarItemsList.map((item) => (
+    <Link
+      className={classNames(
+        styles.linkWrapper,
+        [location.pathname === item.path && styles.activeLinkWrapper]
+      )}
+      to={item.path}
+      key={item.path}
+    >
+      <SvgIcon
+        className={classNames(
+          styles.icon,
+          [],
+          {
+            [styles.applyIconFill]: item.applyIconFill,
+            [styles.applyIconStroke]: item.applyIconStroke,
+          }
+        )}
+        iconName={item.icon}
+        applyStroke={false}
+        applyFill={false}
+        applyHover={false}
+      />
 
-            {expanded &&
+      {expanded &&
                 <div className={styles.text}>
-                    {t(item.text)}
+                  {t(item.text)}
                 </div>
-            }
-        </Link>
-    )), [expanded, t, location]);
+      }
+    </Link>
+  )), [expanded, t, location]);
     
-    const logoutHandler = useCallback(async () => {
-        try {
-            await dispatch(logout()).unwrap();
+  const logoutHandler = useCallback(async () => {
+    try {
+      await dispatch(logout()).unwrap();
 
-            navigate(RoutePath.auth);
-        } catch (error) {
-            console.log(error);
-        }
-    }, [navigate, dispatch]);
+      navigate(RoutePath.auth);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [navigate, dispatch]);
 
-    return (
-        <div
-            className={classNames(styles.Sidebar, [className], mods)}
-            onMouseEnter={() => setExpanded(true)}
-            onMouseLeave={() => setExpanded(false)}
-        >
-            <Logo className={styles.logo}/>
+  return (
+    <div
+      className={classNames(styles.Sidebar, [className], mods)}
+      onMouseEnter={() => setExpanded(true)}
+      onMouseLeave={() => setExpanded(false)}
+    >
+      <Logo className={styles.logo}/>
 
-            <div className={styles.linksWrapper}>
-                {links}
-            </div>
+      <div className={styles.linksWrapper}>
+        {links}
+      </div>
 
-            <div className={styles.footer}>
-                <div className={styles.linkWrapper}>
-                    <SvgIcon
-                        className={classNames(styles.icon,[styles.applyIconFill])}
-                        iconName={icons.SETTINGS}
-                    />
+      <div className={styles.footer}>
+        <div className={styles.linkWrapper}>
+          <SvgIcon
+            className={classNames(styles.icon,[styles.applyIconFill])}
+            iconName={icons.SETTINGS}
+          />
 
-                    {expanded &&
+          {expanded &&
                         <div className={styles.text}>
-                            {t('Настройки')}
+                          {t('Настройки')}
                         </div>
-                    }
-                </div>
-
-                <Link
-                    className={classNames(
-                        styles.linkWrapper,
-                        [location.pathname === RoutePath.changes && styles.activeLinkWrapper]
-                    )}
-                    to={RoutePath.changes}
-                >
-                    <SvgIcon
-                        className={classNames(styles.icon,[styles.applyIconFill])}
-                        iconName={icons.CHANGES}
-                    />
-
-                    {expanded &&
-                        <div className={styles.text}>
-                            {t('Изменения')}
-                        </div>
-                    }
-                </Link>
-
-                <button className={styles.linkWrapper} onClick={logoutHandler}>
-                    <SvgIcon
-                        className={classNames(styles.icon,[styles.applyIconFill])}
-                        iconName={icons.LOGOUT}
-                    />
-
-                    {expanded &&
-                        <div className={styles.text}>
-                            {t('Выйти')}
-                        </div>
-                    }
-                </button>
-            </div>
+          }
         </div>
-    );
+
+        <Link
+          className={classNames(
+            styles.linkWrapper,
+            [location.pathname === RoutePath.changes && styles.activeLinkWrapper]
+          )}
+          to={RoutePath.changes}
+        >
+          <SvgIcon
+            className={classNames(styles.icon,[styles.applyIconFill])}
+            iconName={icons.CHANGES}
+          />
+
+          {expanded &&
+                        <div className={styles.text}>
+                          {t('Изменения')}
+                        </div>
+          }
+        </Link>
+
+        <button className={styles.linkWrapper} onClick={logoutHandler}>
+          <SvgIcon
+            className={classNames(styles.icon,[styles.applyIconFill])}
+            iconName={icons.LOGOUT}
+          />
+
+          {expanded &&
+                        <div className={styles.text}>
+                          {t('Выйти')}
+                        </div>
+          }
+        </button>
+      </div>
+    </div>
+  );
 };
 
 export default Sidebar;

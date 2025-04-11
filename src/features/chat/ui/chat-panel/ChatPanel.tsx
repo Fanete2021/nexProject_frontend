@@ -15,42 +15,42 @@ export interface ChatProps {
 }
 
 const ChatPanel: React.FC<ChatProps> = (props) => {
-    const { className } = props;
-    const dispatch = useAppDispatch();
-    const token = useSelector(getAuthToken)!;
-    const user = useSelector(getUserData)!;
+  const { className } = props;
+  const dispatch = useAppDispatch();
+  const token = useSelector(getAuthToken)!;
+  const user = useSelector(getUserData)!;
 
-    useEffect(() => {
-        const loadChats = async () => {
-            try {
-                const response = await dispatch(fetchChats({ filterMode: 'all' })).unwrap();
-                const { chats } = response;
+  useEffect(() => {
+    const loadChats = async () => {
+      try {
+        const response = await dispatch(fetchChats({ filterMode: 'all' })).unwrap();
+        const { chats } = response;
 
-                for (const chat of chats) {
-                    ChatWebSocketService.subscribe(chat.chatId);
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        };
+        for (const chat of chats) {
+          ChatWebSocketService.subscribe(chat.chatId);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-        loadChats();
-    }, []);
+    loadChats();
+  }, []);
 
-    useEffect(() => {
-        ChatWebSocketService.connect(token, user.userId);
+  useEffect(() => {
+    ChatWebSocketService.connect(token, user.userId);
 
-        return () => {
-            ChatWebSocketService.disconnect();
-        };
-    }, []);
+    return () => {
+      ChatWebSocketService.disconnect();
+    };
+  }, []);
 
-    return (
-        <div className={classNames(styles.ChatPanel, [className])}>
-            <Dialogs className={styles.dialogs} />
-            <SelectedChat className={styles.selectedChat}/>
-        </div>
-    );
+  return (
+    <div className={classNames(styles.ChatPanel, [className])}>
+      <Dialogs className={styles.dialogs} />
+      <SelectedChat className={styles.selectedChat}/>
+    </div>
+  );
 };
 
 export default ChatPanel;

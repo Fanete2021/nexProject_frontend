@@ -13,29 +13,29 @@ export interface GuestPageLayoutProps {
 }
 
 const GuestPageLayout: React.FC<GuestPageLayoutProps> = (props) => {
-    const { children, title, className } = props;
-    const { t } = useTranslation();
+  const { children, title, className } = props;
+  const { t } = useTranslation();
 
-    return (
-        <div className={classNames(styles.GuestPageLayout, [className], {})}>
-            <div className={styles.settings}>
-                <LanguageSwitcher />
-                <ThemeSwitcher />
-            </div>
+  return (
+    <div className={classNames(styles.GuestPageLayout, [className], {})}>
+      <div className={styles.settings}>
+        <LanguageSwitcher />
+        <ThemeSwitcher />
+      </div>
 
-            <div className={styles.container}>
-                <Logo />
+      <div className={styles.container}>
+        <Logo />
 
-                {title &&
-                    <div className={styles.title}>
-                        {t(title)}
-                    </div>
-                }
+        {title &&
+          <div className={styles.title}>
+            {t(title)}
+          </div>
+        }
 
-                {children}
-            </div>
-        </div>
-    );
+        {children}
+      </div>
+    </div>
+  );
 };
 
 export default GuestPageLayout;

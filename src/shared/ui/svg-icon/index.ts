@@ -3,10 +3,10 @@ import SvgIcon from './ui/SvgIcon.tsx';
 import { SvgIconProps } from './ui/SvgIcon.tsx';
 
 export {
-    icons,
-    SvgIcon,
+  icons,
+  SvgIcon,
 };
 
 export type {
-    SvgIconProps
+  SvgIconProps
 };

@@ -17,66 +17,66 @@ export interface DialogItemProps {
 }
 
 const DialogItem: React.FC<DialogItemProps> = (props) => {
-    const { chatData, contactData } = props;
-    const dispatch = useAppDispatch();
-    const user = useSelector(getUserData)!;
+  const { chatData, contactData } = props;
+  const dispatch = useAppDispatch();
+  const user = useSelector(getUserData)!;
     
-    const clickHandler = useCallback(async () => {
-        if (chatData) {
-            try {
-                await dispatch(fetchSelectedChatInfo({ chatId: chatData.chatId })).unwrap();
-            } catch (error) {
-                console.log(error);
-            }
-        }
+  const clickHandler = useCallback(async () => {
+    if (chatData) {
+      try {
+        await dispatch(fetchSelectedChatInfo({ chatId: chatData.chatId })).unwrap();
+      } catch (error) {
+        console.log(error);
+      }
+    }
 
-        if (contactData) {
-            const chatInfo: ChatInfo = {
-                chatId: '',
-                lastMessages: [],
-                chatName: contactData.name || contactData?.username,
-                members: [
-                    {
-                        memberId: user.userId,
-                        admin: false,
-                        memberName: user.name
-                    },
-                    {
-                        memberId: contactData.userId,
-                        admin: false,
-                        memberName: contactData.name
-                    }
-                ]
-            };
+    if (contactData) {
+      const chatInfo: ChatInfo = {
+        chatId: '',
+        lastMessages: [],
+        chatName: contactData.name || contactData?.username,
+        members: [
+          {
+            memberId: user.userId,
+            admin: false,
+            memberName: user.name
+          },
+          {
+            memberId: contactData.userId,
+            admin: false,
+            memberName: contactData.name
+          }
+        ]
+      };
 
-            dispatch(chatActions.setSelectedChat(chatInfo));
-        }
-    }, []);
+      dispatch(chatActions.setSelectedChat(chatInfo));
+    }
+  }, []);
 
-    return (
-        <button
-            onClick={clickHandler}
-            className={styles.DialogItem}
-        >
-            <Avatar
-                text={chatData?.chatName || contactData?.name || contactData?.username}
-                height={40}
-                width={40}
-            />
+  return (
+    <button
+      onClick={clickHandler}
+      className={styles.DialogItem}
+    >
+      <Avatar
+        text={chatData?.chatName || contactData?.name || contactData?.username}
+        height={40}
+        width={40}
+      />
 
-            <div className={styles.info}>
-                <div className={styles.name}>
-                    {chatData?.chatName || contactData?.name || contactData?.username}
-                </div>
+      <div className={styles.info}>
+        <div className={styles.name}>
+          {chatData?.chatName || contactData?.name || contactData?.username}
+        </div>
 
-                {chatData?.lastMessage &&
+        {chatData?.lastMessage &&
                     <div className={styles.message}>
-                        {chatData.lastMessage.message}
+                      {chatData.lastMessage.message}
                     </div>
-                }
-            </div>
-        </button>
-    );
+        }
+      </div>
+    </button>
+  );
 };
 
 export default DialogItem;

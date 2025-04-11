@@ -10,27 +10,27 @@ export interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = (props) => {
-    const { chatInfo, className } = props;
+  const { chatInfo, className } = props;
 
-    return (
-        <div className={classNames(styles.Header, [className])}>
-            <Avatar
-                text={chatInfo.chatName}
-                width={50}
-                height={50}
-            />
+  return (
+    <div className={classNames(styles.Header, [className])}>
+      <Avatar
+        text={chatInfo.chatName}
+        width={50}
+        height={50}
+      />
 
-            <div className={styles.info}>
-                <div className={styles.name}>
-                    {chatInfo.chatName}
-                </div>
-
-                <div className={styles.online}>
-                    заходил 1 мин.назад
-                </div>
-            </div>
+      <div className={styles.info}>
+        <div className={styles.name}>
+          {chatInfo.chatName}
         </div>
-    );
+
+        <div className={styles.online}>
+                    заходил 1 мин.назад
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Header;

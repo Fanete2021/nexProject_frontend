@@ -12,40 +12,40 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { userActions } from '@/entities/user';
 
 const EmailConfirmPage = () => {
-    const { t } = useTranslation();
-    const user = useSelector(getUserData);
-    const dispatch = useAppDispatch();
-    const navigate = useNavigate();
+  const { t } = useTranslation();
+  const user = useSelector(getUserData);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-    const navigateToAuthPage = useCallback(async () => {
-        await dispatch(userActions.resetData());
-        navigate(RoutePath.auth);
-    }, [navigate, dispatch]);
+  const navigateToAuthPage = useCallback(async () => {
+    await dispatch(userActions.resetData());
+    navigate(RoutePath.auth);
+  }, [navigate, dispatch]);
 
-    useEffect(() => {
-        if (!user) {
-            navigate(RoutePath.auth);
-        }
-    }, [user]);
+  useEffect(() => {
+    if (!user) {
+      navigate(RoutePath.auth);
+    }
+  }, [user]);
 
-    return (
-        <GuestPageLayout
-            title={'Пожалуйста, проверьте вашу электронную почту'}
-        >
-            <div className={styles.subtitle}>
-                {t('Мы отправили код на')} <strong>{user?.email}</strong>
-            </div>
+  return (
+    <GuestPageLayout
+      title={'Пожалуйста, проверьте вашу электронную почту'}
+    >
+      <div className={styles.subtitle}>
+        {t('Мы отправили код на')} <strong>{user?.email}</strong>
+      </div>
 
-            <EmailConfirmForm />
+      <EmailConfirmForm />
 
-            <button
-                onClick={navigateToAuthPage}
-                className={classNames(styles.guestLink, ['guestLink'])}
-            >
-                <>{t('Вернуться назад')}</>
-            </button>
-        </GuestPageLayout>
-    );
+      <button
+        onClick={navigateToAuthPage}
+        className={classNames(styles.guestLink, ['guestLink'])}
+      >
+        <>{t('Вернуться назад')}</>
+      </button>
+    </GuestPageLayout>
+  );
 };
 
 export default EmailConfirmPage;

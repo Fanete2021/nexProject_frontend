@@ -6,30 +6,30 @@ import { ValidationListItem } from '../model/ValidationListItem.ts';
 import { useTranslation } from 'react-i18next';
 
 const CheckIcon = memo(() => (
-    <div className={styles.iconWrapper}>
-        <SvgIcon
-            iconName={icons.CHECK}
-            important
-            applyFill={false}
-            applyStroke
-            applyHover={false}
-            className={styles.icon}
-        />
-    </div>
+  <div className={styles.iconWrapper}>
+    <SvgIcon
+      iconName={icons.CHECK}
+      important
+      applyFill={false}
+      applyStroke
+      applyHover={false}
+      className={styles.icon}
+    />
+  </div>
 ));
 CheckIcon.displayName = 'CheckIcon';
 
 const CrossIcon = memo(() => (
-    <div className={styles.iconWrapper}>
-        <SvgIcon
-            iconName={icons.CROSS}
-            important
-            applyFill={false}
-            applyStroke
-            applyHover={false}
-            className={styles.icon}
-        />
-    </div>
+  <div className={styles.iconWrapper}>
+    <SvgIcon
+      iconName={icons.CROSS}
+      important
+      applyFill={false}
+      applyStroke
+      applyHover={false}
+      className={styles.icon}
+    />
+  </div>
 ));
 CrossIcon.displayName = 'CrossIcon';
 
@@ -40,39 +40,39 @@ export interface ValidationListProps {
 }
 
 const ValidationList: React.FC<ValidationListProps> = (props) => {
-    const {
-        children,
-        hasError = false,
-        items
-    } = props;
+  const {
+    children,
+    hasError = false,
+    items
+  } = props;
     
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
-    const mods: Record<string, boolean> = {
-        [styles.errorValidationList]: hasError
-    };
+  const mods: Record<string, boolean> = {
+    [styles.errorValidationList]: hasError
+  };
 
-    return (
-        <div className={styles.wrapper}>
-            {children}
+  return (
+    <div className={styles.wrapper}>
+      {children}
 
-            <ul className={classNames(styles.validationList,[], mods)}>
-                {items.map(item => (
-                    <li 
-                        className={item.isError ? '' : styles.valid}
-                        key={item.text}
-                    >
-                        {(item.isError && hasError)
-                            ? <CrossIcon />
-                            : <CheckIcon />
-                        }
+      <ul className={classNames(styles.validationList,[], mods)}>
+        {items.map(item => (
+          <li 
+            className={item.isError ? '' : styles.valid}
+            key={item.text}
+          >
+            {(item.isError && hasError)
+              ? <CrossIcon />
+              : <CheckIcon />
+            }
 
-                        {t(item.text)}
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
+            {t(item.text)}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 };
 
 export default ValidationList;

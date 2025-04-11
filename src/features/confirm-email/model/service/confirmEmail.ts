@@ -6,19 +6,19 @@ interface ConfirmEmailProps {
 }
 
 export const confirmEmail = createAsyncThunk<void, ConfirmEmailProps, ThunkConfig<string>> (
-    'confirmEmail/confirmEmail',
-    async (confirmEmailData, thunkAPI) => {
-        const {
-            extra,
-            rejectWithValue
-        } = thunkAPI;
+  'confirmEmail/confirmEmail',
+  async (confirmEmailData, thunkAPI) => {
+    const {
+      extra,
+      rejectWithValue
+    } = thunkAPI;
 
-        try {
-            const response = await extra.api.post('/confirm', confirmEmailData);
+    try {
+      const response = await extra.api.post('/confirm', confirmEmailData);
 
-            return response.data;
-        } catch (e) {
-            return rejectWithValue(e.response.data.message);
-        }
+      return response.data;
+    } catch (e) {
+      return rejectWithValue(e.response.data.message);
     }
+  }
 );

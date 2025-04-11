@@ -5,32 +5,32 @@ import RequireAuth from '@/app/providers/router/RequireAuth.tsx';
 import { Loader } from '@/shared/ui';
 
 const AppRouter = () => {
-    const renderWithWrapper = useCallback((route: AppRoutesProps) => {
-        const { element } = route;
+  const renderWithWrapper = useCallback((route: AppRoutesProps) => {
+    const { element } = route;
 
-        const children = (
-            <Suspense fallback={<Loader />}>
-                {element}
-            </Suspense>
-        );
-
-        return (
-            <Route
-                key={route.path}
-                path={route.path}
-                element={route.authOnly
-                    ? <RequireAuth>{children}</RequireAuth>
-                    : element
-                }
-            />
-        );
-    }, []);
+    const children = (
+      <Suspense fallback={<Loader />}>
+        {element}
+      </Suspense>
+    );
 
     return (
-        <Routes>
-            {Object.values(routeConfig).map(renderWithWrapper)}
-        </Routes>
+      <Route
+        key={route.path}
+        path={route.path}
+        element={route.authOnly
+          ? <RequireAuth>{children}</RequireAuth>
+          : element
+        }
+      />
     );
+  }, []);
+
+  return (
+    <Routes>
+      {Object.values(routeConfig).map(renderWithWrapper)}
+    </Routes>
+  );
 };
 
 export default memo(AppRouter);

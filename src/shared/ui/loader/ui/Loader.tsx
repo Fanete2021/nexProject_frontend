@@ -7,11 +7,11 @@ export interface LoaderProps {
 }
 
 const Loader: FC<LoaderProps> = memo(({ className }) => {
-    return (
-        <span
-            className={classNames('loader',[ className ])}
-        />
-    );
+  return (
+    <span
+      className={classNames('loader',[ className ])}
+    />
+  );
 });
 
 Loader.displayName = 'Loader';

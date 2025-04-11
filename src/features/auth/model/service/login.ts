@@ -15,25 +15,25 @@ interface LoginResponse {
 }
 
 export const login = createAsyncThunk<LoginResponse, LoginProps, ThunkConfig<ApiError>> (
-    'auth/login',
-    async (authData, thunkAPI) => {
-        const {
-            extra,
-            rejectWithValue,
-            dispatch
-        } = thunkAPI;
+  'auth/login',
+  async (authData, thunkAPI) => {
+    const {
+      extra,
+      rejectWithValue,
+      dispatch
+    } = thunkAPI;
 
-        try {
-            const response = await extra.api.post('/auth/signin', authData, {
-                withCredentials: true
-            });
+    try {
+      const response = await extra.api.post('/auth/signin', authData, {
+        withCredentials: true
+      });
 
-            await dispatch(authActions.setToken(response.data.access_token));
-            await dispatch(fetchUserData());
+      await dispatch(authActions.setToken(response.data.access_token));
+      await dispatch(fetchUserData());
 
-            return response.data;
-        } catch (e) {
-            return rejectWithValue(e.response.data);
-        }
+      return response.data;
+    } catch (e) {
+      return rejectWithValue(e.response.data);
     }
+  }
 );

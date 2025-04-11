@@ -7,17 +7,17 @@ export interface AuthenticatedPageLayoutProps {
 }
 
 const AuthenticatedPageLayout: React.FC<AuthenticatedPageLayoutProps> = (props) => {
-    const { children } = props;
+  const { children } = props;
 
-    return (
-        <div className={styles.AuthenticatedPageLayout}>
-            <Sidebar className={styles.sidebar}/>
+  return (
+    <div className={styles.AuthenticatedPageLayout}>
+      <Sidebar className={styles.sidebar}/>
 
-            <div className={styles.content}>
-                {children}
-            </div>
-        </div>
-    );
+      <div className={styles.content}>
+        {children}
+      </div>
+    </div>
+  );
 };
 
 export default AuthenticatedPageLayout;

@@ -8,16 +8,16 @@ export interface CustomInputProps extends OutlinedInputProps {
 }
 
 const CustomInput: React.FC<CustomInputProps> = ({ isError, classes,...props }) => {
-    return (
-        <OutlinedInput
-            {...props}
-            classes={{
-                root: classNames(styles.wrapperInput, [classes?.root]),
-                notchedOutline: classNames(isError ? styles.error : styles.notchedOutline, [classes?.notchedOutline]),
-                input: classNames(styles.input, [classes?.input])
-            }}
-        />
-    );
+  return (
+    <OutlinedInput
+      {...props}
+      classes={{
+        root: classNames(styles.wrapperInput, [classes?.root]),
+        notchedOutline: classNames(isError ? styles.error : styles.notchedOutline, [classes?.notchedOutline]),
+        input: classNames(styles.input, [classes?.input])
+      }}
+    />
+  );
 };
 
 export default CustomInput;

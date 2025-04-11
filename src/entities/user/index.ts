@@ -3,13 +3,13 @@ import { userActions, userReducer } from './model/slice/userSlice.ts';
 import { fetchUserData } from './model/service/fetchUserData.ts';
 
 export type {
-    User,
-    UserSchema
+  User,
+  UserSchema
 };
 
 export {
-    userActions,
-    userReducer,
+  userActions,
+  userReducer,
 
-    fetchUserData
+  fetchUserData
 };

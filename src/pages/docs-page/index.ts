@@ -1,5 +1,5 @@
 import { DocsPageAsync } from './ui/DocsPage.async.tsx';
 
 export {
-    DocsPageAsync as DocsPage
+  DocsPageAsync as DocsPage
 };

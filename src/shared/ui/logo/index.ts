@@ -1,9 +1,9 @@
 import Logo, { LogoProps } from './ui/Logo.tsx';
 
 export type {
-    LogoProps
+  LogoProps
 };
 
 export {
-    Logo
+  Logo
 };

@@ -12,25 +12,25 @@ interface FetchChatsProps {
 }
 
 export const fetchChats = createAsyncThunk<FetchChatsResponse, FetchChatsProps, ThunkConfig<string>> (
-    'chat/fetchChats',
-    async (fetchChatsData, thunkAPI) => {
-        const {
-            extra,
-            rejectWithValue,
-        } = thunkAPI;
+  'chat/fetchChats',
+  async (fetchChatsData, thunkAPI) => {
+    const {
+      extra,
+      rejectWithValue,
+    } = thunkAPI;
 
-        try {
-            const response = await extra.api.get('/getChats', {
-                params: {
-                    pageNumber: 1,
-                    pageSize: 15,
-                    filterMode: fetchChatsData.filterMode,
-                }
-            });
-
-            return response.data;
-        } catch (e) {
-            return rejectWithValue(e.response.data.message);
+    try {
+      const response = await extra.api.get('/getChats', {
+        params: {
+          pageNumber: 1,
+          pageSize: 15,
+          filterMode: fetchChatsData.filterMode,
         }
+      });
+
+      return response.data;
+    } catch (e) {
+      return rejectWithValue(e.response.data.message);
     }
+  }
 );

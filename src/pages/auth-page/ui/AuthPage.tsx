@@ -7,20 +7,20 @@ import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { GuestPageLayout } from '@/widgets/guest-page-layout';
 
 const AuthPage = () => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
-    return (
-        <GuestPageLayout title={'Вход'}>
-            <LoginForm />
+  return (
+    <GuestPageLayout title={'Вход'}>
+      <LoginForm />
 
-            <Link 
-                to={RoutePath.registration} 
-                className={classNames(styles.guestLink, ['guestLink'])}
-            >
-                <>{t('Нет аккаунта?')}</>
-            </Link>
-        </GuestPageLayout>
-    );
+      <Link 
+        to={RoutePath.registration} 
+        className={classNames(styles.guestLink, ['guestLink'])}
+      >
+        <>{t('Нет аккаунта?')}</>
+      </Link>
+    </GuestPageLayout>
+  );
 };
 
 export default AuthPage;

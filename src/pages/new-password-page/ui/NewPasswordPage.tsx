@@ -7,22 +7,22 @@ import { EmailForm } from '@/features/change-password';
 import { GuestPageLayout } from '@/widgets/guest-page-layout';
 
 const NewPasswordPage = () => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
-    return (
-        <GuestPageLayout
-            title={'Укажите почту'}
-        >
-            <EmailForm />
+  return (
+    <GuestPageLayout
+      title={'Укажите почту'}
+    >
+      <EmailForm />
 
-            <Link
-                to={RoutePath.auth}
-                className={classNames(styles.guestLink, ['guestLink'])}
-            >
-                <>{t('Вернуться назад')}</>
-            </Link>
-        </GuestPageLayout>
-    );
+      <Link
+        to={RoutePath.auth}
+        className={classNames(styles.guestLink, ['guestLink'])}
+      >
+        <>{t('Вернуться назад')}</>
+      </Link>
+    </GuestPageLayout>
+  );
 };
 
 export default NewPasswordPage;

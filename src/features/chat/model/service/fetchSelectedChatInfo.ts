@@ -7,19 +7,19 @@ interface FetchChatInfoProps {
 }
 
 export const fetchSelectedChatInfo = createAsyncThunk<ChatInfo, FetchChatInfoProps, ThunkConfig<string>> (
-    'chat/fetchSelectedChatInfo',
-    async (chatInfoData, thunkAPI) => {
-        const {
-            extra,
-            rejectWithValue,
-        } = thunkAPI;
+  'chat/fetchSelectedChatInfo',
+  async (chatInfoData, thunkAPI) => {
+    const {
+      extra,
+      rejectWithValue,
+    } = thunkAPI;
 
-        try {
-            const response = await extra.api.get(`/chatInfo/${chatInfoData.chatId}`);
+    try {
+      const response = await extra.api.get(`/chatInfo/${chatInfoData.chatId}`);
 
-            return response.data;
-        } catch (e) {
-            return rejectWithValue(e.response.data.message);
-        }
+      return response.data;
+    } catch (e) {
+      return rejectWithValue(e.response.data.message);
     }
+  }
 );
