@@ -5,14 +5,14 @@ import { ThemeSwitcher } from '@/widgets/theme-switcher';
 import { LanguageSwitcher } from '@/widgets/language-switcher';
 
 const MainPage = () => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
-    return (
-        <AuthenticatedPageLayout>
-            <ThemeSwitcher />
-            <LanguageSwitcher />
-        </AuthenticatedPageLayout>
-    );
+  return (
+    <AuthenticatedPageLayout>
+      <ThemeSwitcher />
+      <LanguageSwitcher />
+    </AuthenticatedPageLayout>
+  );
 };
 
 export default MainPage;

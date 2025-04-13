@@ -9,43 +9,43 @@ import { Loader } from '@/shared/ui';
 import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
 
 function RequireAuth({ children }: { children: JSX.Element }) {
-    const location = useLocation();
-    const dispatch = useAppDispatch();
-    const user = useSelector(getUserData);
-    const [isAppReady, setIsAppReady] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
+  const location = useLocation();
+  const dispatch = useAppDispatch();
+  const user = useSelector(getUserData);
+  const [isAppReady, setIsAppReady] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        const initStore = async () => {
-            try {
-                await dispatch(refreshToken()).unwrap();
-                await dispatch(fetchUserData()).unwrap();
-                setIsAppReady(true);
-            } catch (error) {
-                console.log('refreshToken: ', error);
-                setIsAppReady(false);
-            } finally {
-                setIsLoading(false);
-            }
-        };
+  useEffect(() => {
+    const initStore = async () => {
+      try {
+        await dispatch(refreshToken()).unwrap();
+        await dispatch(fetchUserData()).unwrap();
+        setIsAppReady(true);
+      } catch (error) {
+        console.log('refreshToken: ', error);
+        setIsAppReady(false);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-        if (!user) {
-            initStore();
-        } else {
-            setIsAppReady(true);
-            setIsLoading(false);
-        }
-    }, [dispatch, user]);
-
-    if (isLoading) {
-        return <Loader />;
+    if (!user) {
+      initStore();
+    } else {
+      setIsAppReady(true);
+      setIsLoading(false);
     }
+  }, [dispatch, user]);
 
-    if (!isAppReady) {
-        return <Navigate to={RoutePath.auth} state={{ from: location }} replace />;
-    }
+  if (isLoading) {
+    return <Loader />;
+  }
 
-    return children;
+  if (!isAppReady) {
+    return <Navigate to={RoutePath.auth} state={{ from: location }} replace />;
+  }
+
+  return children;
 }
 
 export default RequireAuth;

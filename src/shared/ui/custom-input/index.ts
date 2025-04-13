@@ -1,9 +1,9 @@
 import CustomInput, { CustomInputProps } from './ui/CustomInput.tsx';
 
 export type {
-    CustomInputProps
+  CustomInputProps
 };
 
 export {
-    CustomInput
+  CustomInput
 };

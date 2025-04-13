@@ -6,33 +6,102 @@
   overflow-y: auto;
 }
 
+.messageGroup {
+  display: flex;
+  gap: 12px;
+  position: relative;
+
+  .messages {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .avatar {
+    position: sticky;
+    bottom: 0;
+    margin-top: auto;
+  }
+}
+
+.dateSeparator {
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
+  line-height: 18px;
+}
+
 .message {
   background: var(--message-bg-color);
   padding: 10px;
-  border-radius: 5px 15px 15px 0;
   width: fit-content;
-  max-width: 350px;
+  max-width: 400px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+
+  .sender {
+    font-weight: bold;
+  }
+
+  .textWrapper {
+    width: auto;
+    line-height: 1;
+    position: relative;
+
+    .text {
+      font-size: 14px;
+      line-height: 18px;
+      word-break: break-word;
+    }
+
+    .time {
+      font-size: 12px;
+      line-height: 14px;
+      color: var(--text-secondary-color);
+      position: relative;
+      top: 4px;
+      float: right;
+      margin-left: 5px;
+    }
+  }
 }
 
 .myMessage {
   background: var(--message-my-bg-color);
 }
 
-.textWrapper {
-  width: auto;
+.topMessage {
+  border-radius: 15px 15px 15px 5px;
+}
 
-  .text {
-    font-size: 14px;
-    line-height: 18px;
-    //margin-bottom: 4px;
-  }
+.middleMessage {
+  border-radius: 5px 15px 15px 5px;
+}
 
-  .time {
-    font-size: 12px;
-    line-height: 14px;
-    color: var(--text-secondary-color);
+.lastMessage {
+  border-radius: 5px 15px 15px 0;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: -11px;
+    bottom: 0;
+    width: 11px;
+    height: 15px;
+    background-color: var(--message-bg-color);
+    clip-path: polygon(0 100%, 100% 0, 100% 100%);
   }
 }
+
+.lastMessage.myMessage {
+  &::after {
+    background-color: var(--message-my-bg-color);
+  }
+}
+
+.topMessage.lastMessage {
+  border-radius: 15px 15px 15px 0;
+}
+

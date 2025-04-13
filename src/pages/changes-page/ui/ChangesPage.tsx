@@ -11,63 +11,63 @@ import { Namespaces } from '@/shared/config/i18n/i18n.ts';
 const posts: IPost[] = data;
 
 const getClassByTag = (tag) => {
-    switch (tag) {
-        case 'UI/UX':
-            return 'ui';
-        case 'Функциональность':
-            return 'functional';
-        case 'Багфикс':
-            return 'bugfix';
-        default:
-            return null;
-    }
+  switch (tag) {
+    case 'UI/UX':
+      return 'ui';
+    case 'Функциональность':
+      return 'functional';
+    case 'Багфикс':
+      return 'bugfix';
+    default:
+      return null;
+  }
 };
 
 const ChangesPage = () => {
-    const { t } = useTranslation(Namespaces.CHANGELOG);
+  const { t } = useTranslation(Namespaces.CHANGELOG);
 
-    return (
-        <AuthenticatedPageLayout>
-            <div className={styles.header}>
-                {t('История обновлений сайта')}
-                <SvgIcon 
-                    iconName={icons.CHANGES}
-                    important
-                    applyHover={false}
-                    className={styles.icon}
-                />
+  return (
+    <AuthenticatedPageLayout>
+      <div className={styles.header}>
+        {t('История обновлений сайта')}
+        <SvgIcon 
+          iconName={icons.CHANGES}
+          important
+          applyHover={false}
+          className={styles.icon}
+        />
+      </div>
+
+      <div className={styles.posts}>
+        {posts.map((post, index) => (
+          <div className={styles.post} key={post.date}>
+            <div className={styles.date}>
+              {t(post.date)}
             </div>
 
-            <div className={styles.posts}>
-                {posts.map((post, index) => (
-                    <div className={styles.post} key={post.date}>
-                        <div className={styles.date}>
-                            {t(post.date)}
-                        </div>
-
-                        <div className={styles.tags}>
-                            {post.tags.map((tag) => (
-                                <div
-                                    className={classNames(styles.tag, [styles[getClassByTag(tag)]])}
-                                    key={tag + index}
-                                >
-                                    {t(tag)}
-                                </div>
-                            ))}
-                        </div>
-
-                        <ul className={styles.changes}>
-                            {post.changes.map((change) => (
-                                <li className={styles.change} key={change + index}>
-                                    {t(change)}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                ))}
+            <div className={styles.tags}>
+              {post.tags.map((tag) => (
+                <div
+                  className={classNames(styles.tag, [styles[getClassByTag(tag)]])}
+                  key={tag + index}
+                >
+                  {t(tag)}
+                </div>
+              ))}
             </div>
-        </AuthenticatedPageLayout>
-    );
+
+            <ul className={styles.changes}>
+              {post.changes.map((change) => (
+                <li className={styles.change} key={change + index}>
+                  {t(change)}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </AuthenticatedPageLayout>
+  );
 };
 
 export default ChangesPage;

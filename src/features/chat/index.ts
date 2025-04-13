@@ -6,34 +6,38 @@ import { chatReducer, chatActions } from './model/slice/chatSlice.ts';
 import { getChatDialogs } from './model/selectors/getChatDialogs.ts';
 import { getChatIsLoadingDialogs } from './model/selectors/getChatIsLoadingDialogs.ts';
 import { fetchChats } from './model/service/fetchChats.ts';
-import { fetchSelectedChatInfo } from './model/service/fetchSelectedChatInfo.ts';
+import { fetchChatInfo } from './model/service/fetchChatInfo.ts';
 import { getChatSelectedChat } from './model/selectors/getChatSelectedChat.ts';
 import ChatWebSocketService from './model/service/ChatWebSocketService.ts';
 import { NewMessage } from './model/types/newMessage.ts';
 import { searchContacts } from './model/service/searchContacts.ts';
 import { ChatTypes } from './model/types/chatTypes.ts';
+import { fetchMyContacts } from './model/service/fetchMyContacts.ts';
+import { createGroup } from './model/service/createGroup.ts';
 
 export {
-    ChatPanelAsync as ChatPanel,
+  ChatPanelAsync as ChatPanel,
 
-    chatReducer,
-    chatActions,
+  chatReducer,
+  chatActions,
 
-    getChatDialogs,
-    getChatIsLoadingDialogs,
-    getChatSelectedChat,
+  getChatDialogs,
+  getChatIsLoadingDialogs,
+  getChatSelectedChat,
 
-    fetchChats,
-    fetchSelectedChatInfo,
-    ChatWebSocketService,
-    searchContacts
+  fetchChats,
+  fetchChatInfo,
+  ChatWebSocketService,
+  searchContacts,
+  fetchMyContacts,
+  createGroup
 };
 
 export type {
-    Chat,
-    ChatSchema,
-    ChatInfo,
-    Message,
-    NewMessage,
-    ChatTypes
+  Chat,
+  ChatSchema,
+  ChatInfo,
+  Message,
+  NewMessage,
+  ChatTypes
 };

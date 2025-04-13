@@ -1,4 +1,4 @@
-import {FC, useEffect, useRef} from 'react';
+import { FC, useEffect, useRef } from 'react';
 import { Provider } from 'react-redux';
 import { createReduxStore } from '../config/store';
 import { StateSchema } from '../config/StateSchema.ts';
@@ -12,23 +12,23 @@ interface StoreProviderProps {
 }
 
 export const StoreProvider: FC<StoreProviderProps> = (props) => {
-    const {
-        initialState,
-        children,
-        asyncReducers
-    } = props;
+  const {
+    initialState,
+    children,
+    asyncReducers
+  } = props;
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const store = useRef(createReduxStore(
+  const store = useRef(createReduxStore(
         initialState as StateSchema,
         asyncReducers as ReducersMapObject<StateSchema>,
         navigate
-    ));
+  ));
 
-    return (
-        <Provider store={store.current}>
-            {children}
-        </Provider>
-    );
+  return (
+    <Provider store={store.current}>
+      {children}
+    </Provider>
+  );
 };

@@ -3,10 +3,10 @@ import { ValidationListProps } from './ui/ValidationList.tsx';
 import ValidationList from './ui/ValidationList.tsx';
 
 export type {
-    ValidationListItem,
-    ValidationListProps
+  ValidationListItem,
+  ValidationListProps
 };
 
 export {
-    ValidationList
+  ValidationList
 };

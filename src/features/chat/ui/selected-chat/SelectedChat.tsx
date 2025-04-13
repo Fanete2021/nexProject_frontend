@@ -12,32 +12,32 @@ export interface SelectedChatProps {
 }
 
 const SelectedChat: React.FC<SelectedChatProps> = (props) => {
-    const { className } = props;
-    const selectedChat = useSelector(getChatSelectedChat);
-    const user = useSelector(getUserData)!;
+  const { className } = props;
+  const selectedChat = useSelector(getChatSelectedChat);
+  const user = useSelector(getUserData)!;
 
-    if (!selectedChat) {
-        return (
-            <div className={styles.empty}>
-              Select a chat to start messaging
-            </div>
-        );
-    }
-  
+  if (!selectedChat) {
     return (
-        <div className={classNames(styles.SelectedChat, [className])}>
-            <Header chatInfo={selectedChat} className={styles.Header}/>
-
-            <Messages
-                messages={selectedChat.lastMessages}
-                user={user}
-                className={styles.Messages}
-                chatId={selectedChat.chatId}
-            />
-
-            <MessageInput className={styles.MessageInput}/>
-        </div>
+      <div className={styles.empty}>
+        Select a chat to start messaging
+      </div>
     );
+  }
+  
+  return (
+    <div className={classNames(styles.SelectedChat, [className])}>
+      <Header chatInfo={selectedChat} className={styles.Header}/>
+
+      <Messages
+        messages={selectedChat.lastMessages}
+        user={user}
+        className={styles.Messages}
+        chatId={selectedChat.chatId}
+      />
+
+      <MessageInput className={styles.MessageInput}/>
+    </div>
+  );
 };
 
 export default SelectedChat;

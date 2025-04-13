@@ -9,40 +9,40 @@ import { tokenMiddleware } from './middleware';
 import { chatReducer } from '@/features/chat';
 
 export function createReduxStore(
-    initialState?: StateSchema,
-    asyncReducers?: ReducersMapObject<StateSchema>,
-    navigate?: (to: To, options?: NavigateOptions) => void
+  initialState?: StateSchema,
+  asyncReducers?: ReducersMapObject<StateSchema>,
+  navigate?: (to: To, options?: NavigateOptions) => void
 ) {
-    const rootReducers: ReducersMapObject<StateSchema> = {
-        ...asyncReducers,
-        auth: authReducer,
-        user: userReducer,
-        chat: chatReducer
-    };
+  const rootReducers: ReducersMapObject<StateSchema> = {
+    ...asyncReducers,
+    auth: authReducer,
+    user: userReducer,
+    chat: chatReducer
+  };
 
-    const reducerManager = createReducerManager(rootReducers);
+  const reducerManager = createReducerManager(rootReducers);
 
-    const extraArg: ThunkExtraArg = {
-        navigate: navigate
-    };
+  const extraArg: ThunkExtraArg = {
+    navigate: navigate
+  };
 
-    const store = configureStore({
-        reducer: reducerManager.reduce as Reducer<StateSchema>,
-        preloadedState: initialState,
-        middleware: getDefaultMiddleware => getDefaultMiddleware({
-            thunk: {
-                extraArgument: extraArg
-            }
-        }).concat(tokenMiddleware)
-    });
+  const store = configureStore({
+    reducer: reducerManager.reduce as Reducer<StateSchema>,
+    preloadedState: initialState,
+    middleware: getDefaultMiddleware => getDefaultMiddleware({
+      thunk: {
+        extraArgument: extraArg
+      }
+    }).concat(tokenMiddleware)
+  });
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    store.reducerManager = reducerManager;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  store.reducerManager = reducerManager;
 
-    extraArg.api = configureApi(store);
+  extraArg.api = configureApi(store);
 
-    return store;
+  return store;
 }
 
 export type AppDispatch = ReturnType<typeof createReduxStore>['dispatch'];

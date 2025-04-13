@@ -24,5 +24,8 @@ export enum icons {
   NOT_FOUND = '404',
   TELEGRAM = 'telegram',
   GITHUB = 'github',
-  SEARCH = 'search'
+  SEARCH = 'search',
+  PAPER_CLIP = 'paperClip',
+  SEND = 'send',
+  SMILE = 'smile'
 }

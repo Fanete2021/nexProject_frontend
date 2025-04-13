@@ -3,8 +3,8 @@ import { confirmEmail } from './model/service/confirmEmail.ts';
 import { sendCode } from './model/service/sendCode.ts';
 
 export {
-    EmailConfirmFormAsync as EmailConfirmForm,
+  EmailConfirmFormAsync as EmailConfirmForm,
 
-    confirmEmail,
-    sendCode
+  confirmEmail,
+  sendCode
 };

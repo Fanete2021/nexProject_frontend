@@ -8,31 +8,31 @@ export interface CustomCheckboxProps extends React.ComponentPropsWithoutRef<'inp
 }
 
 const CustomCheckbox: React.FC<CustomCheckboxProps> = ({ label, ...props }) => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
-    return (
-        <label className={styles.CustomCheckbox}>
-            <input
-                type="checkbox"
-                className={styles.input}
-                {...props}
-            />
+  return (
+    <label className={styles.CustomCheckbox}>
+      <input
+        type="checkbox"
+        className={styles.input}
+        {...props}
+      />
 
-            <span className={styles.checkmark}>
-                <SvgIcon
-                    className={styles.check}
-                    iconName={icons.CHECK}
-                    applyFill={false}
-                    applyHover={false}
-                    applyStroke
-                />
-            </span>
+      <span className={styles.checkmark}>
+        <SvgIcon
+          className={styles.check}
+          iconName={icons.CHECK}
+          applyFill={false}
+          applyHover={false}
+          applyStroke
+        />
+      </span>
 
-            {label && (
-                <span className={styles.label}>{t(label)}</span>
-            )}
-        </label>
-    );
+      {label && (
+        <span className={styles.label}>{t(label)}</span>
+      )}
+    </label>
+  );
 };
 
 export default CustomCheckbox;

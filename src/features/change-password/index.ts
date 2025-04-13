@@ -5,13 +5,13 @@ import { RegistrationFormProps } from './ui/change-password-form/ChangePasswordF
 import { newPassword } from './model/service/newPassword.ts';
 
 export type {
-    RegistrationFormProps
+  RegistrationFormProps
 };
 
 export {
-    EmailFormAsync as EmailForm,
-    ChangePasswordFormAsync as ChangePasswordForm,
+  EmailFormAsync as EmailForm,
+  ChangePasswordFormAsync as ChangePasswordForm,
 
-    changePassword,
-    newPassword
+  changePassword,
+  newPassword
 };

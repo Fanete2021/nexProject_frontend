@@ -4,12 +4,12 @@ import { getAuthIsAuth, getAuthToken, refreshToken } from '@/features/auth';
 import { isTokenExpired } from '@/shared/lib/utils/isTokenExpired.ts'; 
 
 export const tokenMiddleware: Middleware<object, StateSchema> = (store) => (next) => (action) => {
-    const token = getAuthToken(store.getState());
-    const isAuth = getAuthIsAuth(store.getState());
+  const token = getAuthToken(store.getState());
+  const isAuth = getAuthIsAuth(store.getState());
 
-    if (isAuth && token && isTokenExpired(token)) {
-        store.dispatch(refreshToken());
-    }
+  if (isAuth && token && isTokenExpired(token)) {
+    store.dispatch(refreshToken());
+  }
 
-    return next(action);
+  return next(action);
 };

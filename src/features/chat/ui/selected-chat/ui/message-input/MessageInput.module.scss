@@ -1,12 +1,36 @@
 .MessageInput {
-  height: 50px;
+  position: relative;
 }
 
 .input {
-  height: 100%;
   width: 100%;
+  min-height: 50px;
+  max-height: 120px;
   background: var(--input-bg-color);
   color: var(--input-text-color);
   border: none;
   outline: none;
+  padding: 16px 85px 16px 48px;
+  resize: none;
+  overflow-y: auto;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.files {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+}
+
+.rightSide {
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+  display: flex;
+  gap: 15px;
+}
+
+.files, .smile {
+  cursor: pointer;
 }

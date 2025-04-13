@@ -7,19 +7,19 @@ interface RefreshTokenResponse {
 }
 
 export const checkWithoutToken = createAsyncThunk<RefreshTokenResponse, void, ThunkConfig<ApiError>> (
-    'testApi/checkWithoutToken',
-    async (authData, thunkAPI) => {
-        const {
-            extra,
-            rejectWithValue,
-        } = thunkAPI;
+  'testApi/checkWithoutToken',
+  async (authData, thunkAPI) => {
+    const {
+      extra,
+      rejectWithValue,
+    } = thunkAPI;
 
-        try {
-            const response = await extra.api.get('/test/checkWithOutToken');
+    try {
+      const response = await extra.api.get('/test/checkWithOutToken');
 
-            return response.data;
-        } catch (e) {
-            return rejectWithValue(e.response.data);
-        }
+      return response.data;
+    } catch (e) {
+      return rejectWithValue(e.response.data);
     }
+  }
 );

@@ -5,25 +5,31 @@ import { CustomCheckbox, CustomCheckboxProps } from './custom-checkbox';
 import { CustomInput, CustomInputProps } from './custom-input';
 import { ValidationList, ValidationListProps, ValidationListItem } from './validation-list';
 import { Avatar, AvatarProps } from './avatar';
+import { Portal, PortalProps } from './portal';
+import { Modal, ModalProps } from './modal';
 
 export type {
-    SvgIconProps,
-    LoaderProps,
-    LogoProps,
-    CustomCheckboxProps,
-    CustomInputProps,
-    ValidationListProps,
-    ValidationListItem,
-    AvatarProps
+  SvgIconProps,
+  LoaderProps,
+  LogoProps,
+  CustomCheckboxProps,
+  CustomInputProps,
+  ValidationListProps,
+  ValidationListItem,
+  AvatarProps,
+  PortalProps,
+  ModalProps
 };
 
 export {
-    icons,
-    SvgIcon,
-    Loader,
-    Logo,
-    CustomCheckbox,
-    CustomInput,
-    ValidationList,
-    Avatar
+  icons,
+  SvgIcon,
+  Loader,
+  Logo,
+  CustomCheckbox,
+  CustomInput,
+  ValidationList,
+  Avatar,
+  Portal,
+  Modal
 };

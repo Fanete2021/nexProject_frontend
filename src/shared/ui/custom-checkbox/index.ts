@@ -1,9 +1,9 @@
 import CustomCheckbox, { CustomCheckboxProps } from './ui/CustomCheckbox.tsx';
 
 export type {
-    CustomCheckboxProps
+  CustomCheckboxProps
 };
 
 export {
-    CustomCheckbox
+  CustomCheckbox
 };

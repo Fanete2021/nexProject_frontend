@@ -1,8 +1,9 @@
-.DialogItem {
+.DialogItem, .DialogItemSkeleton {
   display: flex;
   user-select: none;
   padding: 5px;
   width: 100%;
+  transition: 0.3s;
 
   .info {
     margin-left: 5px;
@@ -12,20 +13,62 @@
     align-items: flex-start;
     flex: 1;
 
-    .name {
-      font-size: 14px;
-      line-height: 18px;
-      color: var(--text-color);
+    .topSide {
+      display: flex;
+      align-items: center;
+      width: 100%;
+
+      .name {
+        font-size: 14px;
+        line-height: 18px;
+        color: var(--text-color);
+        margin-right: 5px;
+        width: 100%;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-align: start;
+        word-break: break-all;
+      }
+
+      .date {
+        color: var(--text-secondary-color);
+        font-size: 12px;
+        line-height: 14px;
+        margin-left: auto;
+        flex-shrink: 0;
+      }
     }
 
     .message {
       font-size: 12px;
       line-height: 16px;
       color: var(--text-secondary-color);
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-align: start;
+      word-break: break-all;
     }
+  }
+
+  .avatar {
+    flex-shrink: 0;
+  }
+}
+
+.DialogItem {
+  &:hover {
+    background: var(--chat-selected-bg-color);
   }
 }
 
 .skeleton {
   background-color: var(--skeleton-bg-color) !important;
+}
+
+.selectedDialog {
+  background: var(--chat-selected-bg-color);
 }

@@ -8,24 +8,24 @@ interface SearchContactsResponse {
 }
 
 export const searchContacts = createAsyncThunk<SearchContactsResponse, string, ThunkConfig<string>> (
-    'chat/searchContacts',
-    async (searchValue, thunkAPI) => {
-        const {
-            extra,
-            rejectWithValue,
-        } = thunkAPI;
+  'chat/searchContacts',
+  async (searchValue, thunkAPI) => {
+    const {
+      extra,
+      rejectWithValue,
+    } = thunkAPI;
 
-        try {
-            const response = await extra.api.get(`/chat/search/${searchValue}`, {
-                params: {
-                    pageNumber: 1,
-                    pageSize: 10,
-                }
-            });
-
-            return response.data;
-        } catch (e) {
-            return rejectWithValue(e.response.data.message);
+    try {
+      const response = await extra.api.get(`/chat/search/${searchValue}`, {
+        params: {
+          pageNumber: 1,
+          pageSize: 10,
         }
+      });
+
+      return response.data;
+    } catch (e) {
+      return rejectWithValue(e.response.data.message);
     }
+  }
 );

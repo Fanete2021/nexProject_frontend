@@ -4,25 +4,25 @@ import { authActions } from '../slice/authSlice.ts';
 import { userActions } from '@/entities/user';
 
 export const logout = createAsyncThunk<void, void, ThunkConfig<string>> (
-    'auth/logout',
-    async (authData, thunkAPI) => {
-        const {
-            extra,
-            rejectWithValue,
-            dispatch
-        } = thunkAPI;
+  'auth/logout',
+  async (authData, thunkAPI) => {
+    const {
+      extra,
+      rejectWithValue,
+      dispatch
+    } = thunkAPI;
 
-        try {
-            const response = await extra.api.post('/auth/logout', null, {
-                withCredentials: true
-            });
+    try {
+      const response = await extra.api.post('/auth/logout', null, {
+        withCredentials: true
+      });
 
-            await dispatch(authActions.resetToken());
-            await dispatch(userActions.resetData());
+      await dispatch(authActions.resetToken());
+      await dispatch(userActions.resetData());
 
-            return response.data;
-        } catch (e) {
-            return rejectWithValue(e.response.data.message);
-        }
+      return response.data;
+    } catch (e) {
+      return rejectWithValue(e.response.data.message);
     }
+  }
 );
