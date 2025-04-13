@@ -83,7 +83,7 @@
     margin: 5px 0;
     flex: 1;
 
-    .dialog {
+    .dialog:not(:first-child), .dialogSkeleton:not(:first-child) {
       border-top: 1px solid var(--chat-divider-line-color);
     }
   }

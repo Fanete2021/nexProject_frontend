@@ -14,6 +14,7 @@ import { Contact } from '../../model/types/contact.ts';
 import { ChatTypes } from '../../model/types/chatTypes.ts';
 import { fetchChats } from '../../model/service/fetchChats.ts';
 import { getChatSelectedChat } from '../../model/selectors/getChatSelectedChat.ts';
+import { useDebounce } from '@/shared/lib/hooks/useDebounce.ts';
 
 export interface ChatListProps {
   className?: string;
@@ -44,24 +45,44 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
   const dispatch = useAppDispatch();
   const [searchedContacts, setSearchedContacts] = useState<Contact[]>([]);
   const selectedChat = useSelector(getChatSelectedChat);
+  const debouncedSearchValue = useDebounce(searchedValue, 1000);
+  const [isLoadingSearch, setIsLoadingSearch] = useState<boolean>(false);
+
+  console.log(isLoadingSearch)
 
   const dialogs = useSelector(getChatDialogs);
   const isLoadingDialogs = useSelector(getChatIsLoadingDialogs);
 
   const clearSearch = useCallback(() => {
     setSearchedValue('');
+    setSearchedContacts([]);
   }, []);
+
+  useEffect(() => {
+    if (debouncedSearchValue) {
+      setIsLoadingSearch(true);
+
+      const fetchContacts = async () => {
+        try {
+          const response = await dispatch(searchContacts(debouncedSearchValue)).unwrap();
+          setSearchedContacts(response.searchUsers);
+        } catch (error) {
+          console.log(error);
+        } finally {
+          setIsLoadingSearch(false);
+        }
+      };
+
+      fetchContacts();
+    } else {
+      setSearchedContacts([]);
+      setIsLoadingSearch(false);
+    }
+  }, [debouncedSearchValue, dispatch]);
 
   const searchHandler = async (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setSearchedValue(e.target.value);
-
-    try {
-      const response = await dispatch(searchContacts(e.target.value)).unwrap();
-
-      setSearchedContacts(response.searchUsers);
-    } catch (error) {
-      console.log(error);
-    }
+    setIsLoadingSearch(true);
   };
 
   const handleFilterClick = (filter: ChatTypes, event: React.MouseEvent) => {
@@ -136,7 +157,7 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
       <div
         className={styles.content}
         style={{
-          overflow: isLoadingDialogs ? 'hidden' : 'auto'
+          overflow: (isLoadingDialogs || isLoadingSearch) ? 'hidden' : 'auto'
         }}
       >
         <div 
@@ -165,10 +186,10 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
         </div>
 
         <div className={styles.dialogs}>
-          {!searchedValue && isLoadingDialogs &&
+          {(isLoadingSearch || isLoadingDialogs) &&
             <>
               {Array.from({ length: 15 }).map((_, index) => (
-                <DialogItemSkeleton key={index} className={styles.dialog} />
+                <DialogItemSkeleton key={index} className={styles.dialogSkeleton} />
               ))}
             </>
           }
