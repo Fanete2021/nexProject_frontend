@@ -21,7 +21,7 @@ class ChatWebSocketService {
           transports: ['xhr-polling'],
         }
       ),
-      debug: (str) => console.log('[STOMP]', str),
+      // debug: (str) => console.log('[STOMP]', str),
       reconnectDelay: 10000,
       heartbeatIncoming: 10000,
       heartbeatOutgoing: 10000,

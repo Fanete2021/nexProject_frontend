@@ -27,7 +27,7 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
   const user = useSelector(getUserData)!;
 
   useEffect(() => {
-    const loadChats = async () => {
+    const subscribeChats = async () => {
       try {
         //TODO переделать на получение только айдишников
         const response = await dispatch(fetchChats({ filterMode: ChatTypes.ALL })).unwrap();
@@ -41,7 +41,7 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
       }
     };
 
-    loadChats();
+    subscribeChats();
 
     ChatWebSocketService.onMessageCallback = (message: Message) => {
       dispatch(chatActions.addMessage(message));

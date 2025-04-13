@@ -15,6 +15,8 @@ import { ChatTypes } from '../../model/types/chatTypes.ts';
 import { fetchChats } from '../../model/service/fetchChats.ts';
 import { getChatSelectedChat } from '../../model/selectors/getChatSelectedChat.ts';
 import { useDebounce } from '@/shared/lib/hooks/useDebounce.ts';
+import CreatorGroup from './ui/creator-group/CreatorGroup.tsx';
+import { chatActions } from '../../model/slice/chatSlice.ts';
 
 export interface ChatListProps {
   className?: string;
@@ -45,17 +47,24 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
   const dispatch = useAppDispatch();
   const [searchedContacts, setSearchedContacts] = useState<Contact[]>([]);
   const selectedChat = useSelector(getChatSelectedChat);
+  const [isOpenCreatorGroup, setIsOpenCreatorGroup] = useState<boolean>(false);
   const debouncedSearchValue = useDebounce(searchedValue, 1000);
   const [isLoadingSearch, setIsLoadingSearch] = useState<boolean>(false);
-
-  console.log(isLoadingSearch)
 
   const dialogs = useSelector(getChatDialogs);
   const isLoadingDialogs = useSelector(getChatIsLoadingDialogs);
 
+  const closeCreatorGroupHandler = useCallback(() => setIsOpenCreatorGroup(false), []);
+  const toggleCreatorGroupHandler = useCallback(() => setIsOpenCreatorGroup(prev => !prev), []);
+
   const clearSearch = useCallback(() => {
     setSearchedValue('');
     setSearchedContacts([]);
+  }, []);
+
+  const searchHandler = useCallback(async (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setSearchedValue(e.target.value);
+    setIsLoadingSearch(true);
   }, []);
 
   useEffect(() => {
@@ -80,11 +89,6 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
     }
   }, [debouncedSearchValue, dispatch]);
 
-  const searchHandler = async (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setSearchedValue(e.target.value);
-    setIsLoadingSearch(true);
-  };
-
   const handleFilterClick = (filter: ChatTypes, event: React.MouseEvent) => {
     setActiveFilter(filter);
 
@@ -107,7 +111,17 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
   }, [filterRefs]);
 
   useEffect(() => {
-    dispatch(fetchChats({ filterMode: activeFilter }));
+    const loadChats = async () => {
+      try {
+        const response = await dispatch(fetchChats({ filterMode: activeFilter })).unwrap();
+
+        dispatch(chatActions.setDialogs(response.chats));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    loadChats();
   }, [activeFilter]);
 
   useEffect(() => {
@@ -212,9 +226,14 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
         </div>
       </div>
 
-      <button className={styles.newChat}>
+      <button
+        className={styles.newChat}
+        onClick={toggleCreatorGroupHandler}
+      >
         New chat
       </button>
+
+      <CreatorGroup onClose={closeCreatorGroupHandler} isOpen={isOpenCreatorGroup} />
     </div>
   );
 };

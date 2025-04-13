@@ -16,6 +16,9 @@ export const chatSlice = createSlice({
   name: 'chat',
   initialState,
   reducers: {
+    setDialogs: (state, action: PayloadAction<Chat[]>) => {
+      state.dialogs = action.payload;
+    },
     setSelectedChat: (state, action: PayloadAction<ChatInfo>) => {
       state.selectedChat = action.payload;
     },
@@ -44,8 +47,7 @@ export const chatSlice = createSlice({
       .addCase(fetchChats.pending, (state: ChatSchema) => {
         state.isLoadingDialogs = true;
       })
-      .addCase(fetchChats.fulfilled, (state: ChatSchema, action) => {
-        state.dialogs = action.payload.chats;
+      .addCase(fetchChats.fulfilled, (state: ChatSchema) => {
         state.isLoadingDialogs = false;
       })
       .addCase(fetchChats.rejected, (state: ChatSchema) => {

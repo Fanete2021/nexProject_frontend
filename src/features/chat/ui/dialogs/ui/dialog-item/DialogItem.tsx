@@ -65,7 +65,7 @@ const DialogItem: React.FC<DialogItemProps> = (props) => {
         styles.DialogItem,
         [className],
         {
-          [styles.selectedDialog]: chatData?.chatId === selectedChat?.chatId,
+          [styles.selectedDialog]: selectedChat?.chatId && chatData?.chatId === selectedChat.chatId,
         }
       )}
     >
