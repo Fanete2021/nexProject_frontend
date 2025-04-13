@@ -142,8 +142,7 @@ const Messages: React.FC<MessagesProps> = (props) => {
                       </span>
 
                       <span className={styles.time}>
-                        {/* TODO перенести в utils */}
-                        {formatTimeLocalized(message.sendDate)}
+                        {formatTimeLocalized(new Date(message.sendDate))}
                       </span>
                     </div>
                   </div>

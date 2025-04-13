@@ -35,7 +35,7 @@
   background: var(--message-bg-color);
   padding: 10px;
   width: fit-content;
-  max-width: 350px;
+  max-width: 400px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -52,6 +52,7 @@
     .text {
       font-size: 14px;
       line-height: 18px;
+      word-break: break-word;
     }
 
     .time {
