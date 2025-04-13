@@ -65,6 +65,7 @@ const DialogItem: React.FC<DialogItemProps> = (props) => {
         text={chatData?.chatName || contactData?.name || contactData?.username}
         height={40}
         width={40}
+        className={styles.avatar}
       />
 
       <div className={styles.info}>
@@ -73,9 +74,9 @@ const DialogItem: React.FC<DialogItemProps> = (props) => {
         </div>
 
         {chatData?.lastMessage &&
-                    <div className={styles.message}>
-                      {chatData.lastMessage.message}
-                    </div>
+          <div className={styles.message}>
+            {chatData.lastMessage.message}
+          </div>
         }
       </div>
     </button>

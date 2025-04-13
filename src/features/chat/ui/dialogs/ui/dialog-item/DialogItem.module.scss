@@ -22,7 +22,16 @@
       font-size: 12px;
       line-height: 16px;
       color: var(--text-secondary-color);
+      display: -webkit-box;
+      -webkit-line-clamp: 1; /* after 3 line show ... */
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-align: start;
     }
+  }
+
+  .avatar {
+    flex-shrink: 0;
   }
 }
 
