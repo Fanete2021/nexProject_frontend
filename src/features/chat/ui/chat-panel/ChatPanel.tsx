@@ -11,6 +11,10 @@ import ChatWebSocketService from '../../model/service/ChatWebSocketService.ts';
 import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
 import { Message } from '../../model/types/message.ts';
 import { chatActions } from '../../model/slice/chatSlice.ts';
+import { ChatNotification } from '../../model/types/chatNotifications.ts';
+import { fetchChatInfo } from '../../model/service/fetchChatInfo.ts';
+import { Chat } from '../../model/types/chat.ts';
+import { ChatTypes } from '../../model/types/chatTypes.ts';
 
 export interface ChatProps {
     className?: string;
@@ -26,7 +30,7 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
     const loadChats = async () => {
       try {
         //TODO переделать на получение только айдишников
-        const response = await dispatch(fetchChats({ filterMode: 'all' })).unwrap();
+        const response = await dispatch(fetchChats({ filterMode: ChatTypes.ALL })).unwrap();
         const { chats } = response;
 
         for (const chat of chats) {
@@ -41,6 +45,24 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
 
     ChatWebSocketService.onMessageCallback = (message: Message) => {
       dispatch(chatActions.addMessage(message));
+    };
+
+    ChatWebSocketService.onNotificationsCallback = async (notification: ChatNotification) => {
+      try {
+        const response = await dispatch(fetchChatInfo({ chatId: notification.chatId })).unwrap();
+
+        ChatWebSocketService.subscribe(notification.chatId);
+
+        const newChat: Chat = {
+          chatId: response.chatId,
+          lastMessage: response.lastMessages[0],
+          chatName: response.chatName,
+        };
+
+        dispatch(chatActions.addChat(newChat));
+      } catch (error) {
+        console.log(error);
+      }
     };
     
     return () => {

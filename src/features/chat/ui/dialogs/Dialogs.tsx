@@ -13,6 +13,7 @@ import { searchContacts } from '../../model/service/searchContacts.ts';
 import { Contact } from '../../model/types/contact.ts';
 import { ChatTypes } from '../../model/types/chatTypes.ts';
 import { fetchChats } from '../../model/service/fetchChats.ts';
+import { getChatSelectedChat } from '../../model/selectors/getChatSelectedChat.ts';
 
 export interface ChatListProps {
   className?: string;
@@ -42,6 +43,7 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
   const filterRefs = useRef<(HTMLDivElement | null)[]>([]);
   const dispatch = useAppDispatch();
   const [searchedContacts, setSearchedContacts] = useState<Contact[]>([]);
+  const selectedChat = useSelector(getChatSelectedChat);
 
   const dialogs = useSelector(getChatDialogs);
   const isLoadingDialogs = useSelector(getChatIsLoadingDialogs);
@@ -86,6 +88,10 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
   useEffect(() => {
     dispatch(fetchChats({ filterMode: activeFilter }));
   }, [activeFilter]);
+
+  useEffect(() => {
+    clearSearch();
+  }, [selectedChat]);
 
   return (
     <div className={classNames(styles.Dialogs, [className])}>

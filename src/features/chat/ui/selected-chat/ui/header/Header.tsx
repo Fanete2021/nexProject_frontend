@@ -26,7 +26,7 @@ const Header: React.FC<HeaderProps> = (props) => {
         </div>
 
         <div className={styles.online}>
-                    заходил 1 мин.назад
+          заходил 1 мин.назад
         </div>
       </div>
     </div>

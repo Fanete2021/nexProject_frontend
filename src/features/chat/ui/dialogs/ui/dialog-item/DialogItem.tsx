@@ -2,13 +2,14 @@ import React, { useCallback } from 'react';
 import { Chat } from '../../../../model/types/chat.ts';
 import styles from './DialogItem.module.scss';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
-import { fetchSelectedChatInfo } from '../../../../model/service/fetchSelectedChatInfo.ts';
+import { fetchChatInfo } from '../../../../model/service/fetchChatInfo.ts';
 import { Avatar } from '@/shared/ui';
 import { Contact } from '../../../../model/types/contact.ts';
 import { ChatInfo } from '../../../../model/types/chatInfo.ts';
 import { useSelector } from 'react-redux';
 import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
-import { chatActions } from '@/features/chat';
+import { chatActions } from '../../../../model/slice/chatSlice.ts';
+import { getChatSelectedChat } from '../../../../model/selectors/getChatSelectedChat.ts';
 
 export interface DialogItemProps {
   chatData?: Chat;
@@ -20,11 +21,13 @@ const DialogItem: React.FC<DialogItemProps> = (props) => {
   const { chatData, contactData } = props;
   const dispatch = useAppDispatch();
   const user = useSelector(getUserData)!;
+  const selectedChat = useSelector(getChatSelectedChat);
     
   const clickHandler = useCallback(async () => {
-    if (chatData) {
+    if (chatData && selectedChat?.chatId !== chatData.chatId) {
       try {
-        await dispatch(fetchSelectedChatInfo({ chatId: chatData.chatId })).unwrap();
+        const response = await dispatch(fetchChatInfo({ chatId: chatData.chatId })).unwrap();
+        dispatch(chatActions.setSelectedChat(response));
       } catch (error) {
         console.log(error);
       }

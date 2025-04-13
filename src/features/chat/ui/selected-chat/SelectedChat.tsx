@@ -19,7 +19,7 @@ const SelectedChat: React.FC<SelectedChatProps> = (props) => {
   if (!selectedChat) {
     return (
       <div className={styles.empty}>
-              Select a chat to start messaging
+        Select a chat to start messaging
       </div>
     );
   }

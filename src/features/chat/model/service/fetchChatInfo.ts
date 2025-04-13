@@ -6,8 +6,8 @@ interface FetchChatInfoProps {
   chatId: string;
 }
 
-export const fetchSelectedChatInfo = createAsyncThunk<ChatInfo, FetchChatInfoProps, ThunkConfig<string>> (
-  'chat/fetchSelectedChatInfo',
+export const fetchChatInfo = createAsyncThunk<ChatInfo, FetchChatInfoProps, ThunkConfig<string>> (
+  'chat/fetchChatInfo',
   async (chatInfoData, thunkAPI) => {
     const {
       extra,

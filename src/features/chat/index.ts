@@ -6,7 +6,7 @@ import { chatReducer, chatActions } from './model/slice/chatSlice.ts';
 import { getChatDialogs } from './model/selectors/getChatDialogs.ts';
 import { getChatIsLoadingDialogs } from './model/selectors/getChatIsLoadingDialogs.ts';
 import { fetchChats } from './model/service/fetchChats.ts';
-import { fetchSelectedChatInfo } from './model/service/fetchSelectedChatInfo.ts';
+import { fetchChatInfo } from './model/service/fetchChatInfo.ts';
 import { getChatSelectedChat } from './model/selectors/getChatSelectedChat.ts';
 import ChatWebSocketService from './model/service/ChatWebSocketService.ts';
 import { NewMessage } from './model/types/newMessage.ts';
@@ -24,7 +24,7 @@ export {
   getChatSelectedChat,
 
   fetchChats,
-  fetchSelectedChatInfo,
+  fetchChatInfo,
   ChatWebSocketService,
   searchContacts
 };

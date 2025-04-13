@@ -2,6 +2,7 @@ import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { NewMessage } from '../types/newMessage.ts';
 import { Message } from '../types/message.ts';
+import { ChatNotification } from '../types/chatNotifications.ts';
 
 class ChatWebSocketService {
   private client: Client | null = null;
@@ -9,6 +10,7 @@ class ChatWebSocketService {
   private isConnected: boolean = false;
 
   public onMessageCallback: ((message: Message, chatId: string) => void) | null = null;
+  public onNotificationsCallback: ((message: ChatNotification) => void) | null = null;
 
   connect(token: string, userId: string) {
     this.client = new Client({
@@ -70,8 +72,10 @@ class ChatWebSocketService {
   }
 
   subscribeNotifications(userId: string) {
-    this.client?.subscribe(`/queue/user${userId}`, (message) => {
-      console.log(JSON.parse(message.body));
+    this.client?.subscribe(`/topic/user${userId}`, (message) => {
+      if (this.onNotificationsCallback) {
+        this.onNotificationsCallback(JSON.parse(message.body));
+      }
     });
   }
 
