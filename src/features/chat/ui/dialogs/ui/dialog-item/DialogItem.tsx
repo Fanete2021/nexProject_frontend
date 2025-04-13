@@ -10,6 +10,8 @@ import { useSelector } from 'react-redux';
 import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
 import { chatActions } from '../../../../model/slice/chatSlice.ts';
 import { getChatSelectedChat } from '../../../../model/selectors/getChatSelectedChat.ts';
+import { classNames } from '@/shared/lib/utils/classNames.ts';
+import { formatLastMessageDateTime } from '@/shared/lib/utils/formatLastMessageDateTime.ts';
 
 export interface DialogItemProps {
   chatData?: Chat;
@@ -18,7 +20,7 @@ export interface DialogItemProps {
 }
 
 const DialogItem: React.FC<DialogItemProps> = (props) => {
-  const { chatData, contactData } = props;
+  const { chatData, contactData, className } = props;
   const dispatch = useAppDispatch();
   const user = useSelector(getUserData)!;
   const selectedChat = useSelector(getChatSelectedChat);
@@ -59,7 +61,13 @@ const DialogItem: React.FC<DialogItemProps> = (props) => {
   return (
     <button
       onClick={clickHandler}
-      className={styles.DialogItem}
+      className={classNames(
+        styles.DialogItem,
+        [className],
+        {
+          [styles.selectedDialog]: chatData?.chatId === selectedChat?.chatId,
+        }
+      )}
     >
       <Avatar
         text={chatData?.chatName || contactData?.name || contactData?.username}
@@ -69,8 +77,16 @@ const DialogItem: React.FC<DialogItemProps> = (props) => {
       />
 
       <div className={styles.info}>
-        <div className={styles.name}>
-          {chatData?.chatName || contactData?.name || contactData?.username}
+        <div className={styles.topSide}>
+          <div className={styles.name}>
+            {chatData?.chatName || contactData?.name || contactData?.username}
+          </div>
+
+          {chatData?.lastMessage && (
+            <div className={styles.date}>
+              {formatLastMessageDateTime(chatData.lastMessage.sendDate)}
+            </div>
+          )}
         </div>
 
         {chatData?.lastMessage &&

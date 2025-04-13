@@ -1,10 +1,17 @@
 import styles from './DialogItem.module.scss';
 import { Skeleton } from '@mui/material';
-import React, { HTMLAttributes } from 'react';
+import React from 'react';
+import { classNames } from '@/shared/lib/utils/classNames.ts';
 
-const DialogItemSkeleton = React.forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>((props, ref) => {
+export interface DialogItemSkeletonProps {
+  className?: string;
+}
+
+const DialogItemSkeleton: React.FC<DialogItemSkeletonProps> = (props) => {
+  const { className } = props;
+
   return (
-    <div ref={ref} {...props} className={styles.DialogItem}>
+    <div className={classNames(styles.DialogItemSkeleton, [className])}>
       <Skeleton
         variant="circular"
         width={40}
@@ -36,7 +43,6 @@ const DialogItemSkeleton = React.forwardRef<HTMLDivElement, HTMLAttributes<HTMLD
       </div>
     </div>
   );
-});
+};
 
-DialogItemSkeleton.displayName = 'DialogItemSkeleton';
 export default DialogItemSkeleton;

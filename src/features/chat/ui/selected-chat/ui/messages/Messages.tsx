@@ -4,7 +4,7 @@ import { User } from '@/entities/user';
 import styles from './Messages.module.scss';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { Avatar } from '@/shared/ui';
-import { formatDateLocalized } from '@/shared/lib/utils/formatDatreLocalized.ts';
+import { formatDateLocalized } from '@/shared/lib/utils/formatDateLocalized.ts';
 import { formatTimeLocalized } from '@/shared/lib/utils/formatTimeLocalized.ts';
 
 export interface MessagesProps {

@@ -168,7 +168,7 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
           {!searchedValue && isLoadingDialogs &&
             <>
               {Array.from({ length: 15 }).map((_, index) => (
-                <DialogItemSkeleton key={index} />
+                <DialogItemSkeleton key={index} className={styles.dialog} />
               ))}
             </>
           }
@@ -176,7 +176,7 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
           {!searchedValue && !isLoadingDialogs &&
             <>
               {dialogs.map(dialog => (
-                <DialogItem key={dialog.chatId} chatData={dialog} />
+                <DialogItem key={dialog.chatId} chatData={dialog} className={styles.dialog}/>
               ))}
             </>
           }
@@ -184,7 +184,7 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
           {searchedValue &&
             <>
               {searchedContacts.map(contact => (
-                <DialogItem key={contact.userId} contactData={contact} />
+                <DialogItem key={contact.userId} contactData={contact} className={styles.dialog} />
               ))}
             </>
           }

@@ -25,6 +25,7 @@ export const fetchChats = createAsyncThunk<FetchChatsResponse, FetchChatsProps, 
           pageNumber: 1,
           pageSize: 15,
           filterMode: fetchChatsData.filterMode,
+          getLastMess: true
         }
       });
 
