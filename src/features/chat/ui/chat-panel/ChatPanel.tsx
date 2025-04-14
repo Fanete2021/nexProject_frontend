@@ -15,6 +15,9 @@ import { ChatNotification } from '../../model/types/chatNotifications.ts';
 import { fetchChatInfo } from '../../model/service/fetchChatInfo.ts';
 import { Chat } from '../../model/types/chat.ts';
 import { ChatTypes } from '../../model/types/chatTypes.ts';
+import { getChatIsActiveInfoPanel } from '../../model/selectors/getChatIsActiveInfoPanel.ts';
+import InfoChat from '../info-chat/InfoChat.tsx';
+import { getChatSelectedChat } from '../../model/selectors/getChatSelectedChat.ts';
 
 export interface ChatProps {
     className?: string;
@@ -25,6 +28,8 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
   const dispatch = useAppDispatch();
   const token = useSelector(getAuthToken)!;
   const user = useSelector(getUserData)!;
+  const isActiveInfoPanel = useSelector(getChatIsActiveInfoPanel);
+  const selectedChat = useSelector(getChatSelectedChat);
 
   useEffect(() => {
     const subscribeChats = async () => {
@@ -78,10 +83,16 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
     };
   }, []);
 
+  useEffect(() => {
+    ChatWebSocketService.updateConnectionToken(token);
+  }, [token]);
+
   return (
     <div className={classNames(styles.ChatPanel, [className])}>
       <Dialogs className={styles.dialogs} />
       <SelectedChat className={styles.selectedChat}/>
+
+      {isActiveInfoPanel && selectedChat && <InfoChat className={styles.infoChat} />}
     </div>
   );
 };

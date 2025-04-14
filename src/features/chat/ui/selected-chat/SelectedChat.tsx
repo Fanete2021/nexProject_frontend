@@ -35,7 +35,7 @@ const SelectedChat: React.FC<SelectedChatProps> = (props) => {
         chatId={selectedChat.chatId}
       />
 
-      <MessageInput className={styles.MessageInput}/>
+      <MessageInput className={styles.MessageInput} />
     </div>
   );
 };

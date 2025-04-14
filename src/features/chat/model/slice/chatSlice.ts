@@ -10,6 +10,7 @@ const initialState: ChatSchema = {
   isLoadingDialogs: false,
   selectedChat: undefined,
   isLoadingSelectedChat: false,
+  isActiveInfoPanel: false
 };
 
 export const chatSlice = createSlice({
@@ -40,6 +41,9 @@ export const chatSlice = createSlice({
     },
     addChat: (state, action: PayloadAction<Chat>) => {
       state.dialogs.unshift(action.payload);
+    },
+    setIsActiveInfoPanel: (state, action: PayloadAction<boolean>) => {
+      state.isActiveInfoPanel = action.payload;
     }
   },
   extraReducers: (builder) => {

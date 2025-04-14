@@ -5,6 +5,11 @@
   align-items: center;
 }
 
+.chatInfo {
+  display: flex;
+  align-items: center;
+}
+
 .info {
   margin-left: 10px;
   display: flex;
@@ -22,5 +27,15 @@
     font-size: 14px;
     line-height: 18px;
     color: var(--text-secondary-color);
+  }
+}
+
+.actions {
+  margin-left: auto;
+  display: flex;
+  gap: 20px;
+
+  .icon {
+    cursor: pointer;
   }
 }

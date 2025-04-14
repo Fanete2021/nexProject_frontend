@@ -27,5 +27,8 @@ export enum icons {
   SEARCH = 'search',
   PAPER_CLIP = 'paperClip',
   SEND = 'send',
-  SMILE = 'smile'
+  SMILE = 'smile',
+  INFO_PANEL = 'infoPanel',
+  SMARTPHONE = 'smartphone',
+  INFO = 'info'
 }

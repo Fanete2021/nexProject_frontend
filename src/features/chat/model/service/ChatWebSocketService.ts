@@ -8,14 +8,17 @@ class ChatWebSocketService {
   private client: Client | null = null;
   private chatSubscriptionsQueue: string[] = []; // Очередь топиков для подписки
   private isConnected: boolean = false;
+  private currentToken: string = '';
 
   public onMessageCallback: ((message: Message, chatId: string) => void) | null = null;
   public onNotificationsCallback: ((message: ChatNotification) => void) | null = null;
 
   connect(token: string, userId: string) {
+    this.currentToken = token;
+
     this.client = new Client({
       webSocketFactory: () => new SockJS(
-        `${import.meta.env.VITE_API}/ws?token=${token}`,
+        `${import.meta.env.VITE_API}/ws?token=${this.currentToken}`,
         null,
         {
           transports: ['xhr-polling'],
@@ -26,7 +29,7 @@ class ChatWebSocketService {
       heartbeatIncoming: 10000,
       heartbeatOutgoing: 10000,
       connectHeaders: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${this.currentToken}`,
       },
     });
 
@@ -86,6 +89,27 @@ class ChatWebSocketService {
         body: JSON.stringify(newMessage)
       });
     }
+  }
+
+  updateConnectionToken(newToken: string) {
+    if (!this.client) return;
+
+    this.currentToken = newToken;
+
+    this.client.configure({
+      connectHeaders: {
+        Authorization: `Bearer ${newToken}`
+      }
+    });
+
+    // // 3. Для SockJS может потребоваться переподключение
+    // // Но сначала попробуем без него
+    // if (this.client.connected) {
+    //   // Если сервер принимает обновленные заголовки "на лету"
+    //   this.client.deactivate().then(() => {
+    //     this.client?.activate();
+    //   });
+    // }
   }
 }
 

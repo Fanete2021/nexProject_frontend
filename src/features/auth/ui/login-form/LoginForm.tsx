@@ -107,7 +107,7 @@ const LoginForm = () => {
                   iconName={
                     currentInputType === 'email'
                       ? icons.EMAIL
-                      : icons.PHONE
+                      : icons.SMARTPHONE
                   }
                   applyHover={false}
                   important={false}

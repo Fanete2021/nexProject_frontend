@@ -16,3 +16,10 @@
 .selectedChat {
   flex: 1;
 }
+
+.infoChat {
+  width: 220px;
+  height: auto;
+  border-left: 2px solid var(--chat-divider-line-color);
+  flex-shrink: 0;
+}
