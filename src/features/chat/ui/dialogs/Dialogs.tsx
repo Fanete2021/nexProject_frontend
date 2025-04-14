@@ -4,7 +4,7 @@ import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { useSelector } from 'react-redux';
 import { getChatDialogs } from '../../model/selectors/getChatDialogs.ts';
 import DialogItem from './ui/dialog-item/DialogItem.tsx';
-import { CustomInput, icons, SvgIcon } from '@/shared/ui';
+import { CustomInput, icons, Scrollbar, SvgIcon } from '@/shared/ui';
 import { InputAdornment } from '@mui/material';
 import DialogItemSkeleton from './ui/dialog-item/DialogItemSkeleton.tsx';
 import { getChatIsLoadingDialogs } from '../../model/selectors/getChatIsLoadingDialogs.ts';
@@ -168,12 +168,7 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
         />
       </div>
 
-      <div
-        className={styles.content}
-        style={{
-          overflow: (isLoadingDialogs || isLoadingSearch) ? 'hidden' : 'auto'
-        }}
-      >
+      <div className={styles.content}>
         <div 
           className={styles.filter}
           style={{
@@ -200,29 +195,31 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
         </div>
 
         <div className={styles.dialogs}>
-          {(isLoadingSearch || isLoadingDialogs) &&
-            <>
-              {Array.from({ length: 15 }).map((_, index) => (
-                <DialogItemSkeleton key={index} className={styles.dialogSkeleton} />
-              ))}
-            </>
-          }
+          <Scrollbar autoHide>
+            {(isLoadingSearch || isLoadingDialogs) &&
+              <>
+                {Array.from({ length: 15 }).map((_, index) => (
+                  <DialogItemSkeleton key={index} className={styles.dialogSkeleton} />
+                ))}
+              </>
+            }
 
-          {!searchedValue && !isLoadingDialogs &&
-            <>
-              {dialogs.map(dialog => (
-                <DialogItem key={dialog.chatId} chatData={dialog} className={styles.dialog}/>
-              ))}
-            </>
-          }
+            {!searchedValue && !isLoadingDialogs &&
+              <>
+                {dialogs.map(dialog => (
+                  <DialogItem key={dialog.chatId} chatData={dialog} className={styles.dialog}/>
+                ))}
+              </>
+            }
 
-          {searchedValue &&
-            <>
-              {searchedContacts.map(contact => (
-                <DialogItem key={contact.userId} contactData={contact} className={styles.dialog} />
-              ))}
-            </>
-          }
+            {searchedValue &&
+              <>
+                {searchedContacts.map(contact => (
+                  <DialogItem key={contact.userId} contactData={contact} className={styles.dialog} />
+                ))}
+              </>
+            }
+          </Scrollbar>
         </div>
       </div>
 
