@@ -2,6 +2,7 @@ import React from 'react';
 import { CustomInput, icons, SvgIcon } from '@/shared/ui';
 import { InputAdornment } from '@mui/material';
 import styles from './Search.module.scss';
+import { useTranslation } from 'react-i18next';
 
 export interface SearchProps {
   value: string;
@@ -10,6 +11,7 @@ export interface SearchProps {
 }
 
 const Search: React.FC<SearchProps> = (props) => {
+  const { t } = useTranslation();
   const { value, clearSearch, searchHandler } = props;
 
   return (
@@ -37,7 +39,7 @@ const Search: React.FC<SearchProps> = (props) => {
           />
         </InputAdornment>
       }
-      placeholder="Search"
+      placeholder={t('Поиск') as string}
       fullWidth
       classes={{
         root: styles.searchWrapper,

@@ -17,6 +17,7 @@ import { useDebounce } from '@/shared/lib/hooks/useDebounce.ts';
 import CreatorGroup from './ui/creator-group/CreatorGroup.tsx';
 import { chatActions } from '../../model/slice/chatSlice.ts';
 import { Scrollbars } from 'react-custom-scrollbars-2';
+import { useTranslation } from 'react-i18next';
 
 export interface ChatListProps {
   className?: string;
@@ -24,15 +25,15 @@ export interface ChatListProps {
 
 const filters = [
   {
-    name: 'All',
+    name: 'Все',
     value: ChatTypes.ALL,
   },
   {
-    name: 'Contacts',
+    name: 'Контакты',
     value: ChatTypes.PRIVATE,
   },
   {
-    name: 'Group chats',
+    name: 'Группы',
     value: ChatTypes.PUBLIC
   }
 ];
@@ -42,6 +43,7 @@ const COUNT_DIALOGS = 15;
 const Dialogs: React.FC<ChatListProps> = (props) => {
   const { className } = props;
     
+  const { t } = useTranslation();
   const [searchedValue, setSearchedValue] = useState<string>('');
   const [activeFilter, setActiveFilter] = useState<ChatTypes>(ChatTypes.ALL);
   const underlineRef = useRef<HTMLDivElement>(null);
@@ -162,7 +164,7 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
   return (
     <div className={classNames(styles.Dialogs, [className])}>
       <div className={styles.header}>
-        <div className={styles.title}>Chats</div>
+        <div className={styles.title}>{t('Чаты') as string}</div>
 
         <div className={styles.searchWrapper}>
           <Search
@@ -194,7 +196,7 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
               ref={(el) => (filterRefs.current[index] = el)}
               onClick={(event) => handleFilterClick(filter.value, event)}
             >
-              {filter.name}
+              {t(filter.name) as string}
             </div>
           ))}
         </div>
@@ -236,7 +238,7 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
         className={styles.newChat}
         onClick={toggleCreatorGroupHandler}
       >
-        New chat
+        {t('Новый чат') as string}
       </button>
 
       <CreatorGroup onClose={closeCreatorGroupHandler} isOpen={isOpenCreatorGroup} />

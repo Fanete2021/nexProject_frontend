@@ -8,6 +8,7 @@ import { classNames } from '@/shared/lib/utils/classNames.ts';
 import styles from './MessageInput.module.scss';
 import { icons, SvgIcon } from '@/shared/ui';
 import { isPublicChat } from '@/shared/lib/utils/isPublicChat.ts';
+import { useTranslation } from 'react-i18next';
 
 export interface MessageInputProps {
     className?: string;
@@ -18,6 +19,7 @@ const minHeight = '50px';
 const MessageInput: React.FC<MessageInputProps> = (props) => {
   const { className } = props;
 
+  const { t } = useTranslation();
   const [messageText, setMessageText] = useState<string>('');
   const user = useSelector(getUserData)!;
   const selectedChat = useSelector(getChatSelectedChat)!;
@@ -86,7 +88,7 @@ const MessageInput: React.FC<MessageInputProps> = (props) => {
         className={styles.input}
         value={messageText}
         onChange={handleInputChange}
-        placeholder={'Write a message...'}
+        placeholder={t('Напишите сообщение...')}
         onKeyDown={handleKeyDown}
         rows={1}
         maxLength={255}

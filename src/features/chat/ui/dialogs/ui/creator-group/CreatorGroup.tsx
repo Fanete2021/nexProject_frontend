@@ -75,7 +75,7 @@ const CreatorGroup: React.FC<CreatorGroupProps> = (props) => {
         />
 
         <div className={styles.title}>
-          Create group
+          {t('Создать группу') as string}
 
           <SvgIcon
             iconName={icons.GROUP}
@@ -99,7 +99,7 @@ const CreatorGroup: React.FC<CreatorGroupProps> = (props) => {
                 />
               </InputAdornment>
             }
-            placeholder={t('Group name')}
+            placeholder={t('Имя группы') as string}
             fullWidth
             value={groupName}
             onChange={(e) => setGroupName(e.target.value)}
@@ -148,7 +148,7 @@ const CreatorGroup: React.FC<CreatorGroupProps> = (props) => {
 
         <div className={styles.selectedContacts}>
           <div className={styles.title}>
-            Selected people:
+            {t('Выбранные люди:') as string}
           </div>
 
           <Scrollbar autoHide>
