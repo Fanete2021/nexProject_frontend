@@ -3,7 +3,7 @@ import { Chat } from '../../../../model/types/chat.ts';
 import styles from './DialogItem.module.scss';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { fetchChatInfo } from '../../../../model/service/fetchChatInfo.ts';
-import { Avatar } from '@/shared/ui';
+import {Avatar, icons, SvgIcon} from '@/shared/ui';
 import { Contact } from '../../../../model/types/contact.ts';
 import { ChatInfo } from '../../../../model/types/chatInfo.ts';
 import { useSelector } from 'react-redux';
@@ -12,6 +12,7 @@ import { chatActions } from '../../../../model/slice/chatSlice.ts';
 import { getChatSelectedChat } from '../../../../model/selectors/getChatSelectedChat.ts';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { formatLastMessageDateTime } from '@/shared/lib/utils/formatLastMessageDateTime.ts';
+import { ChatTypes } from '../../../../model/types/chatTypes.ts';
 
 export interface DialogItemProps {
   chatData?: Chat;
@@ -89,6 +90,13 @@ const DialogItem: React.FC<DialogItemProps> = (props) => {
       <div className={styles.info}>
         <div className={styles.topSide}>
           <div className={styles.name}>
+            {chatData?.chatType === ChatTypes.PUBLIC &&
+              <SvgIcon
+                iconName={icons.GROUP}
+                className={styles.iconPublic}
+              />
+            }
+
             {chatData?.chatName || contactData?.name || contactData?.username}
           </div>
 

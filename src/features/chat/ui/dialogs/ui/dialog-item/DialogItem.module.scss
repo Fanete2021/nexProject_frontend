@@ -30,6 +30,12 @@
         overflow: hidden;
         text-align: start;
         word-break: break-all;
+
+        .iconPublic {
+          width: 10px;
+          height: 10px;
+          margin-right: 2px;
+        }
       }
 
       .date {
@@ -37,7 +43,6 @@
         font-size: 12px;
         line-height: 14px;
         margin-left: auto;
-        //margin-right: 2px;
         flex-shrink: 0;
       }
     }

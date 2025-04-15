@@ -38,7 +38,9 @@ export {
   fetchMyContacts,
   createGroup,
   fetchInterlocutors,
-  fetchMessages
+  fetchMessages,
+
+  ChatTypes
 };
 
 export type {
@@ -46,6 +48,5 @@ export type {
   ChatSchema,
   ChatInfo,
   Message,
-  NewMessage,
-  ChatTypes
+  NewMessage
 };

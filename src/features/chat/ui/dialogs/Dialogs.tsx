@@ -68,6 +68,7 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
   }, []);
 
   const searchHandler = useCallback(async (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setSearchedContacts([]);
     setSearchedValue(e.target.value);
     setIsLoadingSearch(true);
   }, []);
