@@ -17,6 +17,7 @@ import { getChatSelectedChat } from '../../model/selectors/getChatSelectedChat.t
 import { useDebounce } from '@/shared/lib/hooks/useDebounce.ts';
 import CreatorGroup from './ui/creator-group/CreatorGroup.tsx';
 import { chatActions } from '../../model/slice/chatSlice.ts';
+import { Scrollbars } from 'react-custom-scrollbars-2';
 
 export interface ChatListProps {
   className?: string;
@@ -37,6 +38,8 @@ const filters = [
   }
 ];
 
+const COUNT_DIALOGS = 15;
+
 const Dialogs: React.FC<ChatListProps> = (props) => {
   const { className } = props;
     
@@ -50,6 +53,9 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
   const [isOpenCreatorGroup, setIsOpenCreatorGroup] = useState<boolean>(false);
   const debouncedSearchValue = useDebounce(searchedValue, 1000);
   const [isLoadingSearch, setIsLoadingSearch] = useState<boolean>(false);
+  const scrollbarRef = useRef<Scrollbars>(null);
+  const [currentPageDialogs, setCurrentPageDialogs] = useState<number>(1);
+  const [allPagesDialogs, setAllPagesDialogs] = useState<number>(1);
 
   const dialogs = useSelector(getChatDialogs);
   const isLoadingDialogs = useSelector(getChatIsLoadingDialogs);
@@ -110,23 +116,48 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
     }
   }, [filterRefs]);
 
-  useEffect(() => {
-    const loadChats = async () => {
-      try {
-        const response = await dispatch(fetchChats({ filterMode: activeFilter })).unwrap();
+  const loadChats = async (shouldRewriteChats: boolean) => {
+    try {
+      const newCurrentPage = currentPageDialogs + 1;
 
+      const response = await dispatch(fetchChats({
+        filterMode: activeFilter,
+        pageSize: COUNT_DIALOGS,
+        pageNumber: shouldRewriteChats ? 1 : newCurrentPage
+      })).unwrap();
+      setAllPagesDialogs(response.pageCount);
+
+      if (shouldRewriteChats) {
         dispatch(chatActions.setDialogs(response.chats));
-      } catch (error) {
-        console.log(error);
+        setCurrentPageDialogs(1);
+      } else {
+        dispatch(chatActions.addDialogs(response.chats));
+        setCurrentPageDialogs(newCurrentPage);
       }
-    };
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-    loadChats();
+  useEffect(() => {
+    loadChats(true);
   }, [activeFilter]);
 
   useEffect(() => {
     clearSearch();
   }, [selectedChat]);
+
+  const scrollHandler = () => {
+    if (!scrollbarRef.current) return;
+
+    const scrollTop = scrollbarRef.current.getScrollTop();
+    const scrollHeight = scrollbarRef.current.getScrollHeight();
+    const clientHeight = scrollbarRef.current.getClientHeight();
+
+    if (scrollTop + clientHeight >= scrollHeight && currentPageDialogs < allPagesDialogs) {
+      loadChats(false);
+    }
+  };
 
   return (
     <div className={classNames(styles.Dialogs, [className])}>
@@ -195,7 +226,11 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
         </div>
 
         <div className={styles.dialogs}>
-          <Scrollbar autoHide>
+          <Scrollbar
+            autoHide
+            onScroll={scrollHandler}
+            ref={scrollbarRef}
+          >
             {(isLoadingSearch || isLoadingDialogs) &&
               <>
                 {Array.from({ length: 15 }).map((_, index) => (

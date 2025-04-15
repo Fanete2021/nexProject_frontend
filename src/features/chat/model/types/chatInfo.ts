@@ -7,6 +7,7 @@ export interface ChatInfo {
   members: Member[];
   ownerId?: string;
   chatId: string;
+  messageCount: number;
 
   //TODO заполнить тип для топиков
   // topics: [];

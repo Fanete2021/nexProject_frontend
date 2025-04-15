@@ -51,7 +51,8 @@ const DialogItem: React.FC<DialogItemProps> = (props) => {
             admin: false,
             memberName: contactData.name
           }
-        ]
+        ],
+        messageCount: 0
       };
 
       dispatch(chatActions.setSelectedChat(chatInfo));

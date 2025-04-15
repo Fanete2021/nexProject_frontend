@@ -7,12 +7,17 @@ import { Avatar, Scrollbar } from '@/shared/ui';
 import { formatDateLocalized } from '@/shared/lib/utils/formatDateLocalized.ts';
 import { formatTimeLocalized } from '@/shared/lib/utils/formatTimeLocalized.ts';
 import { Scrollbars } from 'react-custom-scrollbars-2';
+import { useSelector } from 'react-redux';
+import { getChatIsLoadingMessages } from '../../../../model/selectors/getChatIsLoadingMessages.ts';
+import { fetchMessages } from '../../../../model/service/fetchMessages.ts';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 
 export interface MessagesProps {
   messages: Message[];
   user: User;
   className?: string;
   chatId: string;
+  messageCount: number;
 }
 
 enum GroupType {
@@ -63,12 +68,17 @@ const groupMessages = (messages: Message[], timeGap = 10 * 60 * 1000): GroupedMe
   return grouped;
 };
 
+const COUNT_MESSAGE = 50;
+
 const Messages: React.FC<MessagesProps> = (props) => {
-  const { user, className } = props;
+  const { user, className, messageCount, chatId } = props;
 
   const [groupedMessages, setGroupedMessages] = useState<GroupedMessage[]>([]);
   const scrollbarRef = useRef<Scrollbars>(null);
   const [isAtBottom, setIsAtBottom] = useState(true);
+  const isLoadingMessages = useSelector(getChatIsLoadingMessages);
+  const dispatch = useAppDispatch();
+  const [currentPage, setCurrentPage] = useState<number>(1); //TODO поменять на 2, сейчас у бэка с 0 пагинация
 
   useEffect(() => {
     const grouped = groupMessages([...props.messages].reverse());
@@ -89,7 +99,7 @@ const Messages: React.FC<MessagesProps> = (props) => {
     }
   };
 
-  const handleScroll = () => {
+  const scrollHandler = async () => {
     if (!scrollbarRef.current) return;
 
     const scrollTop = scrollbarRef.current.getScrollTop();
@@ -98,12 +108,26 @@ const Messages: React.FC<MessagesProps> = (props) => {
 
     const userScrolledToBottom = Math.abs(scrollHeight - scrollTop - clientHeight) <= 5; // Погрешность проверки
     setIsAtBottom(userScrolledToBottom);
+
+    if (scrollTop <= 0 && !isLoadingMessages && messageCount > props.messages.length) {
+      try {
+        dispatch(fetchMessages({
+          chatId: chatId,
+          pageNumber: currentPage,
+          pageSize: COUNT_MESSAGE,
+        }));
+
+        setCurrentPage(currentPage + 1);
+      } catch (error) {
+        console.error('Ошибка при загрузке сообщений:', error);
+      } 
+    }
   };
 
   return (
     <div className={className}>
       <Scrollbar
-        onScroll={handleScroll}
+        onScroll={scrollHandler}
         ref={scrollbarRef}
       >
         <div className={styles.Messages}>

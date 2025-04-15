@@ -16,6 +16,8 @@ import { fetchMyContacts } from './model/service/fetchMyContacts.ts';
 import { createGroup } from './model/service/createGroup.ts';
 import { getChatIsActiveInfoPanel } from './model/selectors/getChatIsActiveInfoPanel.ts';
 import { fetchInterlocutors } from './model/service/fetchInterlocutors.ts';
+import { fetchMessages } from './model/service/fetchMessages.ts';
+import { getChatIsLoadingMessages } from './model/selectors/getChatIsLoadingMessages.ts';
 
 export {
   ChatPanelAsync as ChatPanel,
@@ -27,6 +29,7 @@ export {
   getChatIsLoadingDialogs,
   getChatSelectedChat,
   getChatIsActiveInfoPanel,
+  getChatIsLoadingMessages,
 
   fetchChats,
   fetchChatInfo,
@@ -34,7 +37,8 @@ export {
   searchContacts,
   fetchMyContacts,
   createGroup,
-  fetchInterlocutors
+  fetchInterlocutors,
+  fetchMessages
 };
 
 export type {

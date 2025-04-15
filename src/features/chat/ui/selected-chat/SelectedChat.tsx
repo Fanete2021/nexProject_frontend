@@ -33,6 +33,7 @@ const SelectedChat: React.FC<SelectedChatProps> = (props) => {
         user={user}
         className={styles.Messages}
         chatId={selectedChat.chatId}
+        messageCount={selectedChat.messageCount}
       />
 
       <MessageInput className={styles.MessageInput} />

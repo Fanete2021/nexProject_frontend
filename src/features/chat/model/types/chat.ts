@@ -13,4 +13,5 @@ export interface ChatSchema {
   selectedChat?: ChatInfo;
   isLoadingSelectedChat: boolean;
   isActiveInfoPanel: boolean;
+  isLoadingMessages: boolean;
 }

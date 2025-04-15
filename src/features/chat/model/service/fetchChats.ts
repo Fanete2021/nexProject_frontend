@@ -5,6 +5,7 @@ import { ChatTypes } from '../../model/types/chatTypes.ts';
 
 interface FetchChatsResponse {
   chats: Chat[];
+  pageCount: number;
 }
 
 interface FetchChatsProps {
