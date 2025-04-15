@@ -25,37 +25,46 @@ const DialogItem: React.FC<DialogItemProps> = (props) => {
   const user = useSelector(getUserData)!;
   const selectedChat = useSelector(getChatSelectedChat);
 
+  const setupSelectedChat = async (chatId: string) => {
+    try {
+      const response = await dispatch(fetchChatInfo({ chatId: chatId })).unwrap();
+      dispatch(chatActions.setSelectedChat(response));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const clickHandler = useCallback(async () => {
     if (chatData && selectedChat?.chatId !== chatData.chatId) {
-      try {
-        const response = await dispatch(fetchChatInfo({ chatId: chatData.chatId })).unwrap();
-        dispatch(chatActions.setSelectedChat(response));
-      } catch (error) {
-        console.log(error);
-      }
+      setupSelectedChat(chatData.chatId);
     }
 
     if (contactData) {
-      const chatInfo: ChatInfo = {
-        chatId: '',
-        lastMessages: [],
-        chatName: contactData.name || contactData?.username,
-        members: [
-          {
-            memberId: user.userId,
-            admin: false,
-            memberName: user.name
-          },
-          {
-            memberId: contactData.userId,
-            admin: false,
-            memberName: contactData.name
-          }
-        ],
-        messageCount: 0
-      };
+      if (contactData.chatId) {
+        setupSelectedChat(contactData.chatId);
+      } else {
+        const chatInfo: ChatInfo = {
+          chatId: '',
+          lastMessages: [],
+          chatName: contactData.name || contactData?.username,
+          members: [
+            {
+              memberId: user.userId,
+              admin: false,
+              memberName: user.name
+            },
+            {
+              memberId: contactData.userId,
+              admin: false,
+              memberName: contactData.name
+            }
+          ],
+          messageCount: 0,
+          topics: []
+        };
 
-      dispatch(chatActions.setSelectedChat(chatInfo));
+        dispatch(chatActions.setSelectedChat(chatInfo));
+      }
     }
   }, []);
 
