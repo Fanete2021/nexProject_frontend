@@ -17,22 +17,6 @@
 
   .searchWrapper {
     margin-top: 8px;
-    height: 30px;
-    padding-left: 10px;
-  }
-
-  .searchInput {
-    margin-left: -3px;
-    padding: 0;
-    padding-right: 10px;
-
-    &::placeholder {
-      color: var(--text-color) !important;
-    }
-  }
-
-  .clearSearch {
-    cursor: pointer;
   }
 }
 

@@ -8,6 +8,7 @@ import { Avatar, AvatarProps } from './avatar';
 import { Portal, PortalProps } from './portal';
 import { Modal, ModalProps } from './modal';
 import { Scrollbar, ScrollbarProps } from './scrollbar';
+import { Search, SearchProps } from './search';
 
 export type {
   SvgIconProps,
@@ -20,7 +21,8 @@ export type {
   AvatarProps,
   PortalProps,
   ModalProps,
-  ScrollbarProps
+  ScrollbarProps,
+  SearchProps
 };
 
 export {
@@ -34,5 +36,6 @@ export {
   Avatar,
   Portal,
   Modal,
-  Scrollbar
+  Scrollbar,
+  Search
 };

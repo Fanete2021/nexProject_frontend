@@ -30,5 +30,7 @@ export enum icons {
   SMILE = 'smile',
   INFO_PANEL = 'infoPanel',
   SMARTPHONE = 'smartphone',
-  INFO = 'info'
+  INFO = 'info',
+  GROUP = 'group',
+  TAG = 'tag'
 }

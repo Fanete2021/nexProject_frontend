@@ -84,7 +84,7 @@ const LoginForm = () => {
   return (
     <form className="form" onSubmit={onSubmit}>
       {error &&
-              <div className="formError">{t(error.errDetails)}</div>
+        <div className="formError">{t(error.errDetails)}</div>
       }
 
       <FormControl
@@ -94,7 +94,7 @@ const LoginForm = () => {
         <div className="label">
           {t('Почта / телефон')}<br/>
           {isShowError('phoneNumberOrMail') &&
-                        <div className="fieldError">{t(formik.errors.phoneNumberOrMail)}</div>
+              <div className="fieldError">{t(formik.errors.phoneNumberOrMail)}</div>
           }
         </div>
 

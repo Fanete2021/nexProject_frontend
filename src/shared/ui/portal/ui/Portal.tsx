@@ -8,7 +8,7 @@ export interface PortalProps {
 
 export const Portal: FC<PortalProps> = (props) => {
   const {
-    container = document.body,
+    container = document.querySelector('.app') || document.body,
     children
   } = props;
 

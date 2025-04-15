@@ -1,44 +1,151 @@
 .CreatorGroup {
-  padding: 20px;
-  background-color: #f0f8ff;
-  border-radius: 10px;
-}
-
-.groupNameInput {
-  width: 100%;
   padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-}
-
-.contactsList {
+  background-color: var(--modal-bg-color);
+  border-radius: 15px;
+  width: 350px;
+  min-height: 485px;
+  max-height: 550px;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-height: 300px;
-  overflow-y: auto;
+  position: relative;
 }
 
-.contactItem {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+.iconClose {
+  position: absolute;
+  width: 12px;
+  height: 12px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  right: 15px;
+  top: 15px;
+}
 
-  &.selected {
-    background-color: #d3f9d8;
+.title {
+  font-size: 20px;
+  line-height: 26px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+
+  .iconGroup {
+    width: 15px;
+    height: 15px;
   }
 }
 
-.saveButton {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
+.groupNameWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  .iconName {
+  }
+
+  .inputWrapper {
+    border-radius: 5px !important;
+    height: 30px;
+  }
+
+  .input {
+    font-size: 14px !important;
+    line-height: 18px;
+  }
+}
+
+.contacts, .selectedContacts {
   border-radius: 5px;
+  border: 1px solid var(--line-color);
+}
+
+.contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 5px;
+  height: 270px;
+
+  .contactsList {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    max-height: 300px;
+  }
+
+  .contactItem {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    .name {
+      font-size: 14px;
+      line-height: 18px;
+    }
+  }
+
+  .checkbox {
+    margin-left: auto;
+  }
+}
+
+.selectedContacts {
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 5px;
+  height: 80px;
+
+  .title {
+    font-size: 14px;
+    line-height: 18px;
+  }
+
+  .items {
+    display: flex;
+    flex-wrap: wrap;
+    user-select: none;
+    gap: 5px;
+
+    .item {
+      display: flex;
+      gap: 3px;
+      align-items: center;
+      justify-content: center;
+      padding-right: 5px;
+      background: var(--chat-selected-bg-color);
+      border-radius: 10px;
+      cursor: pointer;
+      height: fit-content;
+    }
+
+    .name {
+      font-size: 12px;
+      line-height: 16px;
+    }
+  }
+}
+
+//TODO вынести в компонент
+.saveButton {
+  width: 150px;
+  background: var(--button-bg-secondary-color);
   cursor: pointer;
+  height: 30px;
+  color: var(--button-text-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 10px;
+  font-weight: bold;
+  margin: 0 auto;
+
+  &:hover:not(:disabled) {
+    background: var(--button-bg-hover-secondary-color);
+  }
+
+  &:disabled {
+    color: var(--button-text-disabled-color);
+  }
 }

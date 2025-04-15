@@ -4,8 +4,7 @@ import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { useSelector } from 'react-redux';
 import { getChatDialogs } from '../../model/selectors/getChatDialogs.ts';
 import DialogItem from './ui/dialog-item/DialogItem.tsx';
-import { CustomInput, icons, Scrollbar, SvgIcon } from '@/shared/ui';
-import { InputAdornment } from '@mui/material';
+import { Scrollbar, Search } from '@/shared/ui';
 import DialogItemSkeleton from './ui/dialog-item/DialogItemSkeleton.tsx';
 import { getChatIsLoadingDialogs } from '../../model/selectors/getChatIsLoadingDialogs.ts';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
@@ -164,39 +163,13 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
       <div className={styles.header}>
         <div className={styles.title}>Chats</div>
 
-        <CustomInput
-          startAdornment={
-            <InputAdornment position="start">
-              <SvgIcon
-                iconName={icons.SEARCH}
-                applyHover={false}
-                important={Boolean(searchedValue)}
-                applyStroke
-                applyFill={false}
-              />
-            </InputAdornment>
-          }
-          endAdornment={searchedValue &&
-            <InputAdornment position="end">
-              <SvgIcon
-                iconName={icons.CROSS}
-                applyHover={false}
-                important={Boolean(searchedValue)}
-                applyStroke
-                className={styles.clearSearch}
-                onClick={clearSearch}
-              />
-            </InputAdornment>
-          }
-          placeholder="Search"
-          fullWidth
-          classes={{
-            root: styles.searchWrapper,
-            input: styles.searchInput
-          }}
-          value={searchedValue}
-          onChange={searchHandler}
-        />
+        <div className={styles.searchWrapper}>
+          <Search
+            searchHandler={searchHandler}
+            value={searchedValue}
+            clearSearch={clearSearch}
+          />
+        </div>
       </div>
 
       <div className={styles.content}>

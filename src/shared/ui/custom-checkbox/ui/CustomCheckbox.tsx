@@ -2,23 +2,35 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './CustomCheckbox.module.scss';
 import { icons, SvgIcon } from '@/shared/ui';
+import { classNames } from '@/shared/lib/utils/classNames.ts';
 
 export interface CustomCheckboxProps extends React.ComponentPropsWithoutRef<'input'> {
     label?: string;
+    className?: string;
+    setRounded?: boolean;
 }
 
-const CustomCheckbox: React.FC<CustomCheckboxProps> = ({ label, ...props }) => {
+const CustomCheckbox: React.FC<CustomCheckboxProps> = (props) => {
   const { t } = useTranslation();
+  const { label, className, setRounded = false, ...rest } = props;
 
   return (
-    <label className={styles.CustomCheckbox}>
+    <label className={classNames(styles.CustomCheckbox, [className])}>
       <input
         type="checkbox"
         className={styles.input}
-        {...props}
+        {...rest}
       />
 
-      <span className={styles.checkmark}>
+      <span 
+        className={classNames(
+          styles.checkmark,
+          [],
+          {
+            [styles.circle]: setRounded
+          })
+        }
+      >
         <SvgIcon
           className={styles.check}
           iconName={icons.CHECK}
@@ -29,7 +41,7 @@ const CustomCheckbox: React.FC<CustomCheckboxProps> = ({ label, ...props }) => {
       </span>
 
       {label && (
-        <span className={styles.label}>{t(label)}</span>
+        <span className={styles.label}>{t(label) as string}</span>
       )}
     </label>
   );

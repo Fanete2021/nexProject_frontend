@@ -1,0 +1,19 @@
+.searchWrapper {
+  height: 30px;
+  padding-left: 10px;
+  border-radius: 10px !important;
+}
+
+.searchInput {
+  margin-left: -3px;
+  padding: 0;
+  padding-right: 10px;
+
+  &::placeholder {
+    color: var(--text-color) !important;
+  }
+}
+
+.clearSearch {
+  cursor: pointer;
+}
