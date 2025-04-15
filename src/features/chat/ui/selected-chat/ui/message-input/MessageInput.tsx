@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ChatWebSocketService from '../../../../model/service/ChatWebSocketService.ts';
 import { useSelector } from 'react-redux';
 import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
@@ -7,6 +7,7 @@ import { getChatSelectedChat } from '../../../../model/selectors/getChatSelected
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import styles from './MessageInput.module.scss';
 import { icons, SvgIcon } from '@/shared/ui';
+import { isPublicChat } from '@/shared/lib/utils/isPublicChat.ts';
 
 export interface MessageInputProps {
     className?: string;
@@ -22,15 +23,18 @@ const MessageInput: React.FC<MessageInputProps> = (props) => {
   const selectedChat = useSelector(getChatSelectedChat)!;
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-    
+  
   const sendHandler = () => {
     if (!messageText.trim()) return;
 
     const newMessage: NewMessage = {
       message: messageText,
       senderId: user.userId,
-      recipientId: selectedChat.members.find(member => member.memberId !== user.userId)!.memberId,
-      chatId: selectedChat.chatId
+      recipientId: isPublicChat(selectedChat)
+        ? ''
+        : selectedChat.members.find(member => member.memberId !== user.userId)!.memberId,
+      chatId: selectedChat.chatId,
+      topicId: isPublicChat(selectedChat) ? selectedChat.topics[0].topicId : '',
     };
     ChatWebSocketService.sendMessage(newMessage);
     setMessageText('');
@@ -41,7 +45,7 @@ const MessageInput: React.FC<MessageInputProps> = (props) => {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       sendHandler();

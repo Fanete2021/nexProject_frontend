@@ -36,10 +36,12 @@
   max-width: 400px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 7.5px;
 
   .sender {
     font-weight: bold;
+    font-size: 14px;
+    line-height: 18px;
   }
 
   .textWrapper {

@@ -6,6 +6,8 @@ import Messages from './ui/messages/Messages.tsx';
 import styles from './SelectedChat.module.scss';
 import MessageInput from './ui/message-input/MessageInput.tsx';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
+import { isPublicChat } from '@/shared/lib/utils/isPublicChat.ts';
+import { ChatTypes } from '../../model/types/chatTypes.ts';
 
 export interface SelectedChatProps {
   className?: string;
@@ -34,6 +36,7 @@ const SelectedChat: React.FC<SelectedChatProps> = (props) => {
         className={styles.Messages}
         chatId={selectedChat.chatId}
         messageCount={selectedChat.messageCount}
+        chatType={isPublicChat(selectedChat) ? ChatTypes.PUBLIC : ChatTypes.PRIVATE}
       />
 
       <MessageInput className={styles.MessageInput} />

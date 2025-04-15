@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import { getChatIsLoadingMessages } from '../../../../model/selectors/getChatIsLoadingMessages.ts';
 import { fetchMessages } from '../../../../model/service/fetchMessages.ts';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
+import { ChatTypes } from '../../../../model/types/chatTypes.ts';
 
 export interface MessagesProps {
   messages: Message[];
@@ -18,6 +19,7 @@ export interface MessagesProps {
   className?: string;
   chatId: string;
   messageCount: number;
+  chatType: ChatTypes;
 }
 
 enum GroupType {
@@ -71,7 +73,7 @@ const groupMessages = (messages: Message[], timeGap = 10 * 60 * 1000): GroupedMe
 const COUNT_MESSAGE = 50;
 
 const Messages: React.FC<MessagesProps> = (props) => {
-  const { user, className, messageCount, chatId } = props;
+  const { user, className, messageCount, chatId, chatType } = props;
 
   const [groupedMessages, setGroupedMessages] = useState<GroupedMessage[]>([]);
   const scrollbarRef = useRef<Scrollbars>(null);
@@ -159,10 +161,11 @@ const Messages: React.FC<MessagesProps> = (props) => {
                           [styles.lastMessage]: index === group.messages!.length - 1
                         })}
                       >
-                        {/*//TODO сделать для бесед*/}
-                        {/*<div className={styles.sender}>*/}
-                        {/*  {message.senderId}*/}
-                        {/*</div>*/}
+                        {index === 0 && chatType === ChatTypes.PUBLIC &&
+                          <div className={styles.sender}>
+                            {message.senderName}
+                          </div>
+                        }
 
                         <div className={styles.textWrapper}>
                           <span className={styles.text}>
