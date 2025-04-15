@@ -24,7 +24,7 @@ const DialogItem: React.FC<DialogItemProps> = (props) => {
   const dispatch = useAppDispatch();
   const user = useSelector(getUserData)!;
   const selectedChat = useSelector(getChatSelectedChat);
-    
+
   const clickHandler = useCallback(async () => {
     if (chatData && selectedChat?.chatId !== chatData.chatId) {
       try {

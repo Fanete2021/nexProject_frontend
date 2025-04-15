@@ -8,17 +8,14 @@ class ChatWebSocketService {
   private client: Client | null = null;
   private chatSubscriptionsQueue: string[] = []; // Очередь топиков для подписки
   private isConnected: boolean = false;
-  private currentToken: string = '';
 
   public onMessageCallback: ((message: Message, chatId: string) => void) | null = null;
   public onNotificationsCallback: ((message: ChatNotification) => void) | null = null;
 
   connect(token: string, userId: string) {
-    this.currentToken = token;
-
     this.client = new Client({
       webSocketFactory: () => new SockJS(
-        `${import.meta.env.VITE_API}/ws?token=${this.currentToken}`,
+        `${import.meta.env.VITE_API}/ws?token=${token}`,
         null,
         {
           transports: ['xhr-polling'],
@@ -29,7 +26,7 @@ class ChatWebSocketService {
       heartbeatIncoming: 10000,
       heartbeatOutgoing: 10000,
       connectHeaders: {
-        Authorization: `Bearer ${this.currentToken}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -48,29 +45,27 @@ class ChatWebSocketService {
 
   disconnect() {
     this.client?.deactivate().then(() => {
-      this.client = null;
       this.isConnected = false;
     });
   }
 
-  subscribe(chatId: string) {
-    if (this.isConnected && this.client) {
+  public subscribe(chatId: string) {
+    if (!this.chatSubscriptionsQueue.includes(chatId)) {
+      this.chatSubscriptionsQueue.push(chatId);
+    }
+
+    if (this.isConnected) {
       this.client?.subscribe(`/topic/${chatId}`, (message) => {
         if (this.onMessageCallback) {
           this.onMessageCallback(JSON.parse(message.body), chatId);
         }
       });
-    } else {
-      this.chatSubscriptionsQueue.push(chatId);
     }
   }
 
   private processSubscriptionQueue() {
-    while (this.chatSubscriptionsQueue.length) {
-      const chatId = this.chatSubscriptionsQueue.shift();
-      if (chatId) {
-        this.subscribe(chatId);
-      }
+    for (const chatId of this.chatSubscriptionsQueue) {
+      this.subscribe(chatId);
     }
   }
 
@@ -89,27 +84,6 @@ class ChatWebSocketService {
         body: JSON.stringify(newMessage)
       });
     }
-  }
-
-  updateConnectionToken(newToken: string) {
-    if (!this.client) return;
-
-    this.currentToken = newToken;
-
-    this.client.configure({
-      connectHeaders: {
-        Authorization: `Bearer ${newToken}`
-      }
-    });
-
-    // // 3. Для SockJS может потребоваться переподключение
-    // // Но сначала попробуем без него
-    // if (this.client.connected) {
-    //   // Если сервер принимает обновленные заголовки "на лету"
-    //   this.client.deactivate().then(() => {
-    //     this.client?.activate();
-    //   });
-    // }
   }
 }
 

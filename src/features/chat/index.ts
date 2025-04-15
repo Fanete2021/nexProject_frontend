@@ -15,6 +15,7 @@ import { ChatTypes } from './model/types/chatTypes.ts';
 import { fetchMyContacts } from './model/service/fetchMyContacts.ts';
 import { createGroup } from './model/service/createGroup.ts';
 import { getChatIsActiveInfoPanel } from './model/selectors/getChatIsActiveInfoPanel.ts';
+import { fetchInterlocutors } from './model/service/fetchInterlocutors.ts';
 
 export {
   ChatPanelAsync as ChatPanel,
@@ -32,7 +33,8 @@ export {
   ChatWebSocketService,
   searchContacts,
   fetchMyContacts,
-  createGroup
+  createGroup,
+  fetchInterlocutors
 };
 
 export type {

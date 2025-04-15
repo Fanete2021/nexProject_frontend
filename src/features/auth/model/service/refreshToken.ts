@@ -8,7 +8,7 @@ interface RefreshTokenResponse {
 
 export const refreshToken = createAsyncThunk<RefreshTokenResponse, void, ThunkConfig<string>> (
   'auth/refreshToken',
-  async (authData, thunkAPI) => {
+  async (_, thunkAPI) => {
     const {
       extra,
       rejectWithValue,
@@ -17,7 +17,8 @@ export const refreshToken = createAsyncThunk<RefreshTokenResponse, void, ThunkCo
 
     try {
       const response = await extra.api.post('/auth/refresh-token', null, {
-        withCredentials: true
+        withCredentials: true,
+        headers: {}
       });
 
       await dispatch(authActions.setToken(response.data.access_token));

@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { fetchUserData } from '@/entities/user';
 import { Loader } from '@/shared/ui';
 import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
+import useRefreshTokenTimer from '@/shared/lib/hooks/useRefreshTokenTimer';
 
 function RequireAuth({ children }: { children: JSX.Element }) {
   const location = useLocation();
@@ -14,6 +15,7 @@ function RequireAuth({ children }: { children: JSX.Element }) {
   const user = useSelector(getUserData);
   const [isAppReady, setIsAppReady] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  useRefreshTokenTimer();
 
   useEffect(() => {
     const initStore = async () => {

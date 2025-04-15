@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useCallback, useEffect} from 'react';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import styles from './ChatPanel.module.scss';
 import Dialogs from '../dialogs/Dialogs.tsx';
@@ -32,10 +32,24 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
   const selectedChat = useSelector(getChatSelectedChat);
 
   useEffect(() => {
+    ChatWebSocketService.connect(token, user.userId);
+
+    ChatWebSocketService.onMessageCallback = (message: Message) => {
+      dispatch(chatActions.addMessage(message));
+    };
+    
+    return () => {
+      ChatWebSocketService.onMessageCallback = () => {};
+      ChatWebSocketService.disconnect();
+    };
+  }, [token]);
+
+  useEffect(() => {
     const subscribeChats = async () => {
       try {
-        //TODO переделать на получение только айдишников
-        const response = await dispatch(fetchChats({ filterMode: ChatTypes.ALL })).unwrap();
+        const response = await dispatch(fetchChats(
+          { filterMode: ChatTypes.ALL, getLastMess: false, pageSize: 999999 } //Получение всех чатов у пользователя
+        )).unwrap();
         const { chats } = response;
 
         for (const chat of chats) {
@@ -47,11 +61,9 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
     };
 
     subscribeChats();
+  }, []);
 
-    ChatWebSocketService.onMessageCallback = (message: Message) => {
-      dispatch(chatActions.addMessage(message));
-    };
-
+  useEffect(() => {
     ChatWebSocketService.onNotificationsCallback = async (notification: ChatNotification) => {
       try {
         const response = await dispatch(fetchChatInfo({ chatId: notification.chatId })).unwrap();
@@ -69,23 +81,11 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
         console.log(error);
       }
     };
-    
-    return () => {
-      ChatWebSocketService.onMessageCallback = () => {};
-    };
-  }, []);
-
-  useEffect(() => {
-    ChatWebSocketService.connect(token, user.userId);
 
     return () => {
-      ChatWebSocketService.disconnect();
+      ChatWebSocketService.onNotificationsCallback = () => {};
     };
-  }, []);
-
-  useEffect(() => {
-    ChatWebSocketService.updateConnectionToken(token);
-  }, [token]);
+  }, [dispatch]);
 
   return (
     <div className={classNames(styles.ChatPanel, [className])}>
