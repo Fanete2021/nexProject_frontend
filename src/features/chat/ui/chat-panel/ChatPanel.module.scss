@@ -4,6 +4,10 @@
   border-radius: 10px;
   display: flex;
   overflow: hidden;
+
+  @media screen and (max-width: 1024px) {
+    border-radius: 0;
+  }
 }
 
 .dialogs {
@@ -11,6 +15,11 @@
   height: auto;
   border-right: 2px solid var(--chat-divider-line-color);
   flex-shrink: 0;
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    border: 0;
+  }
 }
 
 .selectedChat {

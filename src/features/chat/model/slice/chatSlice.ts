@@ -25,7 +25,7 @@ export const chatSlice = createSlice({
     addDialogs: (state, action: PayloadAction<Chat[]>) => {
       state.dialogs.push(...action.payload);
     },
-    setSelectedChat: (state, action: PayloadAction<ChatInfo>) => {
+    setSelectedChat: (state, action: PayloadAction<ChatInfo | undefined>) => {
       state.selectedChat = action.payload;
     },
     addMessage: (state, action: PayloadAction<Message>) => {

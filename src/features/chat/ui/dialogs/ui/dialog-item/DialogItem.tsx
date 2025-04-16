@@ -3,7 +3,7 @@ import { Chat } from '../../../../model/types/chat.ts';
 import styles from './DialogItem.module.scss';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { fetchChatInfo } from '../../../../model/service/fetchChatInfo.ts';
-import {Avatar, icons, SvgIcon} from '@/shared/ui';
+import { Avatar, icons, SvgIcon } from '@/shared/ui';
 import { Contact } from '../../../../model/types/contact.ts';
 import { ChatInfo } from '../../../../model/types/chatInfo.ts';
 import { useSelector } from 'react-redux';
@@ -13,6 +13,8 @@ import { getChatSelectedChat } from '../../../../model/selectors/getChatSelected
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { formatLastMessageDateTime } from '@/shared/lib/utils/formatLastMessageDateTime.ts';
 import { ChatTypes } from '../../../../model/types/chatTypes.ts';
+import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
+import {MOBILE_MAX_BREAKPOINT} from "@/shared/const/WindowBreakpoints.ts";
 
 export interface DialogItemProps {
   chatData?: Chat;
@@ -25,6 +27,7 @@ const DialogItem: React.FC<DialogItemProps> = (props) => {
   const dispatch = useAppDispatch();
   const user = useSelector(getUserData)!;
   const selectedChat = useSelector(getChatSelectedChat);
+  const windowWidth = useWindowWidth();
 
   const setupSelectedChat = async (chatId: string) => {
     try {
@@ -82,8 +85,8 @@ const DialogItem: React.FC<DialogItemProps> = (props) => {
     >
       <Avatar
         text={chatData?.chatName || contactData?.name || contactData?.username}
-        height={40}
-        width={40}
+        height={windowWidth > MOBILE_MAX_BREAKPOINT ? 40 : 50}
+        width={windowWidth > MOBILE_MAX_BREAKPOINT ? 40 : 50}
         className={styles.avatar}
       />
 
@@ -94,10 +97,14 @@ const DialogItem: React.FC<DialogItemProps> = (props) => {
               <SvgIcon
                 iconName={icons.GROUP}
                 className={styles.iconPublic}
+                applyHover={false}
+                important
               />
             }
 
-            {chatData?.chatName || contactData?.name || contactData?.username}
+            <span>
+              {chatData?.chatName || contactData?.name || contactData?.username}
+            </span>
           </div>
 
           {chatData?.lastMessage && (

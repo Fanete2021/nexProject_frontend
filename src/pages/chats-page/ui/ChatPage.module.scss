@@ -2,4 +2,10 @@
   max-height: calc(100vh - 20px);
   height: calc(100vh - 20px);
   margin: 10px;
+
+  @media screen and (max-width: 1024px){
+    margin: 0;
+    max-height: 100vh;
+    height: 100vh;
+  }
 }

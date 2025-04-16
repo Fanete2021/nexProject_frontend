@@ -24,6 +24,7 @@ const Search: React.FC<SearchProps> = (props) => {
             important={Boolean(value)}
             applyStroke
             applyFill={false}
+            className={styles.iconSearch}
           />
         </InputAdornment>
       }
@@ -34,7 +35,7 @@ const Search: React.FC<SearchProps> = (props) => {
             applyHover={false}
             important={Boolean(value)}
             applyStroke
-            className={styles.clearSearch}
+            className={styles.iconClearSearch}
             onClick={clearSearch}
           />
         </InputAdornment>

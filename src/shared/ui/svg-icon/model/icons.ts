@@ -32,5 +32,8 @@ export enum icons {
   SMARTPHONE = 'smartphone',
   INFO = 'info',
   GROUP = 'group',
-  TAG = 'tag'
+  TAG = 'tag',
+  MENU = 'menu',
+  CREATE_GROUP = 'createGroup',
+  BACK = 'back'
 }

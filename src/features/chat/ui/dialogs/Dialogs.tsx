@@ -4,7 +4,7 @@ import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { useSelector } from 'react-redux';
 import { getChatDialogs } from '../../model/selectors/getChatDialogs.ts';
 import DialogItem from './ui/dialog-item/DialogItem.tsx';
-import { Scrollbar, Search } from '@/shared/ui';
+import {icons, Scrollbar, Search, SvgIcon} from '@/shared/ui';
 import DialogItemSkeleton from './ui/dialog-item/DialogItemSkeleton.tsx';
 import { getChatIsLoadingDialogs } from '../../model/selectors/getChatIsLoadingDialogs.ts';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
@@ -18,6 +18,7 @@ import CreatorGroup from './ui/creator-group/CreatorGroup.tsx';
 import { chatActions } from '../../model/slice/chatSlice.ts';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { useTranslation } from 'react-i18next';
+import {useSidebar} from "@/shared/lib/hooks/useSidebar.ts";
 
 export interface ChatListProps {
   className?: string;
@@ -63,6 +64,8 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
 
   const closeCreatorGroupHandler = useCallback(() => setIsOpenCreatorGroup(false), []);
   const toggleCreatorGroupHandler = useCallback(() => setIsOpenCreatorGroup(prev => !prev), []);
+
+  const { openSidebar } = useSidebar();
 
   const clearSearch = useCallback(() => {
     setSearchedValue('');
@@ -166,6 +169,13 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
       <div className={styles.header}>
         <div className={styles.title}>{t('Чаты') as string}</div>
 
+        <SvgIcon
+          iconName={icons.MENU}
+          className={styles.iconSidebar}
+          onClick={openSidebar}
+          important
+        />
+
         <div className={styles.searchWrapper}>
           <Search
             searchHandler={searchHandler}
@@ -173,6 +183,13 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
             clearSearch={clearSearch}
           />
         </div>
+
+        <SvgIcon
+          className={styles.iconCreateGroup}
+          onClick={toggleCreatorGroupHandler}
+          iconName={icons.CREATE_GROUP}
+          important
+        />
       </div>
 
       <div className={styles.content}>
@@ -207,7 +224,7 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
             onScroll={scrollHandler}
             ref={scrollbarRef}
           >
-            {(isLoadingSearch || isLoadingDialogs) &&
+            {((isLoadingSearch && searchedValue) || isLoadingDialogs) &&
               <>
                 {Array.from({ length: 15 }).map((_, index) => (
                   <DialogItemSkeleton key={index} className={styles.dialogSkeleton} />

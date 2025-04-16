@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Avatar, CustomCheckbox, CustomInput, icons, Modal, Scrollbar, Search, SvgIcon } from '@/shared/ui';
 import { Contact } from '../../../../model/types/contact.ts';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
@@ -8,6 +8,8 @@ import { InputAdornment } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { fetchInterlocutors } from '../../../../model/service/fetchInterlocutors.ts';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
+import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
+import { MOBILE_MAX_BREAKPOINT } from '@/shared/const/WindowBreakpoints.ts';
 
 export interface CreatorGroupProps {
   isOpen: boolean;
@@ -21,6 +23,7 @@ const CreatorGroup: React.FC<CreatorGroupProps> = (props) => {
   const [selectedContacts, setSelectedContacts] = useState<Contact[]>([]);
   const [groupName, setGroupName] = useState<string>('');
   const dispatch = useAppDispatch();
+  const windowWidth = useWindowWidth();
 
   useEffect(() => {
     const initContacts = async () => {
@@ -47,7 +50,7 @@ const CreatorGroup: React.FC<CreatorGroupProps> = (props) => {
       chatName: groupName,
       memberIds: selectedContacts.map((c) => c.userId),
     }));
-    clearStates();
+    closeHandler();
   };
 
   const clearStates = useCallback(() => {
@@ -67,13 +70,14 @@ const CreatorGroup: React.FC<CreatorGroupProps> = (props) => {
     >
       <div className={styles.CreatorGroup}>
         <SvgIcon
-          iconName={icons.CROSS}
+          iconName={windowWidth > MOBILE_MAX_BREAKPOINT ? icons.CROSS : icons.BACK}
           important
-          applyStroke
+          applyStroke={windowWidth > MOBILE_MAX_BREAKPOINT}
+          applyFill={windowWidth <= MOBILE_MAX_BREAKPOINT}
           className={styles.iconClose}
           onClick={onClose}
         />
-
+        
         <div className={styles.title}>
           {t('Создать группу') as string}
 
@@ -128,7 +132,11 @@ const CreatorGroup: React.FC<CreatorGroupProps> = (props) => {
                   )}
                   onClick={() => toggleContactSelection(contact)}
                 >
-                  <Avatar text={contact.username} width={40} height={40}/>
+                  <Avatar
+                    text={contact.username}
+                    width={windowWidth > MOBILE_MAX_BREAKPOINT ? 40 : 50}
+                    height={windowWidth > MOBILE_MAX_BREAKPOINT ? 40 : 50}
+                  />
 
                   <div className={styles.name}>
                     {contact.username}
@@ -159,7 +167,11 @@ const CreatorGroup: React.FC<CreatorGroupProps> = (props) => {
                   className={classNames(styles.item)}
                   onClick={() => toggleContactSelection(contact)}
                 >
-                  <Avatar text={contact.username} width={25} height={25}/>
+                  <Avatar
+                    text={contact.username}
+                    width={windowWidth > MOBILE_MAX_BREAKPOINT ? 25 : 30}
+                    height={windowWidth > MOBILE_MAX_BREAKPOINT ? 25 : 30}
+                  />
 
                   <div className={styles.name}>
                     {contact.username}

@@ -2,6 +2,8 @@ import styles from './DialogItem.module.scss';
 import { Skeleton } from '@mui/material';
 import React from 'react';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
+import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
+import {MOBILE_MAX_BREAKPOINT} from "@/shared/const/WindowBreakpoints.ts";
 
 export interface DialogItemSkeletonProps {
   className?: string;
@@ -9,13 +11,14 @@ export interface DialogItemSkeletonProps {
 
 const DialogItemSkeleton: React.FC<DialogItemSkeletonProps> = (props) => {
   const { className } = props;
+  const windowWidth = useWindowWidth();
 
   return (
     <div className={classNames(styles.DialogItemSkeleton, [className])}>
       <Skeleton
         variant="circular"
-        width={40}
-        height={40}
+        width={windowWidth > MOBILE_MAX_BREAKPOINT ? 40 : 50}
+        height={windowWidth > MOBILE_MAX_BREAKPOINT ? 40 : 50}
         classes={{
           root: styles.skeleton
         }}

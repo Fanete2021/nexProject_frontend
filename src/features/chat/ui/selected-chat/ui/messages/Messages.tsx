@@ -134,7 +134,16 @@ const Messages: React.FC<MessagesProps> = (props) => {
       >
         <div className={styles.Messages}>
           {groupedMessages.map((group, index) => (
-            <div key={index} className={styles.messageGroup}>
+            <div
+              key={index}
+              className={classNames(
+                styles.messageGroup,
+                [],
+                {
+                  [styles.myMessageGroup]: group.messages && group.messages[0].senderId === user.userId
+                }
+              )}
+            >
               {group.type === GroupType.DATE &&
                 <div className={styles.dateSeparator}>
                   {group.date}

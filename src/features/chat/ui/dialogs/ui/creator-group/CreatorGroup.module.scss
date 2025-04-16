@@ -9,6 +9,13 @@
   flex-direction: column;
   gap: 10px;
   position: relative;
+
+  @media screen and (max-width: 768px) {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    max-height: none;
+  }
 }
 
 .iconClose {
@@ -18,6 +25,12 @@
   cursor: pointer;
   right: 15px;
   top: 15px;
+
+  @media screen and (max-width: 768px) {
+    width: 15px;
+    height: 15px;
+    left: 15px;
+  }
 }
 
 .title {
@@ -28,9 +41,19 @@
   align-items: center;
   justify-content: center;
 
+  @media screen and (max-width: 768px) {
+    font-size: 22px;
+    line-height: 28px;
+  }
+
   .iconGroup {
     width: 15px;
     height: 15px;
+
+    @media screen and (max-width: 768px) {
+      width: 17px;
+      height: 17px;
+    }
   }
 }
 
@@ -40,16 +63,29 @@
   gap: 5px;
 
   .iconName {
+    @media screen and (max-width: 768px) {
+      width: 17px;
+      height: 17px;
+    }
   }
 
   .inputWrapper {
     border-radius: 5px !important;
     height: 30px;
+
+    @media screen and (max-width: 768px) {
+      height: 40px;
+    }
   }
 
   .input {
-    font-size: 14px !important;
+    font-size: 14px;
     line-height: 18px;
+
+    @media screen and (max-width: 768px) {
+      font-size: 16px;
+      line-height: 21px;
+    }
   }
 }
 
@@ -64,6 +100,10 @@
   gap: 10px;
   padding: 5px;
   height: 270px;
+
+  @media screen and (max-width: 768px) {
+    flex: 1;
+  }
 
   .contactsList {
     display: flex;
@@ -81,6 +121,11 @@
     .name {
       font-size: 14px;
       line-height: 18px;
+
+      @media screen and (max-width: 768px) {
+        font-size: 16px;
+        line-height: 21px;
+      }
     }
   }
 
@@ -97,9 +142,18 @@
   gap: 5px;
   height: 80px;
 
+  @media screen and (max-width: 768px) {
+    height: 120px;
+  }
+
   .title {
     font-size: 14px;
     line-height: 18px;
+
+    @media screen and (max-width: 768px) {
+      font-size: 16px;
+      line-height: 21px;
+    }
   }
 
   .items {
@@ -118,11 +172,21 @@
       border-radius: 10px;
       cursor: pointer;
       height: fit-content;
+
+      @media screen and (max-width: 768px) {
+        border-radius: 15px;
+        padding-right: 10px;
+      }
     }
 
     .name {
       font-size: 12px;
       line-height: 16px;
+
+      @media screen and (max-width: 768px) {
+        font-size: 14px;
+        line-height: 18px;
+      }
     }
   }
 }
@@ -139,7 +203,14 @@
   justify-content: center;
   border-radius: 10px;
   font-weight: bold;
-  margin: 0 auto;
+  margin: auto auto 0;
+
+  @media screen and (max-width: 768px) {
+    width: 250px;
+    height: 40px;
+    font-size: 16px;
+    line-height: 18px;
+  }
 
   &:hover:not(:disabled) {
     background: var(--button-bg-hover-secondary-color);

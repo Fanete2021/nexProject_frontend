@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import styles from './ChatPanel.module.scss';
 import Dialogs from '../dialogs/Dialogs.tsx';
@@ -18,6 +18,9 @@ import { ChatTypes } from '../../model/types/chatTypes.ts';
 import { getChatIsActiveInfoPanel } from '../../model/selectors/getChatIsActiveInfoPanel.ts';
 import InfoChat from '../info-chat/InfoChat.tsx';
 import { getChatSelectedChat } from '../../model/selectors/getChatSelectedChat.ts';
+import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
+import { isPublicChat } from '@/shared/lib/utils/isPublicChat.ts';
+import { MOBILE_MAX_BREAKPOINT } from '@/shared/const/WindowBreakpoints.ts';
 
 export interface ChatProps {
     className?: string;
@@ -30,6 +33,7 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
   const user = useSelector(getUserData)!;
   const isActiveInfoPanel = useSelector(getChatIsActiveInfoPanel);
   const selectedChat = useSelector(getChatSelectedChat);
+  const windowWidth = useWindowWidth();
 
   useEffect(() => {
     ChatWebSocketService.connect(token, user.userId);
@@ -74,6 +78,7 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
           chatId: response.chatId,
           lastMessage: response.lastMessages[0],
           chatName: response.chatName,
+          chatType: isPublicChat(response) ? ChatTypes.PUBLIC : ChatTypes.PRIVATE,
         };
 
         dispatch(chatActions.addChat(newChat));
@@ -86,6 +91,17 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
       ChatWebSocketService.onNotificationsCallback = () => {};
     };
   }, [dispatch]);
+
+  if (windowWidth <= MOBILE_MAX_BREAKPOINT) {
+    return (
+      <div className={classNames(styles.ChatPanel, [className])}>
+        {selectedChat
+          ? <SelectedChat className={styles.selectedChat}/>
+          : <Dialogs className={styles.dialogs} />
+        }
+      </div>
+    );
+  }
 
   return (
     <div className={classNames(styles.ChatPanel, [className])}>

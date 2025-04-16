@@ -8,6 +8,7 @@ export interface ModalProps {
   isOpen?: boolean;
   onClose: () => void;
   children?: React.ReactNode;
+  hasOverlayBlackout?: boolean;
 }
 
 export const Modal: FC<ModalProps> = (props) => {
@@ -16,6 +17,7 @@ export const Modal: FC<ModalProps> = (props) => {
     isOpen = false,
     onClose,
     children,
+    hasOverlayBlackout = true
   } = props;
 
   const onKeyDown = useCallback((e: KeyboardEvent) => {
@@ -45,7 +47,12 @@ export const Modal: FC<ModalProps> = (props) => {
   return (
     <Portal>
       <div className={classNames(styles.Modal, [ className ], mods)}>
-        <div className={styles.overlay} onClick={onClose}>
+        <div
+          className={classNames(styles.overlay, [], {
+            [styles.blackout]: hasOverlayBlackout
+          })}
+          onClick={onClose}
+        >
           <div
             className={styles.content}
             onClick={onContentClick}

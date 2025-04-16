@@ -4,7 +4,7 @@ import { icons } from '@/shared/ui';
 export interface SidebarItemType {
   path: string;
   text: string;
-  icon: typeof icons;
+  icon: icons;
   applyIconStroke?: boolean;
   applyIconFill?: boolean;
 }
