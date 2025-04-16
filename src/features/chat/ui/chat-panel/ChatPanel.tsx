@@ -15,6 +15,12 @@ import { ChatNotification } from '../../model/types/chatNotifications.ts';
 import { fetchChatInfo } from '../../model/service/fetchChatInfo.ts';
 import { Chat } from '../../model/types/chat.ts';
 import { ChatTypes } from '../../model/types/chatTypes.ts';
+import { getChatIsActiveInfoPanel } from '../../model/selectors/getChatIsActiveInfoPanel.ts';
+import InfoChat from '../info-chat/InfoChat.tsx';
+import { getChatSelectedChat } from '../../model/selectors/getChatSelectedChat.ts';
+import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
+import { isPublicChat } from '@/shared/lib/utils/isPublicChat.ts';
+import { MOBILE_MAX_BREAKPOINT } from '@/shared/const/WindowBreakpoints.ts';
 
 export interface ChatProps {
     className?: string;
@@ -25,12 +31,29 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
   const dispatch = useAppDispatch();
   const token = useSelector(getAuthToken)!;
   const user = useSelector(getUserData)!;
+  const isActiveInfoPanel = useSelector(getChatIsActiveInfoPanel);
+  const selectedChat = useSelector(getChatSelectedChat);
+  const windowWidth = useWindowWidth();
+
+  useEffect(() => {
+    ChatWebSocketService.connect(token, user.userId);
+
+    ChatWebSocketService.onMessageCallback = (message: Message) => {
+      dispatch(chatActions.addMessage(message));
+    };
+    
+    return () => {
+      ChatWebSocketService.onMessageCallback = () => {};
+      ChatWebSocketService.disconnect();
+    };
+  }, [token]);
 
   useEffect(() => {
     const subscribeChats = async () => {
       try {
-        //TODO переделать на получение только айдишников
-        const response = await dispatch(fetchChats({ filterMode: ChatTypes.ALL })).unwrap();
+        const response = await dispatch(fetchChats(
+          { filterMode: ChatTypes.ALL, getLastMess: false, pageSize: 999999 } //Получение всех чатов у пользователя
+        )).unwrap();
         const { chats } = response;
 
         for (const chat of chats) {
@@ -42,11 +65,9 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
     };
 
     subscribeChats();
+  }, []);
 
-    ChatWebSocketService.onMessageCallback = (message: Message) => {
-      dispatch(chatActions.addMessage(message));
-    };
-
+  useEffect(() => {
     ChatWebSocketService.onNotificationsCallback = async (notification: ChatNotification) => {
       try {
         const response = await dispatch(fetchChatInfo({ chatId: notification.chatId })).unwrap();
@@ -57,6 +78,7 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
           chatId: response.chatId,
           lastMessage: response.lastMessages[0],
           chatName: response.chatName,
+          chatType: isPublicChat(response) ? ChatTypes.PUBLIC : ChatTypes.PRIVATE,
         };
 
         dispatch(chatActions.addChat(newChat));
@@ -64,24 +86,29 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
         console.log(error);
       }
     };
-    
-    return () => {
-      ChatWebSocketService.onMessageCallback = () => {};
-    };
-  }, []);
-
-  useEffect(() => {
-    ChatWebSocketService.connect(token, user.userId);
 
     return () => {
-      ChatWebSocketService.disconnect();
+      ChatWebSocketService.onNotificationsCallback = () => {};
     };
-  }, []);
+  }, [dispatch]);
+
+  if (windowWidth <= MOBILE_MAX_BREAKPOINT) {
+    return (
+      <div className={classNames(styles.ChatPanel, [className])}>
+        {selectedChat
+          ? <SelectedChat className={styles.selectedChat}/>
+          : <Dialogs className={styles.dialogs} />
+        }
+      </div>
+    );
+  }
 
   return (
     <div className={classNames(styles.ChatPanel, [className])}>
       <Dialogs className={styles.dialogs} />
       <SelectedChat className={styles.selectedChat}/>
+
+      {isActiveInfoPanel && selectedChat && <InfoChat className={styles.infoChat} />}
     </div>
   );
 };

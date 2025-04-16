@@ -1,0 +1,32 @@
+.searchWrapper {
+  height: 30px;
+  padding-left: 10px;
+  border-radius: 10px !important;
+
+  @media screen and (max-width: 768px) {
+    height: 40px;
+  }
+}
+
+.searchInput {
+  margin-left: -3px;
+  padding: 0;
+  padding-right: 10px;
+
+  @media screen and (max-width: 768px) {
+    font-size: 18px !important;
+  }
+
+  &::placeholder {
+    color: var(--text-color) !important;
+  }
+}
+
+.iconClearSearch {
+  cursor: pointer;
+
+  @media screen and (max-width: 768px) {
+    width: 14px;
+    height: 14px;
+  }
+}

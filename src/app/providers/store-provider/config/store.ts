@@ -5,7 +5,6 @@ import { NavigateOptions, To } from 'react-router-dom';
 import { configureApi } from '@/shared/api/api.ts';
 import { authReducer } from '@/features/auth';
 import { userReducer } from '@/entities/user';
-import { tokenMiddleware } from './middleware';
 import { chatReducer } from '@/features/chat';
 
 export function createReduxStore(
@@ -33,7 +32,7 @@ export function createReduxStore(
       thunk: {
         extraArgument: extraArg
       }
-    }).concat(tokenMiddleware)
+    })
   });
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment

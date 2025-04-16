@@ -45,29 +45,27 @@ class ChatWebSocketService {
 
   disconnect() {
     this.client?.deactivate().then(() => {
-      this.client = null;
       this.isConnected = false;
     });
   }
 
-  subscribe(chatId: string) {
-    if (this.isConnected && this.client) {
+  public subscribe(chatId: string) {
+    if (!this.chatSubscriptionsQueue.includes(chatId)) {
+      this.chatSubscriptionsQueue.push(chatId);
+    }
+
+    if (this.isConnected) {
       this.client?.subscribe(`/topic/${chatId}`, (message) => {
         if (this.onMessageCallback) {
           this.onMessageCallback(JSON.parse(message.body), chatId);
         }
       });
-    } else {
-      this.chatSubscriptionsQueue.push(chatId);
     }
   }
 
   private processSubscriptionQueue() {
-    while (this.chatSubscriptionsQueue.length) {
-      const chatId = this.chatSubscriptionsQueue.shift();
-      if (chatId) {
-        this.subscribe(chatId);
-      }
+    for (const chatId of this.chatSubscriptionsQueue) {
+      this.subscribe(chatId);
     }
   }
 

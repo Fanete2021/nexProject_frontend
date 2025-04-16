@@ -1,44 +1,222 @@
 .CreatorGroup {
-  padding: 20px;
-  background-color: #f0f8ff;
-  border-radius: 10px;
-}
-
-.groupNameInput {
-  width: 100%;
   padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-}
-
-.contactsList {
+  background-color: var(--modal-bg-color);
+  border-radius: 15px;
+  width: 350px;
+  min-height: 485px;
+  max-height: 550px;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-height: 300px;
-  overflow-y: auto;
-}
+  position: relative;
 
-.contactItem {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-
-  &.selected {
-    background-color: #d3f9d8;
+  @media screen and (max-width: 768px) {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    max-height: none;
   }
 }
 
-.saveButton {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
+.iconClose {
+  position: absolute;
+  width: 12px;
+  height: 12px;
   cursor: pointer;
+  right: 15px;
+  top: 15px;
+
+  @media screen and (max-width: 768px) {
+    width: 15px;
+    height: 15px;
+    left: 15px;
+  }
+}
+
+.title {
+  font-size: 20px;
+  line-height: 26px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+
+  @media screen and (max-width: 768px) {
+    font-size: 22px;
+    line-height: 28px;
+  }
+
+  .iconGroup {
+    width: 15px;
+    height: 15px;
+
+    @media screen and (max-width: 768px) {
+      width: 17px;
+      height: 17px;
+    }
+  }
+}
+
+.groupNameWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  .iconName {
+    @media screen and (max-width: 768px) {
+      width: 17px;
+      height: 17px;
+    }
+  }
+
+  .inputWrapper {
+    border-radius: 5px !important;
+    height: 30px;
+
+    @media screen and (max-width: 768px) {
+      height: 40px;
+    }
+  }
+
+  .input {
+    font-size: 14px;
+    line-height: 18px;
+
+    @media screen and (max-width: 768px) {
+      font-size: 16px;
+      line-height: 21px;
+    }
+  }
+}
+
+.contacts, .selectedContacts {
+  border-radius: 5px;
+  border: 1px solid var(--line-color);
+}
+
+.contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 5px;
+  height: 270px;
+
+  @media screen and (max-width: 768px) {
+    flex: 1;
+  }
+
+  .contactsList {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    max-height: 300px;
+  }
+
+  .contactItem {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    .name {
+      font-size: 14px;
+      line-height: 18px;
+
+      @media screen and (max-width: 768px) {
+        font-size: 16px;
+        line-height: 21px;
+      }
+    }
+  }
+
+  .checkbox {
+    margin-left: auto;
+  }
+}
+
+.selectedContacts {
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 5px;
+  height: 80px;
+
+  @media screen and (max-width: 768px) {
+    height: 120px;
+  }
+
+  .title {
+    font-size: 14px;
+    line-height: 18px;
+
+    @media screen and (max-width: 768px) {
+      font-size: 16px;
+      line-height: 21px;
+    }
+  }
+
+  .items {
+    display: flex;
+    flex-wrap: wrap;
+    user-select: none;
+    gap: 5px;
+
+    .item {
+      display: flex;
+      gap: 3px;
+      align-items: center;
+      justify-content: center;
+      padding-right: 5px;
+      background: var(--chat-selected-bg-color);
+      border-radius: 10px;
+      cursor: pointer;
+      height: fit-content;
+
+      @media screen and (max-width: 768px) {
+        border-radius: 15px;
+        padding-right: 10px;
+      }
+    }
+
+    .name {
+      font-size: 12px;
+      line-height: 16px;
+
+      @media screen and (max-width: 768px) {
+        font-size: 14px;
+        line-height: 18px;
+      }
+    }
+  }
+}
+
+//TODO вынести в компонент
+.saveButton {
+  width: 150px;
+  background: var(--button-bg-secondary-color);
+  cursor: pointer;
+  height: 30px;
+  color: var(--button-text-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 10px;
+  font-weight: bold;
+  margin: auto auto 0;
+
+  @media screen and (max-width: 768px) {
+    width: 250px;
+    height: 40px;
+    font-size: 16px;
+    line-height: 18px;
+  }
+
+  &:hover:not(:disabled) {
+    background: var(--button-bg-hover-secondary-color);
+  }
+
+  &:disabled {
+    color: var(--button-text-disabled-color);
+  }
 }

@@ -4,8 +4,7 @@ import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { useSelector } from 'react-redux';
 import { getChatDialogs } from '../../model/selectors/getChatDialogs.ts';
 import DialogItem from './ui/dialog-item/DialogItem.tsx';
-import { CustomInput, icons, SvgIcon } from '@/shared/ui';
-import { InputAdornment } from '@mui/material';
+import {icons, Scrollbar, Search, SvgIcon} from '@/shared/ui';
 import DialogItemSkeleton from './ui/dialog-item/DialogItemSkeleton.tsx';
 import { getChatIsLoadingDialogs } from '../../model/selectors/getChatIsLoadingDialogs.ts';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
@@ -17,6 +16,9 @@ import { getChatSelectedChat } from '../../model/selectors/getChatSelectedChat.t
 import { useDebounce } from '@/shared/lib/hooks/useDebounce.ts';
 import CreatorGroup from './ui/creator-group/CreatorGroup.tsx';
 import { chatActions } from '../../model/slice/chatSlice.ts';
+import { Scrollbars } from 'react-custom-scrollbars-2';
+import { useTranslation } from 'react-i18next';
+import {useSidebar} from "@/shared/lib/hooks/useSidebar.ts";
 
 export interface ChatListProps {
   className?: string;
@@ -24,22 +26,25 @@ export interface ChatListProps {
 
 const filters = [
   {
-    name: 'All',
+    name: 'Все',
     value: ChatTypes.ALL,
   },
   {
-    name: 'Contacts',
+    name: 'Контакты',
     value: ChatTypes.PRIVATE,
   },
   {
-    name: 'Group chats',
+    name: 'Группы',
     value: ChatTypes.PUBLIC
   }
 ];
 
+const COUNT_DIALOGS = 15;
+
 const Dialogs: React.FC<ChatListProps> = (props) => {
   const { className } = props;
     
+  const { t } = useTranslation();
   const [searchedValue, setSearchedValue] = useState<string>('');
   const [activeFilter, setActiveFilter] = useState<ChatTypes>(ChatTypes.ALL);
   const underlineRef = useRef<HTMLDivElement>(null);
@@ -50,6 +55,9 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
   const [isOpenCreatorGroup, setIsOpenCreatorGroup] = useState<boolean>(false);
   const debouncedSearchValue = useDebounce(searchedValue, 1000);
   const [isLoadingSearch, setIsLoadingSearch] = useState<boolean>(false);
+  const scrollbarRef = useRef<Scrollbars>(null);
+  const [currentPageDialogs, setCurrentPageDialogs] = useState<number>(1);
+  const [allPagesDialogs, setAllPagesDialogs] = useState<number>(1);
 
   const dialogs = useSelector(getChatDialogs);
   const isLoadingDialogs = useSelector(getChatIsLoadingDialogs);
@@ -57,12 +65,15 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
   const closeCreatorGroupHandler = useCallback(() => setIsOpenCreatorGroup(false), []);
   const toggleCreatorGroupHandler = useCallback(() => setIsOpenCreatorGroup(prev => !prev), []);
 
+  const { openSidebar } = useSidebar();
+
   const clearSearch = useCallback(() => {
     setSearchedValue('');
     setSearchedContacts([]);
   }, []);
 
   const searchHandler = useCallback(async (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setSearchedContacts([]);
     setSearchedValue(e.target.value);
     setIsLoadingSearch(true);
   }, []);
@@ -110,70 +121,78 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
     }
   }, [filterRefs]);
 
-  useEffect(() => {
-    const loadChats = async () => {
-      try {
-        const response = await dispatch(fetchChats({ filterMode: activeFilter })).unwrap();
+  const loadChats = async (shouldRewriteChats: boolean) => {
+    try {
+      const newCurrentPage = currentPageDialogs + 1;
 
+      const response = await dispatch(fetchChats({
+        filterMode: activeFilter,
+        pageSize: COUNT_DIALOGS,
+        pageNumber: shouldRewriteChats ? 1 : newCurrentPage
+      })).unwrap();
+      setAllPagesDialogs(response.pageCount);
+
+      if (shouldRewriteChats) {
         dispatch(chatActions.setDialogs(response.chats));
-      } catch (error) {
-        console.log(error);
+        setCurrentPageDialogs(1);
+      } else {
+        dispatch(chatActions.addDialogs(response.chats));
+        setCurrentPageDialogs(newCurrentPage);
       }
-    };
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-    loadChats();
+  useEffect(() => {
+    loadChats(true);
   }, [activeFilter]);
 
   useEffect(() => {
     clearSearch();
   }, [selectedChat]);
 
+  const scrollHandler = () => {
+    if (!scrollbarRef.current) return;
+
+    const scrollTop = scrollbarRef.current.getScrollTop();
+    const scrollHeight = scrollbarRef.current.getScrollHeight();
+    const clientHeight = scrollbarRef.current.getClientHeight();
+
+    if (scrollTop + clientHeight >= scrollHeight && currentPageDialogs < allPagesDialogs) {
+      loadChats(false);
+    }
+  };
+
   return (
     <div className={classNames(styles.Dialogs, [className])}>
       <div className={styles.header}>
-        <div className={styles.title}>Chats</div>
+        <div className={styles.title}>{t('Чаты') as string}</div>
 
-        <CustomInput
-          startAdornment={
-            <InputAdornment position="start">
-              <SvgIcon
-                iconName={icons.SEARCH}
-                applyHover={false}
-                important={Boolean(searchedValue)}
-                applyStroke
-                applyFill={false}
-              />
-            </InputAdornment>
-          }
-          endAdornment={searchedValue &&
-            <InputAdornment position="end">
-              <SvgIcon
-                iconName={icons.CROSS}
-                applyHover={false}
-                important={Boolean(searchedValue)}
-                applyStroke
-                className={styles.clearSearch}
-                onClick={clearSearch}
-              />
-            </InputAdornment>
-          }
-          placeholder="Search"
-          fullWidth
-          classes={{
-            root: styles.searchWrapper,
-            input: styles.searchInput
-          }}
-          value={searchedValue}
-          onChange={searchHandler}
+        <SvgIcon
+          iconName={icons.MENU}
+          className={styles.iconSidebar}
+          onClick={openSidebar}
+          important
+        />
+
+        <div className={styles.searchWrapper}>
+          <Search
+            searchHandler={searchHandler}
+            value={searchedValue}
+            clearSearch={clearSearch}
+          />
+        </div>
+
+        <SvgIcon
+          className={styles.iconCreateGroup}
+          onClick={toggleCreatorGroupHandler}
+          iconName={icons.CREATE_GROUP}
+          important
         />
       </div>
 
-      <div
-        className={styles.content}
-        style={{
-          overflow: (isLoadingDialogs || isLoadingSearch) ? 'hidden' : 'auto'
-        }}
-      >
+      <div className={styles.content}>
         <div 
           className={styles.filter}
           style={{
@@ -194,35 +213,41 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
               ref={(el) => (filterRefs.current[index] = el)}
               onClick={(event) => handleFilterClick(filter.value, event)}
             >
-              {filter.name}
+              {t(filter.name) as string}
             </div>
           ))}
         </div>
 
         <div className={styles.dialogs}>
-          {(isLoadingSearch || isLoadingDialogs) &&
-            <>
-              {Array.from({ length: 15 }).map((_, index) => (
-                <DialogItemSkeleton key={index} className={styles.dialogSkeleton} />
-              ))}
-            </>
-          }
+          <Scrollbar
+            autoHide
+            onScroll={scrollHandler}
+            ref={scrollbarRef}
+          >
+            {((isLoadingSearch && searchedValue) || isLoadingDialogs) &&
+              <>
+                {Array.from({ length: 15 }).map((_, index) => (
+                  <DialogItemSkeleton key={index} className={styles.dialogSkeleton} />
+                ))}
+              </>
+            }
 
-          {!searchedValue && !isLoadingDialogs &&
-            <>
-              {dialogs.map(dialog => (
-                <DialogItem key={dialog.chatId} chatData={dialog} className={styles.dialog}/>
-              ))}
-            </>
-          }
+            {!searchedValue && !isLoadingDialogs &&
+              <>
+                {dialogs.map(dialog => (
+                  <DialogItem key={dialog.chatId} chatData={dialog} className={styles.dialog}/>
+                ))}
+              </>
+            }
 
-          {searchedValue &&
-            <>
-              {searchedContacts.map(contact => (
-                <DialogItem key={contact.userId} contactData={contact} className={styles.dialog} />
-              ))}
-            </>
-          }
+            {searchedValue &&
+              <>
+                {searchedContacts.map(contact => (
+                  <DialogItem key={contact.userId} contactData={contact} className={styles.dialog} />
+                ))}
+              </>
+            }
+          </Scrollbar>
         </div>
       </div>
 
@@ -230,7 +255,7 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
         className={styles.newChat}
         onClick={toggleCreatorGroupHandler}
       >
-        New chat
+        {t('Новый чат') as string}
       </button>
 
       <CreatorGroup onClose={closeCreatorGroupHandler} isOpen={isOpenCreatorGroup} />

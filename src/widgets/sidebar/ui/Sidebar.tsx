@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import styles from './Sidebar.module.scss';
 import { icons, Logo, SvgIcon } from '@/shared/ui';
 import { SidebarItemsList } from '../model/items.ts';
@@ -8,6 +8,8 @@ import { useTranslation } from 'react-i18next';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { logout } from '@/features/auth';
+import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
+import { TABLET_MAX_BREAKPOINT } from '@/shared/const/WindowBreakpoints.ts';
 
 export interface SidebarProps {
     className?: string;
@@ -21,9 +23,16 @@ const Sidebar: React.FC<SidebarProps> = (props: SidebarProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const windowWidth = useWindowWidth();
+
+  useEffect(() => {
+    if (windowWidth <= TABLET_MAX_BREAKPOINT) {
+      setExpanded(true);
+    }
+  }, [windowWidth]);
 
   const mods: Record<string, boolean> = {
-    [styles.expanded]: expanded,
+    [styles.expanded]: expanded
   };
 
   const links = useMemo(() => SidebarItemsList.map((item) => (
@@ -51,9 +60,9 @@ const Sidebar: React.FC<SidebarProps> = (props: SidebarProps) => {
       />
 
       {expanded &&
-                <div className={styles.text}>
-                  {t(item.text)}
-                </div>
+        <div className={styles.text}>
+          {t(item.text) as string}
+        </div>
       }
     </Link>
   )), [expanded, t, location]);
@@ -88,9 +97,9 @@ const Sidebar: React.FC<SidebarProps> = (props: SidebarProps) => {
           />
 
           {expanded &&
-                        <div className={styles.text}>
-                          {t('Настройки')}
-                        </div>
+            <div className={styles.text}>
+              {t('Настройки') as string}
+            </div>
           }
         </div>
 
@@ -107,9 +116,9 @@ const Sidebar: React.FC<SidebarProps> = (props: SidebarProps) => {
           />
 
           {expanded &&
-                        <div className={styles.text}>
-                          {t('Изменения')}
-                        </div>
+            <div className={styles.text}>
+              {t('Изменения') as string}
+            </div>
           }
         </Link>
 
@@ -120,9 +129,9 @@ const Sidebar: React.FC<SidebarProps> = (props: SidebarProps) => {
           />
 
           {expanded &&
-                        <div className={styles.text}>
-                          {t('Выйти')}
-                        </div>
+            <div className={styles.text}>
+              {t('Выйти') as string}
+            </div>
           }
         </button>
       </div>

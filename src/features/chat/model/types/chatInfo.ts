@@ -1,5 +1,6 @@
 import { Message } from './message.ts';
 import { Member } from './member.ts';
+import { Topic } from './topic.ts';
 
 export interface ChatInfo {
   chatName: string;
@@ -7,7 +8,6 @@ export interface ChatInfo {
   members: Member[];
   ownerId?: string;
   chatId: string;
-
-  //TODO заполнить тип для топиков
-  // topics: [];
+  messageCount: number;
+  topics: Topic[];
 }

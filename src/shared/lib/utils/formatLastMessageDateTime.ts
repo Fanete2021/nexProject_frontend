@@ -1,9 +1,7 @@
-import { format, isToday, isYesterday, subDays, isThisWeek } from 'date-fns';
+import { format, isToday, isYesterday, isThisWeek } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
 export const formatLastMessageDateTime = (date: Date): string => {
-  const now = new Date();
-
   if (isToday(date)) {
     return format(date, 'HH:mm', { locale: ru });
   }

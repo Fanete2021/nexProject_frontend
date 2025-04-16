@@ -3,7 +3,6 @@
   align-items: center;
   position: relative;
   cursor: pointer;
-  font-size: 16px;
   user-select: none;
 }
 
@@ -42,6 +41,10 @@
 
   .check {
     display: none;
+  }
+
+  &.circle {
+    border-radius: 100%;
   }
 }
 

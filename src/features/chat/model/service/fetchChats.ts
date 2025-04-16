@@ -5,10 +5,14 @@ import { ChatTypes } from '../../model/types/chatTypes.ts';
 
 interface FetchChatsResponse {
   chats: Chat[];
+  pageCount: number;
 }
 
 interface FetchChatsProps {
-    filterMode: ChatTypes;
+  filterMode: ChatTypes;
+  getLastMess?: boolean;
+  pageSize?: number;
+  pageNumber?: number;
 }
 
 export const fetchChats = createAsyncThunk<FetchChatsResponse, FetchChatsProps, ThunkConfig<string>> (
@@ -19,13 +23,15 @@ export const fetchChats = createAsyncThunk<FetchChatsResponse, FetchChatsProps, 
       rejectWithValue,
     } = thunkAPI;
 
+    const { filterMode, getLastMess = true, pageSize = 15, pageNumber = 1 } = fetchChatsData;
+
     try {
       const response = await extra.api.get('/getChats', {
         params: {
-          pageNumber: 1,
-          pageSize: 15,
-          filterMode: fetchChatsData.filterMode,
-          getLastMess: true
+          pageNumber: pageNumber,
+          pageSize: pageSize,
+          filterMode,
+          getLastMess
         }
       });
 

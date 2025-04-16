@@ -2,14 +2,26 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin: 5px;
-  overflow-y: auto;
 }
 
 .messageGroup {
   display: flex;
   gap: 12px;
   position: relative;
+
+  @media screen and (max-width: 768px) {
+    margin: 0 10px;
+  }
+
+  &.myMessageGroup {
+    @media screen and (max-width: 768px) {
+      margin-left: auto;
+
+      .messages {
+        align-items: end;
+      }
+    }
+  }
 
   .messages {
     display: flex;
@@ -19,8 +31,13 @@
 
   .avatar {
     position: sticky;
-    bottom: 0;
+    bottom: 0.5px;
     margin-top: auto;
+    flex-shrink: 0;
+
+    @media screen and (max-width: 768px) {
+      display: none;
+    }
   }
 }
 
@@ -38,10 +55,12 @@
   max-width: 400px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 7.5px;
 
   .sender {
     font-weight: bold;
+    font-size: 14px;
+    line-height: 18px;
   }
 
   .textWrapper {
@@ -71,37 +90,70 @@
   background: var(--message-my-bg-color);
 }
 
-.topMessage {
-  border-radius: 15px 15px 15px 5px;
-}
-
-.middleMessage {
-  border-radius: 5px 15px 15px 5px;
-}
-
 .lastMessage {
-  border-radius: 5px 15px 15px 0;
-  position: relative;
-
   &::after {
     content: '';
     position: absolute;
-    left: -11px;
     bottom: 0;
     width: 11px;
     height: 15px;
-    background-color: var(--message-bg-color);
     clip-path: polygon(0 100%, 100% 0, 100% 100%);
+    background-color: var(--message-bg-color);
   }
 }
 
-.lastMessage.myMessage {
-  &::after {
-    background-color: var(--message-my-bg-color);
+.messageGroup {
+  .topMessage {
+    border-radius: 15px 15px 15px 5px;
+  }
+
+  .middleMessage {
+    border-radius: 5px 15px 15px 5px;
+  }
+
+  .lastMessage {
+    border-radius: 5px 15px 15px 0;
+    position: relative;
+
+    &::after {
+      left: -10px;
+    }
+  }
+
+  .lastMessage.myMessage {
+    &::after {
+      background-color: var(--message-my-bg-color);
+    }
+  }
+
+  .topMessage.lastMessage {
+    border-radius: 15px 15px 15px 0;
   }
 }
 
-.topMessage.lastMessage {
-  border-radius: 15px 15px 15px 0;
-}
+.myMessageGroup {
+  @media screen and (max-width: 768px) {
+    .topMessage {
+      border-radius: 15px 15px 5px 15px;
+    }
 
+    .middleMessage {
+      border-radius: 15px 5px 5px 15px;
+    }
+
+    .lastMessage {
+      border-radius: 15px 5px 0 15px;
+      position: relative;
+
+      &::after {
+        left: auto;
+        right: -10px;
+        transform: scaleX(-1);
+      }
+    }
+
+    .topMessage.lastMessage {
+      border-radius: 15px 15px 0 15px;
+    }
+  }
+}

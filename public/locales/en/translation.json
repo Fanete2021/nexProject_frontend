@@ -59,5 +59,16 @@
   "Username already in use.": "Username already in use",
   "too_many_requests": "Too many password change requests. Try again after {{minutes}} minutes.",
   "user_not_found": "User with email '{{email}}' does not exist.",
-  "New and old passwords match!": "New and old passwords match"
+  "New and old passwords match!": "New and old passwords match",
+  "Поиск": "Search",
+  "Все": "All",
+  "Контакты": "Contacts",
+  "Группы": "Group Chats",
+  "Новый чат": "New chat",
+  "Информация о чате": "Chat Info",
+  "Напишите сообщение...": "Write a message...",
+  "Создать группу": "Create group",
+  "Имя группы": "Group name",
+  "Выбранные люди:": "Selected people:",
+  "Сохранить": "Save"
 }

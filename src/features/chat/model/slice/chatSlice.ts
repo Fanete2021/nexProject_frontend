@@ -3,6 +3,7 @@ import { Chat, ChatSchema } from '../types/chat.ts';
 import { ChatInfo } from '../types/chatInfo.ts';
 import { fetchChats } from '../service/fetchChats.ts';
 import { fetchChatInfo } from '../service/fetchChatInfo.ts';
+import { fetchMessages } from '../service/fetchMessages.ts';
 import { Message } from '../types/message.ts';
 
 const initialState: ChatSchema = {
@@ -10,6 +11,8 @@ const initialState: ChatSchema = {
   isLoadingDialogs: false,
   selectedChat: undefined,
   isLoadingSelectedChat: false,
+  isActiveInfoPanel: false,
+  isLoadingMessages: false,
 };
 
 export const chatSlice = createSlice({
@@ -19,7 +22,10 @@ export const chatSlice = createSlice({
     setDialogs: (state, action: PayloadAction<Chat[]>) => {
       state.dialogs = action.payload;
     },
-    setSelectedChat: (state, action: PayloadAction<ChatInfo>) => {
+    addDialogs: (state, action: PayloadAction<Chat[]>) => {
+      state.dialogs.push(...action.payload);
+    },
+    setSelectedChat: (state, action: PayloadAction<ChatInfo | undefined>) => {
       state.selectedChat = action.payload;
     },
     addMessage: (state, action: PayloadAction<Message>) => {
@@ -40,6 +46,9 @@ export const chatSlice = createSlice({
     },
     addChat: (state, action: PayloadAction<Chat>) => {
       state.dialogs.unshift(action.payload);
+    },
+    setIsActiveInfoPanel: (state, action: PayloadAction<boolean>) => {
+      state.isActiveInfoPanel = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -61,6 +70,16 @@ export const chatSlice = createSlice({
       })
       .addCase(fetchChatInfo.rejected, (state: ChatSchema) => {
         state.isLoadingSelectedChat = false;
+      })
+      .addCase(fetchMessages.pending, (state: ChatSchema) => {
+        state.isLoadingMessages = true;
+      })
+      .addCase(fetchMessages.fulfilled, (state: ChatSchema, action) => {
+        state.selectedChat?.lastMessages.push(...action.payload.messages);
+        state.isLoadingMessages = false;
+      })
+      .addCase(fetchMessages.rejected, (state: ChatSchema) => {
+        state.isLoadingMessages = false;
       });
   }
 });

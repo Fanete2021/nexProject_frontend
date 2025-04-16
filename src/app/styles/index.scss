@@ -6,7 +6,6 @@
 @forward "./common/form";
 @forward "./common/pages";
 
-//TODO сделать скролл как на макетах
 * {
   font-family: 'PTSans', sans-serif;
   scrollbar-width: thin;
@@ -22,12 +21,12 @@
 }
 
 *::-webkit-scrollbar-thumb {
-  background: var(--scroll-active-color); /* Цвет ползунка */
+  background: var(--scroll-active-color);
   border-radius: 5px;
   border: 2px solid var(--scroll-bg-color);
 }
 
-  .app {
+.app {
   width: 100%;
   min-height: 100vh;
   background: var(--bg-color);

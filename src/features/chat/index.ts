@@ -14,6 +14,10 @@ import { searchContacts } from './model/service/searchContacts.ts';
 import { ChatTypes } from './model/types/chatTypes.ts';
 import { fetchMyContacts } from './model/service/fetchMyContacts.ts';
 import { createGroup } from './model/service/createGroup.ts';
+import { getChatIsActiveInfoPanel } from './model/selectors/getChatIsActiveInfoPanel.ts';
+import { fetchInterlocutors } from './model/service/fetchInterlocutors.ts';
+import { fetchMessages } from './model/service/fetchMessages.ts';
+import { getChatIsLoadingMessages } from './model/selectors/getChatIsLoadingMessages.ts';
 
 export {
   ChatPanelAsync as ChatPanel,
@@ -24,13 +28,19 @@ export {
   getChatDialogs,
   getChatIsLoadingDialogs,
   getChatSelectedChat,
+  getChatIsActiveInfoPanel,
+  getChatIsLoadingMessages,
 
   fetchChats,
   fetchChatInfo,
   ChatWebSocketService,
   searchContacts,
   fetchMyContacts,
-  createGroup
+  createGroup,
+  fetchInterlocutors,
+  fetchMessages,
+
+  ChatTypes
 };
 
 export type {
@@ -38,6 +48,5 @@ export type {
   ChatSchema,
   ChatInfo,
   Message,
-  NewMessage,
-  ChatTypes
+  NewMessage
 };

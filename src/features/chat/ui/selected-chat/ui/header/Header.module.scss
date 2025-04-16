@@ -3,6 +3,33 @@
   display: flex;
   padding: 10px;
   align-items: center;
+  gap: 10px;
+
+  @media screen and (max-width: 1024px) {
+    height: 60px;
+  }
+
+  @media screen and (max-width: 768px) {
+    padding-left: 15px;
+    gap: 15px;
+  }
+}
+
+.iconBack {
+  display: none;
+
+  @media screen and (max-width: 768px) {
+    display: block;
+  }
+}
+
+.chatInfo {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  flex-shrink: 0;
 }
 
 .info {
@@ -13,14 +40,69 @@
   flex-direction: column;
   gap: 2px;
 
+  @media screen and (max-width: 768px) {
+    margin-left: 5px;
+  }
+
   .name {
     font-size: 16px;
-    line-height: 21px;
+    line-height: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-align: start;
+    word-break: break-all;
+
+    @media screen and (max-width: 768px) {
+      font-size: 14px;
+    }
+
+    .iconPublic {
+      width: 15px;
+      height: 15px;
+
+      @media screen and (max-width: 768px) {
+        width: 12px;
+        height: 12px;
+      }
+    }
   }
 
   .online {
     font-size: 14px;
     line-height: 18px;
     color: var(--text-secondary-color);
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-align: start;
+    word-break: break-all;
+
+    @media screen and (max-width: 768px) {
+      font-size: 12px;
+      line-height: 16px;
+    }
+  }
+}
+
+.actions {
+  margin-left: auto;
+  display: flex;
+  gap: 20px;
+
+  @media screen and (max-width: 768px) {
+    gap: 10px;
+  }
+
+  .icon, .iconInfoPanel {
+    cursor: pointer;
+  }
+
+  .iconInfoPanel {
+    @media screen and (max-width: 1024px) {
+      display: none;
+    }
   }
 }

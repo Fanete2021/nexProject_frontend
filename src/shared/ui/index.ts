@@ -7,6 +7,8 @@ import { ValidationList, ValidationListProps, ValidationListItem } from './valid
 import { Avatar, AvatarProps } from './avatar';
 import { Portal, PortalProps } from './portal';
 import { Modal, ModalProps } from './modal';
+import { Scrollbar, ScrollbarProps } from './scrollbar';
+import { Search, SearchProps } from './search';
 
 export type {
   SvgIconProps,
@@ -18,7 +20,9 @@ export type {
   ValidationListItem,
   AvatarProps,
   PortalProps,
-  ModalProps
+  ModalProps,
+  ScrollbarProps,
+  SearchProps
 };
 
 export {
@@ -31,5 +35,7 @@ export {
   ValidationList,
   Avatar,
   Portal,
-  Modal
+  Modal,
+  Scrollbar,
+  Search
 };

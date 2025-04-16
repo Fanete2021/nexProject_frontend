@@ -7,6 +7,8 @@ import { useEffect, useState } from 'react';
 import { fetchUserData } from '@/entities/user';
 import { Loader } from '@/shared/ui';
 import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
+import useRefreshTokenTimer from '@/shared/lib/hooks/useRefreshTokenTimer';
+import {SidebarProvider} from "@/app/providers/sidebar-provider";
 
 function RequireAuth({ children }: { children: JSX.Element }) {
   const location = useLocation();
@@ -14,6 +16,7 @@ function RequireAuth({ children }: { children: JSX.Element }) {
   const user = useSelector(getUserData);
   const [isAppReady, setIsAppReady] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  useRefreshTokenTimer();
 
   useEffect(() => {
     const initStore = async () => {
@@ -45,7 +48,11 @@ function RequireAuth({ children }: { children: JSX.Element }) {
     return <Navigate to={RoutePath.auth} state={{ from: location }} replace />;
   }
 
-  return children;
+  return (
+    <SidebarProvider>
+      {children}
+    </SidebarProvider>
+  );
 }
 
 export default RequireAuth;
