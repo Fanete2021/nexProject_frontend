@@ -187,7 +187,7 @@ const CreatorGroup: React.FC<CreatorGroupProps> = (props) => {
           onClick={() => createGroupHandler()}
           disabled={selectedContacts.length === 0 || groupName === ''}
         >
-          Сохранить
+          {t('Создать') as string}
         </button>
       </div>
     </Modal>
