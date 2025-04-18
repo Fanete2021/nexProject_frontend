@@ -39,7 +39,7 @@ const SvgIcon: React.FC<SvgIconProps> = memo((props) => {
       {Icon && (
         <Icon
           {...rest}
-          className={classNames('', [className], mods)}
+          className={classNames(styles.icon, [className], mods)}
         />
       )}
     </>

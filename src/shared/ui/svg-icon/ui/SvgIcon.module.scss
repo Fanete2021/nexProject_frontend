@@ -1,3 +1,9 @@
+.icon {
+  transform: translate3d(0,0,0);
+  -webkit-backface-visibility: hidden;
+  border: 1px solid yellow !important;
+}
+
 .applyFill {
   fill: var(--icon-color);
 }
