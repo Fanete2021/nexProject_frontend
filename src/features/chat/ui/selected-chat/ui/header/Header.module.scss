@@ -47,15 +47,19 @@
   .name {
     font-size: 16px;
     line-height: 1;
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-align: start;
-    word-break: break-all;
+    display: flex;
 
     @media screen and (max-width: 768px) {
       font-size: 14px;
+    }
+
+    span {
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      word-break: break-all;
+      text-align: start;
     }
 
     .iconPublic {

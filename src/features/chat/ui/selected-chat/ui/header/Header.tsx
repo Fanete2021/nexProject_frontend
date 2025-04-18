@@ -58,7 +58,9 @@ const Header: React.FC<HeaderProps> = (props) => {
               />
             }
 
-            {chatInfo.chatName}
+            <span>
+              {chatInfo.chatName}
+            </span>
           </div>
 
           <div className={styles.online}>
