@@ -1,6 +1,6 @@
 import useDynamicSvgImport from '@/shared/lib/hooks/useDynamicSvgImport.ts';
 import { icons } from '../model/icons.ts';
-import React, { memo } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import styles from './SvgIcon.module.scss';
 
@@ -24,6 +24,11 @@ const SvgIcon: React.FC<SvgIconProps> = memo((props) => {
     ...rest
   } = props;
   const { loading, Icon } = useDynamicSvgImport(iconName);
+  const [forceRender, setForceRender] = useState(false);
+  useEffect(() => {
+    const timer = setTimeout(() => setForceRender(true), 50);
+    return () => clearTimeout(timer);
+  }, []);
 
   const mods: Record<string, boolean> = {
     [styles.applyFill]: applyFill && !important,
@@ -37,10 +42,20 @@ const SvgIcon: React.FC<SvgIconProps> = memo((props) => {
   return (
     <>
       {Icon && (
-        <Icon
-          {...rest}
-          className={classNames('', [className], mods)}
-        />
+        <>
+          <Icon
+            {...rest}
+            className={classNames(styles.SvgIcon, [className], mods)}
+          />
+
+          {forceRender && (
+            <Icon
+              {...rest}
+              className={classNames(styles.SvgIcon, [className], mods)}
+              style={{ display: 'none' }}
+            />
+          )}
+        </>
       )}
     </>
   );
