@@ -21,7 +21,6 @@ export function useDynamicSvgImport(iconName: string) {
             strokeWidth={props.strokeWidth || '1'}
             fill={props.fill || 'none'}
             shapeRendering="geometricPrecision"
-            style={{ display: 'inline-block', ...props.style }}
           />
         );
 

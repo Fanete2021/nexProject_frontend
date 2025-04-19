@@ -24,11 +24,6 @@ const SvgIcon: React.FC<SvgIconProps> = memo((props) => {
     ...rest
   } = props;
   const { loading, Icon } = useDynamicSvgImport(iconName);
-  const [forceRender, setForceRender] = useState(false);
-  useEffect(() => {
-    const timer = setTimeout(() => setForceRender(true), 50);
-    return () => clearTimeout(timer);
-  }, []);
 
   const mods: Record<string, boolean> = {
     [styles.applyFill]: applyFill && !important,
@@ -47,14 +42,6 @@ const SvgIcon: React.FC<SvgIconProps> = memo((props) => {
             {...rest}
             className={classNames(styles.SvgIcon, [className], mods)}
           />
-
-          {forceRender && (
-            <Icon
-              {...rest}
-              className={classNames(styles.SvgIcon, [className], mods)}
-              style={{ display: 'none' }}
-            />
-          )}
         </>
       )}
     </>
