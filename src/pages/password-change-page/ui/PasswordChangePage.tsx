@@ -1,16 +1,19 @@
 import { ChangePasswordForm } from '@/features/change-password';
 import { useParams } from 'react-router-dom';
-import { GuestPageLayout } from '@/widgets/guest-page-layout';
+import { useTranslation } from 'react-i18next';
 
 const PasswordChangePage = () => {
   const { token } = useParams<{ token: string }>();
-
+  const { t } = useTranslation();
+  
   return (
-    <GuestPageLayout
-      title={'Смена пароля'}
-    >
+    <>
+      <div className='title'>
+        {t('Смена пароля') as string}
+      </div>
+      
       <ChangePasswordForm token={token || ''}/>
-    </GuestPageLayout>
+    </>
   );
 };
 

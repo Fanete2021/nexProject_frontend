@@ -4,13 +4,16 @@ import { Link } from 'react-router-dom';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
 import styles from './AuthPage.module.scss';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
-import { GuestPageLayout } from '@/widgets/guest-page-layout';
 
 const AuthPage = () => {
   const { t } = useTranslation();
 
   return (
-    <GuestPageLayout title={'Вход'}>
+    <>
+      <div className='title'>
+        {t('Вход') as string}
+      </div>
+
       <LoginForm />
 
       <Link 
@@ -19,7 +22,7 @@ const AuthPage = () => {
       >
         <>{t('Нет аккаунта?')}</>
       </Link>
-    </GuestPageLayout>
+    </>
   );
 };
 

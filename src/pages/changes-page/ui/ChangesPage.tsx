@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import data from '../model/data/posts.json';
 import styles from './ChangesPage.module.scss';
-import { AuthenticatedPageLayout } from '@/widgets/authenticated-page-layout';
 import { icons, SvgIcon } from '@/shared/ui';
 import { IPost } from '../model/types/post.ts';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
@@ -28,7 +27,7 @@ const ChangesPage = () => {
   const { openSidebar } = useSidebar();
 
   return (
-    <AuthenticatedPageLayout>
+    <>
       <div className={styles.header}>
         <SvgIcon
           iconName={icons.MENU}
@@ -73,7 +72,7 @@ const ChangesPage = () => {
           </div>
         ))}
       </div>
-    </AuthenticatedPageLayout>
+    </>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, {ReactNode, useState} from 'react';
 import styles from './AuthenticatedPageLayout.module.scss';
 import { Sidebar } from '@/widgets/sidebar';
 import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
@@ -19,10 +19,10 @@ const AuthenticatedPageLayout: React.FC<AuthenticatedPageLayoutProps> = (props) 
     <div className={styles.AuthenticatedPageLayout}>
       {windowWidth >= DESKTOP_MIN_BREAKPOINT
         ?
-        <Sidebar className={styles.sidebar}/>
+        <Sidebar className={styles.sidebar} />
         :
         <Modal isOpen={isSidebarOpen} onClose={closeSidebar} hasOverlayBlackout={false}>
-          <Sidebar className={styles.sidebar}/>
+          <Sidebar className={styles.sidebar} />
         </Modal>
       }
 
@@ -34,4 +34,3 @@ const AuthenticatedPageLayout: React.FC<AuthenticatedPageLayoutProps> = (props) 
 };
 
 export default AuthenticatedPageLayout;
-export { AuthenticatedPageLayout };

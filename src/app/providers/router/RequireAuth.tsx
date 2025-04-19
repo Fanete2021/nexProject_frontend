@@ -9,6 +9,7 @@ import { Loader } from '@/shared/ui';
 import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
 import useRefreshTokenTimer from '@/shared/lib/hooks/useRefreshTokenTimer';
 import {SidebarProvider} from "@/app/providers/sidebar-provider";
+import AuthenticatedPageLayout from "../../../widgets/authenticated-page-layout/ui/AuthenticatedPageLayout.tsx";
 
 function RequireAuth({ children }: { children: JSX.Element }) {
   const location = useLocation();
@@ -50,7 +51,9 @@ function RequireAuth({ children }: { children: JSX.Element }) {
 
   return (
     <SidebarProvider>
-      {children}
+      <AuthenticatedPageLayout>
+        {children}
+      </AuthenticatedPageLayout>
     </SidebarProvider>
   );
 }

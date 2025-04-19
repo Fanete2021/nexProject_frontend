@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import { routeConfig, AppRoutesProps } from '@/shared/config/routeConfig/routeConfig.tsx';
 import RequireAuth from '@/app/providers/router/RequireAuth.tsx';
 import { Loader } from '@/shared/ui';
+import GuestRoutes from '@/app/providers/router/GuestRoutes.tsx';
 
 const AppRouter = () => {
   const renderWithWrapper = useCallback((route: AppRoutesProps) => {
@@ -20,7 +21,7 @@ const AppRouter = () => {
         path={route.path}
         element={route.authOnly
           ? <RequireAuth>{children}</RequireAuth>
-          : element
+          : <GuestRoutes>{children}</GuestRoutes>
         }
       />
     );

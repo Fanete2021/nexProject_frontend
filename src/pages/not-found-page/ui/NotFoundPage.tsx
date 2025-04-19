@@ -1,5 +1,3 @@
-import React from 'react';
-import { GuestPageLayout } from '@/widgets/guest-page-layout';
 import styles from './NotFoundPage.module.scss';
 import { useTranslation } from 'react-i18next';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
@@ -14,10 +12,10 @@ const NotFoundPage = () => {
   const isAuth = useSelector(getAuthIsAuth);
 
   return (
-    <GuestPageLayout>
+    <>
       <div className={styles.wrapper}>
         <div className={styles.title}>
-          {t('Страница не найдена')}
+          {t('Страница не найдена') as string}
         </div>
 
         <SvgIcon
@@ -37,7 +35,7 @@ const NotFoundPage = () => {
           }
         </Link>
       </div>
-    </GuestPageLayout>
+    </>
   );
 };
 
