@@ -19,15 +19,15 @@ const Sidebar: React.FC<SidebarProps> = (props: SidebarProps) => {
   const { className } = props;
 
   const { t } = useTranslation();
-  const [ expanded, setExpanded ] = useState<boolean>(false);
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const windowWidth = useWindowWidth();
+  const [ expanded, setExpanded ] = useState<boolean>(windowWidth <= TABLET_MAX_BREAKPOINT);
 
-  useEffect(() => {
-    if (windowWidth <= TABLET_MAX_BREAKPOINT) {
-      setExpanded(true);
+  const onMouseLeaveHandler = useCallback(() => {
+    if (windowWidth > TABLET_MAX_BREAKPOINT) {
+      setExpanded(false);
     }
   }, [windowWidth]);
 
@@ -81,7 +81,7 @@ const Sidebar: React.FC<SidebarProps> = (props: SidebarProps) => {
     <div
       className={classNames(styles.Sidebar, [className], mods)}
       onMouseEnter={() => setExpanded(true)}
-      onMouseLeave={() => setExpanded(false)}
+      onMouseLeave={onMouseLeaveHandler}
     >
       <Logo className={styles.logo}/>
 
