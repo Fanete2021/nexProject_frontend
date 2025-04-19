@@ -1,3 +1,9 @@
+.SvgIcon {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-transform-style: preserve-3d;
+}
+
 .applyFill {
   fill: var(--icon-color);
 }
