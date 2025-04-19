@@ -1,4 +1,3 @@
-import { GuestPageLayout } from '@/widgets/guest-page-layout';
 import { developers } from '../model/developers.ts';
 import styles from './AboutDevelopersPage.module.scss';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +8,11 @@ const AboutDevelopersPage = () => {
   const { t } = useTranslation(Namespaces.ABOUT_DEVELOPERS);
 
   return (
-    <GuestPageLayout title={'Создатели платформы'}>
+    <>
+      <div className='title'>
+        {t('Создатели платформы') as string}
+      </div>
+
       <div className={styles.developers}>
         {developers.map(developer => (
           <div key={developer.name} className={styles.developer}>
@@ -63,7 +66,7 @@ const AboutDevelopersPage = () => {
           </div>
         ))}
       </div>
-    </GuestPageLayout>
+    </>
   );
 };
 

@@ -7,10 +7,15 @@
   align-items: center;
   border-right: 1px solid var(--line-color);
   transition: width 0.3s ease;
-}
+  overflow: hidden;
 
-.expanded {
-  width: 160px;
+  &.expanded {
+    width: 160px;
+
+    .text {
+      opacity: 1;
+    }
+  }
 }
 
 .logo {
@@ -57,6 +62,7 @@
     width: 95px;
     line-height: 18px;
     font-size: 14px;
+    opacity: 0;
     transition: color 0.3s ease;
   }
 

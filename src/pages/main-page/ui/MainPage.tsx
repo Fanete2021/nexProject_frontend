@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { AuthenticatedPageLayout } from '@/widgets/authenticated-page-layout';
 import { ThemeSwitcher } from '@/widgets/theme-switcher';
 import { LanguageSwitcher } from '@/widgets/language-switcher';
 import { icons, SvgIcon } from '@/shared/ui';
@@ -10,7 +9,7 @@ const MainPage = () => {
   const { openSidebar } = useSidebar();
 
   return (
-    <AuthenticatedPageLayout>
+    <>
       <ThemeSwitcher />
       <LanguageSwitcher />
 
@@ -18,7 +17,7 @@ const MainPage = () => {
         iconName={icons.MENU}
         onClick={openSidebar}
       />
-    </AuthenticatedPageLayout>
+    </>
   );
 };
 

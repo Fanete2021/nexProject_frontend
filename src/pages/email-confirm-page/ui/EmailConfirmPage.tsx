@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { EmailConfirmForm } from '@/features/confirm-email';
-import { GuestPageLayout } from '@/widgets/guest-page-layout';
 import { useCallback, useEffect } from 'react';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { userActions } from '@/entities/user';
@@ -29,11 +28,13 @@ const EmailConfirmPage = () => {
   }, [user]);
 
   return (
-    <GuestPageLayout
-      title={'Пожалуйста, проверьте вашу электронную почту'}
-    >
+    <>
+      <div className='title'>
+        {t('Пожалуйста, проверьте вашу электронную почту') as string}
+      </div>
+
       <div className={styles.subtitle}>
-        {t('Мы отправили код на')} <strong>{user?.email}</strong>
+        {t('Мы отправили код на') as string} <strong>{user?.email}</strong>
       </div>
 
       <EmailConfirmForm />
@@ -44,7 +45,7 @@ const EmailConfirmPage = () => {
       >
         <>{t('Вернуться назад')}</>
       </button>
-    </GuestPageLayout>
+    </>
   );
 };
 

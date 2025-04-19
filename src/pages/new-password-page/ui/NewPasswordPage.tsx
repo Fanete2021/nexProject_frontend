@@ -4,15 +4,16 @@ import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
 import styles from './NewPasswordPage.module.scss';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { EmailForm } from '@/features/change-password';
-import { GuestPageLayout } from '@/widgets/guest-page-layout';
 
 const NewPasswordPage = () => {
   const { t } = useTranslation();
 
   return (
-    <GuestPageLayout
-      title={'Укажите почту'}
-    >
+    <>
+      <div className='title'>
+        {t('Укажите почту') as string}
+      </div>
+
       <EmailForm />
 
       <Link
@@ -21,7 +22,7 @@ const NewPasswordPage = () => {
       >
         <>{t('Вернуться назад')}</>
       </Link>
-    </GuestPageLayout>
+    </>
   );
 };
 
