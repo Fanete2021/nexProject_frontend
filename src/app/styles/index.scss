@@ -28,9 +28,9 @@
 
 .app {
   width: 100%;
-  min-height: 100vh;
+  height: 100dvh;
+  min-height: 100dvh;
   background: var(--bg-color);
   color: var(--text-color);
   transition: background-color 0.5s, color 0.5s;
 }
-
