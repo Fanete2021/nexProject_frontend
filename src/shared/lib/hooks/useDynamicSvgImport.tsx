@@ -12,9 +12,20 @@ export function useDynamicSvgImport(iconName: string) {
       // please make sure all your svg icons are placed in the same directory
       // if we want that part to be configurable then instead of iconName we will send iconPath as prop
       try {
-        const ReactComponent = (await import(`../../assets/icons/${iconName}.svg`))
-          .default;
-        importedIconRef.current = ReactComponent as React.FC<SVGProps<SVGSVGElement>>;
+        const { default: Icon } = await import(`../../assets/icons/${iconName}.svg`);
+
+        const SafaryFixedIcon = (props: SVGProps<SVGSVGElement>) => (
+          <Icon
+            {...props}
+            stroke={props.stroke || 'none'}
+            strokeWidth={props.strokeWidth || '1'}
+            fill={props.fill || 'none'}
+            shapeRendering="geometricPrecision"
+            style={{ display: 'inline-block', ...props.style }}
+          />
+        );
+
+        importedIconRef.current = SafaryFixedIcon;
       } catch (err) {
         setError(err);
         console.error(err);
