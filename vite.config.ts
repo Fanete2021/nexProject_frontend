@@ -11,7 +11,7 @@ export default defineConfig({
       include: '**/*.svg',
       svgrOptions: {
         exportType: 'default',
-        icon: false
+        icon: true
       }
     }),
     babel()
