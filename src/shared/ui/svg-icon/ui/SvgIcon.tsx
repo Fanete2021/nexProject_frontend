@@ -38,6 +38,7 @@ const SvgIcon: React.FC<SvgIconProps> = memo((props) => {
     <>
       {Icon && (
         <Icon
+          key={`${iconName}-${Date.now()}`}
           {...rest}
           className={classNames(styles.icon, [className], mods)}
         />
