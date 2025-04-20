@@ -4,7 +4,7 @@ import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { useSelector } from 'react-redux';
 import { getChatDialogs } from '../../model/selectors/getChatDialogs.ts';
 import DialogItem from './ui/dialog-item/DialogItem.tsx';
-import {icons, Scrollbar, Search, SvgIcon} from '@/shared/ui';
+import { icons, Scrollbar, Search, SvgIcon } from '@/shared/ui';
 import DialogItemSkeleton from './ui/dialog-item/DialogItemSkeleton.tsx';
 import { getChatIsLoadingDialogs } from '../../model/selectors/getChatIsLoadingDialogs.ts';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
@@ -18,7 +18,7 @@ import CreatorGroup from './ui/creator-group/CreatorGroup.tsx';
 import { chatActions } from '../../model/slice/chatSlice.ts';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { useTranslation } from 'react-i18next';
-import {useSidebar} from "@/shared/lib/hooks/useSidebar.ts";
+import { useSidebar } from '@/shared/lib/hooks/useSidebar.ts';
 
 export interface ChatListProps {
   className?: string;
@@ -39,7 +39,7 @@ const filters = [
   }
 ];
 
-const COUNT_DIALOGS = 15;
+const DIALOGS_PAGE_SIZE = 20;
 
 const Dialogs: React.FC<ChatListProps> = (props) => {
   const { className } = props;
@@ -127,7 +127,7 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
 
       const response = await dispatch(fetchChats({
         filterMode: activeFilter,
-        pageSize: COUNT_DIALOGS,
+        pageSize: DIALOGS_PAGE_SIZE,
         pageNumber: shouldRewriteChats ? 1 : newCurrentPage
       })).unwrap();
       setAllPagesDialogs(response.pageCount);
