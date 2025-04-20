@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import ChatWebSocketService from '../../../../model/service/ChatWebSocketService.ts';
 import { useSelector } from 'react-redux';
 import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
@@ -9,6 +9,7 @@ import styles from './MessageInput.module.scss';
 import { icons, SvgIcon } from '@/shared/ui';
 import { isPublicChat } from '@/shared/lib/utils/isPublicChat.ts';
 import { useTranslation } from 'react-i18next';
+import { useDebouncedMessageDraft } from '../../../../model/hooks/useDebouncedMessageDraft.ts';
 
 export interface MessageInputProps {
     className?: string;
@@ -20,12 +21,12 @@ const MessageInput: React.FC<MessageInputProps> = (props) => {
   const { className } = props;
 
   const { t } = useTranslation();
-  const [messageText, setMessageText] = useState<string>('');
   const user = useSelector(getUserData)!;
   const selectedChat = useSelector(getChatSelectedChat)!;
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  
+  const [messageText, setMessageText] = useDebouncedMessageDraft(selectedChat.chatId);
+
   const sendHandler = () => {
     if (!messageText.trim()) return;
 
@@ -67,8 +68,6 @@ const MessageInput: React.FC<MessageInputProps> = (props) => {
   };
 
   useEffect(() => {
-    setMessageText('');
-
     if (textareaRef.current && containerRef.current) {
       textareaRef.current.style.height = minHeight;
       containerRef.current.style.height = minHeight;

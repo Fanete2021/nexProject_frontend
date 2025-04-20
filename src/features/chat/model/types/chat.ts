@@ -16,4 +16,5 @@ export interface ChatSchema {
   isLoadingSelectedChat: boolean;
   isActiveInfoPanel: boolean;
   isLoadingMessages: boolean;
+  messageDrafts: { [chatId: string]: string };
 }

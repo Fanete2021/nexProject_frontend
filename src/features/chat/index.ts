@@ -18,6 +18,7 @@ import { getChatIsActiveInfoPanel } from './model/selectors/getChatIsActiveInfoP
 import { fetchInterlocutors } from './model/service/fetchInterlocutors.ts';
 import { fetchMessages } from './model/service/fetchMessages.ts';
 import { getChatIsLoadingMessages } from './model/selectors/getChatIsLoadingMessages.ts';
+import { getChatMessageDrafts } from './model/selectors/getChatMessageDrafts.ts';
 
 export {
   ChatPanelAsync as ChatPanel,
@@ -30,6 +31,7 @@ export {
   getChatSelectedChat,
   getChatIsActiveInfoPanel,
   getChatIsLoadingMessages,
+  getChatMessageDrafts,
 
   fetchChats,
   fetchChatInfo,

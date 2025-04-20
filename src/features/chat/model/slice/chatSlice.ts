@@ -13,6 +13,7 @@ const initialState: ChatSchema = {
   isLoadingSelectedChat: false,
   isActiveInfoPanel: false,
   isLoadingMessages: false,
+  messageDrafts: {}
 };
 
 export const chatSlice = createSlice({
@@ -49,7 +50,10 @@ export const chatSlice = createSlice({
     },
     setIsActiveInfoPanel: (state, action: PayloadAction<boolean>) => {
       state.isActiveInfoPanel = action.payload;
-    }
+    },
+    setMessageDraft(state, action: PayloadAction<{ chatId: string; message: string }>) {
+      state.messageDrafts[action.payload.chatId] = action.payload.message;
+    },
   },
   extraReducers: (builder) => {
     builder
