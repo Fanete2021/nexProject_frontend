@@ -35,5 +35,6 @@ export enum icons {
   TAG = 'tag',
   MENU = 'menu',
   CREATE_GROUP = 'createGroup',
-  BACK = 'back'
+  BACK = 'back',
+  MEMBERS = 'members'
 }

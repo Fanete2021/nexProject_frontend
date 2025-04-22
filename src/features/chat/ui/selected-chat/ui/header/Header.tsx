@@ -10,6 +10,7 @@ import { chatActions } from '../../../../model/slice/chatSlice.ts';
 import { MOBILE_MAX_BREAKPOINT } from '@/shared/const/WindowBreakpoints.ts';
 import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
 import { isPublicChat } from '@/shared/lib/utils/isPublicChat.ts';
+import infoChat from "@/features/chat/ui/info-chat/InfoChat.tsx";
 
 export interface HeaderProps {
   chatInfo: ChatInfo;
@@ -21,6 +22,7 @@ const Header: React.FC<HeaderProps> = (props) => {
   const isActiveInfoPanel = useSelector(getChatIsActiveInfoPanel);
   const dispatch = useAppDispatch();
   const windowWidth = useWindowWidth();
+  const isPublic = isPublicChat(chatInfo);
 
   const toggleInfoPanel = () => {
     dispatch(chatActions.setIsActiveInfoPanel(!isActiveInfoPanel));
@@ -63,9 +65,16 @@ const Header: React.FC<HeaderProps> = (props) => {
             </span>
           </div>
 
-          <div className={styles.online}>
-            заходил 1 мин.назад
-          </div>
+          {isPublic
+            ?
+            <div className={styles.members}>
+              {chatInfo.members.length} members
+            </div>
+            :
+            <div className={styles.online}>
+              заходил 1 мин.назад
+            </div>
+          }
         </div>
       </div>
 
