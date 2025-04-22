@@ -12,6 +12,7 @@ import { fetchUserData } from '@/entities/user';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
 import { useNavigate } from 'react-router-dom';
 import { getMessageFromApiError } from '@/shared/lib/utils/getMessageFromApiError.ts';
+import { ApiError } from '@/shared/types/apiError.ts';
 
 const validationSchema = yup.object({
   email: yup.string().email('Почта невалидна').required('Почта обязательна'),
@@ -20,7 +21,7 @@ const validationSchema = yup.object({
     .matches(/^[a-zA-Z][a-zA-Z0-9-_]{2,14}$/,'Не соответствует шаблону'),
   password: yup.string()
     .required('Пароль обязателен')
-    .matches(/^[a-zA-Z0-9!@#$%^&*]{6,15}$/, 'Не соответствует шаблону'),
+    .matches(/^[a-zA-Z0-9!@#$%^&*-]{6,15}$/, 'Не соответствует шаблону'),
   confirmPassword: yup.string()
     .required('Подтверждение пароля обязательно')
     .oneOf([yup.ref('password')], 'Пароли не совпадают'),
@@ -53,9 +54,9 @@ const RegistrationForm = () => {
         await dispatch(fetchUserData());
 
         navigate(RoutePath.emailConfirm);
-      } catch (error) {
-        setEmailError(getMessageFromApiError(error, 'email'));
-        setUsernameError(getMessageFromApiError(error, 'username'));
+      } catch (error: ApiError) {
+        setEmailError(getMessageFromApiError(error, 'email') || '');
+        setUsernameError(getMessageFromApiError(error, 'username') || '');
       } finally {
         setIsSubmitLoading(false);
       }
@@ -132,9 +133,9 @@ const RegistrationForm = () => {
         className="FieldWrapper"
       >
         <div className="label">
-          {t('Почта')}<br/>
+          {t('Почта') as string}<br/>
           {(isFormikErrorVisible(formik, 'email') || emailError) &&
-                        <div className="fieldError">{t(formik.errors.email || emailError)}</div>
+            <div className="fieldError">{t(formik.errors.email || emailError) as string}</div>
           }
         </div>
 
@@ -166,9 +167,9 @@ const RegistrationForm = () => {
         className="FieldWrapper"
       >
         <div className="label">
-          {t('Имя пользователя')} <br/>
+          {t('Имя пользователя') as string} <br/>
           {(isFormikErrorVisible(formik, 'username') || usernameError) &&
-                        <div className="fieldError">{t(formik.errors.username || usernameError)}</div>
+            <div className="fieldError">{t(formik.errors.username || usernameError) as string}</div>
           }
         </div>
 
@@ -205,9 +206,9 @@ const RegistrationForm = () => {
         className="FieldWrapper"
       >
         <div className="label">
-          {t('Пароль')}<br/>
+          {t('Пароль') as string}<br/>
           {isFormikErrorVisible(formik,'password') &&
-                        <div className="fieldError">{t(formik.errors.password)}</div>
+            <div className="fieldError">{t(formik.errors.password) as string}</div>
           }
         </div>
 
@@ -243,9 +244,9 @@ const RegistrationForm = () => {
         className="FieldWrapper"
       >
         <div className="label">
-          {t('Подтверждение пароля')}<br/>
+          {t('Подтверждение пароля') as string}<br/>
           {isFormikErrorVisible(formik, 'confirmPassword') &&
-                        <div className="fieldError">{t(formik.errors.confirmPassword)}</div>
+            <div className="fieldError">{t(formik.errors.confirmPassword) as string}</div>
           }
         </div>
         <CustomInput
