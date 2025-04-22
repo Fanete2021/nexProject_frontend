@@ -58,8 +58,8 @@ const InfoChat: React.FC<InfoChatProps> = (props) => {
 
           <Scrollbar autoHide={true}>
             <div className={styles.members}>
-              {selectedChat.members.map(member => (
-                <div key={member.memberId} className={styles.member}>
+              {selectedChat.members.map((member, index) => (
+                <div key={selectedChat.chatId + member.memberId + index} className={styles.member}>
                   <Avatar text={member.memberName} width={40} height={40}/>
 
                   <div className={styles.info}>
