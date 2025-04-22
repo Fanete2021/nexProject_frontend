@@ -12,6 +12,7 @@ import { getChatIsLoadingMessages } from '../../../../model/selectors/getChatIsL
 import { fetchMessages } from '../../../../model/service/fetchMessages.ts';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { ChatTypes } from '../../../../model/types/chatTypes.ts';
+import selectedChat from "@/features/chat/ui/selected-chat/SelectedChat.tsx";
 
 export interface MessagesProps {
   messages: Message[];
@@ -95,9 +96,13 @@ const Messages: React.FC<MessagesProps> = (props) => {
     }
   }, [groupedMessages]);
 
+  useEffect(() => {
+    scrollToBottom();
+  }, [chatId]);
+
   const scrollToBottom = () => {
     if (scrollbarRef.current) {
-      scrollbarRef.current.scrollToBottom(); // Используем метод scrollToBottom
+      scrollbarRef.current.scrollToBottom();
     }
   };
 
