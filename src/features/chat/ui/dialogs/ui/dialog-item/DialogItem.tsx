@@ -116,6 +116,11 @@ const DialogItem: React.FC<DialogItemProps> = (props) => {
 
         {chatData?.lastMessage &&
           <div className={styles.message}>
+            {chatData?.chatType === ChatTypes.PUBLIC && (
+              user.userId === chatData.lastMessage.senderId
+                ? 'Вы: '
+                : `${chatData.lastMessage.senderName}: `
+            )}
             {chatData.lastMessage.message}
           </div>
         }
