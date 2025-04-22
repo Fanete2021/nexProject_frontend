@@ -2,6 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ThunkConfig } from '@/app/providers/store-provider';
 import { authActions } from '../slice/authSlice.ts';
 import { userActions } from '@/entities/user';
+import {RoutePath} from "@/shared/config/routeConfig/routeConfig.tsx";
 
 export const logout = createAsyncThunk<void, void, ThunkConfig<string>> (
   'auth/logout',
@@ -9,7 +10,7 @@ export const logout = createAsyncThunk<void, void, ThunkConfig<string>> (
     const {
       extra,
       rejectWithValue,
-      dispatch
+      dispatch,
     } = thunkAPI;
 
     try {
@@ -17,6 +18,7 @@ export const logout = createAsyncThunk<void, void, ThunkConfig<string>> (
         withCredentials: true
       });
 
+      extra.navigate(RoutePath.auth);
       await dispatch(authActions.resetToken());
       await dispatch(userActions.resetData());
 
