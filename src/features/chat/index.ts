@@ -10,7 +10,6 @@ import { fetchChatInfo } from './model/service/fetchChatInfo.ts';
 import { getChatSelectedChat } from './model/selectors/getChatSelectedChat.ts';
 import ChatWebSocketService from './model/service/ChatWebSocketService.ts';
 import { NewMessage } from './model/types/newMessage.ts';
-import { searchContacts } from './model/service/searchContacts.ts';
 import { ChatTypes } from './model/types/chatTypes.ts';
 import { fetchMyContacts } from './model/service/fetchMyContacts.ts';
 import { createGroup } from './model/service/createGroup.ts';
@@ -36,7 +35,6 @@ export {
   fetchChats,
   fetchChatInfo,
   ChatWebSocketService,
-  searchContacts,
   fetchMyContacts,
   createGroup,
   fetchInterlocutors,

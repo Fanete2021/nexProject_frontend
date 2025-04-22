@@ -19,6 +19,7 @@ import { chatActions } from '../../model/slice/chatSlice.ts';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { useTranslation } from 'react-i18next';
 import { useSidebar } from '@/shared/lib/hooks/useSidebar.ts';
+import {SearchContact} from "@/entities/contact";
 
 export interface ChatListProps {
   className?: string;
@@ -53,7 +54,6 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
   const [searchedContacts, setSearchedContacts] = useState<Contact[]>([]);
   const selectedChat = useSelector(getChatSelectedChat);
   const [isOpenCreatorGroup, setIsOpenCreatorGroup] = useState<boolean>(false);
-  const debouncedSearchValue = useDebounce(searchedValue, 1000);
   const [isLoadingSearch, setIsLoadingSearch] = useState<boolean>(false);
   const scrollbarRef = useRef<Scrollbars>(null);
   const [currentPageDialogs, setCurrentPageDialogs] = useState<number>(1);
@@ -66,39 +66,6 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
   const toggleCreatorGroupHandler = useCallback(() => setIsOpenCreatorGroup(prev => !prev), []);
 
   const { openSidebar } = useSidebar();
-
-  const clearSearch = useCallback(() => {
-    setSearchedValue('');
-    setSearchedContacts([]);
-  }, []);
-
-  const searchHandler = useCallback(async (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setSearchedContacts([]);
-    setSearchedValue(e.target.value);
-    setIsLoadingSearch(true);
-  }, []);
-
-  useEffect(() => {
-    if (debouncedSearchValue) {
-      setIsLoadingSearch(true);
-
-      const fetchContacts = async () => {
-        try {
-          const response = await dispatch(searchContacts(debouncedSearchValue)).unwrap();
-          setSearchedContacts(response.searchUsers);
-        } catch (error) {
-          console.log(error);
-        } finally {
-          setIsLoadingSearch(false);
-        }
-      };
-
-      fetchContacts();
-    } else {
-      setSearchedContacts([]);
-      setIsLoadingSearch(false);
-    }
-  }, [debouncedSearchValue, dispatch]);
 
   const handleFilterClick = (filter: ChatTypes, event: React.MouseEvent) => {
     setActiveFilter(filter);
@@ -149,7 +116,7 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
   }, [activeFilter]);
 
   useEffect(() => {
-    clearSearch();
+    setSearchedValue('');
   }, [selectedChat]);
 
   const scrollHandler = () => {
@@ -177,10 +144,11 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
         />
 
         <div className={styles.searchWrapper}>
-          <Search
-            searchHandler={searchHandler}
-            value={searchedValue}
-            clearSearch={clearSearch}
+          <SearchContact
+            searchedValue={searchedValue}
+            setSearchedValue={setSearchedValue}
+            setSearchedContacts={setSearchedContacts}
+            setIsLoadingSearch={setIsLoadingSearch}
           />
         </div>
 

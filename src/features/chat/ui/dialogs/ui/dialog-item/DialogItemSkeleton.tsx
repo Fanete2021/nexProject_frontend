@@ -19,9 +19,7 @@ const DialogItemSkeleton: React.FC<DialogItemSkeletonProps> = (props) => {
         variant="circular"
         width={windowWidth > MOBILE_MAX_BREAKPOINT ? 40 : 50}
         height={windowWidth > MOBILE_MAX_BREAKPOINT ? 40 : 50}
-        classes={{
-          root: styles.skeleton
-        }}
+        classes={{ root: 'skeleton' }}
         animation='wave'
       />
 
@@ -29,18 +27,14 @@ const DialogItemSkeleton: React.FC<DialogItemSkeletonProps> = (props) => {
         <Skeleton
           variant="text"
           width={'100%'}
-          classes={{
-            root: styles.skeleton
-          }}
+          classes={{ root: 'skeleton' }}
           animation='wave'
         />
 
         <Skeleton
           variant="text"
           width={'100%'}
-          classes={{
-            root: styles.skeleton
-          }}
+          classes={{ root: 'skeleton' }}
           animation='wave'
         />
       </div>

@@ -3,12 +3,12 @@ import { ThunkConfig } from '@/app/providers/store-provider';
 import { Contact } from '../../model/types/contact.ts';
 
 interface SearchContactsResponse {
-    searchUsers: Contact[];
-    pageCount: number;
+  searchUsers: Contact[];
+  pageCount: number;
 }
 
 export const searchContacts = createAsyncThunk<SearchContactsResponse, string, ThunkConfig<string>> (
-  'chat/searchContacts',
+  'contact/searchContacts',
   async (searchValue, thunkAPI) => {
     const {
       extra,
