@@ -1,0 +1,60 @@
+.GroupMembers {
+  flex: 1;
+  padding: 5px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+
+  .title {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    line-height: 18px;
+
+    .iconMembers {
+      margin-left: 5px;
+      margin-right: 15px;
+      width: 25px;
+      height: 15px;
+    }
+  }
+
+  .members {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    .member {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+
+      .info {
+        .name {
+          font-size: 14px;
+          line-height: 18px;
+        }
+
+        .online {
+          font-size: 12px;
+          line-height: 16px;
+        }
+      }
+    }
+  }
+
+  .addMember {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+
+    .iconAddMember {
+      width: 25px;
+      height: 25px;
+    }
+  }
+}

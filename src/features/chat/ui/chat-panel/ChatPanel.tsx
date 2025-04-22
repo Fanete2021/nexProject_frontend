@@ -95,10 +95,11 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
   if (windowWidth <= MOBILE_MAX_BREAKPOINT) {
     return (
       <div className={classNames(styles.ChatPanel, [className])}>
-        {selectedChat
-          ? <SelectedChat className={styles.selectedChat}/>
-          : <Dialogs className={styles.dialogs} />
-        }
+        {!selectedChat && <Dialogs className={styles.dialogs} />}
+
+        {selectedChat && !isActiveInfoPanel && <SelectedChat className={styles.selectedChat} /> }
+
+        {isActiveInfoPanel && <InfoChat className={styles.infoChat} /> }
       </div>
     );
   }

@@ -10,7 +10,6 @@ import { chatActions } from '../../../../model/slice/chatSlice.ts';
 import { MOBILE_MAX_BREAKPOINT } from '@/shared/const/WindowBreakpoints.ts';
 import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
 import { isPublicChat } from '@/shared/lib/utils/isPublicChat.ts';
-import infoChat from "@/features/chat/ui/info-chat/InfoChat.tsx";
 
 export interface HeaderProps {
   chatInfo: ChatInfo;
@@ -41,7 +40,10 @@ const Header: React.FC<HeaderProps> = (props) => {
         onClick={clearSelectedChat}
       />
 
-      <div className={styles.chatInfo}>
+      <div
+        className={styles.chatInfo}
+        onClick={windowWidth <= MOBILE_MAX_BREAKPOINT ? toggleInfoPanel : undefined}
+      >
         <Avatar
           text={chatInfo.chatName}
           height={windowWidth > MOBILE_MAX_BREAKPOINT ? 50 : 40}
