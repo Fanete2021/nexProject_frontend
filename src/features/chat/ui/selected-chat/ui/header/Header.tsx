@@ -21,6 +21,7 @@ const Header: React.FC<HeaderProps> = (props) => {
   const isActiveInfoPanel = useSelector(getChatIsActiveInfoPanel);
   const dispatch = useAppDispatch();
   const windowWidth = useWindowWidth();
+  const isPublic = isPublicChat(chatInfo);
 
   const toggleInfoPanel = () => {
     dispatch(chatActions.setIsActiveInfoPanel(!isActiveInfoPanel));
@@ -39,7 +40,10 @@ const Header: React.FC<HeaderProps> = (props) => {
         onClick={clearSelectedChat}
       />
 
-      <div className={styles.chatInfo}>
+      <div
+        className={styles.chatInfo}
+        onClick={windowWidth <= MOBILE_MAX_BREAKPOINT ? toggleInfoPanel : undefined}
+      >
         <Avatar
           text={chatInfo.chatName}
           height={windowWidth > MOBILE_MAX_BREAKPOINT ? 50 : 40}
@@ -63,9 +67,16 @@ const Header: React.FC<HeaderProps> = (props) => {
             </span>
           </div>
 
-          <div className={styles.online}>
-            заходил 1 мин.назад
-          </div>
+          {isPublic
+            ?
+            <div className={styles.members}>
+              {chatInfo.members.length} members
+            </div>
+            :
+            <div className={styles.online}>
+              заходил 1 мин.назад
+            </div>
+          }
         </div>
       </div>
 

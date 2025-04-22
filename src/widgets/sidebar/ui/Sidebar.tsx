@@ -10,6 +10,7 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { logout } from '@/features/auth';
 import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
 import { TABLET_MAX_BREAKPOINT } from '@/shared/const/WindowBreakpoints.ts';
+import { useSidebar } from '@/shared/lib/hooks/useSidebar.ts';
 
 export interface SidebarProps {
     className?: string;
@@ -22,6 +23,7 @@ const Sidebar: React.FC<SidebarProps> = (props: SidebarProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { isSidebarOpen, closeSidebar } = useSidebar();
   const windowWidth = useWindowWidth();
   const [ expanded, setExpanded ] = useState<boolean>(windowWidth <= TABLET_MAX_BREAKPOINT);
 
@@ -30,6 +32,14 @@ const Sidebar: React.FC<SidebarProps> = (props: SidebarProps) => {
       setExpanded(false);
     }
   }, [windowWidth]);
+
+  useEffect(() => {
+    closeSidebar();
+  }, [location]);
+
+  useEffect(() => {
+    setExpanded(isSidebarOpen);
+  }, [isSidebarOpen]);
 
   const mods: Record<string, boolean> = {
     [styles.expanded]: expanded

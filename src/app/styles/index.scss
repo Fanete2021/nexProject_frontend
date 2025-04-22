@@ -34,3 +34,7 @@
   color: var(--text-color);
   transition: background-color 0.5s, color 0.5s;
 }
+
+.skeleton {
+  background-color: var(--skeleton-bg-color) !important;
+}

@@ -15,7 +15,7 @@ import { ApiError } from '@/shared/types/apiError.ts';
 const validationSchema = yup.object({
   newPassword: yup.string()
     .required('Новый пароль обязателен')
-    .matches(/^[a-zA-Z0-9!@#$%^&*]{6,15}$/, 'Не соответствует шаблону'),
+    .matches(/^[a-zA-Z0-9!@#$%^&*-]{6,15}$/, 'Не соответствует шаблону'),
   confirmPassword: yup.string()
     .required('Подтверждение пароля обязательно')
     .oneOf([yup.ref('newPassword')], 'Пароли не совпадают'),
@@ -95,7 +95,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = (props) => {
   return (
     <form className="form" onSubmit={onSubmit}>
       {formError &&
-                <div className="formError">{t(formError.errDetails)}</div>
+        <div className="formError">{t(formError.errDetails) as string}</div>
       }
 
       <FormControl
@@ -103,9 +103,9 @@ const RegistrationForm: React.FC<RegistrationFormProps> = (props) => {
         className="FieldWrapper"
       >
         <div className="label">
-          {t('Новый пароль')}<br/>
+          {t('Новый пароль') as string}<br/>
           {isFormikErrorVisible(formik,'newPassword') &&
-                        <div className="fieldError">{t(formik.errors.newPassword)}</div>
+            <div className="fieldError">{t(formik.errors.newPassword) as string}</div>
           }
         </div>
 
@@ -141,9 +141,9 @@ const RegistrationForm: React.FC<RegistrationFormProps> = (props) => {
         className="FieldWrapper"
       >
         <div className="label">
-          {t('Подтверждение пароля')}<br/>
+          {t('Подтверждение пароля') as string}<br/>
           {isFormikErrorVisible(formik, 'confirmPassword') &&
-                        <div className="fieldError">{t(formik.errors.confirmPassword)}</div>
+            <div className="fieldError">{t(formik.errors.confirmPassword) as string}</div>
           }
         </div>
         <CustomInput

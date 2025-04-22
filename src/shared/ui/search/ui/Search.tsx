@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { CustomInput, icons, SvgIcon } from '@/shared/ui';
 import { InputAdornment } from '@mui/material';
 import styles from './Search.module.scss';
@@ -6,13 +6,20 @@ import { useTranslation } from 'react-i18next';
 
 export interface SearchProps {
   value: string;
-  clearSearch?: () => void;
-  searchHandler?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  changeValue: (value: string) => void;
 }
 
 const Search: React.FC<SearchProps> = (props) => {
   const { t } = useTranslation();
-  const { value, clearSearch, searchHandler } = props;
+  const { value, changeValue } = props;
+
+  const clearSearch = useCallback(() => {
+    changeValue('');
+  }, [changeValue]);
+
+  const changeHandler = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    changeValue(e.target.value);
+  }, [changeValue]);
 
   return (
     <CustomInput
@@ -47,7 +54,7 @@ const Search: React.FC<SearchProps> = (props) => {
         input: styles.searchInput
       }}
       value={value}
-      onChange={searchHandler}
+      onChange={changeHandler}
     />
   );
 };
