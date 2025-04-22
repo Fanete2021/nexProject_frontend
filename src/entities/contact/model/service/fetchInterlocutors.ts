@@ -10,7 +10,7 @@ export const fetchInterlocutors = createAsyncThunk<
   FetchInterlocutorsProps,
   ThunkConfig<string>
 > (
-  'chat/fetchInterlocutors',
+  'contact/fetchInterlocutors',
   async (_, thunkAPI) => {
     const {
       extra,

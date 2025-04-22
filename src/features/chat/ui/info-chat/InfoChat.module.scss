@@ -23,6 +23,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  position: relative;
 
   .title {
     display: flex;
@@ -59,6 +60,20 @@
           line-height: 16px;
         }
       }
+    }
+  }
+
+  .addMember {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+
+    .iconAddMember {
+      width: 25px;
+      height: 25px;
     }
   }
 }

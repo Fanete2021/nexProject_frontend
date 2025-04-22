@@ -1,0 +1,26 @@
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--button-text-color);
+
+  &:disabled {
+    color: var(--button-text-disabled-color);
+  }
+}
+
+.primary {
+  background: var(--button-bg-color);
+
+  &:hover:not(:disabled) {
+    background: var(--button-bg-hover-color);
+  }
+}
+
+.secondary {
+  background: var(--button-bg-secondary-color);
+
+  &:hover:not(:disabled) {
+    background: var(--button-bg-hover-secondary-color);
+  }
+}

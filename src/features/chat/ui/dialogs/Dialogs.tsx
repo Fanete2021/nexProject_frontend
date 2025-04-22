@@ -4,22 +4,19 @@ import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { useSelector } from 'react-redux';
 import { getChatDialogs } from '../../model/selectors/getChatDialogs.ts';
 import DialogItem from './ui/dialog-item/DialogItem.tsx';
-import { icons, Scrollbar, Search, SvgIcon } from '@/shared/ui';
+import { icons, Scrollbar, SvgIcon } from '@/shared/ui';
 import DialogItemSkeleton from './ui/dialog-item/DialogItemSkeleton.tsx';
 import { getChatIsLoadingDialogs } from '../../model/selectors/getChatIsLoadingDialogs.ts';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
-import { searchContacts } from '../../model/service/searchContacts.ts';
-import { Contact } from '../../model/types/contact.ts';
 import { ChatTypes } from '../../model/types/chatTypes.ts';
 import { fetchChats } from '../../model/service/fetchChats.ts';
 import { getChatSelectedChat } from '../../model/selectors/getChatSelectedChat.ts';
-import { useDebounce } from '@/shared/lib/hooks/useDebounce.ts';
 import CreatorGroup from './ui/creator-group/CreatorGroup.tsx';
 import { chatActions } from '../../model/slice/chatSlice.ts';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { useTranslation } from 'react-i18next';
 import { useSidebar } from '@/shared/lib/hooks/useSidebar.ts';
-import {SearchContact} from "@/entities/contact";
+import { Contact, ContactSearcher } from '@/entities/contact';
 
 export interface ChatListProps {
   className?: string;
@@ -144,7 +141,7 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
         />
 
         <div className={styles.searchWrapper}>
-          <SearchContact
+          <ContactSearcher
             searchedValue={searchedValue}
             setSearchedValue={setSearchedValue}
             setSearchedContacts={setSearchedContacts}

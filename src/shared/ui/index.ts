@@ -9,6 +9,7 @@ import { Portal, PortalProps } from './portal';
 import { Modal, ModalProps } from './modal';
 import { Scrollbar, ScrollbarProps } from './scrollbar';
 import { Search, SearchProps } from './search';
+import { Button, ButtonProps } from './button';
 
 export type {
   SvgIconProps,
@@ -22,7 +23,8 @@ export type {
   PortalProps,
   ModalProps,
   ScrollbarProps,
-  SearchProps
+  SearchProps,
+  ButtonProps
 };
 
 export {
@@ -37,5 +39,6 @@ export {
   Portal,
   Modal,
   Scrollbar,
-  Search
+  Search,
+  Button
 };

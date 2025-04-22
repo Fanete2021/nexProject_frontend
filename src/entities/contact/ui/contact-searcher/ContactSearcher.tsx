@@ -12,7 +12,7 @@ export interface SearchContactProps {
   setSearchedValue: (searchedValue: string) => void;
 }
 
-const SearchContact: React.FC<SearchContactProps> = (props) => {
+const ContactSearcher: React.FC<SearchContactProps> = (props) => {
   const { searchedValue, setSearchedValue, setSearchedContacts, setIsLoadingSearch  } = props;
   const debouncedSearchValue = useDebounce(searchedValue, 1000);
   const dispatch = useAppDispatch();
@@ -53,4 +53,4 @@ const SearchContact: React.FC<SearchContactProps> = (props) => {
   );
 };
 
-export default SearchContact;
+export default ContactSearcher;

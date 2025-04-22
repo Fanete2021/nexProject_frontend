@@ -36,5 +36,6 @@ export enum icons {
   MENU = 'menu',
   CREATE_GROUP = 'createGroup',
   BACK = 'back',
-  MEMBERS = 'members'
+  MEMBERS = 'members',
+  ADD_MEMBER = 'addMember',
 }

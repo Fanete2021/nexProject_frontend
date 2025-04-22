@@ -1,6 +1,5 @@
 .CreatorGroup {
   padding: 10px;
-  background-color: var(--modal-bg-color);
   border-radius: 15px;
   width: 350px;
   min-height: 485px;
@@ -95,46 +94,10 @@
 }
 
 .contacts {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 5px;
   height: 270px;
 
   @media screen and (max-width: 768px) {
     flex: 1;
-  }
-
-  .contactsList {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    max-height: 300px;
-  }
-
-  .contactItem {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-
-    .name {
-      font-size: 14px;
-      line-height: 18px;
-
-      @media screen and (max-width: 768px) {
-        font-size: 16px;
-        line-height: 21px;
-      }
-    }
-  }
-
-  .checkbox {
-    margin-left: auto;
-  }
-
-  .checkboxSkeleton {
-    margin-right: 10px;
   }
 }
 
@@ -195,17 +158,9 @@
   }
 }
 
-//TODO вынести в компонент
 .saveButton {
   width: 150px;
-  background: var(--button-bg-secondary-color);
-  cursor: pointer;
   height: 30px;
-  color: var(--button-text-color);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   border-radius: 10px;
   font-weight: bold;
   margin: auto auto 0;
@@ -215,13 +170,5 @@
     height: 40px;
     font-size: 16px;
     line-height: 18px;
-  }
-
-  &:hover:not(:disabled) {
-    background: var(--button-bg-hover-secondary-color);
-  }
-
-  &:disabled {
-    color: var(--button-text-disabled-color);
   }
 }
