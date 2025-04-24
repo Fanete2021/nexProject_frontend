@@ -1,0 +1,9 @@
+services:
+  front:
+    build:
+      context: /home/kolya/nexProject_frontend
+      dockerfile: Dockerfile
+    container_name: front
+    network_mode: host
+    ports:
+      - "3000:3000"
