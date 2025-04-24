@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react';
-import { ChatInfo } from '../../../../model/types/chatInfo.ts';
+import { ChatInfo } from '../../../../../../model/types/chatInfo.ts';
 import styles from './Header.module.scss';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { Avatar, icons, SvgIcon } from '@/shared/ui';
 import { useSelector } from 'react-redux';
-import { getChatIsActiveInfoPanel } from '../../../../model/selectors/getChatIsActiveInfoPanel.ts';
+import { getChatIsActiveInfoPanel } from '../../../../../../model/selectors/getChatIsActiveInfoPanel.ts';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
-import { chatActions } from '../../../../model/slice/chatSlice.ts';
+import { chatActions } from '../../../../../../model/slice/chatSlice.ts';
 import { MOBILE_MAX_BREAKPOINT } from '@/shared/const/WindowBreakpoints.ts';
 import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
 import { isPublicChat } from '@/shared/lib/utils/isPublicChat.ts';

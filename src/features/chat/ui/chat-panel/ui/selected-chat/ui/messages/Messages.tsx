@@ -1,18 +1,22 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Message } from '../../../../model/types/message.ts';
+import { Message } from '../../../../../../model/types/message.ts';
 import { User } from '@/entities/user';
 import styles from './Messages.module.scss';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
-import { Avatar, Scrollbar } from '@/shared/ui';
+import { Avatar, icons, Scrollbar, SvgIcon } from '@/shared/ui';
 import { formatDateLocalized } from '@/shared/lib/utils/formatDateLocalized.ts';
 import { formatTimeLocalized } from '@/shared/lib/utils/formatTimeLocalized.ts';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { useSelector } from 'react-redux';
-import { getChatIsLoadingMessages } from '../../../../model/selectors/getChatIsLoadingMessages.ts';
-import { fetchMessages } from '../../../../model/service/fetchMessages.ts';
+import { getChatIsLoadingMessages } from '../../../../../../model/selectors/getChatIsLoadingMessages.ts';
+import { fetchMessages } from '../../../../../../model/service/fetchMessages.ts';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
-import { ChatTypes } from '../../../../model/types/chatTypes.ts';
-import selectedChat from "@/features/chat/ui/selected-chat/SelectedChat.tsx";
+import { ChatTypes } from '../../../../../../model/types/chatTypes.ts';
+import { Menu, MenuItem } from '@mui/material';
+import { deleteMessage } from '../../../../../../model/service/deleteMessage.ts';
+import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
+import { MOBILE_MAX_BREAKPOINT } from '@/shared/const/WindowBreakpoints.ts';
+import { chatActions } from '../../../../../../model/slice/chatSlice.ts';
 
 export interface MessagesProps {
   messages: Message[];
@@ -81,7 +85,15 @@ const Messages: React.FC<MessagesProps> = (props) => {
   const [isAtBottom, setIsAtBottom] = useState(true);
   const isLoadingMessages = useSelector(getChatIsLoadingMessages);
   const dispatch = useAppDispatch();
-  const [currentPage, setCurrentPage] = useState<number>(1); //TODO поменять на 2, сейчас у бэка с 0 пагинация
+  const [currentPage, setCurrentPage] = useState<number>(2);
+  const [menuPosition, setMenuPosition] = useState<{ x: number; y: number } | null>(null);
+  const [selectedMessageId, setSelectedMessageId] = useState<string | null>(null);
+  const appContainerRef = useRef<HTMLElement | null>(null);
+  const windowWidth = useWindowWidth();
+
+  useEffect(() => {
+    appContainerRef.current = document.querySelector('.app');
+  }, []);
 
   useEffect(() => {
     const grouped = groupMessages([...props.messages].reverse());
@@ -131,6 +143,34 @@ const Messages: React.FC<MessagesProps> = (props) => {
     }
   };
 
+  useEffect(() => {
+    setCurrentPage(2);
+    dispatch(chatActions.setEditableMessage(undefined));
+  }, [chatId]);
+
+  const contextMenuHandler = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, messageId: string) => {
+    event.preventDefault();
+    setMenuPosition({ x: event.clientX, y: event.clientY });
+    setSelectedMessageId(messageId);
+  };
+
+  const closeContextMenuHandler = () => {
+    setMenuPosition(null);
+    setSelectedMessageId(null);
+  };
+
+  const editMessageHandler = () => {
+    const editableMessage = props.messages.find(m => m.messageId === selectedMessageId!);
+    dispatch(chatActions.setEditableMessage(editableMessage));
+    closeContextMenuHandler();
+  };
+
+  const deleteMessageHandler = () => {
+    dispatch(deleteMessage({ messageId: selectedMessageId!, chatId: chatId }));
+    closeContextMenuHandler();
+  };
+
+
   return (
     <div className={className}>
       <Scrollbar
@@ -174,6 +214,14 @@ const Messages: React.FC<MessagesProps> = (props) => {
                           [styles.middleMessage]: index > 0 && index < group.messages!.length - 1,
                           [styles.lastMessage]: index === group.messages!.length - 1
                         })}
+                        onContextMenu={message.senderId === user.userId
+                          ? (event) => contextMenuHandler(event, message.messageId)
+                          : undefined
+                        }
+                        onClick={windowWidth <= MOBILE_MAX_BREAKPOINT && message.senderId === user.userId
+                          ? (event) => contextMenuHandler(event, message.messageId)
+                          : undefined
+                        }
                       >
                         {index === 0 && chatType === ChatTypes.PUBLIC &&
                           <div className={styles.sender}>
@@ -187,6 +235,7 @@ const Messages: React.FC<MessagesProps> = (props) => {
                           </span>
 
                           <span className={styles.time}>
+                            {message.edited && 'ред. '}
                             {formatTimeLocalized(new Date(message.sendDate))}
                           </span>
                         </div>
@@ -199,6 +248,42 @@ const Messages: React.FC<MessagesProps> = (props) => {
           ))}
         </div>
       </Scrollbar>
+
+      <Menu
+        open={Boolean(menuPosition)}
+        onClose={closeContextMenuHandler}
+        anchorReference="anchorPosition"
+        anchorPosition={
+          menuPosition !== null
+            ? { top: menuPosition.y, left: menuPosition.x }
+            : undefined
+        }
+        classes={{ paper: styles.menu }}
+        container={appContainerRef.current || undefined}
+      >
+        <MenuItem onClick={editMessageHandler}>
+          <SvgIcon
+            iconName={icons.EDIT}
+            applyStroke
+            applyFill={false}
+            applyHover={false}
+          />
+
+          Редактировать
+        </MenuItem>
+
+        <MenuItem onClick={deleteMessageHandler}>
+          <SvgIcon
+            iconName={icons.DELETE}
+            applyStroke
+            applyFill={false}
+            applyHover={false}
+          />
+
+          Удалить
+        </MenuItem>
+      </Menu>
+
     </div>
   );
 };

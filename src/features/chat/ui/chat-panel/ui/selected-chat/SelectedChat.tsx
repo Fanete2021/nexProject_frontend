@@ -1,13 +1,13 @@
-import Header from './ui/header/Header.tsx';
 import { useSelector } from 'react-redux';
-import { getChatSelectedChat } from '../../model/selectors/getChatSelectedChat.ts';
+import { getChatSelectedChat } from '../../../../model/selectors/getChatSelectedChat.ts';
 import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
-import Messages from './ui/messages/Messages.tsx';
 import styles from './SelectedChat.module.scss';
-import MessageInput from './ui/message-input/MessageInput.tsx';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { isPublicChat } from '@/shared/lib/utils/isPublicChat.ts';
-import { ChatTypes } from '../../model/types/chatTypes.ts';
+import { ChatTypes } from '../../../../model/types/chatTypes.ts';
+import Messages from './ui/messages/Messages.tsx';
+import Header from './ui/header/Header.tsx';
+import MessageInput from './ui/message-input/MessageInput.tsx';
 
 export interface SelectedChatProps {
   className?: string;

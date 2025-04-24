@@ -1,10 +1,10 @@
 import { Avatar, Button, icons, Scrollbar, SvgIcon } from '@/shared/ui';
-import AddUsersToGroup from '../../../chat-panel/ui/add-users-to-group/AddUsersToGroup.tsx';
+import AddUsersToGroup from '../../../add-users-to-group/AddUsersToGroup.tsx';
 import styles from './GroupMembers.module.scss';
-import { classNames } from '@/shared/lib/utils/classNames';
+import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getChatSelectedChat } from '../../../../model/selectors/getChatSelectedChat.ts';
+import { getChatSelectedChat } from '../../../../../../model/selectors/getChatSelectedChat.ts';
 
 export interface GroupMembersProps {
   className?: string;

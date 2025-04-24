@@ -1,3 +1,9 @@
+export enum typesMessage {
+  NEW_MESSAGE = 'NEW_MESSAGE',
+  EDIT_MESSAGE = 'EDIT_MESSAGE',
+  DELETE_MESSAGE = 'DELETE_MESSAGE'
+}
+
 export interface Message {
   chatId: string;
   editDate: string;
@@ -8,4 +14,5 @@ export interface Message {
   senderId: string;
   senderName: string;
   topicId?: string;
+  type?: typesMessage
 }
