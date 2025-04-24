@@ -1,7 +1,7 @@
 import { ChatPanelAsync } from './ui/chat-panel/ChatPanel.async.tsx';
 import { Chat, ChatSchema } from './model/types/chat.ts';
 import { ChatInfo } from './model/types/chatInfo.ts';
-import { Message } from './model/types/message.ts';
+import { Message, typesMessage } from './model/types/message.ts';
 import { chatReducer, chatActions } from './model/slice/chatSlice.ts';
 import { getChatDialogs } from './model/selectors/getChatDialogs.ts';
 import { getChatIsLoadingDialogs } from './model/selectors/getChatIsLoadingDialogs.ts';
@@ -17,7 +17,10 @@ import { getChatIsActiveInfoPanel } from './model/selectors/getChatIsActiveInfoP
 import { fetchMessages } from './model/service/fetchMessages.ts';
 import { getChatIsLoadingMessages } from './model/selectors/getChatIsLoadingMessages.ts';
 import { getChatMessageDrafts } from './model/selectors/getChatMessageDrafts.ts';
-import { addUserToGroup } from "./model/service/addUserToGroup.ts";
+import { addUserToGroup } from './model/service/addUserToGroup.ts';
+import { deleteMessage } from './model/service/deleteMessage.ts';
+import { getChatEditableMessage } from './model/selectors/getChatEditableMessage.ts';
+import { editMessage } from './model/service/editMessage.ts';
 
 export {
   ChatPanelAsync as ChatPanel,
@@ -31,6 +34,9 @@ export {
   getChatIsActiveInfoPanel,
   getChatIsLoadingMessages,
   getChatMessageDrafts,
+  deleteMessage,
+  getChatEditableMessage,
+  editMessage,
 
   fetchChats,
   fetchChatInfo,
@@ -48,5 +54,6 @@ export type {
   ChatSchema,
   ChatInfo,
   Message,
-  NewMessage
+  NewMessage,
+  typesMessage
 };

@@ -13,7 +13,8 @@ const initialState: ChatSchema = {
   isLoadingSelectedChat: false,
   isActiveInfoPanel: false,
   isLoadingMessages: false,
-  messageDrafts: {}
+  messageDrafts: {},
+  editableMessage: undefined
 };
 
 export const chatSlice = createSlice({
@@ -40,9 +41,29 @@ export const chatSlice = createSlice({
         state.dialogs.unshift(chat);
       }
 
-
       if (state.selectedChat?.chatId === newMessage.chatId) {
         state.selectedChat.lastMessages.unshift(newMessage);
+      }
+    },
+    deleteMessage: (state, action: PayloadAction<Message>) => {
+      const messageToDelete = action.payload;
+
+      if (state.selectedChat?.chatId === messageToDelete.chatId) {
+        state.selectedChat.lastMessages = state.selectedChat.lastMessages.filter(
+          message => message.messageId !== messageToDelete.messageId
+        );
+      }
+    },
+    editMessage: (state, action: PayloadAction<Message>) => {
+      const editedMessage = action.payload;
+
+      if (state.selectedChat?.chatId === editedMessage.chatId) {
+        const messageIndex = state.selectedChat.lastMessages.findIndex(
+          message => message.messageId === editedMessage.messageId
+        );
+        if (messageIndex !== -1) {
+          state.selectedChat.lastMessages[messageIndex] = editedMessage;
+        }
       }
     },
     addChat: (state, action: PayloadAction<Chat>) => {
@@ -54,6 +75,9 @@ export const chatSlice = createSlice({
     setMessageDraft(state, action: PayloadAction<{ chatId: string; message: string }>) {
       state.messageDrafts[action.payload.chatId] = action.payload.message;
     },
+    setEditableMessage: (state, action: PayloadAction<Message | undefined>) => {
+      state.editableMessage = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder

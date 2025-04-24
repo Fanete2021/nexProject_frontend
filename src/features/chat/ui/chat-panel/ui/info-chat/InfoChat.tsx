@@ -1,13 +1,13 @@
 import styles from './InfoChat.module.scss';
 import { useSelector } from 'react-redux';
-import { getChatSelectedChat } from '../../model/selectors/getChatSelectedChat.ts';
+import { getChatSelectedChat } from '../../../../model/selectors/getChatSelectedChat.ts';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { icons, SvgIcon } from '@/shared/ui';
 import { useTranslation } from 'react-i18next';
 import { isPublicChat } from '@/shared/lib/utils/isPublicChat.ts';
 import GroupMembers from './ui/group-members/GroupMembers.tsx';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
-import { chatActions } from '../../model/slice/chatSlice.ts';
+import { chatActions } from '../../../../model/slice/chatSlice.ts';
 
 export interface InfoChatProps {
   className?: string;

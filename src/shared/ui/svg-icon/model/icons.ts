@@ -38,4 +38,6 @@ export enum icons {
   BACK = 'back',
   MEMBERS = 'members',
   ADD_MEMBER = 'addMember',
+  DELETE = 'delete',
+  EDIT = 'edit'
 }

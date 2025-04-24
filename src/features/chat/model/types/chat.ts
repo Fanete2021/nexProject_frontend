@@ -17,4 +17,5 @@ export interface ChatSchema {
   isActiveInfoPanel: boolean;
   isLoadingMessages: boolean;
   messageDrafts: { [chatId: string]: string };
+  editableMessage?: Message;
 }
