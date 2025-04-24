@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import {Avatar, Button, CustomInput, icons, Modal, Scrollbar, SvgIcon} from '@/shared/ui';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import styles from './CreatorGroup.module.scss';
-import { createGroup } from '../../../../model/service/createGroup.ts';
+import { createGroup } from '../../../../../../model/service/createGroup.ts';
 import { InputAdornment } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { classNames } from '@/shared/lib/utils/classNames.ts';

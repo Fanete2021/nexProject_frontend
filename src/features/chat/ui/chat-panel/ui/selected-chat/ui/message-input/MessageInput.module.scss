@@ -1,0 +1,88 @@
+.MessageInput {
+  position: relative;
+  background: var(--input-bg-color);
+}
+
+.infoPanel {
+  padding: 5px 15px;
+  display: flex;
+  gap: 12.5px;
+  align-items: center;
+  user-select: none;
+
+  .editableMessageWrapper {
+    display: flex;
+    flex-direction: column;
+
+    .title {
+      font-weight: bold;
+    }
+
+    .editableMessage {
+      border-left: 2px solid var(--message-reply-stroke-color);
+      padding-left: 3px;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      word-break: break-all;
+      text-align: start;
+    }
+  }
+
+  .iconEdit {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  .iconCross {
+    margin-left: auto;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+}
+
+.inputWrapper {
+  margin: 0 85px 0 48px;
+}
+
+.scrollWrapper {
+  height: auto;
+}
+
+.input {
+  width: 100%;
+  color: var(--input-text-color);
+  background: var(--input-bg-color);
+  border: none;
+  outline: none;
+  padding: 16px 0;
+  resize: none;
+  font-size: 14px;
+  line-height: 18px;
+  height: auto;
+  display: block;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.files {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+}
+
+.rightSide {
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+  display: flex;
+  gap: 15px;
+}
+
+.files, .smile {
+  cursor: pointer;
+}

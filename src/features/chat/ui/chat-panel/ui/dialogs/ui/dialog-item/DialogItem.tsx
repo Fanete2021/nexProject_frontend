@@ -1,18 +1,18 @@
 import React, { useCallback } from 'react';
-import { Chat } from '../../../../model/types/chat.ts';
+import { Chat } from '../../../../../../model/types/chat.ts';
 import styles from './DialogItem.module.scss';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
-import { fetchChatInfo } from '../../../../model/service/fetchChatInfo.ts';
+import { fetchChatInfo } from '../../../../../../model/service/fetchChatInfo.ts';
 import { Avatar, icons, SvgIcon } from '@/shared/ui';
 import { Contact } from '../../../../model/types/contact.ts';
-import { ChatInfo } from '../../../../model/types/chatInfo.ts';
+import { ChatInfo } from '../../../../../../model/types/chatInfo.ts';
 import { useSelector } from 'react-redux';
 import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
-import { chatActions } from '../../../../model/slice/chatSlice.ts';
-import { getChatSelectedChat } from '../../../../model/selectors/getChatSelectedChat.ts';
+import { chatActions } from '../../../../../../model/slice/chatSlice.ts';
+import { getChatSelectedChat } from '../../../../../../model/selectors/getChatSelectedChat.ts';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { formatLastMessageDateTime } from '@/shared/lib/utils/formatLastMessageDateTime.ts';
-import { ChatTypes } from '../../../../model/types/chatTypes.ts';
+import { ChatTypes } from '../../../../../../model/types/chatTypes.ts';
 import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
 import {MOBILE_MAX_BREAKPOINT} from "@/shared/const/WindowBreakpoints.ts";
 
