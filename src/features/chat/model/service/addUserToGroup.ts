@@ -3,7 +3,7 @@ import { ThunkConfig } from '@/app/providers/store-provider';
 
 interface AddUserToGroupProps {
   chatId: string;
-  userId: string; //TODO переделать на массив
+  memberIds: string[];
 }
 
 export const addUserToGroup = createAsyncThunk<void, AddUserToGroupProps, ThunkConfig<string>> (

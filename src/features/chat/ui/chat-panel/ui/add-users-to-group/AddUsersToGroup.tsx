@@ -19,10 +19,10 @@ const AddUsersToGroup: React.FC<AddToGroupProps> = (props) => {
   const dispatch = useAppDispatch();
 
   const addToGroupHandler = () => {
-    for (const contact of selectedContacts) {
-      console.log(contact);
-      dispatch(addUserToGroup({ userId: contact.userId, chatId: selectedChat.chatId }));
-    }
+    dispatch(addUserToGroup({
+      memberIds: selectedContacts.map(c => c.userId),
+      chatId: selectedChat.chatId
+    }));
 
     setSelectedContacts([]);
     onClose();
