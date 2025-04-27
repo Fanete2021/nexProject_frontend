@@ -4,11 +4,13 @@ import { NavigateOptions, To } from 'react-router-dom';
 import { AuthSchema } from '@/features/auth';
 import { UserSchema } from '@/entities/user';
 import { ChatSchema } from '@/features/chat';
+import { VideoSchema } from '@/features/video';
 
 export interface StateSchema {
   auth: AuthSchema;
   user: UserSchema;
   chat: ChatSchema;
+  video: VideoSchema;
 }
 
 export type StateSchemaKey = keyof StateSchema;

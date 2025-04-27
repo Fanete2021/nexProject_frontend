@@ -40,9 +40,9 @@ export default defineConfig({
   //     host: 'nex.moootvey.ru',
   //     port: 3000,
   //     protocol: 'wss'
-  //   }
+  //   },
   //   allowedHosts: [
-  //       '.ngrok-free.app',
+  //     '.ngrok-free.app',
   //   ],
   // },
 });

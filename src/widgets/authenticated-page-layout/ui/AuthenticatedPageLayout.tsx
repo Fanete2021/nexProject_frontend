@@ -1,10 +1,11 @@
-import React, {ReactNode, useState} from 'react';
+import React, { ReactNode } from 'react';
 import styles from './AuthenticatedPageLayout.module.scss';
 import { Sidebar } from '@/widgets/sidebar';
 import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
 import { DESKTOP_MIN_BREAKPOINT } from '@/shared/const/WindowBreakpoints.ts';
 import { Modal } from '@/shared/ui';
 import { useSidebar } from '@/shared/lib/hooks/useSidebar';
+import { VideoCallModal } from '@/features/video';
 
 export interface AuthenticatedPageLayoutProps {
   children?: ReactNode;
@@ -17,6 +18,8 @@ const AuthenticatedPageLayout: React.FC<AuthenticatedPageLayoutProps> = (props) 
 
   return (
     <div className={styles.AuthenticatedPageLayout}>
+      <VideoCallModal />
+      
       {windowWidth >= DESKTOP_MIN_BREAKPOINT
         ?
         <Sidebar className={styles.sidebar} />
@@ -25,7 +28,7 @@ const AuthenticatedPageLayout: React.FC<AuthenticatedPageLayoutProps> = (props) 
           <Sidebar className={styles.sidebar} />
         </Modal>
       }
-
+      
       <div className={styles.content}>
         {children}
       </div>

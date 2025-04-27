@@ -6,6 +6,7 @@ import { configureApi } from '@/shared/api/api.ts';
 import { authReducer } from '@/features/auth';
 import { userReducer } from '@/entities/user';
 import { chatReducer } from '@/features/chat';
+import { videoReducer } from '@/features/video';
 
 export function createReduxStore(
   initialState?: StateSchema,
@@ -16,7 +17,8 @@ export function createReduxStore(
     ...asyncReducers,
     auth: authReducer,
     user: userReducer,
-    chat: chatReducer
+    chat: chatReducer,
+    video: videoReducer
   };
 
   const reducerManager = createReducerManager(rootReducers);
