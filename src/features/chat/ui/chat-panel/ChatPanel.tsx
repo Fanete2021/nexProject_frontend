@@ -1,26 +1,26 @@
-import React, {useEffect} from 'react';
-import {classNames} from '@/shared/lib/utils/classNames.ts';
+import React, { useEffect } from 'react';
+import { classNames } from '@/shared/lib/utils/classNames.ts';
 import styles from './ChatPanel.module.scss';
 import Dialogs from './ui/dialogs/Dialogs.tsx';
-import {useAppDispatch} from '@/shared/lib/hooks/useAppDispatch.ts';
-import {fetchChats} from '../../model/service/fetchChats.ts';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
+import { fetchChats } from '../../model/service/fetchChats.ts';
 import SelectedChat from './ui/selected-chat/SelectedChat.tsx';
-import {useSelector} from 'react-redux';
-import {getAuthToken} from '@/features/auth';
+import { useSelector } from 'react-redux';
+import { getAuthToken } from '@/features/auth';
 import ChatWebSocketService from '../../model/service/ChatWebSocketService.ts';
-import {getUserData} from '@/entities/user/model/selectors/getUserData.ts';
-import {Message, typesMessage} from '../../model/types/message.ts';
-import {chatActions} from '../../model/slice/chatSlice.ts';
-import {ChatNotification} from '../../model/types/chatNotifications.ts';
-import {fetchChatInfo} from '../../model/service/fetchChatInfo.ts';
-import {Chat} from '../../model/types/chat.ts';
-import {ChatTypes} from '../../model/types/chatTypes.ts';
-import {getChatIsActiveInfoPanel} from '../../model/selectors/getChatIsActiveInfoPanel.ts';
+import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
+import { Message, typesMessage } from '../../model/types/message.ts';
+import { chatActions } from '../../model/slice/chatSlice.ts';
+import { ChatNotification } from '../../model/types/chatNotifications.ts';
+import { fetchChatInfo } from '../../model/service/fetchChatInfo.ts';
+import { Chat } from '../../model/types/chat.ts';
+import { ChatTypes } from '../../model/types/chatTypes.ts';
+import { getChatIsActiveInfoPanel } from '../../model/selectors/getChatIsActiveInfoPanel.ts';
 import InfoChat from '@/features/chat/ui/chat-panel/ui/info-chat/InfoChat.tsx';
-import {getChatSelectedChat} from '../../model/selectors/getChatSelectedChat.ts';
+import { getChatSelectedChat } from '../../model/selectors/getChatSelectedChat.ts';
 import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
-import {isPublicChat} from '@/shared/lib/utils/isPublicChat.ts';
-import {MOBILE_MAX_BREAKPOINT} from '@/shared/const/WindowBreakpoints.ts';
+import { isPublicChat } from '@/shared/lib/utils/isPublicChat.ts';
+import { MOBILE_MAX_BREAKPOINT } from '@/shared/const/WindowBreakpoints.ts';
 
 export interface ChatProps {
     className?: string;
@@ -39,7 +39,6 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
     ChatWebSocketService.connect(token, user.userId);
 
     ChatWebSocketService.onMessageCallback = (message: Message) => {
-      console.log(message.type === typesMessage.DELETE_MESSAGE)
       switch (message.type) {
         case typesMessage.NEW_MESSAGE:
           dispatch(chatActions.addMessage(message));

@@ -10,6 +10,7 @@ import { chatActions } from '../../../../../../model/slice/chatSlice.ts';
 import { MOBILE_MAX_BREAKPOINT } from '@/shared/const/WindowBreakpoints.ts';
 import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
 import { isPublicChat } from '@/shared/lib/utils/isPublicChat.ts';
+import { videoActions } from '@/features/video';
 
 export interface HeaderProps {
   chatInfo: ChatInfo;
@@ -30,6 +31,10 @@ const Header: React.FC<HeaderProps> = (props) => {
   const clearSelectedChat = useCallback(() => {
     dispatch(chatActions.setSelectedChat(undefined));
   }, []);
+  
+  const videoCallHandler = () => {
+    dispatch(videoActions.setRoomId(chatInfo.chatId));
+  };
 
   return (
     <div className={classNames(styles.Header, [className])}>
@@ -92,6 +97,7 @@ const Header: React.FC<HeaderProps> = (props) => {
         <SvgIcon
           iconName={icons.PHONE}
           className={styles.icon}
+          onClick={videoCallHandler}
           important
         />
 
