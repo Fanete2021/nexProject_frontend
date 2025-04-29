@@ -54,20 +54,22 @@ const Sidebar: React.FC<SidebarProps> = (props: SidebarProps) => {
       to={item.path}
       key={item.path}
     >
-      <SvgIcon
-        className={classNames(
-          styles.icon,
-          [],
-          {
-            [styles.applyIconFill]: item.applyIconFill,
-            [styles.applyIconStroke]: item.applyIconStroke,
-          }
-        )}
-        iconName={item.icon}
-        applyStroke={false}
-        applyFill={false}
-        applyHover={false}
-      />
+      <div className={styles.iconWrapper}>
+        <SvgIcon
+          className={classNames(
+            styles.icon,
+            [],
+            {
+              [styles.applyIconFill]: item.applyIconFill,
+              [styles.applyIconStroke]: item.applyIconStroke,
+            }
+          )}
+          iconName={item.icon}
+          applyStroke={false}
+          applyFill={false}
+          applyHover={false}
+        />
+      </div>
 
       {expanded &&
         <div className={styles.text}>
@@ -101,10 +103,12 @@ const Sidebar: React.FC<SidebarProps> = (props: SidebarProps) => {
 
       <div className={styles.footer}>
         <div className={styles.linkWrapper}>
-          <SvgIcon
-            className={classNames(styles.icon,[styles.applyIconFill])}
-            iconName={icons.SETTINGS}
-          />
+          <div className={styles.iconWrapper}>
+            <SvgIcon
+              className={classNames(styles.icon,[styles.applyIconFill])}
+              iconName={icons.SETTINGS}
+            />
+          </div>
 
           {expanded &&
             <div className={styles.text}>
@@ -120,10 +124,12 @@ const Sidebar: React.FC<SidebarProps> = (props: SidebarProps) => {
           )}
           to={RoutePath.changes}
         >
-          <SvgIcon
-            className={classNames(styles.icon,[styles.applyIconFill])}
-            iconName={icons.CHANGES}
-          />
+          <div className={styles.iconWrapper}>
+            <SvgIcon
+              className={classNames(styles.icon,[styles.applyIconFill])}
+              iconName={icons.CHANGES}
+            />
+          </div>
 
           {expanded &&
             <div className={styles.text}>
@@ -133,10 +139,12 @@ const Sidebar: React.FC<SidebarProps> = (props: SidebarProps) => {
         </Link>
 
         <button className={styles.linkWrapper} onClick={logoutHandler}>
-          <SvgIcon
-            className={classNames(styles.icon,[styles.applyIconFill])}
-            iconName={icons.LOGOUT}
-          />
+          <div className={styles.iconWrapper}>
+            <SvgIcon
+              className={classNames(styles.icon,[styles.applyIconFill])}
+              iconName={icons.LOGOUT}
+            />
+          </div>
 
           {expanded &&
             <div className={styles.text}>

@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useState, useEffect, useLayoutEffect } from 'react';
+import React, { useRef, useCallback, useState, useEffect } from 'react';
 import ChatWebSocketService from '../../../../../../model/service/ChatWebSocketService.ts';
 import { useSelector } from 'react-redux';
 import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
@@ -15,10 +15,13 @@ import { TextareaAutosize } from '@mui/material';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { chatActions } from '../../../../../../model/slice/chatSlice.ts';
 import { editMessage } from '../../../../../../model/service/editMessage.ts';
+import { SmilePicker } from '@/widgets/smile-picker';
 
 export interface MessageInputProps {
     className?: string;
 }
+
+const MAX_LENGTH = 255;
 
 const MessageInput: React.FC<MessageInputProps> = (props) => {
   const { className } = props;
@@ -75,11 +78,19 @@ const MessageInput: React.FC<MessageInputProps> = (props) => {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const value = e.target.value.slice(0, 255);
+    const value = e.target.value.slice(0, MAX_LENGTH);
     if (editableMessage) {
       setLocalMessageText(value);
     } else {
       setMessageText(value);
+    }
+  };
+
+  const onEmojiSelectHandler = (emoji: string) => {
+    if (editableMessage && localMessageText.length < MAX_LENGTH) {
+      setLocalMessageText(prev => prev + emoji);
+    } else if (messageText.length < MAX_LENGTH) {
+      setMessageText(messageText + emoji);
     }
   };
   
@@ -144,11 +155,7 @@ const MessageInput: React.FC<MessageInputProps> = (props) => {
         </div>
 
         <div className={styles.rightSide}>
-          <SvgIcon
-            iconName={icons.SMILE}
-            className={styles.smile}
-            important
-          />
+          <SmilePicker onEmojiSelect={onEmojiSelectHandler} />
 
           <SvgIcon
             iconName={icons.SEND}
