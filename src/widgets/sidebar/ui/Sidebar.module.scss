@@ -15,6 +15,10 @@
     .text {
       opacity: 1;
     }
+
+    @media screen and (max-width: 768px) {
+      width: 140px;
+    }
   }
 }
 
@@ -22,6 +26,11 @@
   width: 78.5px;
   height: 95px;
   margin-top: 10px;
+  flex-shrink: 0;
+
+  @media screen and (max-height: 700px) {
+    margin-top: 5px;
+  }
 }
 
 .linksWrapper {
@@ -30,6 +39,11 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+
+  @media screen and (max-height: 700px) {
+    margin-top: 10px;
+    gap: 10px;
+  }
 }
 
 .linkWrapper {
@@ -41,10 +55,21 @@
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
 
-  .icon {
+  .iconWrapper {
     margin-left: 32px;
-    transition: fill 0.3s ease, stroke 0.3s ease;
+    width: 27px;
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @media screen and (max-width: 768px) {
+      margin-left: 16px;
+    }
+  }
+
+  .icon {
+    transition: fill 0.3s ease, stroke 0.3s ease;
   }
 
   .applyIconFill {
@@ -104,4 +129,9 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+
+  @media screen and (max-height: 700px) {
+    gap: 5px;
+    margin-bottom: 10px;
+  }
 }
