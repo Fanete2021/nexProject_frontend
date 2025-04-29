@@ -8,13 +8,14 @@ import { isPublicChat } from '@/shared/lib/utils/isPublicChat.ts';
 import GroupMembers from './ui/group-members/GroupMembers.tsx';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { chatActions } from '../../../../model/slice/chatSlice.ts';
+import React from 'react';
 
-export interface InfoChatProps {
+export interface InfoChatProps extends React.HTMLProps<HTMLDivElement> {
   className?: string;
 }
 
 const InfoChat: React.FC<InfoChatProps> = (props) => {
-  const { className } = props;
+  const { className, ...rest } = props;
   const { t } = useTranslation();
 
   const selectedChat = useSelector(getChatSelectedChat)!;
@@ -26,7 +27,7 @@ const InfoChat: React.FC<InfoChatProps> = (props) => {
   };
 
   return (
-    <div className={classNames(styles.InfoChat, [className])}>
+    <div className={classNames(styles.InfoChat, [className])} {...rest}>
       <div className={styles.header}>
         <SvgIcon
           iconName={icons.BACK}

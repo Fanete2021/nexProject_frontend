@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import styles from './ChatPanel.module.scss';
 import Dialogs from './ui/dialogs/Dialogs.tsx';
@@ -21,10 +21,14 @@ import { getChatSelectedChat } from '../../model/selectors/getChatSelectedChat.t
 import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
 import { isPublicChat } from '@/shared/lib/utils/isPublicChat.ts';
 import { MOBILE_MAX_BREAKPOINT } from '@/shared/const/WindowBreakpoints.ts';
+import { useResizablePanel } from '@/shared/lib/hooks/useResizablePanel.ts';
 
 export interface ChatProps {
     className?: string;
 }
+
+const MIN_PANEL_WIDTH = 200;
+const MAX_PANEL_WIDTH = 400;
 
 const ChatPanel: React.FC<ChatProps> = (props) => {
   const { className } = props;
@@ -34,6 +38,24 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
   const isActiveInfoPanel = useSelector(getChatIsActiveInfoPanel);
   const selectedChat = useSelector(getChatSelectedChat);
   const windowWidth = useWindowWidth();
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  const { width: leftPanelWidth, startResize: startResizeLeft } = useResizablePanel({
+    minWidth: MIN_PANEL_WIDTH,
+    maxWidth: MAX_PANEL_WIDTH,
+    initialWidth: MIN_PANEL_WIDTH,
+    direction: 'left',
+    containerRef: panelRef,
+  });
+
+  const { width: rightPanelWidth, startResize: startResizeRight } = useResizablePanel({
+    minWidth: MIN_PANEL_WIDTH,
+    maxWidth: MAX_PANEL_WIDTH,
+    initialWidth: MIN_PANEL_WIDTH,
+    direction: 'right',
+    containerRef: panelRef,
+  });
+
 
   useEffect(() => {
     ChatWebSocketService.connect(token, user.userId);
@@ -116,11 +138,26 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
   }
 
   return (
-    <div className={classNames(styles.ChatPanel, [className])}>
-      <Dialogs className={styles.dialogs} />
+    <div className={classNames(styles.ChatPanel, [className])} ref={panelRef}>
+      <Dialogs className={styles.dialogs} style={{ width: `${leftPanelWidth}px` }}/>
+
+      <div
+        className={styles.leftResizeHandle}
+        onMouseDown={startResizeLeft}
+      />
+
       <SelectedChat className={styles.selectedChat}/>
 
-      {isActiveInfoPanel && selectedChat && <InfoChat className={styles.infoChat} />}
+      {isActiveInfoPanel && selectedChat && (
+        <>
+          <div
+            className={styles.rightResizeHandle}
+            onMouseDown={startResizeRight}
+          />
+
+          <InfoChat className={styles.infoChat} style={{ width: `${rightPanelWidth}px` }} />
+        </>
+      )}
     </div>
   );
 };
