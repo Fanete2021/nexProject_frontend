@@ -115,6 +115,11 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
         };
 
         dispatch(chatActions.addChat(newChat));
+
+        //При выборе пустого диалога chatId = ''
+        if (selectedChat && !selectedChat.chatId) {
+          dispatch(chatActions.setSelectedChat(response));
+        }
       } catch (error) {
         console.log(error);
       }
@@ -123,7 +128,7 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
     return () => {
       ChatWebSocketService.onNotificationsCallback = () => {};
     };
-  }, [dispatch]);
+  }, [dispatch, selectedChat]);
 
   if (windowWidth <= MOBILE_MAX_BREAKPOINT) {
     return (
@@ -146,7 +151,7 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
         onMouseDown={startResizeLeft}
       />
 
-      <SelectedChat className={styles.selectedChat}/>
+      <SelectedChat className={styles.selectedChat} />
 
       {isActiveInfoPanel && selectedChat && (
         <>
