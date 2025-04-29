@@ -18,7 +18,7 @@ import { useSidebar } from '@/shared/lib/hooks/useSidebar.ts';
 import { Contact, ContactSearcher } from '@/entities/contact';
 import CreatorGroupModal from '../creator-group-modal/CreatorGroupModal.tsx';
 
-export interface ChatListProps {
+export interface ChatListProps extends React.HTMLProps<HTMLDivElement> {
   className?: string;
 }
 
@@ -40,7 +40,7 @@ const filters = [
 const DIALOGS_PAGE_SIZE = 20;
 
 const Dialogs: React.FC<ChatListProps> = (props) => {
-  const { className } = props;
+  const { className, ...rest } = props;
     
   const { t } = useTranslation();
   const [searchedValue, setSearchedValue] = useState<string>('');
@@ -129,7 +129,7 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
   };
 
   return (
-    <div className={classNames(styles.Dialogs, [className])}>
+    <div className={classNames(styles.Dialogs, [className])} {...rest}>
       <div className={styles.header}>
         <div className={styles.title}>{t('Чаты') as string}</div>
 

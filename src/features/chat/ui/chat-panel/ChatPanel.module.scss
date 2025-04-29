@@ -13,13 +13,24 @@
 .dialogs {
   width: 220px;
   height: auto;
-  border-right: 2px solid var(--chat-divider-line-color);
   flex-shrink: 0;
 
   @media screen and (max-width: 768px) {
     width: 100%;
     border: 0;
   }
+}
+
+.leftResizeHandle, .rightResizeHandle {
+  cursor: ew-resize;
+}
+
+.leftResizeHandle {
+  border-right: 2px solid var(--chat-divider-line-color);
+}
+
+.rightResizeHandle {
+  border-left: 2px solid var(--chat-divider-line-color);
 }
 
 .selectedChat {
@@ -29,7 +40,6 @@
 .infoChat {
   width: 220px;
   height: auto;
-  border-left: 2px solid var(--chat-divider-line-color);
   flex-shrink: 0;
 
   @media screen and (max-width: 768px) {
