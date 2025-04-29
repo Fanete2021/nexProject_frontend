@@ -39,5 +39,10 @@ export enum icons {
   MEMBERS = 'members',
   ADD_MEMBER = 'addMember',
   DELETE = 'delete',
-  EDIT = 'edit'
+  EDIT = 'edit',
+  CAMERA = 'camera',
+  CAMERA_OFF = 'cameraOff',
+  MICROPHONE = 'microphone',
+  MICROPHONE_OFF = 'microphoneOff',
+  LINE = 'line',
 }

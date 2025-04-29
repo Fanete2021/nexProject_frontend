@@ -8,6 +8,7 @@
   flex-direction: column;
   gap: 10px;
   position: relative;
+  background-color: var(--modal-bg-color);
 
   @media screen and (max-width: 768px) {
     width: 100vw;

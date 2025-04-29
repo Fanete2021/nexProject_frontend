@@ -6,7 +6,7 @@ import { Portal } from '@/shared/ui';
 export interface ModalProps {
   className?: string;
   isOpen?: boolean;
-  onClose: () => void;
+  onClose?: () => void;
   children?: React.ReactNode;
   hasOverlayBlackout?: boolean;
 }
@@ -21,7 +21,7 @@ export const Modal: FC<ModalProps> = (props) => {
   } = props;
 
   const onKeyDown = useCallback((e: KeyboardEvent) => {
-    if (e.key === 'Escape') {
+    if (e.key === 'Escape' && onClose) {
       onClose();
     }
   }, [ onClose ]);

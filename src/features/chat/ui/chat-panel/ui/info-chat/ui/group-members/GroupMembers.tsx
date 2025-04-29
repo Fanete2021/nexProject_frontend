@@ -1,5 +1,5 @@
 import { Avatar, Button, icons, Scrollbar, SvgIcon } from '@/shared/ui';
-import AddUsersToGroup from '../../../add-users-to-group/AddUsersToGroup.tsx';
+import AddUsersToGroupModal from '../../../add-users-to-group-modal/AddUsersToGroupModal.tsx';
 import styles from './GroupMembers.module.scss';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { useCallback, useState } from 'react';
@@ -64,7 +64,7 @@ const GroupMembers: React.FC<GroupMembersProps> = (props) => {
         />
       </Button>
 
-      <AddUsersToGroup onClose={closeAddToGroupHandler} isOpen={isOpenAddToGroup}/>
+      <AddUsersToGroupModal onClose={closeAddToGroupHandler} isOpen={isOpenAddToGroup}/>
     </div>
   );
 };

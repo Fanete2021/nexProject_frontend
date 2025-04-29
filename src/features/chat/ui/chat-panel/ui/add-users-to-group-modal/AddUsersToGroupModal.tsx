@@ -1,7 +1,7 @@
 import { Contact, ContactPicker } from '@/entities/contact';
 import { useState } from 'react';
 import { Button, Modal } from '@/shared/ui';
-import styles from './AddUsersToGroup.module.scss';
+import styles from './AddUsersToGroupModal.module.scss';
 import { useSelector } from 'react-redux';
 import { getChatSelectedChat } from '../../../../model/selectors/getChatSelectedChat.ts';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
@@ -12,7 +12,7 @@ export interface AddToGroupProps {
   isOpen: boolean;
 }
 
-const AddUsersToGroup: React.FC<AddToGroupProps> = (props) => {
+const AddUsersToGroupModal: React.FC<AddToGroupProps> = (props) => {
   const { isOpen, onClose } = props;
   const [selectedContacts, setSelectedContacts] = useState<Contact[]>([]);
   const selectedChat = useSelector(getChatSelectedChat)!;
@@ -54,4 +54,4 @@ const AddUsersToGroup: React.FC<AddToGroupProps> = (props) => {
   );
 };
 
-export default AddUsersToGroup;
+export default AddUsersToGroupModal;
