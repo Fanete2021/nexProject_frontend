@@ -11,12 +11,12 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { ChatTypes } from '../../../../model/types/chatTypes.ts';
 import { fetchChats } from '../../../../model/service/fetchChats.ts';
 import { getChatSelectedChat } from '../../../../model/selectors/getChatSelectedChat.ts';
-import CreatorGroup from './ui/creator-group/CreatorGroup.tsx';
 import { chatActions } from '../../../../model/slice/chatSlice.ts';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { useTranslation } from 'react-i18next';
 import { useSidebar } from '@/shared/lib/hooks/useSidebar.ts';
 import { Contact, ContactSearcher } from '@/entities/contact';
+import CreatorGroupModal from '../creator-group-modal/CreatorGroupModal.tsx';
 
 export interface ChatListProps {
   className?: string;
@@ -223,7 +223,7 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
         {t('Новый чат') as string}
       </button>
 
-      <CreatorGroup onClose={closeCreatorGroupHandler} isOpen={isOpenCreatorGroup} />
+      <CreatorGroupModal onClose={closeCreatorGroupHandler} isOpen={isOpenCreatorGroup} />
     </div>
   );
 };

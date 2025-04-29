@@ -1,5 +1,6 @@
 import { Client } from '@stomp/stompjs';
 import * as kurentoUtils from 'kurento-utils';
+import { participant } from '../types/participant.ts';
 
 enum commandTypes {
   JOIN_CALL = 'JOIN_CALL',
@@ -13,12 +14,17 @@ enum commandTypes {
   LEAVE_CALL = 'LEAVE_CALL'
 }
 
+export enum participantsUpdateActions {
+  ADD = 'add',
+  REMOVE = 'remove'
+}
+
 class WebRtcService {
   private stompClient: Client | null = null;
-  private participants: Record<string, any> = {};
+  private participants: Record<string, participant> = {};
   private currentUserId: string | null = null;
   private roomId: string | null = null;
-  private onParticipantsUpdate: ((participant: HTMLDivElement) => void) | null = null;
+  private onParticipantsUpdate: ((participant: participant, action: participantsUpdateActions) => void) | null = null;
 
   constructor() {
     this.participants = {};
@@ -28,7 +34,7 @@ class WebRtcService {
     token: string,
     userId: string,
     roomId: string,
-    onParticipantsUpdate: (participant: HTMLDivElement) => void
+    onParticipantsUpdate: (participant: participant, action: participantsUpdateActions) => void
   ) {
     this.currentUserId = userId;
     this.roomId = roomId;
@@ -42,6 +48,40 @@ class WebRtcService {
     });
 
     this.stompClient.activate();
+  }
+
+  public updateVideoTrack(enabled: boolean) {
+    const currentUserId = this.currentUserId!;
+    const currentParticipant = this.participants[currentUserId];
+
+    if (!currentParticipant || !currentParticipant.rtcPeer) return;
+
+    const videoTrack = currentParticipant.rtcPeer.getLocalStream().getVideoTracks()[0];
+    if (videoTrack) {
+      videoTrack.enabled = enabled;
+      const senders = currentParticipant.rtcPeer.peerConnection.getSenders();
+      const videoSender = senders.find(sender => sender.track?.kind === 'video');
+      if (videoSender) {
+        videoSender.replaceTrack(videoTrack);
+      }
+    }
+  }
+
+  public updateAudioTrack(enabled: boolean) {
+    const currentUserId = this.currentUserId!;
+    const currentParticipant = this.participants[currentUserId];
+
+    if (!currentParticipant || !currentParticipant.rtcPeer) return;
+
+    const audioTrack = currentParticipant.rtcPeer.getLocalStream().getAudioTracks()[0];
+    if (audioTrack) {
+      audioTrack.enabled = enabled;
+      const senders = currentParticipant.rtcPeer.peerConnection.getSenders();
+      const audioSender = senders.find(sender => sender.track?.kind === 'audio');
+      if (audioSender) {
+        audioSender.replaceTrack(audioTrack);
+      }
+    }
   }
 
   private handleConnect() {
@@ -98,31 +138,26 @@ class WebRtcService {
       audio: true,
       video: {
         mandatory: {
-          maxWidth: 320,
-          maxFrameRate: 15,
+          maxWidth: 1024,
+          maxFrameRate: 60,
           minFrameRate: 15,
         },
       },
     };
 
     const currentUserParticipant = {
-      userId: this.currentUserId,
-      videoRef: document.createElement('video'),
+      userId: this.currentUserId!,
+      video: document.createElement('video'),
       rtcPeer: null
     };
 
     this.participants[this.currentUserId!] = currentUserParticipant;
-    const currentUserVideo = currentUserParticipant.videoRef;
+    const currentUserVideo = currentUserParticipant.video;
     currentUserVideo.id = 'video-' + this.currentUserId;
     currentUserVideo.autoplay = true;
     currentUserVideo.controls = false;
 
-    const container = document.createElement('div');
-    container.id = this.currentUserId;
-    container.appendChild(currentUserVideo);
-    container.appendChild(document.createTextNode(this.currentUserId));
-
-    this.onParticipantsUpdate(container);
+    this.onParticipantsUpdate(currentUserParticipant, participantsUpdateActions.ADD);
 
     const options = {
       localVideo: currentUserVideo,
@@ -139,6 +174,7 @@ class WebRtcService {
       currentUserParticipant.rtcPeer.generateOffer((err, offerSdp) => {
         if (err) return console.error("sdp offer error");
         this.sendStompMessage(commandTypes.RECEIVE_CALL, { senderId: this.currentUserId, sdpOffer: offerSdp });
+        this.updateVideoTrack(false);
       });
     });
 
@@ -149,22 +185,17 @@ class WebRtcService {
     if (!this.participants[sender]) {
       const participant = {
         userId: sender,
-        videoRef: document.createElement('video'),
+        video: document.createElement('video'),
         rtcPeer: null
       };
 
       this.participants[sender] = participant;
-      const video = participant.videoRef;
+      const video = participant.video;
       video.id = 'video-' + sender;
       video.autoplay = true;
       video.controls = false;
 
-      const container = document.createElement('div');
-      container.id = sender;
-      container.appendChild(video);
-      container.appendChild(document.createTextNode(sender));
-
-      this.onParticipantsUpdate(container);
+      this.onParticipantsUpdate(participant, participantsUpdateActions.ADD);
 
       const options = {
         remoteVideo: video,
@@ -200,9 +231,16 @@ class WebRtcService {
   };
 
   private onParticipantLeft = (request: any) => {
-    console.log('Participant ' + request.userId + ' left');
-    const { [request.userId]: _, ...rest } = this.participants;
-    this.participants = rest;
+    const participant = this.participants[request.userId];
+    if (participant) {
+      this.onParticipantsUpdate(participant, participantsUpdateActions.REMOVE);
+
+      if (participant.rtcPeer) {
+        participant.rtcPeer.dispose();
+      }
+
+      delete this.participants[request.userId];
+    }
   };
 
   public leaveRoom = () => {
