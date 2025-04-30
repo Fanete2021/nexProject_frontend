@@ -21,6 +21,7 @@ import { addUserToGroup } from './model/service/addUserToGroup.ts';
 import { deleteMessage } from './model/service/deleteMessage.ts';
 import { getChatEditableMessage } from './model/selectors/getChatEditableMessage.ts';
 import { editMessage } from './model/service/editMessage.ts';
+import { getChatDialogsFilter } from './model/selectors/getChatDialogsFilter.ts';
 
 export {
   ChatPanelAsync as ChatPanel,
@@ -34,9 +35,8 @@ export {
   getChatIsActiveInfoPanel,
   getChatIsLoadingMessages,
   getChatMessageDrafts,
-  deleteMessage,
   getChatEditableMessage,
-  editMessage,
+  getChatDialogsFilter,
 
   fetchChats,
   fetchChatInfo,
@@ -45,6 +45,8 @@ export {
   createGroup,
   fetchMessages,
   addUserToGroup,
+  editMessage,
+  deleteMessage,
 
   ChatTypes
 };

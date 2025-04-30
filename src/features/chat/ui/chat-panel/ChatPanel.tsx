@@ -1,27 +1,28 @@
-import React, { useEffect, useRef } from 'react';
-import { classNames } from '@/shared/lib/utils/classNames.ts';
+import React, {useEffect, useRef} from 'react';
+import {classNames} from '@/shared/lib/utils/classNames.ts';
 import styles from './ChatPanel.module.scss';
 import Dialogs from './ui/dialogs/Dialogs.tsx';
-import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
-import { fetchChats } from '../../model/service/fetchChats.ts';
+import {useAppDispatch} from '@/shared/lib/hooks/useAppDispatch.ts';
+import {fetchChats} from '../../model/service/fetchChats.ts';
 import SelectedChat from './ui/selected-chat/SelectedChat.tsx';
-import { useSelector } from 'react-redux';
-import { getAuthToken } from '@/features/auth';
+import {useSelector} from 'react-redux';
+import {getAuthToken} from '@/features/auth';
 import ChatWebSocketService from '../../model/service/ChatWebSocketService.ts';
-import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
-import { Message, typesMessage } from '../../model/types/message.ts';
-import { chatActions } from '../../model/slice/chatSlice.ts';
-import { ChatNotification } from '../../model/types/chatNotifications.ts';
-import { fetchChatInfo } from '../../model/service/fetchChatInfo.ts';
-import { Chat } from '../../model/types/chat.ts';
-import { ChatTypes } from '../../model/types/chatTypes.ts';
-import { getChatIsActiveInfoPanel } from '../../model/selectors/getChatIsActiveInfoPanel.ts';
+import {getUserData} from '@/entities/user/model/selectors/getUserData.ts';
+import {Message, typesMessage} from '../../model/types/message.ts';
+import {chatActions} from '../../model/slice/chatSlice.ts';
+import {ChatNotification} from '../../model/types/chatNotifications.ts';
+import {fetchChatInfo} from '../../model/service/fetchChatInfo.ts';
+import {Chat} from '../../model/types/chat.ts';
+import {ChatTypes} from '../../model/types/chatTypes.ts';
+import {getChatIsActiveInfoPanel} from '../../model/selectors/getChatIsActiveInfoPanel.ts';
 import InfoChat from '@/features/chat/ui/chat-panel/ui/info-chat/InfoChat.tsx';
-import { getChatSelectedChat } from '../../model/selectors/getChatSelectedChat.ts';
+import {getChatSelectedChat} from '../../model/selectors/getChatSelectedChat.ts';
 import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
-import { isPublicChat } from '@/shared/lib/utils/isPublicChat.ts';
-import { MOBILE_MAX_BREAKPOINT } from '@/shared/const/WindowBreakpoints.ts';
-import { useResizablePanel } from '@/shared/lib/hooks/useResizablePanel.ts';
+import {isPublicChat} from '@/shared/lib/utils/isPublicChat.ts';
+import {MOBILE_MAX_BREAKPOINT} from '@/shared/const/WindowBreakpoints.ts';
+import {useResizablePanel} from '@/shared/lib/hooks/useResizablePanel.ts';
+import {getChatDialogsFilter} from '../../model/selectors/getChatDialogsFilter.ts';
 
 export interface ChatProps {
     className?: string;
@@ -32,12 +33,16 @@ const MAX_PANEL_WIDTH = 400;
 
 const ChatPanel: React.FC<ChatProps> = (props) => {
   const { className } = props;
+  
   const dispatch = useAppDispatch();
+  const windowWidth = useWindowWidth();
+  
   const token = useSelector(getAuthToken)!;
   const user = useSelector(getUserData)!;
   const isActiveInfoPanel = useSelector(getChatIsActiveInfoPanel);
   const selectedChat = useSelector(getChatSelectedChat);
-  const windowWidth = useWindowWidth();
+  const dialogsFilter = useSelector(getChatDialogsFilter);
+  
   const panelRef = useRef<HTMLDivElement>(null);
 
   const { width: leftPanelWidth, startResize: startResizeLeft } = useResizablePanel({
@@ -107,14 +112,22 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
 
         ChatWebSocketService.subscribe(notification.chatId);
 
+        const isPublic = isPublicChat(response);
+
         const newChat: Chat = {
           chatId: response.chatId,
           lastMessage: response.lastMessages[0],
           chatName: response.chatName,
-          chatType: isPublicChat(response) ? ChatTypes.PUBLIC : ChatTypes.PRIVATE,
+          chatType: isPublic ? ChatTypes.PUBLIC : ChatTypes.PRIVATE,
         };
 
-        dispatch(chatActions.addChat(newChat));
+        if (
+          dialogsFilter === ChatTypes.ALL ||
+          (isPublic && dialogsFilter === ChatTypes.PUBLIC) ||
+          (!isPublic && dialogsFilter === ChatTypes.PRIVATE)
+        ) {
+          dispatch(chatActions.addChat(newChat));
+        }
 
         //При выборе пустого диалога chatId = ''
         if (selectedChat && !selectedChat.chatId) {
@@ -128,7 +141,7 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
     return () => {
       ChatWebSocketService.onNotificationsCallback = () => {};
     };
-  }, [dispatch, selectedChat]);
+  }, [dispatch, selectedChat, dialogsFilter]);
 
   if (windowWidth <= MOBILE_MAX_BREAKPOINT) {
     return (

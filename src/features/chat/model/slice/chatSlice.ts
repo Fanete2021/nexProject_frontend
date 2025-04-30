@@ -5,6 +5,7 @@ import { fetchChats } from '../service/fetchChats.ts';
 import { fetchChatInfo } from '../service/fetchChatInfo.ts';
 import { fetchMessages } from '../service/fetchMessages.ts';
 import { Message } from '../types/message.ts';
+import { ChatTypes } from '../types/chatTypes.ts';
 
 const initialState: ChatSchema = {
   dialogs: [],
@@ -14,7 +15,8 @@ const initialState: ChatSchema = {
   isActiveInfoPanel: false,
   isLoadingMessages: false,
   messageDrafts: {},
-  editableMessage: undefined
+  editableMessage: undefined,
+  dialogsFilter: ChatTypes.ALL
 };
 
 export const chatSlice = createSlice({
@@ -77,6 +79,9 @@ export const chatSlice = createSlice({
     },
     setEditableMessage: (state, action: PayloadAction<Message | undefined>) => {
       state.editableMessage = action.payload;
+    },
+    setDialogsFilter: (state, action: PayloadAction<ChatTypes>) => {
+      state.dialogsFilter = action.payload;
     }
   },
   extraReducers: (builder) => {

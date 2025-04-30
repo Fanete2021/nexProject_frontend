@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { useSidebar } from '@/shared/lib/hooks/useSidebar.ts';
 import { Contact, ContactSearcher } from '@/entities/contact';
 import CreatorGroupModal from '../creator-group-modal/CreatorGroupModal.tsx';
+import { getChatDialogsFilter } from '../../../../model/selectors/getChatDialogsFilter.ts';
 
 export interface ChatListProps extends React.HTMLProps<HTMLDivElement> {
   className?: string;
@@ -43,27 +44,28 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
   const { className, ...rest } = props;
     
   const { t } = useTranslation();
-  const [searchedValue, setSearchedValue] = useState<string>('');
-  const [activeFilter, setActiveFilter] = useState<ChatTypes>(ChatTypes.ALL);
   const dispatch = useAppDispatch();
+  const { openSidebar } = useSidebar();
+
+  const [searchedValue, setSearchedValue] = useState<string>('');
   const [searchedContacts, setSearchedContacts] = useState<Contact[]>([]);
-  const selectedChat = useSelector(getChatSelectedChat);
   const [isOpenCreatorGroup, setIsOpenCreatorGroup] = useState<boolean>(false);
   const [isLoadingSearch, setIsLoadingSearch] = useState<boolean>(false);
-  const scrollbarRef = useRef<Scrollbars>(null);
   const [currentPageDialogs, setCurrentPageDialogs] = useState<number>(1);
   const [allPagesDialogs, setAllPagesDialogs] = useState<number>(1);
 
+  const dialogsFilter = useSelector(getChatDialogsFilter);
+  const selectedChat = useSelector(getChatSelectedChat);
   const dialogs = useSelector(getChatDialogs);
   const isLoadingDialogs = useSelector(getChatIsLoadingDialogs);
+
+  const scrollbarRef = useRef<Scrollbars>(null);
 
   const closeCreatorGroupHandler = useCallback(() => setIsOpenCreatorGroup(false), []);
   const toggleCreatorGroupHandler = useCallback(() => setIsOpenCreatorGroup(prev => !prev), []);
 
-  const { openSidebar } = useSidebar();
-
   const filterChangeValueHandler = useCallback((filter: string) => {
-    setActiveFilter(filter as ChatTypes);
+    dispatch(chatActions.setDialogsFilter(filter as ChatTypes));
   }, []);
 
   const loadChats = async (shouldRewriteChats: boolean) => {
@@ -71,7 +73,7 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
       const newCurrentPage = currentPageDialogs + 1;
 
       const response = await dispatch(fetchChats({
-        filterMode: activeFilter,
+        filterMode: dialogsFilter,
         pageSize: DIALOGS_PAGE_SIZE,
         pageNumber: shouldRewriteChats ? 1 : newCurrentPage
       })).unwrap();
@@ -91,7 +93,7 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
 
   useEffect(() => {
     loadChats(true);
-  }, [activeFilter]);
+  }, [dialogsFilter]);
 
   useEffect(() => {
     setSearchedValue('');
@@ -141,7 +143,7 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
       <div className={styles.content}>
         {!searchedValue &&
           <Tabs
-            value={activeFilter}
+            value={dialogsFilter}
             onChange={filterChangeValueHandler}
             items={filters}
             className={styles.filter}
