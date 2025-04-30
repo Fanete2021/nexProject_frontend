@@ -20,10 +20,11 @@ export interface DialogItemProps {
   chatData?: Chat;
   contactData?: Contact;
   className?: string;
+  openContextMenu?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, chat: Chat) => void;
 }
 
 const DialogItem: React.FC<DialogItemProps> = (props) => {
-  const { chatData, contactData, className } = props;
+  const { chatData, contactData, className, openContextMenu } = props;
   const dispatch = useAppDispatch();
   const user = useSelector(getUserData)!;
   const selectedChat = useSelector(getChatSelectedChat);
@@ -84,6 +85,10 @@ const DialogItem: React.FC<DialogItemProps> = (props) => {
           [styles.selectedDialog]: selectedChat?.chatId && chatData?.chatId === selectedChat.chatId,
         }
       )}
+      onContextMenu={openContextMenu && chatData && chatData.chatType === ChatTypes.PRIVATE
+        ? (event) => openContextMenu(event, chatData)
+        : undefined
+      }
     >
       <Avatar
         text={chatData?.chatName || contactData?.name || contactData?.username}

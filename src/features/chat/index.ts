@@ -23,6 +23,7 @@ import { getChatEditableMessage } from './model/selectors/getChatEditableMessage
 import { editMessage } from './model/service/editMessage.ts';
 import { getChatDialogsFilter } from './model/selectors/getChatDialogsFilter.ts';
 import { getChatIsLoadingSelectedChat } from './model/selectors/getChatIsLoadingSelectedChat.ts';
+import { deletePrivateChat } from './model/service/deletePrivateChat.ts';
 
 export {
   ChatPanelAsync as ChatPanel,
@@ -49,6 +50,7 @@ export {
   addUserToGroup,
   editMessage,
   deleteMessage,
+  deletePrivateChat,
 
   ChatTypes
 };

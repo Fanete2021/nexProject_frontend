@@ -18,6 +18,9 @@ import { useSidebar } from '@/shared/lib/hooks/useSidebar.ts';
 import { Contact, ContactSearcher } from '@/entities/contact';
 import CreatorGroupModal from '../creator-group-modal/CreatorGroupModal.tsx';
 import { getChatDialogsFilter } from '../../../../model/selectors/getChatDialogsFilter.ts';
+import { Chat } from '../../../../model/types/chat.ts';
+import ActionMenu from '../action-menu/ActionMenu.tsx';
+import { deletePrivateChat } from '../../../../model/service/deletePrivateChat.ts';
 
 export interface ChatListProps extends React.HTMLProps<HTMLDivElement> {
   className?: string;
@@ -53,6 +56,8 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
   const [isLoadingSearch, setIsLoadingSearch] = useState<boolean>(false);
   const [currentPageDialogs, setCurrentPageDialogs] = useState<number>(1);
   const [allPagesDialogs, setAllPagesDialogs] = useState<number>(1);
+  const [actionMenuPosition, setActionMenuPosition] = useState<{ x: number; y: number } | null>(null);
+  const [actionMenuChat, setActionMenuChat] = useState<Chat | null>(null);
 
   const dialogsFilter = useSelector(getChatDialogsFilter);
   const selectedChat = useSelector(getChatSelectedChat);
@@ -111,6 +116,22 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
     }
   };
 
+  const openActionMenuHandler = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, chat: Chat) => {
+    event.preventDefault();
+    setActionMenuPosition({ x: event.clientX, y: event.clientY });
+    setActionMenuChat(chat);
+  };
+
+  const closeActionMenuHandler = () => {
+    setActionMenuPosition(null);
+    setActionMenuChat(null);
+  };
+
+  const deleteMessageHandler = () => {
+    dispatch(deletePrivateChat({ chatId: actionMenuChat!.chatId }));
+    closeActionMenuHandler();
+  };
+
   return (
     <div className={classNames(styles.Dialogs, [className])} {...rest}>
       <div className={styles.header}>
@@ -167,7 +188,12 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
             {!searchedValue && !isLoadingDialogs &&
               <>
                 {dialogs.map(dialog => (
-                  <DialogItem key={dialog.chatId} chatData={dialog} className={styles.dialog} />
+                  <DialogItem
+                    key={dialog.chatId}
+                    chatData={dialog}
+                    className={styles.dialog}
+                    openContextMenu={openActionMenuHandler}
+                  />
                 ))}
               </>
             }
@@ -191,6 +217,12 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
       </button>
 
       <CreatorGroupModal onClose={closeCreatorGroupHandler} isOpen={isOpenCreatorGroup} />
+
+      <ActionMenu
+        deleteHandler={deleteMessageHandler}
+        onClose={closeActionMenuHandler}
+        position={actionMenuPosition}
+      />
     </div>
   );
 };

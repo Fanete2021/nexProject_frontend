@@ -70,6 +70,9 @@ export const chatSlice = createSlice({
     addChat: (state, action: PayloadAction<Chat>) => {
       state.dialogs.unshift(action.payload);
     },
+    deleteChatById: (state, action: PayloadAction<string>) => {
+      state.dialogs = state.dialogs.filter((dialog) => dialog.chatId !== action.payload);
+    },
     setIsActiveInfoPanel: (state, action: PayloadAction<boolean>) => {
       state.isActiveInfoPanel = action.payload;
     },
