@@ -4,7 +4,7 @@ import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { useSelector } from 'react-redux';
 import { getChatDialogs } from '../../../../model/selectors/getChatDialogs.ts';
 import DialogItem from './ui/dialog-item/DialogItem.tsx';
-import { icons, Scrollbar, SvgIcon } from '@/shared/ui';
+import { icons, Scrollbar, SvgIcon, Tabs } from '@/shared/ui';
 import DialogItemSkeleton from './ui/dialog-item/DialogItemSkeleton.tsx';
 import { getChatIsLoadingDialogs } from '../../../../model/selectors/getChatIsLoadingDialogs.ts';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
@@ -45,8 +45,6 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
   const { t } = useTranslation();
   const [searchedValue, setSearchedValue] = useState<string>('');
   const [activeFilter, setActiveFilter] = useState<ChatTypes>(ChatTypes.ALL);
-  const underlineRef = useRef<HTMLDivElement>(null);
-  const filterRefs = useRef<(HTMLDivElement | null)[]>([]);
   const dispatch = useAppDispatch();
   const [searchedContacts, setSearchedContacts] = useState<Contact[]>([]);
   const selectedChat = useSelector(getChatSelectedChat);
@@ -64,26 +62,9 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
 
   const { openSidebar } = useSidebar();
 
-  const handleFilterClick = (filter: ChatTypes, event: React.MouseEvent) => {
-    setActiveFilter(filter);
-
-    const target = event.target as HTMLDivElement;
-    if (underlineRef.current && target) {
-      const { offsetLeft, offsetWidth } = target;
-
-      underlineRef.current.style.transform = `translateX(${offsetLeft}px)`;
-      underlineRef.current.style.width = `${offsetWidth}px`;
-    }
-  };
-
-  useEffect(() => {
-    const initialFilter = filterRefs.current[0];
-    if (underlineRef.current && initialFilter) {
-      const { offsetLeft, offsetWidth } = initialFilter;
-      underlineRef.current.style.transform = `translateX(${offsetLeft}px)`;
-      underlineRef.current.style.width = `${offsetWidth}px`;
-    }
-  }, [filterRefs]);
+  const filterChangeValueHandler = useCallback((filter: string) => {
+    setActiveFilter(filter as ChatTypes);
+  }, []);
 
   const loadChats = async (shouldRewriteChats: boolean) => {
     try {
@@ -158,30 +139,14 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
       </div>
 
       <div className={styles.content}>
-        <div 
-          className={styles.filter}
-          style={{
-            display: !searchedValue ? 'flex' : 'none' //Чтобы корректно устанавливалась underline
-          }}
-        >
-          <div
-            ref={underlineRef}
-            className={styles.underline}
-          ></div>
-
-          {filters.map((filter, index) => (
-            <div
-              key={filter.value}
-              className={classNames(styles.item, [], {
-                [styles.active]: activeFilter === filter.value,
-              })}
-              ref={(el) => (filterRefs.current[index] = el)}
-              onClick={(event) => handleFilterClick(filter.value, event)}
-            >
-              {t(filter.name) as string}
-            </div>
-          ))}
-        </div>
+        {!searchedValue &&
+          <Tabs
+            value={activeFilter}
+            onChange={filterChangeValueHandler}
+            items={filters}
+            className={styles.filter}
+          />
+        }
 
         <div className={styles.dialogs}>
           <Scrollbar

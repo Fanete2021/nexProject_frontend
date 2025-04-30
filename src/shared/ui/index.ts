@@ -10,6 +10,7 @@ import { Modal, ModalProps } from './modal';
 import { Scrollbar, ScrollbarProps } from './scrollbar';
 import { Search, SearchProps } from './search';
 import { Button, ButtonProps } from './button';
+import { Tabs, TabsProps } from './tabs';
 
 export type {
   SvgIconProps,
@@ -24,7 +25,8 @@ export type {
   ModalProps,
   ScrollbarProps,
   SearchProps,
-  ButtonProps
+  ButtonProps,
+  TabsProps
 };
 
 export {
@@ -40,5 +42,6 @@ export {
   Modal,
   Scrollbar,
   Search,
-  Button
+  Button,
+  Tabs
 };
