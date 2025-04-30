@@ -1,6 +1,13 @@
 import { format, isToday, isYesterday, isThisWeek } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
+/**
+ * Получение времени в засимости от текущей даты, в форматах:
+ * hh:mm
+ * вчера hh:mm
+ * day, hh:mm
+ * DD.MM.YYYY
+ */
 export const formatLastMessageDateTime = (date: Date): string => {
   if (isToday(date)) {
     return format(date, 'HH:mm', { locale: ru });

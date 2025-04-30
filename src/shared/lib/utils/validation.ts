@@ -1,4 +1,6 @@
-
+/**
+ * Валидация для форм авторизации/регистрации.
+ */
 const passwordLengthValidText = 'От 6 до 15 символов';
 const passwordCharsValidText = 'Используются только латинские буквы, цифры и специальные символы (!@#$%^&*-)';
 export const isPasswordValid = (password: string) => {

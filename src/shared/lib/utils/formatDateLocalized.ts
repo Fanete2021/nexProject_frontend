@@ -1,3 +1,8 @@
+/**
+ * Получение даты в засимости от текущей даты, в форматах:
+ * день месяц
+ * день месяц год
+ */
 export const formatDateLocalized = (dateString: string): string => {
   const date = new Date(dateString);
   const now = new Date();
