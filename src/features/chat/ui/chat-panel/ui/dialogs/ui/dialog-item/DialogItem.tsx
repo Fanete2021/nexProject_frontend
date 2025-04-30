@@ -4,7 +4,6 @@ import styles from './DialogItem.module.scss';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { fetchChatInfo } from '../../../../../../model/service/fetchChatInfo.ts';
 import { Avatar, icons, SvgIcon } from '@/shared/ui';
-import { Contact } from '../../../../model/types/contact.ts';
 import { ChatInfo } from '../../../../../../model/types/chatInfo.ts';
 import { useSelector } from 'react-redux';
 import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
@@ -14,16 +13,18 @@ import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { formatLastMessageDateTime } from '@/shared/lib/utils/formatLastMessageDateTime.ts';
 import { ChatTypes } from '../../../../../../model/types/chatTypes.ts';
 import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
-import {MOBILE_MAX_BREAKPOINT} from "@/shared/const/WindowBreakpoints.ts";
+import { MOBILE_MAX_BREAKPOINT } from '@/shared/const/WindowBreakpoints.ts';
+import { Contact } from '@/entities/contact';
 
 export interface DialogItemProps {
   chatData?: Chat;
   contactData?: Contact;
   className?: string;
+  openContextMenu?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, chat: Chat) => void;
 }
 
 const DialogItem: React.FC<DialogItemProps> = (props) => {
-  const { chatData, contactData, className } = props;
+  const { chatData, contactData, className, openContextMenu } = props;
   const dispatch = useAppDispatch();
   const user = useSelector(getUserData)!;
   const selectedChat = useSelector(getChatSelectedChat);
@@ -31,8 +32,10 @@ const DialogItem: React.FC<DialogItemProps> = (props) => {
 
   const setupSelectedChat = async (chatId: string) => {
     try {
+      dispatch(chatActions.setIsLoadingSelectedChat(true));
       const response = await dispatch(fetchChatInfo({ chatId: chatId })).unwrap();
       dispatch(chatActions.setSelectedChat(response));
+      dispatch(chatActions.setIsLoadingSelectedChat(false));
     } catch (error) {
       console.log(error);
     }
@@ -82,6 +85,10 @@ const DialogItem: React.FC<DialogItemProps> = (props) => {
           [styles.selectedDialog]: selectedChat?.chatId && chatData?.chatId === selectedChat.chatId,
         }
       )}
+      onContextMenu={openContextMenu && chatData && chatData.chatType === ChatTypes.PRIVATE
+        ? (event) => openContextMenu(event, chatData)
+        : undefined
+      }
     >
       <Avatar
         text={chatData?.chatName || contactData?.name || contactData?.username}

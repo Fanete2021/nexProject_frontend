@@ -1,0 +1,38 @@
+.Tabs {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item {
+  user-select: none;
+  position: relative;
+  font-size: 14px;
+  line-height: 16px;
+  color: var(--link-text-color);
+  cursor: pointer;
+  transition: color 0.3s;
+
+  &:hover {
+    color: var(--link-text-hover-color);
+  }
+
+  &.active {
+    color: var(--link-text-hover-color);
+  }
+
+  @media screen and (max-width: 768px) {
+    font-size: 16px;
+    line-height: 18px;
+  }
+}
+
+.underline {
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+  height: 2px;
+  background: var(--link-text-hover-color);
+  transition: transform 0.3s ease, width 0.3s ease;
+}

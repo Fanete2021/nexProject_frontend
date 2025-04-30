@@ -16,6 +16,7 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { chatActions } from '../../../../../../model/slice/chatSlice.ts';
 import { editMessage } from '../../../../../../model/service/editMessage.ts';
 import { SmilePicker } from '@/widgets/smile-picker';
+import { getChatIsLoadingSelectedChat } from '../../../../../../model/selectors/getChatIsLoadingSelectedChat.ts';
 
 export interface MessageInputProps {
     className?: string;
@@ -26,18 +27,23 @@ const MAX_LENGTH = 255;
 const MessageInput: React.FC<MessageInputProps> = (props) => {
   const { className } = props;
 
-  const { t } = useTranslation();
   const user = useSelector(getUserData)!;
   const selectedChat = useSelector(getChatSelectedChat)!;
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [messageText, setMessageText] = useDebouncedMessageDraft(selectedChat.chatId);
   const editableMessage = useSelector(getChatEditableMessage);
-  const [localMessageText, setLocalMessageText] = useState<string>(editableMessage?.message || '');
+  const isLoadingSelectedChat = useSelector(getChatIsLoadingSelectedChat);
+  
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const currentMessageText = editableMessage ? localMessageText : messageText;
-  const isMessageValid = Boolean(currentMessageText.trim());
+  const [messageText, setMessageText] = useDebouncedMessageDraft(selectedChat?.chatId);
+  
+  const containerRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const scrollWrapperRef = useRef<HTMLDivElement>(null);
+ 
+  const [localMessageText, setLocalMessageText] = useState<string>(editableMessage?.message || '');
+  
+  const currentMessageText = editableMessage ? localMessageText : messageText;
+  const isMessageValid = Boolean(currentMessageText.trim());
 
   useEffect(() => {
     if (editableMessage) {
@@ -46,7 +52,7 @@ const MessageInput: React.FC<MessageInputProps> = (props) => {
   }, [editableMessage]);
 
   const sendHandler = () => {
-    if (!isMessageValid) return;
+    if (!isMessageValid || isLoadingSelectedChat) return;
 
     if (editableMessage) {
       dispatch(editMessage({

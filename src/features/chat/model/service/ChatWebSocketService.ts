@@ -22,9 +22,9 @@ class ChatWebSocketService {
         }
       ),
       // debug: (str) => console.log('[STOMP]', str),
-      reconnectDelay: 10000,
-      heartbeatIncoming: 10000,
-      heartbeatOutgoing: 10000,
+      reconnectDelay: 5000,
+      heartbeatIncoming: 20000,
+      heartbeatOutgoing: 20000,
       connectHeaders: {
         Authorization: `Bearer ${token}`,
       },

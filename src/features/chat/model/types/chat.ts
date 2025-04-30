@@ -18,4 +18,5 @@ export interface ChatSchema {
   isLoadingMessages: boolean;
   messageDrafts: { [chatId: string]: string };
   editableMessage?: Message;
+  dialogsFilter: ChatTypes;
 }

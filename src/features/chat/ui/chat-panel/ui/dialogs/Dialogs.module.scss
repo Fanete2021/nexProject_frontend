@@ -74,10 +74,6 @@
   flex-direction: column;
 
   .filter {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     padding: 0 15px;
     height: 34px;
     flex-shrink: 0;
@@ -85,33 +81,6 @@
     @media screen and (max-width: 768px) {
       justify-content: start;
       gap: 15px;
-    }
-
-    .item {
-      user-select: none;
-      position: relative;
-      font-size: 16px;
-      line-height: 18px;
-      color: var(--link-text-color);
-      cursor: pointer;
-      transition: color 0.3s;
-
-      &:hover {
-        color: var(--link-text-hover-color);
-      }
-
-      &.active {
-        color: var(--link-text-hover-color);
-      }
-    }
-
-    .underline {
-      position: absolute;
-      bottom: 5px;
-      left: 0;
-      height: 2px;
-      background: var(--link-text-hover-color);
-      transition: transform 0.3s ease, width 0.3s ease;
     }
   }
 

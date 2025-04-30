@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useFloating, offset, flip, shift } from '@floating-ui/react';
+import React, { useState, useCallback } from 'react';
+import { useFloating, offset, flip, shift, autoUpdate } from '@floating-ui/react';
 import emojis from '@emoji-mart/data';
 import Picker from '@emoji-mart/react';
 import { icons, SvgIcon } from '@/shared/ui';
@@ -15,23 +15,31 @@ export interface SmilePickerProps {
 const SmilePicker: React.FC<SmilePickerProps> = ({ className, onEmojiSelect }) => {
   const [open, setOpen] = useState(false);
   const { x, y, strategy, refs } = useFloating({
+    open,
+    onOpenChange: setOpen,
     placement: 'top',
-    middleware: [offset({ mainAxis: 5 }), flip(), shift()],
+    middleware: [
+      offset(10),
+      flip(),
+      shift({ padding: 5 })
+    ],
+    whileElementsMounted: autoUpdate
   });
+
   const { theme } = useTheme();
 
   const handleToggle = () => {
     setOpen(!open);
   };
 
-  const handleClickOutside = (event: MouseEvent) => {
+  const handleClickOutside = useCallback((event: MouseEvent) => {
     if (
       refs.floating.current && !refs.floating.current.contains(event.target as Node) &&
       refs.reference.current && !refs.reference.current.contains(event.target as Node)
     ) {
       setOpen(false);
     }
-  };
+  }, [refs]);
 
   return (
     <>

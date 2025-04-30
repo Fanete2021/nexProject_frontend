@@ -2,9 +2,9 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Chat, ChatSchema } from '../types/chat.ts';
 import { ChatInfo } from '../types/chatInfo.ts';
 import { fetchChats } from '../service/fetchChats.ts';
-import { fetchChatInfo } from '../service/fetchChatInfo.ts';
 import { fetchMessages } from '../service/fetchMessages.ts';
 import { Message } from '../types/message.ts';
+import { ChatTypes } from '../types/chatTypes.ts';
 
 const initialState: ChatSchema = {
   dialogs: [],
@@ -14,7 +14,8 @@ const initialState: ChatSchema = {
   isActiveInfoPanel: false,
   isLoadingMessages: false,
   messageDrafts: {},
-  editableMessage: undefined
+  editableMessage: undefined,
+  dialogsFilter: ChatTypes.ALL
 };
 
 export const chatSlice = createSlice({
@@ -69,6 +70,9 @@ export const chatSlice = createSlice({
     addChat: (state, action: PayloadAction<Chat>) => {
       state.dialogs.unshift(action.payload);
     },
+    deleteChatById: (state, action: PayloadAction<string>) => {
+      state.dialogs = state.dialogs.filter((dialog) => dialog.chatId !== action.payload);
+    },
     setIsActiveInfoPanel: (state, action: PayloadAction<boolean>) => {
       state.isActiveInfoPanel = action.payload;
     },
@@ -77,6 +81,12 @@ export const chatSlice = createSlice({
     },
     setEditableMessage: (state, action: PayloadAction<Message | undefined>) => {
       state.editableMessage = action.payload;
+    },
+    setDialogsFilter: (state, action: PayloadAction<ChatTypes>) => {
+      state.dialogsFilter = action.payload;
+    },
+    setIsLoadingSelectedChat: (state, action: PayloadAction<boolean>) => {
+      state.isLoadingSelectedChat = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -89,15 +99,6 @@ export const chatSlice = createSlice({
       })
       .addCase(fetchChats.rejected, (state: ChatSchema) => {
         state.isLoadingDialogs = false;
-      })
-      .addCase(fetchChatInfo.pending, (state: ChatSchema) => {
-        state.isLoadingSelectedChat = true;
-      })
-      .addCase(fetchChatInfo.fulfilled, (state: ChatSchema) => {
-        state.isLoadingSelectedChat = false;
-      })
-      .addCase(fetchChatInfo.rejected, (state: ChatSchema) => {
-        state.isLoadingSelectedChat = false;
       })
       .addCase(fetchMessages.pending, (state: ChatSchema) => {
         state.isLoadingMessages = true;

@@ -4,7 +4,7 @@ import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { useSelector } from 'react-redux';
 import { getChatDialogs } from '../../../../model/selectors/getChatDialogs.ts';
 import DialogItem from './ui/dialog-item/DialogItem.tsx';
-import { icons, Scrollbar, SvgIcon } from '@/shared/ui';
+import { icons, Scrollbar, SvgIcon, Tabs } from '@/shared/ui';
 import DialogItemSkeleton from './ui/dialog-item/DialogItemSkeleton.tsx';
 import { getChatIsLoadingDialogs } from '../../../../model/selectors/getChatIsLoadingDialogs.ts';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
@@ -17,6 +17,10 @@ import { useTranslation } from 'react-i18next';
 import { useSidebar } from '@/shared/lib/hooks/useSidebar.ts';
 import { Contact, ContactSearcher } from '@/entities/contact';
 import CreatorGroupModal from '../creator-group-modal/CreatorGroupModal.tsx';
+import { getChatDialogsFilter } from '../../../../model/selectors/getChatDialogsFilter.ts';
+import { Chat } from '../../../../model/types/chat.ts';
+import ActionMenu from '../action-menu/ActionMenu.tsx';
+import { deletePrivateChat } from '../../../../model/service/deletePrivateChat.ts';
 
 export interface ChatListProps extends React.HTMLProps<HTMLDivElement> {
   className?: string;
@@ -43,54 +47,38 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
   const { className, ...rest } = props;
     
   const { t } = useTranslation();
-  const [searchedValue, setSearchedValue] = useState<string>('');
-  const [activeFilter, setActiveFilter] = useState<ChatTypes>(ChatTypes.ALL);
-  const underlineRef = useRef<HTMLDivElement>(null);
-  const filterRefs = useRef<(HTMLDivElement | null)[]>([]);
   const dispatch = useAppDispatch();
+  const { openSidebar } = useSidebar();
+
+  const [searchedValue, setSearchedValue] = useState<string>('');
   const [searchedContacts, setSearchedContacts] = useState<Contact[]>([]);
-  const selectedChat = useSelector(getChatSelectedChat);
   const [isOpenCreatorGroup, setIsOpenCreatorGroup] = useState<boolean>(false);
   const [isLoadingSearch, setIsLoadingSearch] = useState<boolean>(false);
-  const scrollbarRef = useRef<Scrollbars>(null);
   const [currentPageDialogs, setCurrentPageDialogs] = useState<number>(1);
   const [allPagesDialogs, setAllPagesDialogs] = useState<number>(1);
+  const [actionMenuPosition, setActionMenuPosition] = useState<{ x: number; y: number } | null>(null);
+  const [actionMenuChat, setActionMenuChat] = useState<Chat | null>(null);
 
+  const dialogsFilter = useSelector(getChatDialogsFilter);
+  const selectedChat = useSelector(getChatSelectedChat);
   const dialogs = useSelector(getChatDialogs);
   const isLoadingDialogs = useSelector(getChatIsLoadingDialogs);
+
+  const scrollbarRef = useRef<Scrollbars>(null);
 
   const closeCreatorGroupHandler = useCallback(() => setIsOpenCreatorGroup(false), []);
   const toggleCreatorGroupHandler = useCallback(() => setIsOpenCreatorGroup(prev => !prev), []);
 
-  const { openSidebar } = useSidebar();
-
-  const handleFilterClick = (filter: ChatTypes, event: React.MouseEvent) => {
-    setActiveFilter(filter);
-
-    const target = event.target as HTMLDivElement;
-    if (underlineRef.current && target) {
-      const { offsetLeft, offsetWidth } = target;
-
-      underlineRef.current.style.transform = `translateX(${offsetLeft}px)`;
-      underlineRef.current.style.width = `${offsetWidth}px`;
-    }
-  };
-
-  useEffect(() => {
-    const initialFilter = filterRefs.current[0];
-    if (underlineRef.current && initialFilter) {
-      const { offsetLeft, offsetWidth } = initialFilter;
-      underlineRef.current.style.transform = `translateX(${offsetLeft}px)`;
-      underlineRef.current.style.width = `${offsetWidth}px`;
-    }
-  }, [filterRefs]);
+  const filterChangeValueHandler = useCallback((filter: string) => {
+    dispatch(chatActions.setDialogsFilter(filter as ChatTypes));
+  }, []);
 
   const loadChats = async (shouldRewriteChats: boolean) => {
     try {
       const newCurrentPage = currentPageDialogs + 1;
 
       const response = await dispatch(fetchChats({
-        filterMode: activeFilter,
+        filterMode: dialogsFilter,
         pageSize: DIALOGS_PAGE_SIZE,
         pageNumber: shouldRewriteChats ? 1 : newCurrentPage
       })).unwrap();
@@ -110,7 +98,7 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
 
   useEffect(() => {
     loadChats(true);
-  }, [activeFilter]);
+  }, [dialogsFilter]);
 
   useEffect(() => {
     setSearchedValue('');
@@ -126,6 +114,22 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
     if (scrollTop + clientHeight >= scrollHeight && currentPageDialogs < allPagesDialogs) {
       loadChats(false);
     }
+  };
+
+  const openActionMenuHandler = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, chat: Chat) => {
+    event.preventDefault();
+    setActionMenuPosition({ x: event.clientX, y: event.clientY });
+    setActionMenuChat(chat);
+  };
+
+  const closeActionMenuHandler = () => {
+    setActionMenuPosition(null);
+    setActionMenuChat(null);
+  };
+
+  const deleteMessageHandler = () => {
+    dispatch(deletePrivateChat({ chatId: actionMenuChat!.chatId }));
+    closeActionMenuHandler();
   };
 
   return (
@@ -158,30 +162,14 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
       </div>
 
       <div className={styles.content}>
-        <div 
-          className={styles.filter}
-          style={{
-            display: !searchedValue ? 'flex' : 'none' //Чтобы корректно устанавливалась underline
-          }}
-        >
-          <div
-            ref={underlineRef}
-            className={styles.underline}
-          ></div>
-
-          {filters.map((filter, index) => (
-            <div
-              key={filter.value}
-              className={classNames(styles.item, [], {
-                [styles.active]: activeFilter === filter.value,
-              })}
-              ref={(el) => (filterRefs.current[index] = el)}
-              onClick={(event) => handleFilterClick(filter.value, event)}
-            >
-              {t(filter.name) as string}
-            </div>
-          ))}
-        </div>
+        {!searchedValue &&
+          <Tabs
+            value={dialogsFilter}
+            onChange={filterChangeValueHandler}
+            items={filters}
+            className={styles.filter}
+          />
+        }
 
         <div className={styles.dialogs}>
           <Scrollbar
@@ -200,7 +188,12 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
             {!searchedValue && !isLoadingDialogs &&
               <>
                 {dialogs.map(dialog => (
-                  <DialogItem key={dialog.chatId} chatData={dialog} className={styles.dialog}/>
+                  <DialogItem
+                    key={dialog.chatId}
+                    chatData={dialog}
+                    className={styles.dialog}
+                    openContextMenu={openActionMenuHandler}
+                  />
                 ))}
               </>
             }
@@ -224,6 +217,12 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
       </button>
 
       <CreatorGroupModal onClose={closeCreatorGroupHandler} isOpen={isOpenCreatorGroup} />
+
+      <ActionMenu
+        deleteHandler={deleteMessageHandler}
+        onClose={closeActionMenuHandler}
+        position={actionMenuPosition}
+      />
     </div>
   );
 };

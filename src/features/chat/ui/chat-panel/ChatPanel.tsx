@@ -22,6 +22,9 @@ import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
 import { isPublicChat } from '@/shared/lib/utils/isPublicChat.ts';
 import { MOBILE_MAX_BREAKPOINT } from '@/shared/const/WindowBreakpoints.ts';
 import { useResizablePanel } from '@/shared/lib/hooks/useResizablePanel.ts';
+import { getChatDialogsFilter } from '../../model/selectors/getChatDialogsFilter.ts';
+import { getChatIsLoadingSelectedChat } from '../../model/selectors/getChatIsLoadingSelectedChat.ts';
+import SelectedChatSkeleton from './ui/selected-chat/SelectedChatSkeleton.tsx';
 
 export interface ChatProps {
     className?: string;
@@ -32,12 +35,17 @@ const MAX_PANEL_WIDTH = 400;
 
 const ChatPanel: React.FC<ChatProps> = (props) => {
   const { className } = props;
+  
   const dispatch = useAppDispatch();
+  const windowWidth = useWindowWidth();
+  
   const token = useSelector(getAuthToken)!;
   const user = useSelector(getUserData)!;
   const isActiveInfoPanel = useSelector(getChatIsActiveInfoPanel);
   const selectedChat = useSelector(getChatSelectedChat);
-  const windowWidth = useWindowWidth();
+  const dialogsFilter = useSelector(getChatDialogsFilter);
+  const isLoadingSelectedChat = useSelector(getChatIsLoadingSelectedChat);
+  
   const panelRef = useRef<HTMLDivElement>(null);
 
   const { width: leftPanelWidth, startResize: startResizeLeft } = useResizablePanel({
@@ -107,14 +115,22 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
 
         ChatWebSocketService.subscribe(notification.chatId);
 
+        const isPublic = isPublicChat(response);
+
         const newChat: Chat = {
           chatId: response.chatId,
           lastMessage: response.lastMessages[0],
           chatName: response.chatName,
-          chatType: isPublicChat(response) ? ChatTypes.PUBLIC : ChatTypes.PRIVATE,
+          chatType: isPublic ? ChatTypes.PUBLIC : ChatTypes.PRIVATE,
         };
 
-        dispatch(chatActions.addChat(newChat));
+        if (
+          dialogsFilter === ChatTypes.ALL ||
+          (isPublic && dialogsFilter === ChatTypes.PUBLIC) ||
+          (!isPublic && dialogsFilter === ChatTypes.PRIVATE)
+        ) {
+          dispatch(chatActions.addChat(newChat));
+        }
 
         //При выборе пустого диалога chatId = ''
         if (selectedChat && !selectedChat.chatId) {
@@ -128,14 +144,18 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
     return () => {
       ChatWebSocketService.onNotificationsCallback = () => {};
     };
-  }, [dispatch, selectedChat]);
+  }, [dispatch, selectedChat, dialogsFilter]);
 
   if (windowWidth <= MOBILE_MAX_BREAKPOINT) {
     return (
       <div className={classNames(styles.ChatPanel, [className])}>
         {!selectedChat && <Dialogs className={styles.dialogs} />}
 
-        {selectedChat && !isActiveInfoPanel && <SelectedChat className={styles.selectedChat} /> }
+        {selectedChat && !isActiveInfoPanel && (
+          isLoadingSelectedChat 
+            ? <SelectedChatSkeleton className={styles.selectedChat} />
+            : <SelectedChat className={styles.selectedChat} />
+        )}
 
         {isActiveInfoPanel && <InfoChat className={styles.infoChat} /> }
       </div>
@@ -151,7 +171,10 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
         onMouseDown={startResizeLeft}
       />
 
-      <SelectedChat className={styles.selectedChat} />
+      {isLoadingSelectedChat
+        ? <SelectedChatSkeleton className={styles.selectedChat} />
+        : <SelectedChat className={styles.selectedChat} />
+      }
 
       {isActiveInfoPanel && selectedChat && (
         <>
