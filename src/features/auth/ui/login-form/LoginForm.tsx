@@ -92,7 +92,7 @@ const LoginForm = () => {
         className="FieldWrapper"
       >
         <div className="label">
-          {t('Почта / телефон')}<br/>
+          {t('Почта / телефон') as string}<br/>
           {isShowError('phoneNumberOrMail') &&
               <div className="fieldError">{t(formik.errors.phoneNumberOrMail)}</div>
           }
@@ -115,6 +115,7 @@ const LoginForm = () => {
               </InputAdornment>
             )
           }
+          type='email'
           id="phoneNumberOrMail"
           placeholder={t('Почта или телефон')}
           fullWidth
