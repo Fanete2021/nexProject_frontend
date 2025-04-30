@@ -22,6 +22,7 @@ import { deleteMessage } from './model/service/deleteMessage.ts';
 import { getChatEditableMessage } from './model/selectors/getChatEditableMessage.ts';
 import { editMessage } from './model/service/editMessage.ts';
 import { getChatDialogsFilter } from './model/selectors/getChatDialogsFilter.ts';
+import { getChatIsLoadingSelectedChat } from './model/selectors/getChatIsLoadingSelectedChat.ts';
 
 export {
   ChatPanelAsync as ChatPanel,
@@ -37,6 +38,7 @@ export {
   getChatMessageDrafts,
   getChatEditableMessage,
   getChatDialogsFilter,
+  getChatIsLoadingSelectedChat,
 
   fetchChats,
   fetchChatInfo,

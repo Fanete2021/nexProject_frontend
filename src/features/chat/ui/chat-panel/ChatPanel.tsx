@@ -1,28 +1,30 @@
-import React, {useEffect, useRef} from 'react';
-import {classNames} from '@/shared/lib/utils/classNames.ts';
+import React, { useEffect, useRef } from 'react';
+import { classNames } from '@/shared/lib/utils/classNames.ts';
 import styles from './ChatPanel.module.scss';
 import Dialogs from './ui/dialogs/Dialogs.tsx';
-import {useAppDispatch} from '@/shared/lib/hooks/useAppDispatch.ts';
-import {fetchChats} from '../../model/service/fetchChats.ts';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
+import { fetchChats } from '../../model/service/fetchChats.ts';
 import SelectedChat from './ui/selected-chat/SelectedChat.tsx';
-import {useSelector} from 'react-redux';
-import {getAuthToken} from '@/features/auth';
+import { useSelector } from 'react-redux';
+import { getAuthToken } from '@/features/auth';
 import ChatWebSocketService from '../../model/service/ChatWebSocketService.ts';
-import {getUserData} from '@/entities/user/model/selectors/getUserData.ts';
-import {Message, typesMessage} from '../../model/types/message.ts';
-import {chatActions} from '../../model/slice/chatSlice.ts';
-import {ChatNotification} from '../../model/types/chatNotifications.ts';
-import {fetchChatInfo} from '../../model/service/fetchChatInfo.ts';
-import {Chat} from '../../model/types/chat.ts';
-import {ChatTypes} from '../../model/types/chatTypes.ts';
-import {getChatIsActiveInfoPanel} from '../../model/selectors/getChatIsActiveInfoPanel.ts';
+import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
+import { Message, typesMessage } from '../../model/types/message.ts';
+import { chatActions } from '../../model/slice/chatSlice.ts';
+import { ChatNotification } from '../../model/types/chatNotifications.ts';
+import { fetchChatInfo } from '../../model/service/fetchChatInfo.ts';
+import { Chat } from '../../model/types/chat.ts';
+import { ChatTypes } from '../../model/types/chatTypes.ts';
+import { getChatIsActiveInfoPanel } from '../../model/selectors/getChatIsActiveInfoPanel.ts';
 import InfoChat from '@/features/chat/ui/chat-panel/ui/info-chat/InfoChat.tsx';
-import {getChatSelectedChat} from '../../model/selectors/getChatSelectedChat.ts';
+import { getChatSelectedChat } from '../../model/selectors/getChatSelectedChat.ts';
 import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
-import {isPublicChat} from '@/shared/lib/utils/isPublicChat.ts';
-import {MOBILE_MAX_BREAKPOINT} from '@/shared/const/WindowBreakpoints.ts';
-import {useResizablePanel} from '@/shared/lib/hooks/useResizablePanel.ts';
-import {getChatDialogsFilter} from '../../model/selectors/getChatDialogsFilter.ts';
+import { isPublicChat } from '@/shared/lib/utils/isPublicChat.ts';
+import { MOBILE_MAX_BREAKPOINT } from '@/shared/const/WindowBreakpoints.ts';
+import { useResizablePanel } from '@/shared/lib/hooks/useResizablePanel.ts';
+import { getChatDialogsFilter } from '../../model/selectors/getChatDialogsFilter.ts';
+import { getChatIsLoadingSelectedChat } from '../../model/selectors/getChatIsLoadingSelectedChat.ts';
+import SelectedChatSkeleton from './ui/selected-chat/SelectedChatSkeleton.tsx';
 
 export interface ChatProps {
     className?: string;
@@ -42,6 +44,7 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
   const isActiveInfoPanel = useSelector(getChatIsActiveInfoPanel);
   const selectedChat = useSelector(getChatSelectedChat);
   const dialogsFilter = useSelector(getChatDialogsFilter);
+  const isLoadingSelectedChat = useSelector(getChatIsLoadingSelectedChat);
   
   const panelRef = useRef<HTMLDivElement>(null);
 
@@ -148,7 +151,11 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
       <div className={classNames(styles.ChatPanel, [className])}>
         {!selectedChat && <Dialogs className={styles.dialogs} />}
 
-        {selectedChat && !isActiveInfoPanel && <SelectedChat className={styles.selectedChat} /> }
+        {selectedChat && !isActiveInfoPanel && (
+          isLoadingSelectedChat 
+            ? <SelectedChatSkeleton className={styles.selectedChat} />
+            : <SelectedChat className={styles.selectedChat} />
+        )}
 
         {isActiveInfoPanel && <InfoChat className={styles.infoChat} /> }
       </div>
@@ -164,7 +171,10 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
         onMouseDown={startResizeLeft}
       />
 
-      <SelectedChat className={styles.selectedChat} />
+      {isLoadingSelectedChat
+        ? <SelectedChatSkeleton className={styles.selectedChat} />
+        : <SelectedChat className={styles.selectedChat} />
+      }
 
       {isActiveInfoPanel && selectedChat && (
         <>

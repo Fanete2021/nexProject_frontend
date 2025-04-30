@@ -167,7 +167,7 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
             {!searchedValue && !isLoadingDialogs &&
               <>
                 {dialogs.map(dialog => (
-                  <DialogItem key={dialog.chatId} chatData={dialog} className={styles.dialog}/>
+                  <DialogItem key={dialog.chatId} chatData={dialog} className={styles.dialog} />
                 ))}
               </>
             }

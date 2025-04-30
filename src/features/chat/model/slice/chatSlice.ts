@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Chat, ChatSchema } from '../types/chat.ts';
 import { ChatInfo } from '../types/chatInfo.ts';
 import { fetchChats } from '../service/fetchChats.ts';
-import { fetchChatInfo } from '../service/fetchChatInfo.ts';
 import { fetchMessages } from '../service/fetchMessages.ts';
 import { Message } from '../types/message.ts';
 import { ChatTypes } from '../types/chatTypes.ts';
@@ -82,6 +81,9 @@ export const chatSlice = createSlice({
     },
     setDialogsFilter: (state, action: PayloadAction<ChatTypes>) => {
       state.dialogsFilter = action.payload;
+    },
+    setIsLoadingSelectedChat: (state, action: PayloadAction<boolean>) => {
+      state.isLoadingSelectedChat = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -94,15 +96,6 @@ export const chatSlice = createSlice({
       })
       .addCase(fetchChats.rejected, (state: ChatSchema) => {
         state.isLoadingDialogs = false;
-      })
-      .addCase(fetchChatInfo.pending, (state: ChatSchema) => {
-        state.isLoadingSelectedChat = true;
-      })
-      .addCase(fetchChatInfo.fulfilled, (state: ChatSchema) => {
-        state.isLoadingSelectedChat = false;
-      })
-      .addCase(fetchChatInfo.rejected, (state: ChatSchema) => {
-        state.isLoadingSelectedChat = false;
       })
       .addCase(fetchMessages.pending, (state: ChatSchema) => {
         state.isLoadingMessages = true;
