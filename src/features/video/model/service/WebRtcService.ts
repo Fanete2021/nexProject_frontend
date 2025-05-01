@@ -11,7 +11,7 @@ enum commandTypes {
   ICE_CANDIDATE = 'ICE_CANDIDATE',
   ON_ICE_CANDIDATE = 'ON_ICE_CANDIDATE',
   RECEIVE_CALL = 'RECEIVE_CALL',
-  LEAVE_CALL = 'LEAVE_CALL'
+  END_CALL = 'END_CALL'
 }
 
 export enum participantsUpdateActions {
@@ -25,6 +25,7 @@ class WebRtcService {
   private currentUserId: string | null = null;
   private roomId: string | null = null;
   private onParticipantsUpdate: ((participant: participant, action: participantsUpdateActions) => void) | null = null;
+  private onCloseConnection: (() => void) | null = null;
 
   constructor() {
     this.participants = {};
@@ -34,11 +35,13 @@ class WebRtcService {
     token: string,
     userId: string,
     roomId: string,
-    onParticipantsUpdate: (participant: participant, action: participantsUpdateActions) => void
+    onParticipantsUpdate: (participant: participant, action: participantsUpdateActions) => void,
+    onCloseConnection: () => void,
   ) {
     this.currentUserId = userId;
     this.roomId = roomId;
     this.onParticipantsUpdate = onParticipantsUpdate;
+    this.onCloseConnection = onCloseConnection;
 
     this.stompClient = new Client({
       brokerURL: 'wss://api.moootvey.ru/api/call',
@@ -119,6 +122,10 @@ class WebRtcService {
             }
           }
         );
+        break;
+      case commandTypes.END_CALL:
+        this.clearStatesAndDeactivateClient();
+        this.onCloseConnection();
         break;
       default:
         console.error('Unrecognized message type:', message.commandType);
@@ -245,9 +252,13 @@ class WebRtcService {
 
   public leaveRoom = () => {
     if (this.stompClient && this.stompClient.connected) {
-      this.sendStompMessage(commandTypes.LEAVE_CALL, { userId: this.currentUserId });
+      this.sendStompMessage(commandTypes.END_CALL, { userId: this.currentUserId });
     }
 
+    this.clearStatesAndDeactivateClient();
+  };
+
+  private clearStatesAndDeactivateClient = () => {
     for (const key in this.participants) {
       if (this.participants[key].rtcPeer) {
         this.participants[key].rtcPeer.dispose();

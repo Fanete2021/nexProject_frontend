@@ -42,6 +42,8 @@ const VideoCallModal = () => {
   useEffect(() => {
     if (!isOpen) {
       dispatch(videoActions.resetRoomId());
+      setIsVideoEnabled(false);
+      setIsAudioEnabled(true);
     }
   }, [isOpen]);
 
