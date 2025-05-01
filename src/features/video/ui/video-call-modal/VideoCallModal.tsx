@@ -42,6 +42,8 @@ const VideoCallModal = () => {
   useEffect(() => {
     if (!isOpen) {
       dispatch(videoActions.resetRoomId());
+      setIsVideoEnabled(false);
+      setIsAudioEnabled(true);
     }
   }, [isOpen]);
 
@@ -51,9 +53,13 @@ const VideoCallModal = () => {
 
   useEffect(() => {
     if (roomId && isOpen) {
-      WebRtcService.initialize(token, userId, roomId, onParticipantsUpdate);
+      WebRtcService.connect(roomId);
     }
   }, [roomId, isOpen]);
+
+  useEffect(() => {
+    WebRtcService.initialize(token, userId, onParticipantsUpdate, () => setIsOpen(false));
+  }, []);
 
   const onParticipantsUpdate = (participant: participant, action: participantsUpdateActions) => {
     if (containerRef.current) {
