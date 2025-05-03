@@ -1,6 +1,7 @@
 import { Client } from '@stomp/stompjs';
 import * as kurentoUtils from 'kurento-utils';
 import { participant } from '../types/participant.ts';
+import { isSafari } from '@/shared/const/isSafari.ts';
 
 enum commandTypes {
   JOIN_CALL = 'JOIN_CALL',
@@ -44,6 +45,12 @@ class WebRtcService {
     this.stompClient = new Client({
       brokerURL: 'wss://api.moootvey.ru/api/call',
       connectHeaders: { Authorization: `Bearer ${token}` },
+      onConnect: () => {
+        this.stompClient?.subscribe('/user/exchange/amq.direct/reply', (message) => {
+          const response = JSON.parse(message.body);
+          this.handleServerMessage(response);
+        });
+      },
       onStompError: (frame) => console.error('STOMP Error:', frame.headers['message'], frame.body),
     });
 
@@ -86,17 +93,11 @@ class WebRtcService {
 
   public connect(roomId: string) {
     this.roomId = roomId;
-    this.stompClient?.subscribe('/user/exchange/amq.direct/reply', (message) => {
-      const response = JSON.parse(message.body);
-      this.handleServerMessage(response);
-    });
-
     this.sendStompMessage(commandTypes.JOIN_CALL, { roomId: this.roomId });
   }
 
   private handleServerMessage(message: any) {
     const parsedMessage = JSON.parse(message.jsonPayload);
-    console.log(message);
 
     switch (message.commandType) {
       case commandTypes.EXISTING_PARTICIPANT:
@@ -146,9 +147,9 @@ class WebRtcService {
         mandatory: {
           maxWidth: 1024,
           maxFrameRate: 60,
-          minFrameRate: 15,
+          minFrameRate: 15
         },
-      },
+      }
     };
 
     const currentUserParticipant = {
@@ -160,7 +161,9 @@ class WebRtcService {
     this.participants[this.currentUserId!] = currentUserParticipant;
     const currentUserVideo = currentUserParticipant.video;
     currentUserVideo.id = 'video-' + this.currentUserId;
+    currentUserVideo.playsInline = true;
     currentUserVideo.autoplay = true;
+    currentUserVideo.muted = false;
     currentUserVideo.controls = false;
 
     this.onParticipantsUpdate(currentUserParticipant, participantsUpdateActions.ADD);
@@ -178,8 +181,9 @@ class WebRtcService {
         return console.error(error);
       }
       currentUserParticipant.rtcPeer.generateOffer((err, offerSdp) => {
-        if (err) return console.error("sdp offer error");
-        this.sendStompMessage(commandTypes.RECEIVE_CALL, { senderId: this.currentUserId, sdpOffer: offerSdp });
+        if (err) return console.error('sdp offer error');
+        const modifiedSdp = this.preferH264(offerSdp);
+        this.sendStompMessage(commandTypes.RECEIVE_CALL, { senderId: this.currentUserId, sdpOffer: modifiedSdp });
         this.updateVideoTrack(false);
       });
     });
@@ -198,7 +202,9 @@ class WebRtcService {
       this.participants[sender] = participant;
       const video = participant.video;
       video.id = 'video-' + sender;
+      video.playsInline = true;
       video.autoplay = true;
+      video.muted = false;
       video.controls = false;
 
       this.onParticipantsUpdate(participant, participantsUpdateActions.ADD);
@@ -215,8 +221,9 @@ class WebRtcService {
           return console.error(error);
         }
         participant.rtcPeer.generateOffer((err, offerSdp) => {
-          if (err) return console.error("sdp offer error");
-          this.sendStompMessage(commandTypes.RECEIVE_CALL, { senderId: sender, sdpOffer: offerSdp });
+          if (err) return console.error('sdp offer error');
+          const modifiedSdp = this.preferH264(offerSdp);
+          this.sendStompMessage(commandTypes.RECEIVE_CALL, { senderId: sender, sdpOffer: modifiedSdp });
         });
       });
     }
@@ -224,7 +231,8 @@ class WebRtcService {
 
   private receiveVideoResponse = (payload: any) => {
     if (this.participants[payload.userId] && this.participants[payload.userId].rtcPeer) {
-      this.participants[payload.userId].rtcPeer.processAnswer(payload.sdpAnswer, (error) => {
+      const modifiedSdp = this.preferH264(payload.sdpAnswer);
+      this.participants[payload.userId].rtcPeer.processAnswer(modifiedSdp, (error) => {
         if (error) return console.error(error);
       });
     } else {
@@ -264,8 +272,35 @@ class WebRtcService {
       }
     }
     this.participants = {};
-    this.stompClient?.deactivate();
   };
+
+  private preferH264(sdp: string): string {
+    let lines = sdp.split('\n');
+    let h264Index = -1;
+    let vp8Index = -1;
+    let vp9Index = -1;
+
+    for (let i = 0; i < lines.length; i++) {
+      if (lines[i].startsWith('a=rtpmap:')) {
+        const parts = lines[i].split(' ');
+        if (parts[1].includes('H264')) {
+          h264Index = parseInt(parts[0].split(':')[1]);
+        } else if (parts[1].includes('VP8')) {
+          vp8Index = parseInt(parts[0].split(':')[1]);
+        } else if (parts[1].includes('VP9')) {
+          vp9Index = parseInt(parts[0].split(':')[1]);
+        }
+      }
+    }
+
+    if (h264Index !== -1) {
+      lines = lines.filter(line => !line.startsWith(`a=rtpmap:${vp8Index}`) && !line.startsWith(`a=rtpmap:${vp9Index}`));
+      lines = lines.filter(line => !line.startsWith(`a=rtcp-fb:${vp8Index}`) && !line.startsWith(`a=rtcp-fb:${vp9Index}`));
+      lines = lines.filter(line => !line.startsWith(`a=fmtp:${vp8Index}`) && !line.startsWith(`a=fmtp:${vp9Index}`));
+    }
+
+    return lines.join('\n');
+  }
 }
 
 export default new WebRtcService();

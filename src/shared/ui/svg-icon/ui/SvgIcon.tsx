@@ -3,6 +3,7 @@ import { icons } from '../model/icons.ts';
 import React, { memo, useEffect, useState } from 'react';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import styles from './SvgIcon.module.scss';
+import { isSafari } from '@/shared/const/isSafari.ts';
 
 export interface SvgIconProps extends React.SVGAttributes<SVGSVGElement> {
   iconName: icons;
@@ -48,7 +49,7 @@ const SvgIcon: React.FC<SvgIconProps> = memo((props) => {
             className={classNames(styles.SvgIcon, [className], mods)}
           />
 
-          {forceRender && (
+          {isSafari && forceRender && (
             <Icon
               {...rest}
               className={classNames(styles.SvgIcon, [className], mods)}

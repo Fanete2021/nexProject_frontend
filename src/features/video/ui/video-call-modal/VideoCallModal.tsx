@@ -68,6 +68,7 @@ const VideoCallModal = () => {
       if (action === participantsUpdateActions.ADD) {
         video.classList.add(styles.videoItem);
         containerRef.current.appendChild(video);
+
         setVideoCount(prev => prev + 1);
       }
 
