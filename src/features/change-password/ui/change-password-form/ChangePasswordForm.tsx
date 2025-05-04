@@ -3,7 +3,7 @@ import * as yup from 'yup';
 import { FormControl } from '@mui/material';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { useTranslation } from 'react-i18next';
-import { CustomInput, icons, Loader, SvgIcon, ValidationList, ValidationListItem } from '@/shared/ui';
+import { CustomInput, icons, Loader, SvgIcon, ValidationList } from '@/shared/ui';
 import { useCallback, useState } from 'react';
 import { newPassword } from '@/features/change-password';
 import { useNavigate } from 'react-router-dom';
@@ -61,23 +61,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = (props) => {
     },
   });
 
-  const {
-    passwordLengthValid,
-    passwordLengthValidText,
-    passwordCharsValid,
-    passwordCharsValidText
-  } = isPasswordValid(formik.values.newPassword);
-
-  const newPasswordValidationListItems: ValidationListItem[] = [
-    {
-      text: passwordLengthValidText,
-      isError: !passwordLengthValid
-    },
-    {
-      text: passwordCharsValidText,
-      isError: !passwordCharsValid
-    },
-  ];
+  const passwordValidation = isPasswordValid(formik.values.newPassword);
 
   const onSubmit = useCallback((e) => {
     e.preventDefault();
@@ -110,7 +94,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = (props) => {
         </div>
 
         <ValidationList
-          items={newPasswordValidationListItems}
+          items={passwordValidation}
           hasError={isFormikErrorVisible(formik, 'newPassword')}
         >
           <CustomInput

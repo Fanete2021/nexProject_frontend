@@ -45,4 +45,6 @@ export enum icons {
   MICROPHONE = 'microphone',
   MICROPHONE_OFF = 'microphoneOff',
   LINE = 'line',
+  ORGANIZATION = 'organization',
+  BUSINESS_MEETING = 'businessMeeting'
 }

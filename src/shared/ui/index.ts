@@ -3,7 +3,7 @@ import { Loader, LoaderProps } from './loader';
 import { Logo, LogoProps } from './logo';
 import { CustomCheckbox, CustomCheckboxProps } from './custom-checkbox';
 import { CustomInput, CustomInputProps } from './custom-input';
-import { ValidationList, ValidationListProps, ValidationListItem } from './validation-list';
+import { ValidationList, ValidationListProps } from './validation-list';
 import { Avatar, AvatarProps } from './avatar';
 import { Portal, PortalProps } from './portal';
 import { Modal, ModalProps } from './modal';
@@ -19,7 +19,6 @@ export type {
   CustomCheckboxProps,
   CustomInputProps,
   ValidationListProps,
-  ValidationListItem,
   AvatarProps,
   PortalProps,
   ModalProps,

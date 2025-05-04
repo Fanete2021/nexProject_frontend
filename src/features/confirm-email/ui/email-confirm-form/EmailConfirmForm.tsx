@@ -138,7 +138,7 @@ const EmailConfirmForm = () => {
       </div>
 
       {error &&
-                <div className={styles.error}>{t('Неверный код')}</div>
+        <div className={styles.error}>{t('Неверный код')}</div>
       }
 
       <div className={styles.sendCodeWrapper}>

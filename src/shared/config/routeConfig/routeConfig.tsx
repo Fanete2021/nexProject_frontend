@@ -2,7 +2,7 @@ import { PathRouteProps } from 'react-router-dom';
 import { MainPage } from '@/pages/main-page';
 import { AuthPage } from '@/pages/auth-page';
 import { ChatsPage } from '@/pages/chats-page';
-import { TeamsPage } from '@/pages/teams-page';
+import { OrganizationPage } from '@/pages/organization-page';
 import { CalendarPage } from '@/pages/calendar-page';
 import { NotificationsPage } from '@/pages/notifications-page';
 import { EmailPage } from '@/pages/email-page';
@@ -26,7 +26,7 @@ export enum AppRoutes {
   EMAIL_CONFIRM = 'emailConfirm',
   MAIN = 'main',
   CHATS = 'chats',
-  TEAMS = 'teams',
+  ORGANIZATION = 'organization',
   CALENDAR = 'calendar',
   DOCS  = 'docs',
   NOTIFICATIONS  = 'notifications',
@@ -47,7 +47,7 @@ export const RoutePath: Record<AppRoutes, string> = {
   [AppRoutes.PASSWORD_CHANGE]: `/${AppRoutes.NEW_PASSWORD}/:token`,
   [AppRoutes.MAIN]: '/',
   [AppRoutes.CHATS]: `/${AppRoutes.CHATS}`,
-  [AppRoutes.TEAMS]: `/${AppRoutes.TEAMS}`,
+  [AppRoutes.ORGANIZATION]: `/${AppRoutes.ORGANIZATION}`,
   [AppRoutes.CALENDAR]: `/${AppRoutes.CALENDAR}`,
   [AppRoutes.DOCS]: `/${AppRoutes.DOCS}`,
   [AppRoutes.NOTIFICATIONS]: `/${AppRoutes.NOTIFICATIONS}`,
@@ -89,9 +89,9 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
     element: <ChatsPage />,
     authOnly: true,
   },
-  [AppRoutes.TEAMS]: {
-    path: `${RoutePath.teams}`,
-    element: <TeamsPage />,
+  [AppRoutes.ORGANIZATION]: {
+    path: `${RoutePath.organization}`,
+    element: <OrganizationPage />,
     authOnly: true,
   },
   [AppRoutes.CALENDAR]: {

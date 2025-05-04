@@ -4,7 +4,7 @@ import { FormControl, InputAdornment } from '@mui/material';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { useTranslation } from 'react-i18next';
 import { registration } from '@/features/registration/ui/model/service/registration.ts';
-import { CustomInput, icons, Loader, SvgIcon, ValidationList, ValidationListItem } from '@/shared/ui';
+import { CustomInput, icons, Loader, SvgIcon, ValidationList } from '@/shared/ui';
 import { useCallback, useState } from 'react';
 import { isPasswordValid, isUsernameValid } from '@/shared/lib/utils/validation.ts';
 import { isFormikErrorVisible } from '@/shared/lib/utils/isFormikErrorVisible.ts';
@@ -63,45 +63,8 @@ const RegistrationForm = () => {
     },
   });
 
-  const {
-    usernameLengthValid,
-    usernameLengthValidText,
-    usernameStartsWithLetter,
-    usernameStartsWithLetterText,
-    usernameCharsValid,
-    usernameCharsValidText
-  } = isUsernameValid(formik.values.username);
-  const usernameValidationListItems: ValidationListItem[] = [
-    {
-      text: usernameLengthValidText,
-      isError: !usernameLengthValid
-    },
-    {
-      text: usernameStartsWithLetterText,
-      isError: !usernameStartsWithLetter
-    },
-    {
-      text: usernameCharsValidText,
-      isError: !usernameCharsValid
-    },
-  ];
-
-  const {
-    passwordLengthValid,
-    passwordLengthValidText,
-    passwordCharsValid,
-    passwordCharsValidText
-  } = isPasswordValid(formik.values.password);
-  const passwordValidationListItems: ValidationListItem[] = [
-    {
-      text: passwordLengthValidText,
-      isError: !passwordLengthValid
-    },
-    {
-      text: passwordCharsValidText,
-      isError: !passwordCharsValid
-    },
-  ];
+  const usernameValidation = isUsernameValid(formik.values.username);
+  const passwordValidation = isPasswordValid(formik.values.password);
 
   const onSubmit = useCallback((e) => {
     e.preventDefault();
@@ -174,7 +137,7 @@ const RegistrationForm = () => {
         </div>
 
         <ValidationList
-          items={usernameValidationListItems}
+          items={usernameValidation}
           hasError={isFormikErrorVisible(formik, 'username')}
         >
           <CustomInput
@@ -213,7 +176,7 @@ const RegistrationForm = () => {
         </div>
 
         <ValidationList
-          items={passwordValidationListItems}
+          items={passwordValidation}
           hasError={isFormikErrorVisible(formik, 'password')}
         >
           <CustomInput

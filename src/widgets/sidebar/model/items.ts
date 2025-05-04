@@ -23,33 +23,33 @@ export const SidebarItemsList: SidebarItemType[] = [
     applyIconFill: true,
   },
   {
-    path: RoutePath.teams,
-    icon: icons.TEAMS,
-    text: 'Команды',
+    path: RoutePath.organization,
+    icon: icons.ORGANIZATION,
+    text: 'Организация',
     applyIconFill: true,
   },
-  {
-    path: RoutePath.calendar,
-    icon: icons.CALENDAR,
-    text: 'Календарь',
-    applyIconStroke: true
-  },
-  {
-    path: RoutePath.docs,
-    icon: icons.DOCS,
-    text: 'Документы',
-    applyIconFill: true,
-  },
-  {
-    path: RoutePath.notifications,
-    icon: icons.NOTIFICATIONS,
-    text: 'Уведомления',
-    applyIconFill: true,
-  },
-  {
-    path: RoutePath.email,
-    icon: icons.EMAIL,
-    text: 'Почта',
-    applyIconFill: true,
-  },
+  // {
+  //   path: RoutePath.calendar,
+  //   icon: icons.CALENDAR,
+  //   text: 'Календарь',
+  //   applyIconStroke: true
+  // },
+  // {
+  //   path: RoutePath.docs,
+  //   icon: icons.DOCS,
+  //   text: 'Документы',
+  //   applyIconFill: true,
+  // },
+  // {
+  //   path: RoutePath.notifications,
+  //   icon: icons.NOTIFICATIONS,
+  //   text: 'Уведомления',
+  //   applyIconFill: true,
+  // },
+  // {
+  //   path: RoutePath.email,
+  //   icon: icons.EMAIL,
+  //   text: 'Почта',
+  //   applyIconFill: true,
+  // },
 ];

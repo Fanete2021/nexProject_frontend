@@ -2,8 +2,8 @@ import React, { memo, ReactNode } from 'react';
 import styles from './ValidationList.module.scss';
 import { icons, SvgIcon } from '@/shared/ui';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
-import { ValidationListItem } from '../model/ValidationListItem.ts';
 import { useTranslation } from 'react-i18next';
+import { Validation } from '@/shared/types/validation.ts';
 
 const CheckIcon = memo(() => (
   <div className={styles.iconWrapper}>
@@ -36,7 +36,7 @@ CrossIcon.displayName = 'CrossIcon';
 export interface ValidationListProps {
     children?: ReactNode;
     hasError?: boolean;
-    items: ValidationListItem[];
+    items: Validation[];
 }
 
 const ValidationList: React.FC<ValidationListProps> = (props) => {
@@ -67,7 +67,7 @@ const ValidationList: React.FC<ValidationListProps> = (props) => {
               : <CheckIcon />
             }
 
-            {t(item.text)}
+            {t(item.text) as string}
           </li>
         ))}
       </ul>

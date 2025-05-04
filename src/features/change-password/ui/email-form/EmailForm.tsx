@@ -76,10 +76,10 @@ const EmailForm = () => {
   return (
     <form className="form" onSubmit={onSubmit}>
       {formSuccessText &&
-                <div className="formSuccess">{t(formSuccessText)}</div>
+        <div className="formSuccess">{t(formSuccessText)}</div>
       }
       {formError &&
-                <div className="formError">{formError}</div>
+        <div className="formError">{formError}</div>
       }
 
       <FormControl
@@ -89,7 +89,7 @@ const EmailForm = () => {
         <div className="label">
           {t('Почта')}<br/>
           {isFormikErrorVisible(formik, 'email') &&
-                        <div className="fieldError">{t(formik.errors.email)}</div>
+            <div className="fieldError">{t(formik.errors.email)}</div>
           }
         </div>
 
