@@ -1,6 +1,5 @@
 import { useSelector } from 'react-redux';
 import { useLocation, Navigate } from 'react-router-dom';
-import { refreshToken } from '@/features/auth';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { useEffect, useState } from 'react';
@@ -8,8 +7,9 @@ import { fetchUserData } from '@/entities/user';
 import { Loader } from '@/shared/ui';
 import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
 import useRefreshTokenTimer from '@/shared/lib/hooks/useRefreshTokenTimer';
-import {SidebarProvider} from "@/app/providers/sidebar-provider";
-import AuthenticatedPageLayout from "../../../widgets/authenticated-page-layout/ui/AuthenticatedPageLayout.tsx";
+import { SidebarProvider } from '@/app/providers/sidebar-provider';
+import { AuthenticatedPageLayout } from '@/widgets/authenticated-page-layout';
+import { refreshToken } from '@/features/account/auth';
 
 function RequireAuth({ children }: { children: JSX.Element }) {
   const location = useLocation();

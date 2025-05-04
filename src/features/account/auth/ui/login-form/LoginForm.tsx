@@ -3,7 +3,6 @@ import * as yup from 'yup';
 import { FormControl, InputAdornment } from '@mui/material';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import styles from './LoginForm.module.scss';
-import { login } from '@/features/auth/model/service/login.ts';
 import { useTranslation } from 'react-i18next';
 import { CustomCheckbox, CustomInput, icons, Loader, SvgIcon } from '@/shared/ui';
 import { useCallback, useEffect, useState } from 'react';
@@ -13,9 +12,10 @@ import { getInputType } from '@/shared/lib/utils/getInputType.ts';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { useSelector } from 'react-redux';
 import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
-import { sendCode } from '@/features/confirm-email';
 import { ApiError } from '@/shared/types/apiError.ts';
-import { getAuthIsLoading } from '@/features/auth';
+import { sendCode } from '@/features/account/confirm-email';
+import { getAuthIsLoading } from '../../model/selectors/getAuthIsLoading.ts';
+import { login } from '../../model/service/login.ts';
 
 const validationSchema = yup.object({
   phoneNumberOrMail: yup.string()
@@ -132,9 +132,9 @@ const LoginForm = () => {
         className="FieldWrapper"
       >
         <div className="label">
-          {t('Пароль')}<br/>
+          {t('Пароль') as string}<br/>
           {isShowError('password') &&
-                        <div className="fieldError">{t(formik.errors.password)}</div>
+            <div className="fieldError">{t(formik.errors.password) as string}</div>
           }
         </div>
 

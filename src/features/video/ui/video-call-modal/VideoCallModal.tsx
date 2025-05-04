@@ -2,16 +2,16 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { icons, Modal, SvgIcon } from '@/shared/ui';
 import styles from './VideoCallModal.module.scss';
 import { useSelector } from 'react-redux';
-import { getAuthToken } from '@/features/auth';
 import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
 import { getVideoRoomId } from '../../model/selectors/getVideoRoomId.ts';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { videoActions } from '../../model/slice/videoSlice.ts';
 import WebRtcService, { participantsUpdateActions } from '../../model/service/WebRtcService.ts';
 import { participant } from '../../model/types/participant.ts';
+import { getAuthToken } from '@/features/account/auth';
 
 const VideoCallModal = () => {
-  const token = useSelector(getAuthToken);
+  const token = useSelector(getAuthToken)!;
   const { userId } = useSelector(getUserData)!;
   const roomId = useSelector(getVideoRoomId);
   const dispatch = useAppDispatch();

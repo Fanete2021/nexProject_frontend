@@ -4,8 +4,8 @@ import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { getAuthIsAuth } from '@/features/auth';
 import { icons, SvgIcon } from '@/shared/ui';
+import { getAuthIsAuth } from '@/features/account/auth';
 
 const NotFoundPage = () => {
   const { t } = useTranslation();

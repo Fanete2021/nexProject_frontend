@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ThunkConfig } from '@/app/providers/store-provider';
-import { authActions } from '@/features/auth';
 import { ApiError } from '@/shared/types/apiError.ts';
+import { authActions } from '@/features/account/auth';
 
 interface RegistrationProps {
     email: string;

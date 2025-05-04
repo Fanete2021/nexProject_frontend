@@ -3,10 +3,10 @@ import { StateSchema, ThunkExtraArg } from './StateSchema.ts';
 import { createReducerManager } from './reducerManager.ts';
 import { NavigateOptions, To } from 'react-router-dom';
 import { configureApi } from '@/shared/api/api.ts';
-import { authReducer } from '@/features/auth';
 import { userReducer } from '@/entities/user';
 import { chatReducer } from '@/features/chat';
 import { videoReducer } from '@/features/video';
+import { authReducer } from '@/features/account/auth';
 
 export function createReduxStore(
   initialState?: StateSchema,

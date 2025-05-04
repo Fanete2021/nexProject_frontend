@@ -3,7 +3,6 @@ import * as yup from 'yup';
 import { FormControl, InputAdornment } from '@mui/material';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { useTranslation } from 'react-i18next';
-import { registration } from '@/features/registration/ui/model/service/registration.ts';
 import { CustomInput, icons, Loader, SvgIcon, ValidationList } from '@/shared/ui';
 import { useCallback, useState } from 'react';
 import { isPasswordValid, isUsernameValid } from '@/shared/lib/utils/validation.ts';
@@ -13,6 +12,7 @@ import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
 import { useNavigate } from 'react-router-dom';
 import { getMessageFromApiError } from '@/shared/lib/utils/getMessageFromApiError.ts';
 import { ApiError } from '@/shared/types/apiError.ts';
+import { registration } from '../../model/service/registration.ts';
 
 const validationSchema = yup.object({
   email: yup.string().email('Почта невалидна').required('Почта обязательна'),

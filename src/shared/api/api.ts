@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { StateSchema } from '@/app/providers/store-provider';
-import { getAuthToken } from '@/features/auth';
 import { Store } from '@reduxjs/toolkit';
+import { getAuthToken } from '@/features/account/auth';
 
 export const configureApi = (store: Store<StateSchema>) => {
   const api = axios.create({

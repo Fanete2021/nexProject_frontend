@@ -5,10 +5,10 @@ import styles from './EmailConfirmPage.module.scss';
 import { useSelector } from 'react-redux';
 import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
-import { EmailConfirmForm } from '@/features/confirm-email';
 import { useCallback, useEffect } from 'react';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { userActions } from '@/entities/user';
+import { EmailConfirmForm } from '@/features/account/confirm-email';
 
 const EmailConfirmPage = () => {
   const { t } = useTranslation();

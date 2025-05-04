@@ -6,7 +6,7 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { fetchChats } from '../../model/service/fetchChats.ts';
 import SelectedChat from './ui/selected-chat/SelectedChat.tsx';
 import { useSelector } from 'react-redux';
-import { getAuthToken } from '@/features/auth';
+import { getAuthToken } from '@/features/account/auth';
 import ChatWebSocketService from '../../model/service/ChatWebSocketService.ts';
 import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
 import { Message, typesMessage } from '../../model/types/message.ts';

@@ -3,7 +3,7 @@ import { ThunkConfig } from '@/app/providers/store-provider';
 import { ApiError } from '@/shared/types/apiError.ts';
 
 interface RefreshTokenResponse {
-    access_token: string;
+  access_token: string;
 }
 
 export const checkWithoutToken = createAsyncThunk<RefreshTokenResponse, void, ThunkConfig<ApiError>> (

@@ -28,7 +28,7 @@ function extractEmail(errorDetails) {
   return null;
 }
 
-const EmailForm = () => {
+const SendCodeForm = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const [formError, setFormError] = useState<string>('');
@@ -131,4 +131,4 @@ const EmailForm = () => {
   );
 };
 
-export default EmailForm;
+export default SendCodeForm;

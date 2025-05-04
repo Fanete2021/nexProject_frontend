@@ -5,8 +5,9 @@ import { useTranslation } from 'react-i18next';
 import { CustomInput } from '@/shared/ui';
 import { useCallback, useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { confirmEmail, sendCode } from '@/features/confirm-email';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
+import { confirmEmail } from '../../model/service/confirmEmail.ts';
+import { sendCode } from '../../model/service/sendCode.ts';
 
 const formatTime = (time: number): string => {
   const minutes = Math.floor(time / 60);
@@ -138,7 +139,7 @@ const EmailConfirmForm = () => {
       </div>
 
       {error &&
-        <div className={styles.error}>{t('Неверный код')}</div>
+        <div className={styles.error}>{t('Неверный код') as string}</div>
       }
 
       <div className={styles.sendCodeWrapper}>
@@ -152,7 +153,7 @@ const EmailConfirmForm = () => {
             className={styles.sendCode}
             onClick={sendCodeHandler}
           >
-            {t('Я не получил(а) код')}
+            {t('Я не получил(а) код') as string}
           </button>
         }
       </div>

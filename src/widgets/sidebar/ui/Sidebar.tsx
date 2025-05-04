@@ -7,7 +7,7 @@ import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
 import { useTranslation } from 'react-i18next';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
-import { logout } from '@/features/auth';
+import { logout } from '@/features/account/auth';
 import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
 import { TABLET_MAX_BREAKPOINT } from '@/shared/const/WindowBreakpoints.ts';
 import { useSidebar } from '@/shared/lib/hooks/useSidebar.ts';

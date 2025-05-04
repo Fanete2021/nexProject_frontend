@@ -11,7 +11,7 @@ import { DocsPage } from '@/pages/docs-page';
 import { RegistrationPage } from '@/pages/registration-page';
 import { EmailConfirmPage } from '@/pages/email-confirm-page';
 import { NewPasswordPage } from '@/pages/new-password-page';
-import { PasswordChangePage } from '@/pages/password-change-page';
+import { NewPasswordRequestPage } from '@/pages/new-password-request-page';
 import { NotFoundPage } from '@/pages/not-found-page';
 import { AboutDevelopersPage } from '@/pages/about-developers-page';
 import { TestApiPage } from '@/pages/test-api-page';
@@ -32,8 +32,8 @@ export enum AppRoutes {
   NOTIFICATIONS  = 'notifications',
   EMAIL  = 'email',
   CHANGES  = 'changes',
+  NEW_PASSWORD_REQUEST = 'newPasswordRequest',
   NEW_PASSWORD = 'newPassword',
-  PASSWORD_CHANGE = 'passwordChange',
   ABOUT_DEVELOPERS = 'aboutDevelopers',
   NOT_FOUND = 'notFound',
   TEST_API = 'testApi'
@@ -43,8 +43,8 @@ export const RoutePath: Record<AppRoutes, string> = {
   [AppRoutes.AUTH]: '/auth',
   [AppRoutes.REGISTRATION]: `/${AppRoutes.REGISTRATION}`,
   [AppRoutes.EMAIL_CONFIRM]: `/${AppRoutes.EMAIL_CONFIRM}`,
-  [AppRoutes.NEW_PASSWORD]: `/${AppRoutes.NEW_PASSWORD}`,
-  [AppRoutes.PASSWORD_CHANGE]: `/${AppRoutes.NEW_PASSWORD}/:token`,
+  [AppRoutes.NEW_PASSWORD_REQUEST]: `/${AppRoutes.NEW_PASSWORD_REQUEST}`,
+  [AppRoutes.NEW_PASSWORD]: `/${AppRoutes.NEW_PASSWORD}/:token`,
   [AppRoutes.MAIN]: '/',
   [AppRoutes.CHATS]: `/${AppRoutes.CHATS}`,
   [AppRoutes.ORGANIZATION]: `/${AppRoutes.ORGANIZATION}`,
@@ -75,9 +75,9 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
     path: `${RoutePath.newPassword}`,
     element: <NewPasswordPage />,
   },
-  [AppRoutes.PASSWORD_CHANGE]: {
-    path: `${RoutePath.passwordChange}`,
-    element: <PasswordChangePage />,
+  [AppRoutes.NEW_PASSWORD_REQUEST]: {
+    path: `${RoutePath.newPasswordRequest}`,
+    element: <NewPasswordRequestPage />,
   },
   [AppRoutes.MAIN]: {
     path: `${RoutePath.main}`,

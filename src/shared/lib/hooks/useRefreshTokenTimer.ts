@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
-import { refreshToken } from '@/features/auth';
+import { refreshToken } from '@/features/account/auth';
 
 const useRefreshTokenTimer = () => {
   const dispatch = useAppDispatch();
