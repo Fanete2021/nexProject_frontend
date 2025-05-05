@@ -1,0 +1,12 @@
+.SidebarOpener {
+  width: 30px;
+  height: 30px;
+}
+
+.mobileStyles {
+  display: none;
+
+  @media screen and (max-width: 1024px) {
+    display: block;
+  }
+}

@@ -1,7 +1,7 @@
-import {CustomInput, icons, Loader, SvgIcon, ValidationList, ValidationListItem} from '@/shared/ui';
+import { CustomInput, icons, Loader, SvgIcon, ValidationList, ValidationListItem } from '@/shared/ui';
 import styles from './CreateOrganizationForm.module.scss';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
-import { FormControl, InputAdornment } from '@mui/material';
+import { FormControl } from '@mui/material';
 import { isFormikErrorVisible } from '@/shared/lib/utils/isFormikErrorVisible.ts';
 import { useTranslation } from 'react-i18next';
 import { useCallback, useState } from 'react';
@@ -9,7 +9,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { createOrganization } from '@/entities/organization';
-import {isOrganizationNameValid, isUsernameValid} from "@/shared/lib/utils/validation.ts";
+import { isOrganizationNameValid } from '@/shared/lib/utils/validation.ts';
 
 export interface CreateOrganizationFormProps {
   className?: string;
@@ -18,7 +18,7 @@ export interface CreateOrganizationFormProps {
 const validationSchema = yup.object({
   orgName: yup.string()
     .required('Название обязательно')
-    .matches(/^[a-zA-Z0-9!@#$%^&*-]{6,15}$/, 'Не соответствует шаблону'),
+    .matches(/^.{6,20}$/, 'Не соответствует шаблону'),
 });
 
 const CreateOrganizationForm: React.FC<CreateOrganizationFormProps> = (props) => {
@@ -77,9 +77,9 @@ const CreateOrganizationForm: React.FC<CreateOrganizationFormProps> = (props) =>
           className="FieldWrapper"
         >
           <div className="label">
-            {t('Название')}<br/>
+            {t('Название') as string}<br/>
             {isFormikErrorVisible(formik, 'orgName', { checkTouched: false }) &&
-              <div className="fieldError">{t(formik.errors.orgName)}</div>
+              <div className="fieldError">{t(formik.errors.orgName) as string}</div>
             }
           </div>
 

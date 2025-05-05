@@ -7,6 +7,7 @@ import { userReducer } from '@/entities/user';
 import { chatReducer } from '@/features/chat';
 import { videoReducer } from '@/features/video';
 import { authReducer } from '@/features/account/auth';
+import { organizationReducer } from '@/entities/organization';
 
 export function createReduxStore(
   initialState?: StateSchema,
@@ -18,7 +19,8 @@ export function createReduxStore(
     auth: authReducer,
     user: userReducer,
     chat: chatReducer,
-    video: videoReducer
+    video: videoReducer,
+    organization: organizationReducer,
   };
 
   const reducerManager = createReducerManager(rootReducers);

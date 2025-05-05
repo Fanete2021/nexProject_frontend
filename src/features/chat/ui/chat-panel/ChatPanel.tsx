@@ -1,10 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
-import styles from './ChatPanel.module.scss';
-import Dialogs from './ui/dialogs/Dialogs.tsx';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { fetchChats } from '../../model/service/fetchChats.ts';
-import SelectedChat from './ui/selected-chat/SelectedChat.tsx';
 import { useSelector } from 'react-redux';
 import { getAuthToken } from '@/features/account/auth';
 import ChatWebSocketService from '../../model/service/ChatWebSocketService.ts';
@@ -16,7 +13,6 @@ import { fetchChatInfo } from '../../model/service/fetchChatInfo.ts';
 import { Chat } from '../../model/types/chat.ts';
 import { ChatTypes } from '../../model/types/chatTypes.ts';
 import { getChatIsActiveInfoPanel } from '../../model/selectors/getChatIsActiveInfoPanel.ts';
-import InfoChat from '@/features/chat/ui/chat-panel/ui/info-chat/InfoChat.tsx';
 import { getChatSelectedChat } from '../../model/selectors/getChatSelectedChat.ts';
 import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
 import { isPublicChat } from '@/shared/lib/utils/isPublicChat.ts';
@@ -24,7 +20,11 @@ import { MOBILE_MAX_BREAKPOINT } from '@/shared/const/WindowBreakpoints.ts';
 import { useResizablePanel } from '@/shared/lib/hooks/useResizablePanel.ts';
 import { getChatDialogsFilter } from '../../model/selectors/getChatDialogsFilter.ts';
 import { getChatIsLoadingSelectedChat } from '../../model/selectors/getChatIsLoadingSelectedChat.ts';
-import SelectedChatSkeleton from './ui/selected-chat/SelectedChatSkeleton.tsx';
+import styles from './ChatPanel.module.scss';
+import Dialogs from './components/dialogs/Dialogs.tsx';
+import SelectedChatSkeleton from './components/selected-chat/SelectedChatSkeleton.tsx';
+import InfoChat from './components/info-chat/InfoChat.tsx';
+import SelectedChat from './components/selected-chat/SelectedChat.tsx';
 
 export interface ChatProps {
     className?: string;

@@ -3,13 +3,13 @@ import { useLocation, Navigate } from 'react-router-dom';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { useEffect, useState } from 'react';
-import { fetchUserData } from '@/entities/user';
+import { fetchUserData, getUserData } from '@/entities/user';
 import { Loader } from '@/shared/ui';
-import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
 import useRefreshTokenTimer from '@/shared/lib/hooks/useRefreshTokenTimer';
 import { SidebarProvider } from '@/app/providers/sidebar-provider';
 import { AuthenticatedPageLayout } from '@/widgets/authenticated-page-layout';
 import { refreshToken } from '@/features/account/auth';
+import { fetchMyOrganizations } from '@/entities/organization';
 
 function RequireAuth({ children }: { children: JSX.Element }) {
   const location = useLocation();
@@ -17,29 +17,32 @@ function RequireAuth({ children }: { children: JSX.Element }) {
   const user = useSelector(getUserData);
   const [isAppReady, setIsAppReady] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
   useRefreshTokenTimer();
 
   useEffect(() => {
     const initStore = async () => {
       try {
         await dispatch(refreshToken()).unwrap();
-        await dispatch(fetchUserData()).unwrap();
+
+        const promises = [];
+        if (!user) {
+          promises.push(dispatch(fetchUserData()).unwrap());
+        }
+
+        promises.push(dispatch(fetchMyOrganizations()).unwrap());
+
+        await Promise.all(promises);
         setIsAppReady(true);
       } catch (error) {
-        console.log('refreshToken: ', error);
         setIsAppReady(false);
       } finally {
         setIsLoading(false);
       }
     };
 
-    if (!user) {
-      initStore();
-    } else {
-      setIsAppReady(true);
-      setIsLoading(false);
-    }
-  }, [dispatch, user]);
+    initStore();
+  }, []);
 
   if (isLoading) {
     return <Loader />;

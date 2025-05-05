@@ -5,7 +5,7 @@ import { icons, SvgIcon } from '@/shared/ui';
 import { IPost } from '../model/types/post.ts';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { Namespaces } from '@/shared/config/i18n/i18n.ts';
-import { useSidebar } from '@/shared/lib/hooks/useSidebar.ts';
+import { SidebarOpener } from '@/widgets/sidebar-opener';
 
 const posts: IPost[] = data;
 
@@ -24,16 +24,11 @@ const getClassByTag = (tag: string) => {
 
 const ChangesPage = () => {
   const { t } = useTranslation(Namespaces.CHANGELOG);
-  const { openSidebar } = useSidebar();
 
   return (
     <>
       <div className={styles.header}>
-        <SvgIcon
-          iconName={icons.MENU}
-          className={styles.iconSidebar}
-          onClick={openSidebar}
-        />
+        <SidebarOpener className={styles.iconSidebar} />
 
         {t('История обновлений сайта') as string}
         <SvgIcon

@@ -12,7 +12,7 @@ export enum icons {
   NOTIFICATIONS = 'notifications',
   DOCS = 'docs',
   CALENDAR = 'calendar',
-  TEAMS = 'teams',
+  TEAM = 'team',
   CHATS = 'chats',
   MAIN = 'main',
   PASSWORD = 'password',
@@ -35,7 +35,7 @@ export enum icons {
   TAG = 'tag',
   MENU = 'menu',
   CREATE_GROUP = 'createGroup',
-  BACK = 'back',
+  ARROW = 'arrow',
   MEMBERS = 'members',
   ADD_MEMBER = 'addMember',
   DELETE = 'delete',
@@ -46,5 +46,9 @@ export enum icons {
   MICROPHONE_OFF = 'microphoneOff',
   LINE = 'line',
   ORGANIZATION = 'organization',
-  BUSINESS_MEETING = 'businessMeeting'
+  BUSINESS_MEETING = 'businessMeeting',
+  MEMBER = 'member',
+  FILTER = 'filter',
+  ACTION_MENU = 'actionMenu',
+  MEMBER_ADD = 'memberAdd',
 }

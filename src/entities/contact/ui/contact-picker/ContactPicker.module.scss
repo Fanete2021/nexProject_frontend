@@ -2,37 +2,64 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 5px;
+  position: relative;
+  background: var(--modal-bg-color);
+  padding: 10px;
+  border-radius: 15px;
+  width: 350px;
+  height: 400px;
 }
 
-.contactsList {
+.title {
+  text-align: center;
+  font-size: 20px;
+  line-height: 26px;
+}
+
+.picker {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  max-height: 300px;
-}
+  gap: 10px;
+  padding: 5px;
+  flex: 1;
 
-.contactItem {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 5px;
+  .contactsList {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    max-height: 300px;
+  }
 
-  .name {
-    font-size: 14px;
-    line-height: 18px;
+  .contactItem {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 
-    @media screen and (max-width: 768px) {
-      font-size: 16px;
-      line-height: 21px;
+    .name {
+      font-size: 14px;
+      line-height: 18px;
+
+      @media screen and (max-width: 768px) {
+        font-size: 16px;
+        line-height: 21px;
+      }
     }
+  }
+
+  .checkbox {
+    margin-left: auto;
+  }
+
+  .checkboxSkeleton {
+    margin-right: 10px;
   }
 }
 
-.checkbox {
-  margin-left: auto;
-}
-
-.checkboxSkeleton {
-  margin-right: 10px;
+.add {
+  flex-shrink: 0;
+  height: 30px;
+  width: 150px;
+  margin: 0 auto;
+  border-radius: 15px;
 }

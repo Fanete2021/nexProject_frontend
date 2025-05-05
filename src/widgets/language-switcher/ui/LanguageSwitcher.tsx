@@ -1,9 +1,9 @@
-import React, { memo, useCallback, useState } from 'react';
+import React, { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Popover } from '@mui/material';
-import { icons, SvgIcon } from '@/shared/ui';
+import { icons, Popover, SvgIcon } from '@/shared/ui';
 import styles from './LanguageSwitcher.module.scss';
 import { LOCAL_STORAGE_LANGUAGE_KEY } from '@/shared/config/i18n/i18n.ts';
+import { usePopover } from '@/shared/lib/hooks/usePopover.ts';
 
 const LanguageSwitcher = memo(() => {
   const { i18n } = useTranslation();
@@ -20,17 +20,7 @@ const LanguageSwitcher = memo(() => {
     });
   };
 
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-
-  const openPopover = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  }, []);
-
-  const closePopover = useCallback(() => {
-    setAnchorEl(null);
-  }, []);
-
-  const open = Boolean(anchorEl);
+  const { anchorEl, openPopover, isOpenPopover, closePopover } = usePopover();
 
   return (
     <>
@@ -42,7 +32,7 @@ const LanguageSwitcher = memo(() => {
       </button>
 
       <Popover
-        open={open}
+        open={isOpenPopover}
         anchorEl={anchorEl}
         onClose={closePopover}
         anchorOrigin={{
@@ -52,9 +42,6 @@ const LanguageSwitcher = memo(() => {
         transformOrigin={{
           vertical: 'top',
           horizontal: 'center',
-        }}
-        classes={{
-          paper: styles.popover
         }}
       >
         <button

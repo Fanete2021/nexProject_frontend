@@ -11,6 +11,9 @@ import { Scrollbar, ScrollbarProps } from './scrollbar';
 import { Search, SearchProps } from './search';
 import { Button, ButtonProps } from './button';
 import { Tabs, TabsProps } from './tabs';
+import { Popover, PopoverProps } from './popover';
+import { Arrow, ArrowProps, ArrowDirections } from './arrow';
+import { ActionMenu, ActionMenuProps, ActionMenuPosition } from './action-menu';
 
 export type {
   SvgIconProps,
@@ -25,7 +28,11 @@ export type {
   ScrollbarProps,
   SearchProps,
   ButtonProps,
-  TabsProps
+  TabsProps,
+  PopoverProps,
+  ArrowProps,
+  ActionMenuProps,
+  ActionMenuPosition
 };
 
 export {
@@ -42,5 +49,9 @@ export {
   Scrollbar,
   Search,
   Button,
-  Tabs
+  Tabs,
+  Popover,
+  Arrow,
+  ArrowDirections,
+  ActionMenu
 };

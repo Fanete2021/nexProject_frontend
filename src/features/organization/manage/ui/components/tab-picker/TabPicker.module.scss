@@ -1,0 +1,28 @@
+.tab {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  cursor: pointer;
+
+  .iconWrapper {
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .icon {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  .title {
+    font-size: 20px;
+    line-height: 26px;
+  }
+}
+
+.popover {
+  padding: 10px 0;
+  background: var(--bg-color) !important;
+}
