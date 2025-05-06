@@ -6,7 +6,6 @@ import { fetchMyOrganizations } from './model/service/fetchMyOrganizations.ts';
 import { fetchOrganizationInfo } from './model/service/fetchOrganizationInfo.ts';
 import { getOrganizationIsLoading } from './model/selectors/getOrganizationIsLoading.ts';
 import { OrganizationRoles } from './model/types/organizationRoles.ts';
-import OrganizationPicker from './ui/organization-picker/OrganizationPicker.tsx';
 import { getOrganizationSelectedOrganization } from './model/selectors/getOrganizationSelectedOrganization.ts';
 import { getMyRole } from './libs/utils/getMyRole.ts';
 import { getRoleName } from './libs/utils/getRoleName.ts';
@@ -29,12 +28,10 @@ export {
   getOrganizationIsLoading,
   getOrganizationSelectedOrganization,
   
-  OrganizationPicker,
-
-  getMyRole,
-  getRoleName,
-  isAdmin,
-  isOwner
+  getMyRole as getMyRoleInOrganization,
+  getRoleName as getOrganizationRoleName,
+  isAdmin as isAdminInOrganization,
+  isOwner as isOwnerInOrganization,
 };
 
 export type {

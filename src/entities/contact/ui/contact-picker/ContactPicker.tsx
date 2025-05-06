@@ -11,6 +11,7 @@ import { fetchInterlocutors } from '../../model/service/fetchInterlocutors.ts';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 
 export interface ContactPickerProps {
+  data?: Contact[];
   className?: string;
   selectedContacts: Contact[];
   setSelectedContacts: React.Dispatch<React.SetStateAction<Contact[]>>;
@@ -28,13 +29,14 @@ const ContactPicker: React.FC<ContactPickerProps> = (props) => {
     pickHandler,
     filterIds,
     headerText,
-    footerText
+    footerText,
+    data
   } = props;
 
   const dispatch = useAppDispatch();
   const windowWidth = useWindowWidth();
   
-  const [myContacts, setMyContacts] = useState<Contact[]>([]);
+  const [myContacts, setMyContacts] = useState<Contact[]>(data || []);
   const [searchedContacts, setSearchedContacts] = useState<Contact[]>([]);
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [searchedValue, setSearchedValue] = useState<string>('');
@@ -47,8 +49,10 @@ const ContactPicker: React.FC<ContactPickerProps> = (props) => {
       setMyContacts(response);
     };
 
-    initContacts();
-  }, []);
+    if (!data) {
+      initContacts();
+    }
+  }, [data]);
 
   useEffect(() => {
     const filteredContacts = (searchedValue ? searchedContacts : myContacts).filter(
@@ -76,6 +80,7 @@ const ContactPicker: React.FC<ContactPickerProps> = (props) => {
 
       <div className={styles.picker}>
         <ContactSearcher
+          data={data}
           setSearchedContacts={setSearchedContacts}
           setIsLoadingSearch={setIsLoadingSearch}
           searchedValue={searchedValue}

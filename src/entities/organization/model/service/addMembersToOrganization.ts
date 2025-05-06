@@ -12,7 +12,7 @@ interface AddMembersToOrganizationProps {
 }
 
 export const addMembersToOrganization = createAsyncThunk<OrganizationInfo, AddMembersToOrganizationProps, ThunkConfig<string>> (
-  'organization/addMembersToOrganization ',
+  'organization/addMembersToOrganization',
   async (addMembersToOrganizationData, thunkAPI) => {
     const {
       extra,

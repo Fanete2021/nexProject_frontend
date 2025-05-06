@@ -10,10 +10,11 @@ export interface SearchContactProps {
   setIsLoadingSearch: (isLoadingSearch: boolean) => void;
   searchedValue: string;
   setSearchedValue: (searchedValue: string) => void;
+  data?: Contact[];
 }
 
 const ContactSearcher: React.FC<SearchContactProps> = (props) => {
-  const { searchedValue, setSearchedValue, setSearchedContacts, setIsLoadingSearch  } = props;
+  const { searchedValue, setSearchedValue, setSearchedContacts, setIsLoadingSearch, data  } = props;
   const debouncedSearchValue = useDebounce(searchedValue, 1000);
   const dispatch = useAppDispatch();
   
@@ -24,7 +25,7 @@ const ContactSearcher: React.FC<SearchContactProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    if (debouncedSearchValue) {
+    if (debouncedSearchValue && !data) {
       setIsLoadingSearch(true);
 
       const fetchContacts = async () => {

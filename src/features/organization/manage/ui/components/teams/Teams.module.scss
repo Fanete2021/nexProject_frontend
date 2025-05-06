@@ -1,0 +1,72 @@
+.Teams {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 100%;
+  height: 100%;
+}
+
+.infoWrapper {
+  display: flex;
+  gap: 20px;
+
+  .iconInfo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 16px;
+    line-height: 21px;
+    justify-content: center;
+
+    .tags {
+      display: flex;
+      gap: 15px;
+      font-weight: bold;
+    }
+
+    .description {
+      max-width: 900px;
+      color: var(--text-secondary-color);
+    }
+  }
+}
+
+.members {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  .member {
+    background: var(--organization-member-card-bg-color);
+    border-radius: 25px;
+    gap: 5px;
+    display: flex;
+    align-items: center;
+    min-width: 230px;
+    padding: 10px;
+
+    .info {
+      display: flex;
+      flex-direction: column;
+      font-size: 16px;
+      line-height: 21px;
+    }
+
+    .iconActionMenu {
+      margin-left: auto;
+      cursor: pointer;
+      width: 5px;
+      height: 20px;
+    }
+
+    .iconMemberAdd {
+      width: 50px;
+      height: 50px;
+    }
+  }
+}

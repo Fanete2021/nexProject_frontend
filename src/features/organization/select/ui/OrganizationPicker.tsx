@@ -1,17 +1,30 @@
 import { useSelector } from 'react-redux';
-import { getOrganizationData } from '../../model/selectors/getOrganizationData.ts';
-import { getOrganizationSelectedOrganization } from '../../model/selectors/getOrganizationSelectedOrganization.ts';
 import { Arrow, ArrowDirections, Avatar, Popover, SvgIcon, icons } from '@/shared/ui';
 import styles from './OrganizationPicker.module.scss';
 import { usePopover } from '@/shared/lib/hooks/usePopover.ts';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
-import { fetchOrganizationInfo } from '@/entities/organization';
+import {
+  fetchOrganizationInfo,
+  getOrganizationData,
+  getOrganizationSelectedOrganization
+} from '@/entities/organization';
+import { teamActions } from '@/entities/team';
+import { useCallback, useState } from 'react';
+import { CreateOrganizationFormModal } from '@/features/organization/create';
 
-const OrganizationPicker = () => {
+export interface OrganizationPickerProps {
+  hasCreateOrganization?: boolean;
+}
+
+const OrganizationPicker: React.FC<OrganizationPickerProps> = (props) => {
+  const { hasCreateOrganization = false } = props;
+
+  const dispatch = useAppDispatch();
+
   const organizations = useSelector(getOrganizationData)!;
   const selectedOrganization = useSelector(getOrganizationSelectedOrganization);
-  
-  const dispatch = useAppDispatch();
+
+  const [isOpenCreatorOrganization, setIsOpenCreatorOrganization] = useState<boolean>(false);
 
   const { anchorEl, openPopover, isOpenPopover, closePopover } = usePopover();
   
@@ -21,7 +34,18 @@ const OrganizationPicker = () => {
     dispatch(fetchOrganizationInfo({
       organizationId
     }));
+    dispatch(teamActions.resetSelectedTeam());
   };
+
+  const closeCreatorOrganizationHandler = useCallback(() => setIsOpenCreatorOrganization(false), []);
+  const openCreatorOrganizationHandler = useCallback(() => {
+    closePopover();
+    setIsOpenCreatorOrganization(true);
+  }, []);
+
+  const onCreateOrganizationHandler = useCallback(() => {
+    closeCreatorOrganizationHandler();
+  }, []);
   
   return (
     <>
@@ -97,7 +121,30 @@ const OrganizationPicker = () => {
               </span>
             </div>
           ))}
+
+        {hasCreateOrganization &&
+          <div className={styles.organization} onClick={openCreatorOrganizationHandler}>
+            <SvgIcon
+              iconName={icons.ORGANIZATION}
+              important
+              applyHover={false}
+              className={styles.iconOrganizationAdd}
+            />
+
+            <span className={styles.title}>
+              Создать организацию
+            </span>
+          </div>
+        }
       </Popover>
+
+      {hasCreateOrganization &&
+        <CreateOrganizationFormModal
+          onClose={closeCreatorOrganizationHandler}
+          isOpen={isOpenCreatorOrganization}
+          onCreateHandler={onCreateOrganizationHandler}
+        />
+      }
     </>
   );
 };

@@ -6,6 +6,7 @@ import { ChatSchema } from '@/features/chat';
 import { VideoSchema } from '@/features/video';
 import { AuthSchema } from '@/features/account/auth';
 import { OrganizationSchema } from '@/entities/organization';
+import { TeamSchema } from '@/entities/team';
 
 export interface StateSchema {
   auth: AuthSchema;
@@ -13,6 +14,7 @@ export interface StateSchema {
   chat: ChatSchema;
   video: VideoSchema;
   organization: OrganizationSchema;
+  team: TeamSchema;
 }
 
 export type StateSchemaKey = keyof StateSchema;

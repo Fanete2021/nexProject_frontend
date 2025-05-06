@@ -13,6 +13,7 @@ import { isOrganizationNameValid } from '@/shared/lib/utils/validation.ts';
 
 export interface CreateOrganizationFormProps {
   className?: string;
+  onCreateHandler?: () => void;
 }
 
 const validationSchema = yup.object({
@@ -22,7 +23,7 @@ const validationSchema = yup.object({
 });
 
 const CreateOrganizationForm: React.FC<CreateOrganizationFormProps> = (props) => {
-  const { className } = props;
+  const { className, onCreateHandler } = props;
   
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -40,6 +41,7 @@ const CreateOrganizationForm: React.FC<CreateOrganizationFormProps> = (props) =>
       setIsSubmitLoading(true);
       try {
         await dispatch(createOrganization(values)).unwrap();
+        onCreateHandler?.();
       } catch (error) {
         console.log(error);
       } finally {

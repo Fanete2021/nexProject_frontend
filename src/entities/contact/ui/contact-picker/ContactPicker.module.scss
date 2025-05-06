@@ -1,9 +1,12 @@
+.ContactPickerModal {
+  background: var(--modal-bg-color);
+}
+
 .ContactPicker {
   display: flex;
   flex-direction: column;
   gap: 10px;
   position: relative;
-  background: var(--modal-bg-color);
   padding: 10px;
   border-radius: 15px;
   width: 350px;

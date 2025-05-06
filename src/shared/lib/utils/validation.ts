@@ -50,3 +50,14 @@ export const isOrganizationNameValid = (orgName: string): Validation[] => {
     },
   ];
 };
+
+export const isTeamNameValid = (orgName: string): Validation[] => {
+  const lengthValid = /^.{6,20}$/.test(orgName);
+
+  return [
+    {
+      text: 'От 6 до 20 символов',
+      isError: !lengthValid
+    },
+  ];
+};

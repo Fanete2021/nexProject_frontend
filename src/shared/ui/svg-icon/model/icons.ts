@@ -51,4 +51,5 @@ export enum icons {
   FILTER = 'filter',
   ACTION_MENU = 'actionMenu',
   MEMBER_ADD = 'memberAdd',
+  TEAM_ADD = 'teamAdd',
 }

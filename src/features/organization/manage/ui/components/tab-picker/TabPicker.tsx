@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { getMyRole, getOrganizationSelectedOrganization } from '@/entities/organization';
+import { getMyRoleInOrganization, getOrganizationSelectedOrganization } from '@/entities/organization';
 import { getUserData } from '@/entities/user';
 import { usePopover } from '@/shared/lib/hooks/usePopover.ts';
 import styles from './TabPicker.module.scss';
@@ -22,7 +22,7 @@ const TabPicker: React.FC<TabPickerProps> = (props) => {
   const selectedOrganization = useSelector(getOrganizationSelectedOrganization)!;
   const user = useSelector(getUserData)!;
 
-  const myRole = getMyRole(selectedOrganization, user);
+  const myRole = getMyRoleInOrganization(selectedOrganization, user);
 
   const { anchorEl, openPopover, isOpenPopover, closePopover } = usePopover();
 

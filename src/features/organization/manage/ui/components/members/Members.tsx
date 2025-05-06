@@ -1,10 +1,10 @@
 import {
   addMembersToOrganization,
   deleteMemberFromOrganization,
-  getMyRole,
+  getMyRoleInOrganization,
   getOrganizationSelectedOrganization,
-  getRoleName,
-  isAdmin
+  getOrganizationRoleName,
+  isAdminInOrganization
 } from '@/entities/organization';
 import { useSelector } from 'react-redux';
 import styles from './Members.module.scss';
@@ -33,7 +33,7 @@ const Members = () => {
   const [selectedContacts, setSelectedContacts] = useState<Contact[]>([]);
   const [isOpenContactPicker, setIsOpenContactPicker] = useState<boolean>(false);
   
-  const myRole = getMyRole(selectedOrganization, user);
+  const myRole = getMyRoleInOrganization(selectedOrganization, user);
   const sortedMembers = [...selectedOrganization.members].sort((a, b) => {
     return rolePriority.indexOf(a.role) - rolePriority.indexOf(b.role);
   });
@@ -123,7 +123,7 @@ const Members = () => {
 
       <Scrollbar autoHide>
         <div className={styles.members}>
-          {(isAdmin(myRole)) &&
+          {(isAdminInOrganization(myRole)) &&
             <button
               className={styles.member}
               onClick={() => setIsOpenContactPicker(true)}
@@ -151,10 +151,10 @@ const Members = () => {
 
               <div className={styles.info}>
                 <span className={styles.name}>{member.name}</span>
-                <span className={styles.role}>{getRoleName(member.role)}</span>
+                <span className={styles.role}>{getOrganizationRoleName(member.role)}</span>
               </div>
 
-              {(member.userId !== user.userId && isAdmin(myRole) && !isAdmin(member.role)) &&
+              {(member.userId !== user.userId && isAdminInOrganization(myRole) && !isAdminInOrganization(member.role)) &&
                 <SvgIcon
                   iconName={icons.ACTION_MENU}
                   applyStroke

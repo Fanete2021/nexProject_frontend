@@ -8,7 +8,7 @@ interface DeleteMemberFromOrganizationProps {
 }
 
 export const deleteMemberFromOrganization = createAsyncThunk<void, DeleteMemberFromOrganizationProps, ThunkConfig<string>> (
-  'organization/deleteMemberFromOrganization ',
+  'organization/deleteMemberFromOrganization',
   async (deleteMemberFromOrganizationData, thunkAPI) => {
     const {
       extra,

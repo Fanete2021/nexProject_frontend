@@ -10,6 +10,7 @@ import { SidebarProvider } from '@/app/providers/sidebar-provider';
 import { AuthenticatedPageLayout } from '@/widgets/authenticated-page-layout';
 import { refreshToken } from '@/features/account/auth';
 import { fetchMyOrganizations } from '@/entities/organization';
+import { fetchMyTeams } from '@/entities/team';
 
 function RequireAuth({ children }: { children: JSX.Element }) {
   const location = useLocation();
@@ -31,6 +32,7 @@ function RequireAuth({ children }: { children: JSX.Element }) {
         }
 
         promises.push(dispatch(fetchMyOrganizations()).unwrap());
+        promises.push(dispatch(fetchMyTeams()).unwrap());
 
         await Promise.all(promises);
         setIsAppReady(true);
