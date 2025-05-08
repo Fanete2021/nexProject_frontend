@@ -6,13 +6,13 @@ import { fetchMyOrganizations } from './model/service/fetchMyOrganizations.ts';
 import { fetchOrganizationInfo } from './model/service/fetchOrganizationInfo.ts';
 import { getOrganizationIsLoading } from './model/selectors/getOrganizationIsLoading.ts';
 import { OrganizationRoles } from './model/types/organizationRoles.ts';
-import { getOrganizationSelectedOrganization } from './model/selectors/getOrganizationSelectedOrganization.ts';
 import { getMyRole } from './libs/utils/getMyRole.ts';
 import { getRoleName } from './libs/utils/getRoleName.ts';
 import { isAdmin } from './libs/utils/isAdmin.ts';
 import { isOwner } from './libs/utils/isOwner.ts';
 import { deleteMemberFromOrganization } from './model/service/deleteMemberFromOrganization.ts';
 import { addMembersToOrganization } from './model/service/addMembersToOrganization.ts';
+import { OrganizationInfo } from './model/types/organizationInfo.ts';
 
 export {
   createOrganization,
@@ -26,8 +26,7 @@ export {
 
   getOrganizationData,
   getOrganizationIsLoading,
-  getOrganizationSelectedOrganization,
-  
+
   getMyRole as getMyRoleInOrganization,
   getRoleName as getOrganizationRoleName,
   isAdmin as isAdminInOrganization,
@@ -37,5 +36,6 @@ export {
 export type {
   Organization,
   OrganizationSchema,
-  OrganizationRoles
+  OrganizationRoles,
+  OrganizationInfo
 };

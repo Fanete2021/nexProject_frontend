@@ -12,7 +12,7 @@ import { getChatSelectedChat } from '../../../../model/selectors/getChatSelected
 import { chatActions } from '../../../../model/slice/chatSlice.ts';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { useTranslation } from 'react-i18next';
-import { Contact, ContactSearcher } from '@/entities/contact';
+import { Contact } from '@/entities/contact';
 import CreatorGroupModal from '../creator-group-modal/CreatorGroupModal.tsx';
 import { getChatDialogsFilter } from '../../../../model/selectors/getChatDialogsFilter.ts';
 import { Chat } from '../../../../model/types/chat.ts';
@@ -20,6 +20,7 @@ import { deletePrivateChat } from '../../../../model/service/deletePrivateChat.t
 import DialogItem from './components/dialog-item/DialogItem.tsx';
 import DialogItemSkeleton from './components/dialog-item/DialogItemSkeleton.tsx';
 import { SidebarOpener } from '@/widgets/sidebar-opener';
+import { ContactSearcher } from '@/widgets/contact-searcher';
 
 export interface ChatListProps extends React.HTMLProps<HTMLDivElement> {
   className?: string;

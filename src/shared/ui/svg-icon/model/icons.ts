@@ -52,4 +52,5 @@ export enum icons {
   ACTION_MENU = 'actionMenu',
   MEMBER_ADD = 'memberAdd',
   TEAM_ADD = 'teamAdd',
+  TASK_BOARD = 'taskBoard',
 }

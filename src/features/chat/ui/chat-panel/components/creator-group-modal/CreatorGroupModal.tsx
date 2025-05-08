@@ -8,7 +8,8 @@ import { useTranslation } from 'react-i18next';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
 import { MOBILE_MAX_BREAKPOINT } from '@/shared/const/WindowBreakpoints.ts';
-import { Contact, ContactPicker } from '@/entities/contact';
+import { Contact } from '@/entities/contact';
+import { ContactPicker } from '@/widgets/pickers/contact-picker';
 
 export interface CreatorGroupProps {
   isOpen: boolean;

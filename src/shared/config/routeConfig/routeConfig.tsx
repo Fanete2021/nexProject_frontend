@@ -15,6 +15,7 @@ import { NewPasswordRequestPage } from '@/pages/new-password-request-page';
 import { NotFoundPage } from '@/pages/not-found-page';
 import { AboutDevelopersPage } from '@/pages/about-developers-page';
 import { TestApiPage } from '@/pages/test-api-page';
+import { TasksPage } from '@/pages/tasks-page';
 
 export type AppRoutesProps = PathRouteProps & {
     authOnly?: boolean;
@@ -35,6 +36,7 @@ export enum AppRoutes {
   NEW_PASSWORD_REQUEST = 'newPasswordRequest',
   NEW_PASSWORD = 'newPassword',
   ABOUT_DEVELOPERS = 'aboutDevelopers',
+  TASKS = 'tasks',
   NOT_FOUND = 'notFound',
   TEST_API = 'testApi'
 }
@@ -54,6 +56,7 @@ export const RoutePath: Record<AppRoutes, string> = {
   [AppRoutes.EMAIL]: `/${AppRoutes.EMAIL}`,
   [AppRoutes.CHANGES]: `/${AppRoutes.CHANGES}`,
   [AppRoutes.ABOUT_DEVELOPERS]: `/${AppRoutes.ABOUT_DEVELOPERS}`,
+  [AppRoutes.TASKS]: `/${AppRoutes.TASKS}`,
   [AppRoutes.TEST_API]: `/${AppRoutes.TEST_API}`,
   [AppRoutes.NOT_FOUND]: '*'
 };
@@ -117,6 +120,11 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.CHANGES]: {
     path: `${RoutePath.changes}`,
     element: <ChangesPage />,
+    authOnly: true,
+  },
+  [AppRoutes.TASKS]: {
+    path: `${RoutePath.tasks}`,
+    element: <TasksPage />,
     authOnly: true,
   },
   [AppRoutes.ABOUT_DEVELOPERS]: {

@@ -55,7 +55,7 @@ const CreateOrganizationForm: React.FC<CreateOrganizationFormProps> = (props) =>
     formik.handleSubmit();
   }, [formik.handleSubmit]);
 
-  const organizationValidation = isOrganizationNameValid(formik.values.orgName);
+  const organizationNameValidation = isOrganizationNameValid(formik.values.orgName);
   
   return (
     <div className={classNames(styles.CreateOrganizationForm, [className])}>
@@ -86,7 +86,7 @@ const CreateOrganizationForm: React.FC<CreateOrganizationFormProps> = (props) =>
           </div>
 
           <ValidationList
-            items={organizationValidation}
+            items={organizationNameValidation}
             hasError={isFormikErrorVisible(formik, 'orgName')}
           >
             <CustomInput

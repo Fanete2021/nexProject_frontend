@@ -24,8 +24,6 @@ export const fetchMyTeams = createAsyncThunk<Team[], void, ThunkConfig<string>> 
         }))
       );
 
-      console.log(userOrganizations, result)
-
       return result;
     } catch (e) {
       return rejectWithValue(e.response.data.message);

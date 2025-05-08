@@ -1,0 +1,37 @@
+.CreateTaskFormModal {
+  background: var(--modal-bg-color);
+  padding: 20px;
+  border-radius: 15px;
+}
+
+.CreateTaskForm {
+  width: 340px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.iconTask {
+  margin: 0 auto;
+}
+
+.header {
+  margin-top: 15px;
+  text-align: center;
+  font-weight: bold;
+
+  .title {
+    font-size: 26px;
+    line-height: 34px;
+  }
+
+  .subtitle {
+    font-size: 18px;
+    color: var(--text-secondary-color);
+    line-height: 23px;
+  }
+}
+
+.form {
+  margin-top: 30px;
+}

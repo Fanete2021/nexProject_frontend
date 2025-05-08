@@ -61,3 +61,25 @@ export const isTeamNameValid = (orgName: string): Validation[] => {
     },
   ];
 };
+
+export const isTaskBoardNameValid = (taskBoardName: string): Validation[] => {
+  const lengthValid = /^.{6,20}$/.test(taskBoardName);
+
+  return [
+    {
+      text: 'От 6 до 20 символов',
+      isError: !lengthValid
+    },
+  ];
+};
+
+export const isTaskNameValid = (taskName: string): Validation[] => {
+  const lengthValid = /^.{6,20}$/.test(taskName);
+
+  return [
+    {
+      text: 'От 6 до 20 символов',
+      isError: !lengthValid
+    },
+  ];
+};

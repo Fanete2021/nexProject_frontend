@@ -27,6 +27,8 @@
     "i18next-http-backend": "^3.0.2",
     "kurento-utils": "^7.2.0",
     "react": "^18.2.0",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18.2.0",
     "react-i18next": "^11.15.5",
     "react-redux": "^9.2.0",

@@ -6,7 +6,6 @@ import { TeamTag } from './model/types/teamTag.ts';
 import { teamReducer, teamActions } from './model/slice/teamSlice.ts';
 import { getTeamData } from '@/entities/team/model/selectors/getTeamData.ts';
 import { getTeamIsLoading } from '@/entities/team/model/selectors/getTeamIsLoading.ts';
-import { getTeamSelectedTeam } from '@/entities/team/model/selectors/getTeamSelectedTeam.ts';
 import { addMembersToTeam } from './model/service/addMembersToTeam.ts';
 import { createTeam } from './model/service/createTeam.ts';
 import { deleteMemberFromTeam } from './model/service/deleteMemberFromTeam.ts';
@@ -30,7 +29,6 @@ export {
 
   getTeamData,
   getTeamIsLoading,
-  getTeamSelectedTeam,
 
   addMembersToTeam,
   createTeam,

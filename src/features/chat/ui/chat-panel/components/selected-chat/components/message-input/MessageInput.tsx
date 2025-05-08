@@ -15,8 +15,8 @@ import { TextareaAutosize } from '@mui/material';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { chatActions } from '../../../../../../model/slice/chatSlice.ts';
 import { editMessage } from '../../../../../../model/service/editMessage.ts';
-import { SmilePicker } from '@/widgets/smile-picker';
 import { getChatIsLoadingSelectedChat } from '../../../../../../model/selectors/getChatIsLoadingSelectedChat.ts';
+import { SmilePicker } from '@/widgets/pickers/smile-picker';
 
 export interface MessageInputProps {
     className?: string;

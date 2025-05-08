@@ -2,13 +2,10 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Team, TeamSchema } from '../types/team';
 import { createTeam } from '../service/createTeam.ts';
 import { fetchMyTeams } from '../service/fetchMyTeams.ts';
-import { fetchTeamInfo } from '../service/fetchTeamInfo.ts';
-import { addMembersToTeam } from '../service/addMembersToTeam.ts';
 
 const initialState: TeamSchema = {
   data: undefined,
   isLoading: false,
-  selectedTeam: undefined,
 };
 
 export const teamSlice = createSlice({
@@ -17,16 +14,6 @@ export const teamSlice = createSlice({
   reducers: {
     setData: (state, action: PayloadAction<Team[]>) => {
       state.data = action.payload;
-    },
-    removeMemberFromSelectedTeamById: (state, action: PayloadAction<string>) => {
-      if (state.selectedTeam) {
-        state.selectedTeam.teamMembers = state.selectedTeam.teamMembers.filter(
-          member => member.userId !== action.payload
-        );
-      }
-    },
-    resetSelectedTeam: (state) => {
-      state.selectedTeam = undefined;
     }
   },
   extraReducers: (builder) => {
@@ -47,12 +34,6 @@ export const teamSlice = createSlice({
       })
       .addCase(fetchMyTeams.rejected, (state: TeamSchema) => {
         state.isLoading = false;
-      })
-      .addCase(fetchTeamInfo.fulfilled, (state: TeamSchema, action) => {
-        state.selectedTeam = action.payload;
-      })
-      .addCase(addMembersToTeam.fulfilled, (state: TeamSchema, action) => {
-        state.selectedTeam = action.payload;
       });
   }
 });

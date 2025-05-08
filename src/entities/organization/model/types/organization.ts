@@ -9,6 +9,5 @@ export interface Organization {
 
 export interface OrganizationSchema {
   data?: Organization[];
-  selectedOrganization?: OrganizationInfo;
   isLoading: boolean;
 }

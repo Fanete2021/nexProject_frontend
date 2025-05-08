@@ -2,12 +2,12 @@ import { Modal } from '@/shared/ui';
 import CreateOrganizationForm , { CreateOrganizationFormProps } from './CreateOrganizationForm';
 import styles from './CreateOrganizationForm.module.scss';
 
-export interface ContactPickerModalProps extends CreateOrganizationFormProps {
+export interface CreateOrganizationFormModalProps extends CreateOrganizationFormProps {
   onClose: () => void;
   isOpen: boolean;
 }
 
-const CreateOrganizationFormModal: React.FC<ContactPickerModalProps> = (props) => {
+const CreateOrganizationFormModal: React.FC<CreateOrganizationFormModalProps> = (props) => {
   const { onClose, isOpen, ...rest } = props;
 
   return (

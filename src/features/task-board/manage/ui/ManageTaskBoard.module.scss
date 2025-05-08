@@ -1,0 +1,29 @@
+.ManageBoard {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 20px;
+}
+
+.header {
+  display: flex;
+  gap: 50px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.teamPickerImage {
+  width: 50px !important;
+  height: 50px !important;
+}
+
+.teamPickerText {
+  font-size: 25px;
+  line-height: 32px;
+}
+
+.teamPickerIconArrow {
+  width: 9px;
+  height: 17px;
+}

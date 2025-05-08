@@ -2,9 +2,8 @@ import {
   addMembersToOrganization,
   deleteMemberFromOrganization,
   getMyRoleInOrganization,
-  getOrganizationSelectedOrganization,
   getOrganizationRoleName,
-  isAdminInOrganization
+  isAdminInOrganization, OrganizationInfo,
 } from '@/entities/organization';
 import { useSelector } from 'react-redux';
 import styles from './Members.module.scss';
@@ -13,7 +12,8 @@ import { getUserData } from '@/entities/user';
 import { OrganizationRoles } from '@/entities/organization/model/types/organizationRoles.ts';
 import React, { useState } from 'react';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
-import { Contact, ContactPickerModal } from '@/entities/contact';
+import { Contact } from '@/entities/contact';
+import { ContactPickerModal } from '@/widgets/pickers/contact-picker';
 
 const rolePriority = [
   OrganizationRoles.OWNER,
@@ -22,10 +22,15 @@ const rolePriority = [
   OrganizationRoles.VIEWER,
 ];
 
-const Members = () => {
+export interface MembersProps {
+  organization: OrganizationInfo
+}
+
+const Members: React.FC<MembersProps> = (props) => {
+  const { organization } = props;
+
   const dispatch = useAppDispatch();
-  
-  const selectedOrganization = useSelector(getOrganizationSelectedOrganization)!;
+
   const user = useSelector(getUserData)!;
   
   const [actionMenuPosition, setActionMenuPosition] = useState<ActionMenuPosition | null>(null);
@@ -33,8 +38,8 @@ const Members = () => {
   const [selectedContacts, setSelectedContacts] = useState<Contact[]>([]);
   const [isOpenContactPicker, setIsOpenContactPicker] = useState<boolean>(false);
   
-  const myRole = getMyRoleInOrganization(selectedOrganization, user);
-  const sortedMembers = [...selectedOrganization.members].sort((a, b) => {
+  const myRole = getMyRoleInOrganization(organization, user);
+  const sortedMembers = [...organization.members].sort((a, b) => {
     return rolePriority.indexOf(a.role) - rolePriority.indexOf(b.role);
   });
   
@@ -53,7 +58,7 @@ const Members = () => {
     closeActionMenuHandler();
     dispatch(deleteMemberFromOrganization({
       userId: selectedMemberId!,
-      organizationId: selectedOrganization.organizationId,
+      organizationId: organization.organizationId,
     }));
   };
 
@@ -67,7 +72,7 @@ const Members = () => {
         userId: c.userId,
         role: OrganizationRoles.VIEWER
       })),
-      organizationId: selectedOrganization.organizationId
+      organizationId: organization.organizationId
     }));
 
     onCloseContactPickerHandler();
@@ -86,12 +91,12 @@ const Members = () => {
 
         <div className={styles.info}>
           <span className={styles.countMembers}>
-            {selectedOrganization.members.length} members
+            {organization.members.length} members
           </span>
 
-          {selectedOrganization.organizationDescription &&
+          {organization.organizationDescription &&
             <span className={styles.description}>
-              {selectedOrganization.organizationDescription}
+              {organization.organizationDescription}
             </span>
           }
         </div>
@@ -184,7 +189,7 @@ const Members = () => {
         headerText={
           `Добавить участников ${selectedContacts.length ? `(+${selectedContacts.length})` : ''}`
         }
-        filterIds={selectedOrganization.members.map(m => m.userId)}
+        filterIds={organization.members.map(m => m.userId)}
         footerText='Добавить'
         pickHandler={addMembers}
       />

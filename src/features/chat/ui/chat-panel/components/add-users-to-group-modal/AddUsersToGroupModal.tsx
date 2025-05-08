@@ -1,9 +1,10 @@
-import { Contact, ContactPickerModal } from '@/entities/contact';
+import { Contact } from '@/entities/contact';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getChatSelectedChat } from '../../../../model/selectors/getChatSelectedChat.ts';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { addUserToGroup } from '@/features/chat';
+import { ContactPickerModal } from '@/widgets/pickers/contact-picker';
 
 export interface AddToGroupProps {
   onClose: () => void;

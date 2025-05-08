@@ -28,6 +28,12 @@ export const SidebarItemsList: SidebarItemType[] = [
     text: 'Организация',
     applyIconFill: true,
   },
+  {
+    path: RoutePath.tasks,
+    icon: icons.TASK_BOARD,
+    text: 'Задачи',
+    applyIconFill: true
+  }
   // {
   //   path: RoutePath.calendar,
   //   icon: icons.CALENDAR,

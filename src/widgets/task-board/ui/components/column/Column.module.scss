@@ -1,0 +1,21 @@
+.header {
+  font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  border-bottom: 1px solid var(--line-color);
+}
+
+.tasks {
+  padding: 10px;
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.isOver {
+  background-color: #f0f0f0; /* Изменение фона */
+  border: 2px dashed #ccc; /* Добавление пунктирной границы */
+}

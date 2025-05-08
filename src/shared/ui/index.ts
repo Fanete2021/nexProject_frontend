@@ -14,6 +14,8 @@ import { Tabs, TabsProps } from './tabs';
 import { Popover, PopoverProps } from './popover';
 import { Arrow, ArrowProps, ArrowDirections } from './arrow';
 import { ActionMenu, ActionMenuProps, ActionMenuPosition } from './action-menu';
+import { Picker, PickerProps, PickerItem } from './picker';
+import { TaskCard, TaskCardProps } from './task-card';
 
 export type {
   SvgIconProps,
@@ -32,7 +34,10 @@ export type {
   PopoverProps,
   ArrowProps,
   ActionMenuProps,
-  ActionMenuPosition
+  ActionMenuPosition,
+  PickerProps,
+  PickerItem,
+  TaskCardProps
 };
 
 export {
@@ -53,5 +58,7 @@ export {
   Popover,
   Arrow,
   ArrowDirections,
-  ActionMenu
+  ActionMenu,
+  Picker,
+  TaskCard
 };
