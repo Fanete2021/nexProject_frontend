@@ -9,7 +9,7 @@ export interface TaskInfo extends Task {
   labels: {
     labelId: string;
     labelName: string;
-  };
+  }[];
   comment: string;
   createdAt: Date;
   updatedAt: Date;

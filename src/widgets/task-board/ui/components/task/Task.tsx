@@ -1,14 +1,16 @@
 import { Task as TaskType } from '@/entities/task';
 import { useDrag } from 'react-dnd';
 import { TaskCard } from '@/shared/ui';
+import styles from './Task.module.scss';
 
 export interface TaskProps {
   task: TaskType;
   onDrop: (taskId: string, newStatusId: string) => void;
+  onClick: (taskId: string) => void;
 }
 
 const Task: React.FC<TaskProps> = (props) => {
-  const { onDrop, task } = props;
+  const { onDrop, task, onClick } = props;
   
   const [{ isDragging }, drag] = useDrag({
     type: 'TASK',
@@ -28,8 +30,9 @@ const Task: React.FC<TaskProps> = (props) => {
     <div
       ref={drag}
       style={{ opacity: isDragging ? 0.5 : 1 }}
+      onClick={() => onClick(task.taskId)}
     >
-      <TaskCard task={task} />
+      <TaskCard task={task} className={styles.task}/>
     </div>
   );
 };

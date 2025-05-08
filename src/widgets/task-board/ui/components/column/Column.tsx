@@ -9,10 +9,11 @@ export interface ColumnProps {
   column: ColumnType;
   onDrop: (taskId: string, newStatusId: string) => void;
   className?: string;
+  onClickTask: (taskId: string) => void;
 }
 
 const Column: React.FC<ColumnProps> = (props) => {
-  const { column, onDrop, className  } = props;
+  const { column, onDrop, className, onClickTask  } = props;
 
   const [{ isOver }, drop] = useDrop({
     accept: 'TASK',
@@ -33,7 +34,7 @@ const Column: React.FC<ColumnProps> = (props) => {
 
       <div className={styles.tasks}>
         {column.tasks.map((task) => (
-          <Task key={task.taskId} task={task} onDrop={onDrop} />
+          <Task key={task.taskId} task={task} onDrop={onDrop} onClick={onClickTask}/>
         ))}
       </div>
     </div>

@@ -9,7 +9,7 @@ import { TeamPicker } from '@/widgets/pickers/team-picker';
 import { TaskBoardPicker } from '@/widgets/pickers/task-board-picker';
 import { CreateTaskFormModal } from '@/features/task/create';
 import { TaskBoardView } from '@/widgets/task-board';
-import { editTask, TaskInfo } from '@/entities/task';
+import { editTask, TaskInfo, fetchTaskInfo } from '@/entities/task';
 
 const ManageTaskBoard = () => {
   const dispatch = useAppDispatch();
@@ -79,6 +79,20 @@ const ManageTaskBoard = () => {
     }
   };
 
+  const getTaskInfo = async (taskId: string) => {
+    try {
+      const response = await dispatch(fetchTaskInfo({
+        taskId,
+        boardId: selectedTaskBoard!.boardId,
+        teamId: selectedTeam!.teamId
+      }));
+
+      return response.payload;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className={styles.ManageBoard}>
       <div className={styles.header}>
@@ -122,6 +136,7 @@ const ManageTaskBoard = () => {
         <TaskBoardView
           taskBoard={selectedTaskBoard}
           changeStatus={updateTaskStatus}
+          getTaskInfo={getTaskInfo}
         />
       )}
     </div>
