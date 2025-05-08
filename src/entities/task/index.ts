@@ -5,6 +5,7 @@ import { editTask } from './model/service/editTask.ts';
 import { NewTask } from './model/types/newTask.ts';
 import { EditTask } from './model/types/editTask.ts';
 import { TaskPriorities } from './model/types/taskPriorities.ts';
+import { fetchTaskInfo } from './model/service/fetchTaskInfo.ts';
 
 export type {
   Task,
@@ -16,6 +17,7 @@ export type {
 export {
   createTask,
   editTask,
+  fetchTaskInfo,
   
   TaskPriorities
 };

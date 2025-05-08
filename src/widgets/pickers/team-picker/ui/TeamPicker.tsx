@@ -1,5 +1,5 @@
 import { Avatar, SvgIcon, icons, Picker, PickerProps, PickerItem } from '@/shared/ui';
-import styles from './teamPicker.module.scss';
+import styles from './TeamPicker.module.scss';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
