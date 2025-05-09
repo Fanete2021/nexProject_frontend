@@ -1,7 +1,6 @@
 import { Client } from '@stomp/stompjs';
 import * as kurentoUtils from 'kurento-utils';
 import { participant } from '../types/participant.ts';
-import { isSafari } from '@/shared/const/isSafari.ts';
 
 enum commandTypes {
   JOIN_CALL = 'JOIN_CALL',
@@ -12,7 +11,9 @@ enum commandTypes {
   ICE_CANDIDATE = 'ICE_CANDIDATE',
   ON_ICE_CANDIDATE = 'ON_ICE_CANDIDATE',
   RECEIVE_CALL = 'RECEIVE_CALL',
-  END_CALL = 'END_CALL'
+  END_CALL = 'END_CALL',
+  START_RECORD = 'START_RECORD',
+  STOP_RECORD = 'STOP_RECORD',
 }
 
 export enum participantsUpdateActions {
@@ -23,10 +24,13 @@ export enum participantsUpdateActions {
 class WebRtcService {
   private stompClient: Client | null = null;
   private participants: Record<string, participant> = {};
+
   private currentUserId: string | null = null;
   private roomId: string | null = null;
+
   private onParticipantsUpdate: ((participant: participant, action: participantsUpdateActions) => void) | null = null;
   private onCloseConnection: (() => void) | null = null;
+  private onRecordingChange: (isRecording: boolean) => void = null;
 
   constructor() {
     this.participants = {};
@@ -37,10 +41,12 @@ class WebRtcService {
     userId: string,
     onParticipantsUpdate: (participant: participant, action: participantsUpdateActions) => void,
     onCloseConnection: () => void,
+    onRecordingChange: (isRecording: boolean) => void,
   ) {
     this.currentUserId = userId;
     this.onParticipantsUpdate = onParticipantsUpdate;
     this.onCloseConnection = onCloseConnection;
+    this.onRecordingChange = onRecordingChange;
 
     this.stompClient = new Client({
       brokerURL: 'wss://api.moootvey.ru/api/call',
@@ -126,6 +132,12 @@ class WebRtcService {
       case commandTypes.END_CALL:
         this.clearStatesAndDeactivateClient();
         this.onCloseConnection();
+        break;
+      case commandTypes.START_RECORD:
+        this.onRecordingChange(true);
+        break;
+      case commandTypes.STOP_RECORD:
+        this.onRecordingChange(false);
         break;
       default:
         console.error('Unrecognized message type:', message.commandType);
@@ -263,6 +275,16 @@ class WebRtcService {
     }
 
     this.clearStatesAndDeactivateClient();
+  };
+
+  public startRecording = () => {
+    this.sendStompMessage(commandTypes.START_RECORD, { roomId: this.roomId });
+    this.onRecordingChange(true);
+  };
+
+  public stopRecording = () => {
+    this.sendStompMessage(commandTypes.STOP_RECORD, { roomId: this.roomId });
+    this.onRecordingChange(false);
   };
 
   private clearStatesAndDeactivateClient = () => {

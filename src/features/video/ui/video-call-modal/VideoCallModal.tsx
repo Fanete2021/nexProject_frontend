@@ -19,6 +19,7 @@ const VideoCallModal = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isVideoEnabled, setIsVideoEnabled] = useState(false);
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
+  const [isRecording, setIsRecording] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [videoCount, setVideoCount] = useState(0);
 
@@ -39,6 +40,14 @@ const VideoCallModal = () => {
     WebRtcService.updateAudioTrack(newState);
   }, [isAudioEnabled]);
 
+  const toggleRecord = () => {
+    if (isRecording) {
+      WebRtcService.stopRecording();
+    } else {
+      WebRtcService.startRecording();
+    }
+  };
+
   useEffect(() => {
     if (!isOpen) {
       dispatch(videoActions.resetRoomId());
@@ -58,7 +67,13 @@ const VideoCallModal = () => {
   }, [roomId, isOpen]);
 
   useEffect(() => {
-    WebRtcService.initialize(token, userId, onParticipantsUpdate, () => setIsOpen(false));
+    WebRtcService.initialize(
+      token,
+      userId,
+      onParticipantsUpdate,
+      () => setIsOpen(false),
+      setIsRecording
+    );
   }, []);
 
   const onParticipantsUpdate = (participant: participant, action: participantsUpdateActions) => {
@@ -148,6 +163,7 @@ const VideoCallModal = () => {
               />
               <span className={styles.text}>Video</span>
             </div>
+
             <div className={styles.audio}>
               <SvgIcon
                 iconName={isAudioEnabled ? icons.MICROPHONE : icons.MICROPHONE_OFF}
@@ -160,6 +176,7 @@ const VideoCallModal = () => {
 
               <span className={styles.text}>Mute</span>
             </div>
+
             <div className={styles.leave}>
               <SvgIcon
                 iconName={icons.PHONE}
@@ -169,6 +186,17 @@ const VideoCallModal = () => {
               />
 
               <span className={styles.text}>Leave</span>
+            </div>
+
+            <div className={styles.record}>
+              <SvgIcon
+                iconName={icons.RECORD}
+                className={styles.icon}
+                important={isRecording}
+                onClick={toggleRecord}
+              />
+
+              <span className={styles.text}>Record</span>
             </div>
           </div>
         </div>

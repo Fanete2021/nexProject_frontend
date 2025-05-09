@@ -7,8 +7,10 @@ import { useTranslation } from 'react-i18next';
 import { isPublicChat } from '@/shared/lib/utils/isPublicChat.ts';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { chatActions } from '../../../../model/slice/chatSlice.ts';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import GroupMembers from './components/group-members/GroupMembers.tsx';
+import { fetchVideoTranscriptions, VideoTranscription } from '@/entities/video-transcription';
+import Transcriptions from './components/transcriptions/Transcriptions.tsx';
 
 export interface InfoChatProps extends React.HTMLProps<HTMLDivElement> {
   className?: string;
@@ -16,15 +18,39 @@ export interface InfoChatProps extends React.HTMLProps<HTMLDivElement> {
 
 const InfoChat: React.FC<InfoChatProps> = (props) => {
   const { className, ...rest } = props;
+  
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
 
   const selectedChat = useSelector(getChatSelectedChat)!;
+  
   const isPublic = isPublicChat(selectedChat);
-  const dispatch = useAppDispatch();
+  
+  const [transcriptions, setTranscription] = useState<VideoTranscription[]>([]);
   
   const closeInfoChat = () => {
     dispatch(chatActions.setIsActiveInfoPanel(false));
   };
+
+  useEffect(() => {
+    const setupTranscriptipons = async () => {
+      try {
+        const response = await dispatch(fetchVideoTranscriptions({
+          chatId: selectedChat.chatId
+        }));
+
+        setTranscription(response.payload);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    if (isPublic) {
+      setTranscription([]);
+    } else {
+      setupTranscriptipons();
+    }
+  }, [selectedChat]);
 
   return (
     <div className={classNames(styles.InfoChat, [className])} {...rest}>
@@ -49,6 +75,8 @@ const InfoChat: React.FC<InfoChatProps> = (props) => {
       {isPublic &&
         <GroupMembers />
       }
+
+      {!isPublic && transcriptions && <Transcriptions transcriptions={transcriptions} />}
     </div>
   );
 };
