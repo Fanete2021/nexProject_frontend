@@ -1,13 +1,13 @@
 import styles from './Team.module.scss';
-import { ActionMenu, ActionMenuPosition, Avatar, icons, Scrollbar, SvgIcon } from '@/shared/ui';
+import { ActionMenu, ActionMenuPosition, Avatar, icons, SvgIcon } from '@/shared/ui';
 import { useSelector } from 'react-redux';
 import {
   addMembersToTeam,
   deleteMemberFromTeam,
-  getMyRoleInTeam, getTeamRoleName,
+  getMyRoleInTeam,
   isAdminInTeam,
   TeamRoles,
-  TeamInfo
+  TeamInfo, TeamMember
 } from '@/entities/team';
 import { Contact } from '@/entities/contact';
 import { getUserData } from '@/entities/user';
@@ -15,6 +15,7 @@ import React, { useState } from 'react';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { OrganizationInfo } from '@/entities/organization';
 import { ContactPickerModal } from '@/widgets/pickers/contact-picker';
+import MemberList from '../../member-list/MemberList.tsx';
 
 const rolePriority = [
   TeamRoles.OWNER,
@@ -26,10 +27,11 @@ const rolePriority = [
 export interface TeamsProps {
   organization: OrganizationInfo;
   team: TeamInfo;
+  changeTeam: (team: TeamInfo) => void;
 }
 
 const Team: React.FC<TeamsProps> = (props) => {
-  const { team, organization } = props;
+  const { team, organization, changeTeam } = props;
 
   const dispatch = useAppDispatch();
 
@@ -49,6 +51,9 @@ const Team: React.FC<TeamsProps> = (props) => {
   }));
 
   const sortedMembers = [...team.teamMembers].sort((a, b) => {
+    if (a.userId === user.userId) return -1;
+    if (b.userId === user.userId) return 1;
+
     return rolePriority.indexOf(a.role) - rolePriority.indexOf(b.role);
   });
 
@@ -63,106 +68,101 @@ const Team: React.FC<TeamsProps> = (props) => {
     setSelectedMemberId(null);
   };
 
-  const deleteMember = () => {
+  const deleteMember = async () => {
     closeActionMenuHandler();
-    dispatch(deleteMemberFromTeam({
-      userId: selectedMemberId!,
-      teamId: team.teamId,
-    }));
+
+    try {
+      await dispatch(deleteMemberFromTeam({
+        userId: selectedMemberId!,
+        teamId: team.teamId,
+      }));
+
+      const modifiedTeam: TeamInfo = {
+        ...team,
+        teamMembers: team.teamMembers.filter(m => m.userId !== selectedMemberId)
+      };
+
+      changeTeam(modifiedTeam);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const onCloseContactPickerHandler = () => {
     setIsOpenContactPicker(false);
   };
 
-  const addMembers = (contacts: Contact[]) => {
-    dispatch(addMembersToTeam({
-      members: contacts.map(c => ({
-        userId: c.userId,
-        role: TeamRoles.VIEWER
-      })),
-      teamId: team.teamId
-    }));
+  const addMembers = async (contacts: Contact[]) => {
+    try {
+      const response = await dispatch(addMembersToTeam({
+        members: contacts.map(c => ({
+          userId: c.userId,
+          role: TeamRoles.VIEWER
+        })),
+        teamId: team.teamId
+      }));
 
-    onCloseContactPickerHandler();
-    setSelectedContacts([]);
+      changeTeam(response.payload);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      onCloseContactPickerHandler();
+      setSelectedContacts([]);
+    }
+  };
+
+  const canEditMember = (member: TeamMember) => {
+    return member.userId !== user.userId && isAdminInTeam(myRole) && !isAdminInTeam(member.role);
   };
   
   return (
     <div className={styles.Teams}>
-      <div className={styles.infoWrapper}>
-        <SvgIcon
-          iconName={icons.INFO}
-          applyHover={false}
-          important
-          className={styles.iconInfo}
-        />
+      <MemberList 
+        canEditMember={canEditMember}
+        editMember={openActionMenuHandler}
+        canAddMember={isAdminInTeam(myRole)}
+        members={sortedMembers}
+        addMember={() => setIsOpenContactPicker(true)}
+      >
+        <div className={styles.header}>
+          <Avatar
+            width={40}
+            height={40}
+            text={team.teamName}
+          />
 
-        <div className={styles.info}>
-          <span className={styles.tags}>
-            {team.teamTags.map((tag) => (
-              <span key={tag.tagName} style={{ color: tag.tagColor }}>{tag.tagName}</span>
-            ))}
-          </span>
-
-          <span className={styles.countMembers}>
-            {team.teamMembers.length} members
-          </span>
-
-          {team.teamDescription &&
-            <span className={styles.description}>
-              {team.teamDescription}
-            </span>
-          }
+          {team.teamName}
         </div>
-      </div>
 
-      <Scrollbar autoHide>
-        <div className={styles.members}>
-          {(isAdminInTeam(myRole)) &&
-            <button
-              className={styles.member}
-              onClick={() => setIsOpenContactPicker(true)}
-            >
-              <SvgIcon
-                iconName={icons.MEMBER_ADD}
-                important
-                className={styles.iconMemberAdd}
-                applyHover={false}
-              />
+        <div className={styles.infoWrapper}>
+          <SvgIcon
+            iconName={icons.INFO}
+            applyHover={false}
+            important
+            className={styles.iconInfo}
+          />
 
-              <div className={styles.info}>
-                Добавить участника
-              </div>
-            </button>
-          }
+          <div className={styles.info}>
+            <div className={styles.infoHeader}>
+              <span className={styles.countMembers}>
+                {team.teamMembers.length} members
+              </span>
 
-          {sortedMembers.map(member => (
-            <div key={member.userId} className={styles.member}>
-              <Avatar
-                width={50}
-                height={50}
-                text={member.name}
-              />
-
-              <div className={styles.info}>
-                <span className={styles.name}>{member.name}</span>
-                <span className={styles.role}>{getTeamRoleName(member.role)}</span>
-              </div>
-
-              {(member.userId !== user.userId && isAdminInTeam(myRole) && !isAdminInTeam(member.role)) &&
-                <SvgIcon
-                  iconName={icons.ACTION_MENU}
-                  applyStroke
-                  applyFill={false}
-                  className={styles.iconActionMenu}
-                  onClick={(e) => openActionMenuHandler(e, member.userId)}
-                />
-              }
+              <span className={styles.tags}>
+                {team.teamTags.map((tag) => (
+                  <span key={tag.tagName}>#{tag.tagName}</span>
+                ))}
+              </span>
             </div>
-          ))}
+
+            {team.teamDescription &&
+              <span className={styles.description}>
+                {team.teamDescription}
+              </span>
+            }
+          </div>
         </div>
-      </Scrollbar>
+      </MemberList>
 
       <ActionMenu
         onClose={closeActionMenuHandler}

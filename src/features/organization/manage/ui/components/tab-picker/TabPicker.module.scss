@@ -1,8 +1,39 @@
+.TabPicker {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tabWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
 .tab {
   display: flex;
   gap: 10px;
   align-items: center;
   cursor: pointer;
+  width: 160px;
+  border-radius: 5px;
+  padding: 5px;
+  transition: 0.3s;
+  color: var(--text-secondary-color);
+
+  &.canSelected {
+    &:hover {
+      background: var(--organization-selected-tab-hover-bg-color);
+      color: var(--text-color);
+    }
+  }
+
+  &.selected {
+    color: var(--text-color);
+
+    &.canSelected {
+      background: var(--organization-selected-tab-bg-color);
+    }
+  }
 
   .iconWrapper {
     width: 40px;
@@ -19,15 +50,48 @@
   .title {
     font-size: 20px;
     line-height: 26px;
-  }
-
-  .iconArrow {
-    width: 7px;
-    height: 13px;
+    flex: 1;
+    text-align: center;
   }
 }
 
-.popover {
-  padding: 10px 0;
-  background: var(--bg-color) !important;
+
+.teams {
+  display: flex;
+  flex-direction: column;
+  padding: 5px 0 5px 15px;
+  gap: 5px;
+
+  .team {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    border-radius: 15px;
+    transition: 0.3s;
+    color: var(--text-secondary-color);
+
+    &:hover {
+      color: var(--text-color);
+    }
+
+    &.selected {
+      background: var(--organization-selected-tab-bg-color);
+      color: var(--text-color);
+    }
+
+    &.canSelected:hover {
+      background: var(--organization-selected-tab-hover-bg-color);
+    }
+
+    .iconAddTeam {
+      width: 30px;
+      height: 30px;
+    }
+
+    .name {
+      font-size: 14px;
+      line-height: 18px;
+    }
+  }
 }

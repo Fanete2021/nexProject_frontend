@@ -1,28 +1,28 @@
 import styles from './ManageOrganization.module.scss';
 import {
-  getMyRoleInOrganization, getOrganizationData,
-  isAdminInOrganization, OrganizationInfo,
+  getOrganizationData,
+  OrganizationInfo,
 } from '@/entities/organization';
 import TabPicker from './components/tab-picker/TabPicker.tsx';
 import { useSelector } from 'react-redux';
 import { Tabs } from './components/tab-picker/model/tabs.ts';
 import { useCallback, useEffect, useState } from 'react';
-import Members from './components/members/Members.tsx';
 import { SidebarOpener } from '@/widgets/sidebar-opener';
-import Team from './components/team/Team.tsx';
-import { getUserData } from '@/entities/user';
 import { OrganizationPicker } from '@/widgets/pickers/organization-picker';
-import { getTeamData, TeamInfo } from '@/entities/team';
-import { TeamPicker } from '@/widgets/pickers/team-picker';
+import { fetchTeamInfo, getTeamData, TeamInfo } from '@/entities/team';
+import { icons, SvgIcon } from '@/shared/ui';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
+import Members from './components/tabs/members/Members.tsx';
+import Team from './components/tabs/team/Team.tsx';
 
 const ManageOrganization = () => {
-  const user = useSelector(getUserData)!;
+  const dispatch = useAppDispatch();
+  
   const organizations = useSelector(getOrganizationData)!;
   const teams = useSelector(getTeamData)!;
 
   const [selectedOrganization, setSelectedOrganization] = useState<OrganizationInfo | null>(null);
   const [selectedTeam, setSelectedTeam] = useState<TeamInfo | null>(null);
-  
   const [currentTab, setCurrentTab] = useState<Tabs>(Tabs.MEMBERS);
 
   useEffect(() => {
@@ -36,6 +36,15 @@ const ManageOrganization = () => {
   const changeTab = useCallback((tab: Tabs) => {
     setCurrentTab(tab);
   }, []);
+
+  const onSelectTeamHandler = async (teamId: string) => {
+    try {
+      const response = await dispatch(fetchTeamInfo({ teamId }));
+      setSelectedTeam(response.payload);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   
   return (
     <div className={styles.ManageOrganization}>
@@ -47,36 +56,71 @@ const ManageOrganization = () => {
           organizations={organizations}
           onSelect={setSelectedOrganization}
         />
+      </div>
+
+      {selectedOrganization && selectedOrganization?.organizationDescription &&
+        <div className={styles.orgDescription}>
+          <SvgIcon
+            iconName={icons.INFO}
+            applyHover={false}
+            important
+            className={styles.iconInfo}
+          />
+
+          <div className={styles.text}>
+            {selectedOrganization?.organizationDescription}
+          </div>
+        </div>
+      }
+
+      <div className={styles.content}>
+        {!selectedOrganization &&
+          <>
+            <SvgIcon
+              iconName={icons.ORGANIZATION_IDEAS}
+              className={styles.iconOrganizationIdeas}
+              important
+              applyHover={false}
+            />
+
+            <div className={styles.withoutSelectedOrganization}>
+              Чтобы управлять настройками и просматривать информацию, выберите организацию из списка.
+            </div>
+          </>
+        }
 
         {selectedOrganization &&
           <>
-            <TabPicker
-              currentTab={currentTab}
-              changeTab={changeTab}
-              selectedOrganization={selectedOrganization}
-            />
-
-            {currentTab === Tabs.TEAMS &&
-              <TeamPicker
-                organizationId={selectedOrganization.organizationId}
-                hasCreateTeam={isAdminInOrganization(
-                  getMyRoleInOrganization(selectedOrganization, user)
-                )}
+            <div className={styles.leftPanel}>
+              <TabPicker
+                currentTab={currentTab}
+                changeTab={changeTab}
+                selectedOrganization={selectedOrganization}
                 teams={teams}
-                onSelect={setSelectedTeam}
+                selectTeam={onSelectTeamHandler}
+                selectedTeamId={selectedTeam?.teamId}
               />
-            }
+            </div>
+
+            <div className={styles.rightPanel}>
+              {currentTab === Tabs.MEMBERS &&
+                <Members
+                  organization={selectedOrganization}
+                  changeOrganization={setSelectedOrganization}
+                />
+              }
+
+              {currentTab === Tabs.TEAMS && selectedTeam &&
+                <Team
+                  organization={selectedOrganization}
+                  team={selectedTeam}
+                  changeTeam={setSelectedTeam}
+                />
+              }
+            </div>
           </>
         }
       </div>
-
-      {selectedOrganization &&
-        <div className={styles.content}>
-          {currentTab === Tabs.MEMBERS && <Members organization={selectedOrganization} />}
-
-          {currentTab === Tabs.TEAMS && selectedTeam && <Team team={selectedTeam} organization={selectedOrganization}/>}
-        </div>
-      }
     </div>
   );
 };

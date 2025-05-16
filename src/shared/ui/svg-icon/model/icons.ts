@@ -53,5 +53,7 @@ export enum icons {
   MEMBER_ADD = 'memberAdd',
   TEAM_ADD = 'teamAdd',
   TASK_BOARD = 'taskBoard',
-  RECORD = 'record'
+  RECORD = 'record',
+  ORGANIZATION_IDEAS = 'organizationIdeas',
+  PEOPLE = 'people',
 }

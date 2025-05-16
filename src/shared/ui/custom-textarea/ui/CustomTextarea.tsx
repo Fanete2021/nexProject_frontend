@@ -32,34 +32,30 @@ const CustomTextarea: React.FC<CustomTextareaProps> = (props) => {
     if (textareaRef.current && scrollWrapperRef.current) {
       const element = textareaRef.current;
 
-      console.log(element.scrollHeight);
-
       const newHeight = Math.min(element.scrollHeight, maxHeight);
       scrollWrapperRef.current.style.height = `${newHeight + PADDING_TOP + PADDING_BOTTOM + 1}px`;
     }
   }, [value, maxHeight]);
 
   return (
-    <>
-      <div
-        ref={scrollWrapperRef}
-        className={classNames(styles.wrapper, [classes?.wrapper])}
-        style={{ maxHeight: `${maxHeight}px`, paddingTop: `${PADDING_TOP}px`, paddingBottom: `${PADDING_BOTTOM}px` }}
-      >
-        <Scrollbar>
-          <TextareaAutosize
-            ref={textareaRef}
-            {...rest}
-            value={value}
-            className={classNames(
-              styles.input,
-              [classes?.textarea]
-            )}
-          />
-        </Scrollbar>
-      </div>
-    </>
-
+    <div
+      ref={scrollWrapperRef}
+      className={classNames(styles.wrapper, [classes?.wrapper])}
+      style={{ maxHeight: `${maxHeight}px`, paddingTop: `${PADDING_TOP}px`, paddingBottom: `${PADDING_BOTTOM}px` }}
+      onClick={() => textareaRef.current?.focus()}
+    >
+      <Scrollbar>
+        <TextareaAutosize
+          ref={textareaRef}
+          {...rest}
+          value={value}
+          className={classNames(
+            styles.input,
+            [classes?.textarea]
+          )}
+        />
+      </Scrollbar>
+    </div>
   );
 };
 

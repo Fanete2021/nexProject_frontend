@@ -1,0 +1,48 @@
+.Teams {
+  height: 100%;
+}
+
+.header {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+}
+
+.infoWrapper {
+  display: flex;
+  gap: 15px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+
+  .iconInfo {
+    width: 30px;
+    height: 30px;
+  }
+
+  .info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    justify-content: center;
+
+    .infoHeader {
+      display: flex;
+      gap: 5px;
+      font-size: 16px;
+      line-height: 21px;
+
+      .tags {
+        display: flex;
+        gap: 5px;
+        color: var(--text-secondary-color);
+      }
+    }
+
+    .description {
+      max-width: 800px;
+      font-size: 14px;
+      line-height: 18px;
+    }
+  }
+}

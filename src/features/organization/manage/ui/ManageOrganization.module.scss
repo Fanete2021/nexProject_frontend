@@ -3,6 +3,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  gap: 30px;
 }
 
 .header {
@@ -12,8 +13,52 @@
   flex-wrap: wrap;
 }
 
+.orgDescription {
+  display: flex;
+  gap: 20px;
+
+  .iconInfo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .text {
+    max-width: 800px;
+    font-size: 16px;
+    line-height: 21px;
+    align-self: center;
+  }
+}
+
 .content {
-  margin-top: 30px;
   width: 100%;
   flex: 1;
+  display: flex;
+  gap: 20px;
+
+  .iconOrganizationIdeas {
+    opacity: 0.1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .withoutSelectedOrganization {
+    font-size: 26px;
+    font-weight: bold;
+    max-width: 400px;
+    text-align: center;
+    align-self: center;
+    margin: 0 auto;
+    z-index: 1;
+  }
+
+  .leftPanel {
+
+  }
+
+  .rightPanel {
+    width: 100%;
+  }
 }

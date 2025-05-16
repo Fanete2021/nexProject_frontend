@@ -1,15 +1,21 @@
 import { useSelector } from 'react-redux';
-import { getMyRoleInOrganization, OrganizationInfo } from '@/entities/organization';
+import { getMyRoleInOrganization, isAdminInOrganization, OrganizationInfo } from '@/entities/organization';
 import { getUserData } from '@/entities/user';
-import { usePopover } from '@/shared/lib/hooks/usePopover.ts';
 import styles from './TabPicker.module.scss';
-import { Arrow, ArrowDirections, Popover, SvgIcon } from '@/shared/ui';
+import {Avatar, icons, SvgIcon} from '@/shared/ui';
 import { tabs, Tabs } from './model/tabs.ts';
+import { classNames } from '@/shared/lib/utils/classNames.ts';
+import { Team } from '@/entities/team';
+import {CreateTeamFormModal} from "@/features/team/create";
+import {useCallback, useState} from "react";
 
 export interface TabPickerProps {
   currentTab: Tabs;
   changeTab: (newTab: Tabs) => void;
   selectedOrganization: OrganizationInfo;
+  teams: Team[];
+  selectTeam: (teamId: string) => void;
+  selectedTeamId?: string;
 }
 
 export const tabsArray = Object.entries(tabs).map(([key, value]) => ({
@@ -18,68 +24,57 @@ export const tabsArray = Object.entries(tabs).map(([key, value]) => ({
 }));
 
 const TabPicker: React.FC<TabPickerProps> = (props) => {
-  const { currentTab, changeTab, selectedOrganization } = props;
+  const { currentTab, changeTab, selectedOrganization, teams, selectTeam, selectedTeamId } = props;
 
   const user = useSelector(getUserData)!;
 
-  const myRole = getMyRoleInOrganization(selectedOrganization, user);
+  const canCreateTeam = isAdminInOrganization(getMyRoleInOrganization(selectedOrganization, user));
 
-  const { anchorEl, openPopover, isOpenPopover, closePopover } = usePopover();
+  const [isOpenCreatorTeam, setIsOpenCreatorTeam] = useState<boolean>(false);
+
+  const filteredTeams = teams.filter((team) =>
+    team.organizationId === selectedOrganization.organizationId
+  );
 
   const onClickHandler = (newTab: Tabs) => {
-    closePopover();
     changeTab(newTab);
   };
 
+  const selectTeamHandler = (teamId: string) => {
+    changeTab(Tabs.TEAMS);
+    selectTeam(teamId);
+  };
+
+  const closeCreatorTeamHandler = useCallback(() => setIsOpenCreatorTeam(false), []);
+  const openCreatorTeamHandler = useCallback(() => {
+    setIsOpenCreatorTeam(true);
+  }, []);
+
+  const onCreateTeamHandler = useCallback(() => {
+    closeCreatorTeamHandler();
+  }, []);
+
   return (
-    <>
-      <div className={styles.tab} onClick={openPopover}>
-        <div className={styles.iconWrapper}>
-          <SvgIcon
-            iconName={tabs[currentTab].icon}
-            applyHover={false}
-            className={styles.icon}
-          />
-        </div>
-
-        <span className={styles.title}>
-          {tabs[currentTab].title}
-        </span>
-
-        <Arrow
-          className={styles.iconArrow}
-          direction={isOpenPopover ? ArrowDirections.UP : ArrowDirections.DOWN}
-        />
-      </div>
-
-      <Popover
-        open={isOpenPopover}
-        anchorEl={anchorEl}
-        onClose={closePopover}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        classes={{
-          paper: styles.popover
-        }}
-      >
-        {tabsArray
-          .map((tab) => (
+    <div className={styles.TabPicker}>
+      {tabsArray
+        .map((tab) => (
+          <div
+            key={tab.id}
+            className={classNames(styles.tabWrapper)}
+          >
             <div
-              key={tab.id}
-              className={styles.tab}
-              onClick={() => onClickHandler(tab.id)}
+              className={classNames(styles.tab, [], {
+                [styles.selected]: currentTab === tab.id,
+                [styles.canSelected]: tab.id !== Tabs.TEAMS
+              })}
+              onClick={tab.id !== Tabs.TEAMS ? () => onClickHandler(tab.id) : undefined}
             >
               <div className={styles.iconWrapper}>
                 <SvgIcon
                   iconName={tab.icon}
                   applyHover={false}
                   className={styles.icon}
+                  important={currentTab === tab.id}
                 />
               </div>
 
@@ -87,9 +82,60 @@ const TabPicker: React.FC<TabPickerProps> = (props) => {
                 {tab.title}
               </span>
             </div>
-          ))}
-      </Popover>
-    </>
+
+            {tab.id === Tabs.TEAMS && (
+              <div className={styles.teams}>
+                {filteredTeams.map((team: Team) => (
+                  <div
+                    key={team.teamId}
+                    className={classNames(styles.team, [styles.canSelected], {
+                      [styles.selected]: team.teamId === selectedTeamId,
+                    })}
+                    onClick={() => selectTeamHandler(team.teamId)}
+                  >
+                    <Avatar
+                      text={team.teamName}
+                      width={30}
+                      height={30}
+                    />
+
+                    <div className={styles.name}>
+                      {team.teamName}
+                    </div>
+                  </div>
+                ))}
+
+                {canCreateTeam &&
+                  <div
+                    className={classNames(styles.team)}
+                    onClick={openCreatorTeamHandler}
+                  >
+                    <SvgIcon
+                      iconName={icons.TEAM_ADD}
+                      applyHover={false}
+                      className={styles.iconAddTeam}
+                    />
+
+                    <div className={styles.name}>
+                      Создать команду
+                    </div>
+                  </div>
+                }
+              </div>
+            )}
+          </div>
+        ))
+      }
+
+      {canCreateTeam && selectedOrganization &&
+        <CreateTeamFormModal
+          onClose={closeCreatorTeamHandler}
+          isOpen={isOpenCreatorTeam}
+          onCreateHandler={onCreateTeamHandler}
+          organizationId={selectedOrganization.organizationId}
+        />
+      }
+    </div>
     
   );
 };
