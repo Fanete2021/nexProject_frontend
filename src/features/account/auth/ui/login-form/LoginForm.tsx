@@ -94,7 +94,7 @@ const LoginForm = () => {
         <div className="label">
           {t('Почта / телефон') as string}<br/>
           {isShowError('phoneNumberOrMail') &&
-              <div className="fieldError">{t(formik.errors.phoneNumberOrMail)}</div>
+            <div className="fieldError">{t(formik.errors.phoneNumberOrMail)}</div>
           }
         </div>
 

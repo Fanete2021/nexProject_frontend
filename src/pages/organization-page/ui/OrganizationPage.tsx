@@ -8,7 +8,6 @@ import { ManageOrganization } from '@/features/organization/manage';
 import { SidebarOpener } from '@/widgets/sidebar-opener';
 
 const OrganizationPage = () => {
-  const { openSidebar } = useSidebar();
   const organizations = useSelector(getOrganizationData)!;
 
   if (organizations.length === 0) {

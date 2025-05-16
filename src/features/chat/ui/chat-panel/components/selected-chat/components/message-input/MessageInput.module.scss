@@ -45,28 +45,17 @@
   }
 }
 
-.inputWrapper {
-  margin: 0 85px 0 48px;
+.fieldWrapper {
+  margin: 0 85px 0 44px;
 }
 
-.scrollWrapper {
-  height: auto;
+.inputWrapper {
+  border: none;
 }
 
 .input {
-  width: 100%;
-  color: var(--input-text-color);
-  background: var(--input-bg-color);
-  border: none;
-  outline: none;
-  padding: 16px 0;
-  resize: none;
   font-size: 14px;
   line-height: 18px;
-  height: auto;
-  display: block;
-  box-sizing: border-box;
-  overflow: hidden;
 }
 
 .files {

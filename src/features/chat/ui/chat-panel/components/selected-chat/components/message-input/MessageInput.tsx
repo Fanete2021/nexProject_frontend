@@ -6,12 +6,11 @@ import { NewMessage } from '../../../../../../model/types/newMessage.ts';
 import { getChatSelectedChat } from '../../../../../../model/selectors/getChatSelectedChat.ts';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import styles from './MessageInput.module.scss';
-import { icons, Scrollbar, SvgIcon } from '@/shared/ui';
+import { CustomTextarea, icons, SvgIcon } from '@/shared/ui';
 import { isPublicChat } from '@/shared/lib/utils/isPublicChat.ts';
 import { useTranslation } from 'react-i18next';
 import { useDebouncedMessageDraft } from '../../../../../../model/hooks/useDebouncedMessageDraft.ts';
 import { getChatEditableMessage } from '../../../../../../model/selectors/getChatEditableMessage.ts';
-import { TextareaAutosize } from '@mui/material';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { chatActions } from '../../../../../../model/slice/chatSlice.ts';
 import { editMessage } from '../../../../../../model/service/editMessage.ts';
@@ -36,10 +35,6 @@ const MessageInput: React.FC<MessageInputProps> = (props) => {
   const dispatch = useAppDispatch();
   const [messageText, setMessageText] = useDebouncedMessageDraft(selectedChat?.chatId);
   
-  const containerRef = useRef<HTMLDivElement>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const scrollWrapperRef = useRef<HTMLDivElement>(null);
- 
   const [localMessageText, setLocalMessageText] = useState<string>(editableMessage?.message || '');
   
   const currentMessageText = editableMessage ? localMessageText : messageText;
@@ -105,12 +100,8 @@ const MessageInput: React.FC<MessageInputProps> = (props) => {
     setLocalMessageText('');
   }, [dispatch]);
 
-  useEffect(() => {
-    scrollWrapperRef.current!.style.height = `${textareaRef.current!.scrollHeight}px`;
-  }, [currentMessageText]);
-
   return (
-    <div ref={containerRef} className={classNames(styles.MessageInput, [className])}>
+    <div className={classNames(styles.MessageInput, [className])}>
       {editableMessage &&
         <div className={styles.infoPanel}>
           <SvgIcon
@@ -137,28 +128,25 @@ const MessageInput: React.FC<MessageInputProps> = (props) => {
         </div>
       }
 
-      <div className={styles.inputWrapper}>
+      <div className={styles.fieldWrapper}>
         <SvgIcon
           iconName={icons.PAPER_CLIP}
           className={styles.files}
           important
         />
 
-        <div ref={scrollWrapperRef} className={styles.scrollWrapper}>
-          <Scrollbar autoHide={true}>
-            <TextareaAutosize
-              value={currentMessageText}
-              onChange={handleInputChange}
-              placeholder={t('Напишите сообщение...')}
-              onKeyDown={handleKeyDown}
-              minRows={1}
-              maxRows={5}
-              className={styles.input}
-              maxLength={255}
-              ref={textareaRef}
-            />
-          </Scrollbar>
-        </div>
+        <CustomTextarea
+          maxHeight={100}
+          value={currentMessageText}
+          onChange={handleInputChange}
+          classes={{
+            wrapper: styles.inputWrapper,
+            textarea: styles.input,
+          }}
+          maxLength={255}
+          onKeyDown={handleKeyDown}
+          placeholder={t('Напишите сообщение...')}
+        />
 
         <div className={styles.rightSide}>
           <SmilePicker onEmojiSelect={onEmojiSelectHandler} />

@@ -16,6 +16,7 @@ import { Arrow, ArrowProps, ArrowDirections } from './arrow';
 import { ActionMenu, ActionMenuProps, ActionMenuPosition } from './action-menu';
 import { Picker, PickerProps, PickerItem } from './picker';
 import { TaskCard, TaskCardProps } from './task-card';
+import { CustomTextarea, CustomTextareaProps } from './custom-textarea';
 
 export type {
   SvgIconProps,
@@ -37,7 +38,8 @@ export type {
   ActionMenuPosition,
   PickerProps,
   PickerItem,
-  TaskCardProps
+  TaskCardProps,
+  CustomTextareaProps
 };
 
 export {
@@ -60,5 +62,6 @@ export {
   ArrowDirections,
   ActionMenu,
   Picker,
-  TaskCard
+  TaskCard,
+  CustomTextarea
 };

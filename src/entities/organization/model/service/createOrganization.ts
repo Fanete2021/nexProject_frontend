@@ -4,6 +4,7 @@ import { Organization } from '../types/organization.ts';
 
 interface CreateOrganizationProps {
   orgName: string;
+  orgDescription?: string;
 }
 
 export const createOrganization = createAsyncThunk<Organization, CreateOrganizationProps, ThunkConfig<string>> (
