@@ -1,0 +1,53 @@
+.TaskInfoCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.header {
+  font-size: 16px;
+  line-height: 21px;
+}
+
+.info {
+  display: flex;
+  gap: 20px;
+  font-size: 14px;
+  line-height: 18px;
+  justify-content: space-between;
+
+  .details, .people, .dates {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .details {
+    .priority {
+      display: flex;
+
+      span {
+        display: flex;
+        align-items: end;
+        margin-left: 10px;
+        gap: 5px;
+      }
+    }
+  }
+
+  .people {
+    .author, .executor {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+    }
+  }
+
+  .dates {
+    div {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+  }
+}

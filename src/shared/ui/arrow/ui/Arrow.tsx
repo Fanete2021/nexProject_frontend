@@ -19,6 +19,7 @@ const Arrow: React.FC<ArrowProps> = (props) => {
   return (
     <SvgIcon
       iconName={icons.ARROW}
+      applyHover={false}
       important
       className={classNames(
         styles.arrow,

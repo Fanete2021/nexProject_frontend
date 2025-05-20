@@ -73,5 +73,10 @@
   "ROLE_OWNER": "Owner",
   "ROLE_ADMIN": "Admin",
   "ROLE_EDITOR": "Editor",
-  "ROLE_VIEWER" : "Viewer"
+  "ROLE_VIEWER" : "Viewer",
+  "OPEN_TASK": "New tasks",
+  "IN_PROGRESS": "IN PROGRESS",
+  "LOW_PRIORITY": "Low",
+  "MEDIUM_PRIORITY": "Medium",
+  "HIGH_PRIORITY": "High"
 }

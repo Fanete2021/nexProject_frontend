@@ -7,6 +7,8 @@ import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { ColumnType } from './model/types/column.ts';
 import Column from './components/column/Column.tsx';
 import { TaskInfo } from '@/entities/task';
+import { TaskInfoCard } from '@/shared/ui/index.ts';
+import { Scrollbar } from '@/shared/ui';
 
 export interface TaskBoardViewProps {
   taskBoard: TaskBoardInfo;
@@ -44,73 +46,41 @@ const TaskBoardView: React.FC<TaskBoardViewProps> = (props) => {
     setSelectedTask(taskInfo);
   };
 
-  console.log(selectedTask)
-
   return (
-    <div className={styles.TaskBoardView}>
-      <DndProvider backend={HTML5Backend}>
-        <div className={classNames(styles.columns, [className])}>
-          {columns.map((column) => (
-            <Column
-              key={column.status.statusId}
-              column={column}
-              onDrop={handleDrop}
-              className={styles.column}
-              onClickTask={onClickTaskHandler}
-            />
-          ))}
+    <div className={styles.TaskBoardViewWrapper}>
+      <div className={styles.filters}>
+        <div className={styles.title}>ФИЛЬТРЫ:</div>
+
+        <div className={styles.filter}>
+          Только мои задачи
         </div>
-      </DndProvider>
+      </div>
 
-      {selectedTask && (
-        <div className={styles.selectedTask}>
-          <div>
-            {selectedTask.taskName}
-          </div>
+      <div className={styles.TaskBoardView}>
+        <Scrollbar>
+          <DndProvider backend={HTML5Backend}>
+            <div className={classNames(styles.columns, [className])}>
+              {columns.map((column) => (
+                <Column
+                  key={column.status.statusId}
+                  column={column}
+                  onDrop={handleDrop}
+                  className={styles.column}
+                  onClickTask={onClickTaskHandler}
+                  selectedTask={selectedTask}
+                />
+              ))}
+            </div>
+          </DndProvider>
+        </Scrollbar>
 
-          <div>
-            {selectedTask.status.statusName}
-          </div>
-
-          <div>
-            {selectedTask.priority}
-          </div>
-
-          <div>
-            {selectedTask.taskDescription}
-          </div>
-
-          <div>
-            Автор: {selectedTask.authorName ? selectedTask.authorName : '-'}
-          </div>
-
-          <div>
-            Исполнитель: {selectedTask.executorName ? selectedTask.executorName : '-'}
-          </div>
-
-          <div>
-            {selectedTask.labels.map(label => (
-              <span key={label.labelId}>{label.labelName} </span>
-            ))}
-          </div>
-
-          <div>
-            Создана: {selectedTask.createdAt.toLocaleString()}
-          </div>
-
-          <div>
-            Обновлена: {selectedTask.updatedAt.toLocaleString() ? selectedTask.updatedAt.toLocaleString() : '-'}
-          </div>
-
-          <div>
-            Завершена: {selectedTask.completedAt ? selectedTask.completedAt.toLocaleString() : '-'}
-          </div>
-
-          <div>
-            Оценка сложности: {selectedTask.complexity ? selectedTask.complexity : '-'}
-          </div>
-        </div>
-      )}
+        {selectedTask && (
+          <TaskInfoCard
+            taskInfo={selectedTask}
+            className={styles.selectedTask}
+          />
+        )}
+      </div>
     </div>
   );
 };

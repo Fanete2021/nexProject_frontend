@@ -22,7 +22,7 @@
 
   &.canSelected {
     &:hover {
-      background: var(--organization-selected-tab-hover-bg-color);
+      background: var(--organization-tab-hover-bg-color);
       color: var(--text-color);
     }
   }
@@ -81,7 +81,7 @@
     }
 
     &.canSelected:hover {
-      background: var(--organization-selected-tab-hover-bg-color);
+      background: var(--organization-tab-hover-bg-color);
     }
 
     .iconAddTeam {

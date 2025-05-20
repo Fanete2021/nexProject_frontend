@@ -2,6 +2,7 @@ import { Avatar } from '@/shared/ui';
 import { Task } from '@/entities/task';
 import styles from './TaskCard.module.scss';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
+import { getPriorityElement } from '@/shared/lib/utils/getPriorityElement.tsx';
 
 export interface TaskCardProps extends React.HTMLProps<HTMLDivElement> {
   task: Task;
@@ -16,13 +17,17 @@ const TaskCard: React.FC<TaskCardProps> = (props) => {
       {...rest}
       className={classNames(styles.task, [className])}
     >
-      <div className={styles.taskHeader}>
+      <div className={styles.leftPanel}>
         <div className={styles.name}>{task.taskName}</div>
 
-        {task.executorName && <Avatar text={task.executorName} width={30} height={30} />}
+        <div className={styles.priority}>
+          {getPriorityElement(task.priority)}
+        </div>
       </div>
 
-      <div className={styles.taskPriority}>{task.priority}</div>
+      <div className={styles.rightPanel}>
+        {task.executorName && <Avatar text={task.executorName} width={30} height={30} />}
+      </div>
     </div>
   );
 };

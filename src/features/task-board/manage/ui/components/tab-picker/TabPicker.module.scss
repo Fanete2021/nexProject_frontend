@@ -1,0 +1,23 @@
+.TabPicker {
+  display: flex;
+  gap: 25px;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+  border-radius: 5px;
+
+  &:hover {
+    background-color: var(--task-board-tab-hover-bg-color);
+  }
+
+  &.selected {
+    background-color: var(--task-board-selected-tab-bg-color);
+  }
+}

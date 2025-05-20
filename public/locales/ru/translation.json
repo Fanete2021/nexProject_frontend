@@ -8,5 +8,11 @@
   "ROLE_OWNER": "Владелец",
   "ROLE_ADMIN": "Админ",
   "ROLE_EDITOR": "Редактор",
-  "ROLE_VIEWER" : "Участник"
+  "ROLE_VIEWER" : "Участник",
+  "OPEN_TASK": "Новые задачи",
+  "IN_PROGRESS": "В работе",
+  "COMPLETED": "Завершённые",
+  "LOW_PRIORITY": "Низкий",
+  "MEDIUM_PRIORITY": "Средний",
+  "HIGH_PRIORITY": "Высокий"
 }

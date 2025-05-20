@@ -10,6 +10,9 @@ import { TaskBoardPicker } from '@/widgets/pickers/task-board-picker';
 import { CreateTaskFormModal } from '@/features/task/create';
 import { TaskBoardView } from '@/widgets/task-board';
 import { editTask, TaskInfo, fetchTaskInfo } from '@/entities/task';
+import { Button, icons, SvgIcon } from '@/shared/ui';
+import { Tabs } from './components/tab-picker/model/tabs';
+import TabPicker from './components/tab-picker/TabPicker';
 
 const ManageTaskBoard = () => {
   const dispatch = useAppDispatch();
@@ -17,9 +20,10 @@ const ManageTaskBoard = () => {
   const teams = useSelector(getTeamData)!;
 
   const [taskBoards, setTaskBoards] = useState<TaskBoard[]>([]);
-  const [selectedTeam, setSelectedTeam] = useState<TeamInfo>();
-  const [selectedTaskBoard, setSelectedTaskBoard] = useState<TaskBoardInfo>();
+  const [selectedTeam, setSelectedTeam] = useState<TeamInfo | null>();
+  const [selectedTaskBoard, setSelectedTaskBoard] = useState<TaskBoardInfo | null>();
   const [isOpenCreatorTask, setIsOpenCreatorTask] = useState<boolean>(false);
+  const [currentTab, setCurrentTab] = useState<Tabs>(Tabs.PANEL_KANBAN);
 
   useEffect(() => {
     const setupBoards = async () => {
@@ -35,6 +39,10 @@ const ManageTaskBoard = () => {
     if (selectedTeam) {
       setupBoards();
     }
+  }, [selectedTeam]);
+
+  useEffect(() => {
+    setSelectedTaskBoard(null);
   }, [selectedTeam]);
 
   const closeCreatorTaskHandler = useCallback(() => setIsOpenCreatorTask(false), []);
@@ -119,7 +127,12 @@ const ManageTaskBoard = () => {
 
         {selectedTaskBoard && selectedTeam &&
           <>
-            <button onClick={openCreatorTaskHandler}>Создать задачу</button>
+            <Button
+              onClick={openCreatorTaskHandler}
+              className={styles.createTask}
+            >
+              Создать задачу
+            </Button>
 
             <CreateTaskFormModal
               board={selectedTaskBoard}
@@ -132,12 +145,39 @@ const ManageTaskBoard = () => {
         }
       </div>
 
-      {selectedTaskBoard && (
-        <TaskBoardView
-          taskBoard={selectedTaskBoard}
-          changeStatus={updateTaskStatus}
-          getTaskInfo={getTaskInfo}
-        />
+      {!selectedTaskBoard &&
+        <div className={styles.content}>
+          <SvgIcon
+            iconName={icons.ANALYTICS}
+            className={styles.iconAnalytics}
+            important
+            applyHover={false}
+          />
+
+          <div className={styles.text}>
+            {!selectedTeam
+              ? 'Чтобы просмотреть доступные доски, выберите команду из списка.'
+              : 'Для работы с задачами и просмотра информации выберите доску из списка'
+            }
+          </div>
+        </div>
+      }
+
+      {selectedTeam && selectedTaskBoard && (
+        <>
+          <TabPicker
+            changeTab={setCurrentTab}
+            currentTab={currentTab}
+          />
+
+          {currentTab === Tabs.PANEL_KANBAN &&
+            <TaskBoardView
+              taskBoard={selectedTaskBoard}
+              changeStatus={updateTaskStatus}
+              getTaskInfo={getTaskInfo}
+            />
+          }
+        </>
       )}
     </div>
   );

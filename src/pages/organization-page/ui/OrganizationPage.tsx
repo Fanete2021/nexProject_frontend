@@ -1,5 +1,4 @@
 import { icons, SvgIcon } from '@/shared/ui';
-import { useSidebar } from '@/shared/lib/hooks/useSidebar.ts';
 import styles from './OrganizationPage.module.scss';
 import { CreateOrganizationForm } from '@/features/organization/create';
 import { useSelector } from 'react-redux';

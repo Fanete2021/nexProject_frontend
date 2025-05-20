@@ -2,12 +2,13 @@ import { useSelector } from 'react-redux';
 import { getMyRoleInOrganization, isAdminInOrganization, OrganizationInfo } from '@/entities/organization';
 import { getUserData } from '@/entities/user';
 import styles from './TabPicker.module.scss';
-import {Avatar, icons, SvgIcon} from '@/shared/ui';
+import { Avatar, icons, SvgIcon } from '@/shared/ui';
 import { tabs, Tabs } from './model/tabs.ts';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { Team } from '@/entities/team';
-import {CreateTeamFormModal} from "@/features/team/create";
-import {useCallback, useState} from "react";
+import { CreateTeamFormModal } from '@/features/team/create';
+import { useCallback, useState } from 'react';
+import { convertObjectToArray } from '@/shared/lib/utils/convertObjectToArray.ts';
 
 export interface TabPickerProps {
   currentTab: Tabs;
@@ -18,10 +19,7 @@ export interface TabPickerProps {
   selectedTeamId?: string;
 }
 
-export const tabsArray = Object.entries(tabs).map(([key, value]) => ({
-  id: key as Tabs,
-  ...value
-}));
+export const tabsArray = convertObjectToArray(tabs);
 
 const TabPicker: React.FC<TabPickerProps> = (props) => {
   const { currentTab, changeTab, selectedOrganization, teams, selectTeam, selectedTeamId } = props;
