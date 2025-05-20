@@ -171,7 +171,7 @@ const LoginForm = () => {
         />
 
         <Link
-          to={RoutePath.newPassword}
+          to={RoutePath.newPasswordRequest}
           className={classNames(styles.forgot, ['guestLink'])}
         >
           <>{t('Забыли пароль?')}</>

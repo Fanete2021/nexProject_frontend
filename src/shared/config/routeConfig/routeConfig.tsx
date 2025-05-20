@@ -45,7 +45,7 @@ export const RoutePath: Record<AppRoutes, string> = {
   [AppRoutes.AUTH]: '/auth',
   [AppRoutes.REGISTRATION]: `/${AppRoutes.REGISTRATION}`,
   [AppRoutes.EMAIL_CONFIRM]: `/${AppRoutes.EMAIL_CONFIRM}`,
-  [AppRoutes.NEW_PASSWORD_REQUEST]: `/${AppRoutes.NEW_PASSWORD_REQUEST}`,
+  [AppRoutes.NEW_PASSWORD_REQUEST]: '/newPassword',
   [AppRoutes.NEW_PASSWORD]: `/${AppRoutes.NEW_PASSWORD}/:token`,
   [AppRoutes.MAIN]: '/',
   [AppRoutes.CHATS]: `/${AppRoutes.CHATS}`,
