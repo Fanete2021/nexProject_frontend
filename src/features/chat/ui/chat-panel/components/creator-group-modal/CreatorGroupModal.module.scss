@@ -96,7 +96,7 @@
 
 .contacts {
   height: 270px;
-  width: 100%;
+  width: 100% !important;
 
   @media screen and (max-width: 768px) {
     flex: 1;

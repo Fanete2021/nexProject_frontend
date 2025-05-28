@@ -158,6 +158,7 @@ const ContactPicker: React.FC<ContactPickerProps> = (props) => {
           variant={'secondary'}
           className={styles.add}
           onClick={() => pickHandler(selectedContacts)}
+          disabled={selectedContacts.length === 0}
         >
           {footerText}
         </Button>
