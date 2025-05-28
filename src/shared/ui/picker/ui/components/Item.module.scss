@@ -1,6 +1,21 @@
-.PickerItem {
+.Item {
   display: flex;
   gap: 10px;
   align-items: center;
   cursor: pointer;
+  padding: 5px 5px 5px 0;
+  color: var(--text-secondary-color);
+  user-select: none;
+
+  &:hover {
+    color: var(--text-color);
+  }
+}
+
+.main {
+  color: var(--text-color);
+}
+
+.image {
+  flex-shrink: 0;
 }

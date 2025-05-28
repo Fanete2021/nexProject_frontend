@@ -1,4 +1,53 @@
-.popover {
-  padding: 10px 0 0 0;
-  background: var(--bg-color) !important;
+.Picker {
+  position: relative;
+}
+
+.itemsContainer {
+  border: 1px solid transparent;
+  width: max-content;
+}
+
+.activeItemsContainer {
+  top: 0;
+  left: 0;
+  position: absolute;
+  z-index: var(--modal-z-index);
+  border-radius: 10px;
+  animation: activeItemsContainerBorder 1s ease-in-out forwards;
+  background: var(--bg-color);
+}
+
+.iconArrow {
+  flex-shrink: 0;
+}
+
+@keyframes activeItemsContainerBorder {
+  0% {
+    border-left-color: transparent;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+  }
+  25% {
+    border-top-color: var(--line-color);
+  }
+  50% {
+    border-right-color: var(--line-color);
+  }
+  75% {
+    border-bottom-color: var(--line-color);
+  }
+  100% {
+    border-left-color: var(--line-color);
+    border-color: var(--line-color);
+  }
+}
+
+.items {
+  animation: fadeIn 1s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

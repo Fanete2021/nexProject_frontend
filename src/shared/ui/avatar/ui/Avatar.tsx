@@ -18,13 +18,18 @@ const Avatar: React.FC<AvatarProps> = memo((props) => {
   const initials = useMemo(() => formatText(text), [text]);
 
   useEffect(() => {
-    if (avatarRef.current) {
-      const avatarElement = avatarRef.current;
+    if (!avatarRef.current) return;
+
+    const observer = new ResizeObserver((entries) => {
+      const avatarElement = entries[0].target as HTMLDivElement;
       const avatarWidth = avatarElement.offsetWidth;
       const avatarHeight = avatarElement.offsetHeight;
       const fontSize = Math.min(avatarWidth, avatarHeight) / 3;
       avatarElement.style.fontSize = `${fontSize}px`;
-    }
+    });
+
+    observer.observe(avatarRef.current);
+    return () => observer.disconnect();
   }, [width, height, text]);
 
   if (src) {
