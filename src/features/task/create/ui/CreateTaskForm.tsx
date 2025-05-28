@@ -1,22 +1,23 @@
-import React, {useCallback, useState} from 'react';
+import React, { useCallback, useState } from 'react';
 import * as yup from 'yup';
-import {useTranslation} from 'react-i18next';
-import {useAppDispatch} from '@/shared/lib/hooks/useAppDispatch.ts';
-import {useFormik} from 'formik';
-import {isTaskNameValid} from '@/shared/lib/utils/validation.ts';
-import {createTask, TaskPriorities} from '@/entities/task';
-import {classNames} from '@/shared/lib/utils/classNames.ts';
-import {CustomInput, icons, Loader, SvgIcon, ValidationList} from '@/shared/ui';
-import {FormControl} from '@mui/material';
-import {isFormikErrorVisible} from '@/shared/lib/utils/isFormikErrorVisible.ts';
+import { useTranslation } from 'react-i18next';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
+import { useFormik } from 'formik';
+import { isTaskNameValid } from '@/shared/lib/utils/validation.ts';
+import { createTask, TaskPriorities } from '@/entities/task';
+import { classNames } from '@/shared/lib/utils/classNames.ts';
+import { CustomInput, icons, Loader, SvgIcon, ValidationList, ValidationListDirections } from '@/shared/ui';
+import { FormControl } from '@mui/material';
+import { isFormikErrorVisible } from '@/shared/lib/utils/isFormikErrorVisible.ts';
 import styles from './CreateTaskForm.module.scss';
-import {BoardInfo} from '@/entities/board';
+import { TaskBoardInfo } from '@/entities/task-board';
 
 export interface CreateTaskFormProps {
   teamId: string;
-  board: BoardInfo;
+  board: TaskBoardInfo;
   className?: string;
   onCreateHandler?: () => void;
+  validationListDirection?: ValidationListDirections;
 }
 
 const validationSchema = yup.object({
@@ -26,7 +27,7 @@ const validationSchema = yup.object({
 });
 
 const CreateTaskForm: React.FC<CreateTaskFormProps> = (props) => {
-  const { className, onCreateHandler, teamId, board } = props;
+  const { className, onCreateHandler, teamId, board, validationListDirection = ValidationListDirections.ALL } = props;
 
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -71,7 +72,7 @@ const CreateTaskForm: React.FC<CreateTaskFormProps> = (props) => {
   return (
     <div className={classNames(styles.CreateTaskForm, [className])}>
       <SvgIcon
-        iconName={icons.TASK_BOARD}
+        iconName={icons.TASK}
         className={styles.iconTask}
         applyHover={false}
         important
@@ -96,6 +97,7 @@ const CreateTaskForm: React.FC<CreateTaskFormProps> = (props) => {
           <ValidationList
             items={taskNameValidation}
             hasError={isFormikErrorVisible(formik, 'taskName')}
+            direction={validationListDirection}
           >
             <CustomInput
               id="taskName"
@@ -107,6 +109,7 @@ const CreateTaskForm: React.FC<CreateTaskFormProps> = (props) => {
               onChange={formik.handleChange}
               isError={isFormikErrorVisible(formik, 'taskName', { checkTouched: false })}
               onBlur={formik.handleBlur}
+              autoComplete="off"
             />
           </ValidationList>
         </FormControl>

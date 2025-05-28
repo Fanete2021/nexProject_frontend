@@ -59,5 +59,6 @@ export enum icons {
   ANALYTICS = 'analytics',
   KANBAN_BOARD = 'kanbanBoard',
   TASKS = 'tasks',
-  MEDIUM = 'medium'
+  MEDIUM = 'medium',
+  TASK = 'task'
 }

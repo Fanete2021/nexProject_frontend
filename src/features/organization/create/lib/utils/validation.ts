@@ -2,7 +2,7 @@ import { Validation } from '@/shared/types/validation.ts';
 
 export const isOrganizationNameValid = (orgName: string): Validation[] => {
   const lengthValid = /^.{3,64}$/.test(orgName);
-  const charsValid = /^[\p{L}0-9&_-]+$/u.test(orgName);
+  const charsValid = /^[\p{L}0-9&_ -]+$/u.test(orgName);
 
   return [
     {

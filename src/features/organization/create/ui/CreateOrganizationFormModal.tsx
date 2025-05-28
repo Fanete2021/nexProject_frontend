@@ -1,5 +1,5 @@
-import { Modal } from '@/shared/ui';
-import CreateOrganizationForm , { CreateOrganizationFormProps } from './CreateOrganizationForm';
+import {Modal, ValidationListDirections} from '@/shared/ui';
+import CreateOrganizationForm, {CreateOrganizationFormProps} from './CreateOrganizationForm';
 import styles from './CreateOrganizationForm.module.scss';
 
 export interface CreateOrganizationFormModalProps extends CreateOrganizationFormProps {
@@ -13,7 +13,7 @@ const CreateOrganizationFormModal: React.FC<CreateOrganizationFormModalProps> = 
   return (
     <Modal onClose={onClose} isOpen={isOpen}>
       <div className={styles.CreateOrganizationFormModal}>
-        <CreateOrganizationForm {...rest} />
+        <CreateOrganizationForm {...rest} validationListDirection={ValidationListDirections.VERTICAL} />
       </div>
     </Modal>
   );

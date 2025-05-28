@@ -1,4 +1,12 @@
-import { CustomInput, CustomTextarea, icons, Loader, Scrollbar, SvgIcon, ValidationList } from '@/shared/ui';
+import {
+  CustomInput,
+  CustomTextarea,
+  icons,
+  Loader,
+  SvgIcon,
+  ValidationList,
+  ValidationListDirections
+} from '@/shared/ui';
 import styles from './CreateOrganizationForm.module.scss';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { FormControl } from '@mui/material';
@@ -14,6 +22,7 @@ import { isOrganizationDescriptionValid, isOrganizationNameValid } from '../lib/
 export interface CreateOrganizationFormProps {
   className?: string;
   onCreateHandler?: () => void;
+  validationListDirection?: ValidationListDirections;
 }
 
 const enum FORM_FIELDS {
@@ -24,13 +33,13 @@ const enum FORM_FIELDS {
 const validationSchema = yup.object({
   [FORM_FIELDS.ORG_NAME]: yup.string()
     .required('Название обязательно')
-    .matches(/^[\p{L}0-9&_-]{3,64}$/u, 'Не соответствует шаблону'),
+    .matches(/^[\p{L}0-9&_ -]{3,64}$/u, 'Не соответствует шаблону'),
   [FORM_FIELDS.ORG_DESCRIPTION]: yup.string()
     .matches(/^.{0,255}$/, 'Не соответствует шаблону'),
 });
 
 const CreateOrganizationForm: React.FC<CreateOrganizationFormProps> = (props) => {
-  const { className, onCreateHandler } = props;
+  const { className, onCreateHandler, validationListDirection = ValidationListDirections.ALL } = props;
   
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -78,7 +87,7 @@ const CreateOrganizationForm: React.FC<CreateOrganizationFormProps> = (props) =>
       <div className={styles.header}>
         <span className={styles.title}>Создайте свою организацию!</span>
         <span className={styles.subtitle}>
-          Объединяйте команду, управляйте проектами и контролируйте процессы в одном месте.
+          Объединяйте людей, управляйте проектами и контролируйте процессы в одном месте.
         </span>
       </div>
 
@@ -94,6 +103,7 @@ const CreateOrganizationForm: React.FC<CreateOrganizationFormProps> = (props) =>
           <ValidationList
             items={organizationNameValidation}
             hasError={isFormikErrorVisible(formik, FORM_FIELDS.ORG_NAME)}
+            direction={validationListDirection}
           >
             <CustomInput
               id={FORM_FIELDS.ORG_NAME}
@@ -105,6 +115,7 @@ const CreateOrganizationForm: React.FC<CreateOrganizationFormProps> = (props) =>
               onChange={formik.handleChange}
               isError={isFormikErrorVisible(formik, FORM_FIELDS.ORG_NAME, { checkTouched: false })}
               onBlur={formik.handleBlur}
+              autoComplete="off"
             />
           </ValidationList>
         </FormControl>
@@ -120,6 +131,7 @@ const CreateOrganizationForm: React.FC<CreateOrganizationFormProps> = (props) =>
           <ValidationList
             items={organizationDescriptionValidation}
             hasError={isFormikErrorVisible(formik, FORM_FIELDS.ORG_DESCRIPTION)}
+            direction={validationListDirection}
           >
             <CustomTextarea
               id={FORM_FIELDS.ORG_DESCRIPTION}
