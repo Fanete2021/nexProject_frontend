@@ -7,7 +7,7 @@ export interface FetchMyTaskBoardsProps {
 }
 
 export const fetchMyTaskBoards = createAsyncThunk<TaskBoard[], FetchMyTaskBoardsProps, ThunkConfig<string>> (
-  'board/fetchMyTaskBoards',
+  'taskBoard/fetchMyTaskBoards',
   async (fetchMyTaskBoardsData, thunkAPI) => {
     const {
       extra,

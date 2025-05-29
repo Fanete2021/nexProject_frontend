@@ -8,7 +8,7 @@ export interface FetchTaskBoardInfoProps {
 }
 
 export const fetchTaskBoardInfo = createAsyncThunk<TaskBoardInfo, FetchTaskBoardInfoProps, ThunkConfig<string>> (
-  'board/fetchBoardInfo',
+  'taskBoard/fetchBoardInfo',
   async (fetchTaskBoardInfoData, thunkAPI) => {
     const {
       extra,

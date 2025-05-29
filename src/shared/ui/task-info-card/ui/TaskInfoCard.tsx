@@ -5,15 +5,16 @@ import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { useTranslation } from 'react-i18next';
 import { getPriorityElement } from '@/shared/lib/utils/getPriorityElement.tsx';
 import { Avatar } from '@/shared/ui';
-import {formatTimeLocalized} from "@/shared/lib/utils/formatTimeLocalized.ts";
+import { formatTimeLocalized } from '@/shared/lib/utils/formatTimeLocalized.ts';
 
 export interface TaskInfoCardProps {
   className?: string;
   taskInfo: TaskInfo;
+  assignYourself?: (taskId: string) => void;
 }
 
 const TaskInfoCard: React.FC<TaskInfoCardProps> = (props) => {
-  const { taskInfo, className } = props;
+  const { taskInfo, className, assignYourself } = props;
 
   const { t } = useTranslation();
 
@@ -21,6 +22,13 @@ const TaskInfoCard: React.FC<TaskInfoCardProps> = (props) => {
     <div className={classNames(styles.TaskInfoCard, [className])}>
       <div className={styles.header}>
         {taskInfo.taskName}
+
+        <span
+          className={styles.assignYourself}
+          onClick={() => assignYourself?.(taskInfo.taskId)}
+        >
+          (Назначить себе)
+        </span>
       </div>
 
       <div className={styles.info}>

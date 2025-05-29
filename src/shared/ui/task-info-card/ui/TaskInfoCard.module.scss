@@ -7,6 +7,17 @@
 .header {
   font-size: 16px;
   line-height: 21px;
+
+  .assignYourself {
+    margin-left: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text-secondary-color);
+
+    &:hover {
+      color: var(--text-color);
+    }
+  }
 }
 
 .info {
@@ -51,3 +62,4 @@
     }
   }
 }
+

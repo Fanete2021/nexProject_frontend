@@ -9,7 +9,6 @@ import { TeamPicker } from '@/widgets/pickers/team-picker';
 import { TaskBoardPicker } from '@/widgets/pickers/task-board-picker';
 import { CreateTaskFormModal } from '@/features/task/create';
 import { TaskBoardView } from '@/widgets/task-board';
-import { editTask, TaskInfo, fetchTaskInfo } from '@/entities/task';
 import { Button, icons, SvgIcon } from '@/shared/ui';
 import { Tabs } from './components/tab-picker/model/tabs';
 import TabPicker from './components/tab-picker/TabPicker';
@@ -53,53 +52,6 @@ const ManageTaskBoard = () => {
   const onCreateTaskHandler = useCallback(() => {
     closeCreatorTaskHandler();
   }, []);
-  
-  const updateTaskStatus = async (taskId: string, newStatusId: string) => {
-    const task = selectedTaskBoard!.boardTasks.find(task => task.taskId === taskId);
-
-    if (task && task.status.statusId === newStatusId) {
-      return;
-    }
-
-    try {
-      const response = await dispatch(editTask({
-        editTask: {
-          taskId: taskId,
-          newTaskStatusId: newStatusId
-        },
-        teamId: selectedTeam!.teamId,
-      }));
-      
-      const editableTask: TaskInfo = response.payload;
-
-      const updatedTasks = selectedTaskBoard!.boardTasks.map(task =>
-        task.taskId === taskId
-          ? editableTask
-          : task
-      );
-
-      setSelectedTaskBoard({
-        ...selectedTaskBoard!,
-        boardTasks: updatedTasks
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getTaskInfo = async (taskId: string) => {
-    try {
-      const response = await dispatch(fetchTaskInfo({
-        taskId,
-        boardId: selectedTaskBoard!.boardId,
-        teamId: selectedTeam!.teamId
-      }));
-
-      return response.payload;
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <div className={styles.ManageBoard}>
@@ -173,8 +125,6 @@ const ManageTaskBoard = () => {
           {currentTab === Tabs.PANEL_KANBAN &&
             <TaskBoardView
               taskBoard={selectedTaskBoard}
-              changeStatus={updateTaskStatus}
-              getTaskInfo={getTaskInfo}
             />
           }
         </>
