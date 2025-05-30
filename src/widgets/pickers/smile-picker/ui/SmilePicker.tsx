@@ -64,10 +64,7 @@ const SmilePicker: React.FC<SmilePickerProps> = ({ className, onEmojiSelect }) =
         >
           <Picker
             data={emojis}
-            onEmojiSelect={(emojiObject) => {
-              onEmojiSelect(emojiObject.native);
-              setOpen(false);
-            }}
+            onEmojiSelect={(emojiObject) => onEmojiSelect(emojiObject.native)}
             onClickOutside={handleClickOutside}
             locale='ru'
             theme={theme === Theme.MINIMALISTIC_LIGHT ? 'light' : 'dark'}

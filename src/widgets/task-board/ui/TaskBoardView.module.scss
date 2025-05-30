@@ -1,29 +1,49 @@
+.TaskBoardViewWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+}
+
 .TaskBoardView {
   display: flex;
-  border: 2px solid var(--line-color);
+  border: 1px solid var(--line-color);
+  overflow: hidden;
+  border-radius: 5px;
+  height: 100%;
+}
+
+.filters {
+  display: flex;
+  height: 30px;
+  gap: 20px;
+  align-items: center;
+  font-size: 16px;
+  line-height: 21px;
+
+  .filter {
+    color: var(--text-secondary-color);
+    text-decoration: line-through;
+    cursor: pointer;
+  }
 }
 
 .columns {
   display: flex;
-  flex: 1;
-
-  .column:first-child {
-    border-bottom-left-radius: 10px;
-    border-top-left-radius: 10px;
-  }
-
-  .column:last-child {
-    border-bottom-right-radius: 10px;
-    border-top-right-radius: 10px;
-  }
+  height: 100%;
 
   .column {
     flex: 1;
+
+    &:not(:last-child) {
+      border-right: 1px solid var(--line-color);
+    }
   }
 }
 
 .selectedTask {
-  width: 400px;
-  padding: 20px;
-  border-left: 2px solid var(--line-color);
+  flex-shrink: 0;
+  width: 560px;
+  padding: 10px;
+  border-left: 3px solid var(--line-color);
 }

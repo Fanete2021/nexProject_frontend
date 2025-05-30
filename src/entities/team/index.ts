@@ -13,7 +13,6 @@ import { fetchMyTeams } from './model/service/fetchMyTeams.ts';
 import { fetchTeamInfo } from './model/service/fetchTeamInfo.ts';
 import { getMyRole } from './libs/utils/getMyRole.ts';
 import { isAdmin } from './libs/utils/isAdmin.ts';
-import { getRoleName } from './libs/utils/getRoleName.ts';
 
 export type {
   Team, 
@@ -38,7 +37,6 @@ export {
 
   getMyRole as getMyRoleInTeam,
   isAdmin as isAdminInTeam,
-  getRoleName as getTeamRoleName,
 
   TeamRoles
 };

@@ -94,7 +94,7 @@ const LoginForm = () => {
         <div className="label">
           {t('Почта / телефон') as string}<br/>
           {isShowError('phoneNumberOrMail') &&
-              <div className="fieldError">{t(formik.errors.phoneNumberOrMail)}</div>
+            <div className="fieldError">{t(formik.errors.phoneNumberOrMail)}</div>
           }
         </div>
 
@@ -171,7 +171,7 @@ const LoginForm = () => {
         />
 
         <Link
-          to={RoutePath.newPassword}
+          to={RoutePath.newPasswordRequest}
           className={classNames(styles.forgot, ['guestLink'])}
         >
           <>{t('Забыли пароль?')}</>

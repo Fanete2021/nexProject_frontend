@@ -9,7 +9,7 @@ import { CreateTeamFormModal } from '@/features/team/create';
 export interface TeamPickerProps {
   organizationId?: string;
   hasCreateTeam?: boolean;
-  onSelect?: (selectedteam: TeamInfo) => void;
+  onSelect?: (selectedTeam: TeamInfo) => void;
   teams: Team[];
   classes?: PickerProps['classes'] & {
     image?: string;

@@ -19,6 +19,8 @@
   margin-top: 15px;
   text-align: center;
   font-weight: bold;
+  display: flex;
+  flex-direction: column;
 
   .title {
     font-size: 26px;
@@ -34,4 +36,8 @@
 
 .form {
   margin-top: 30px;
+
+  .textareaWrapper {
+    max-height: 200px;
+  }
 }

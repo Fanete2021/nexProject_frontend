@@ -1,4 +1,4 @@
-import { CustomInput, icons, Loader, SvgIcon, ValidationList } from '@/shared/ui';
+import { CustomInput, icons, Loader, SvgIcon, ValidationList, ValidationListDirections } from '@/shared/ui';
 import styles from './CreateTeamForm.module.scss';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { FormControl } from '@mui/material';
@@ -15,6 +15,7 @@ export interface CreateTeamFormProps {
   className?: string;
   organizationId: string;
   onCreateHandler?: () => void;
+  validationListDirection?: ValidationListDirections;
 }
 
 const validationSchema = yup.object({
@@ -24,7 +25,7 @@ const validationSchema = yup.object({
 });
 
 const CreateTeamForm: React.FC<CreateTeamFormProps> = (props) => {
-  const { className, organizationId, onCreateHandler } = props;
+  const { className, organizationId, onCreateHandler, validationListDirection = ValidationListDirections.ALL } = props;
 
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -72,7 +73,10 @@ const CreateTeamForm: React.FC<CreateTeamFormProps> = (props) => {
       />
 
       <div className={styles.header}>
-        <span className={styles.title}>Создайте свою команду!</span>
+        <span className={styles.title}>Создайте команду!</span>
+        <span className={styles.subtitle}>
+          Создавайте доски задач, отслеживайте выполнение задач и оценивайте эффективность участников
+        </span>
       </div>
 
       <form className={classNames('form', [styles.form])} onSubmit={onSubmit}>
@@ -90,6 +94,7 @@ const CreateTeamForm: React.FC<CreateTeamFormProps> = (props) => {
           <ValidationList
             items={teamNameValid}
             hasError={isFormikErrorVisible(formik, 'teamName')}
+            direction={validationListDirection}
           >
             <CustomInput
               id="teamName"
@@ -101,6 +106,7 @@ const CreateTeamForm: React.FC<CreateTeamFormProps> = (props) => {
               onChange={formik.handleChange}
               isError={isFormikErrorVisible(formik, 'teamName', { checkTouched: false })}
               onBlur={formik.handleBlur}
+              autoComplete="off"
             />
           </ValidationList>
         </FormControl>

@@ -1,4 +1,4 @@
-import { Modal } from '@/shared/ui';
+import { Modal, ValidationListDirections } from '@/shared/ui';
 import CreateTeamForm, { CreateTeamFormProps } from './CreateTeamForm';
 import styles from './CreateTeamForm.module.scss';
 
@@ -13,7 +13,7 @@ const CreateTeamFormModal: React.FC<CreateTeamFormModalProps> = (props) => {
   return (
     <Modal onClose={onClose} isOpen={isOpen}>
       <div className={styles.CreateTeamFormModal}>
-        <CreateTeamForm {...rest} />
+        <CreateTeamForm {...rest} validationListDirection={ValidationListDirections.VERTICAL}/>
       </div>
     </Modal>
   );

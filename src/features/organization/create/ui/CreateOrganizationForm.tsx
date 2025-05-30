@@ -1,4 +1,12 @@
-import { CustomInput, icons, Loader, SvgIcon, ValidationList, ValidationListItem } from '@/shared/ui';
+import {
+  CustomInput,
+  CustomTextarea,
+  icons,
+  Loader,
+  SvgIcon,
+  ValidationList,
+  ValidationListDirections
+} from '@/shared/ui';
 import styles from './CreateOrganizationForm.module.scss';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { FormControl } from '@mui/material';
@@ -9,21 +17,29 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { createOrganization } from '@/entities/organization';
-import { isOrganizationNameValid } from '@/shared/lib/utils/validation.ts';
+import { isOrganizationDescriptionValid, isOrganizationNameValid } from '../lib/utils/validation';
 
 export interface CreateOrganizationFormProps {
   className?: string;
   onCreateHandler?: () => void;
+  validationListDirection?: ValidationListDirections;
+}
+
+const enum FORM_FIELDS {
+  ORG_NAME = 'orgName',
+  ORG_DESCRIPTION = 'orgDescription'
 }
 
 const validationSchema = yup.object({
-  orgName: yup.string()
+  [FORM_FIELDS.ORG_NAME]: yup.string()
     .required('Название обязательно')
-    .matches(/^.{6,20}$/, 'Не соответствует шаблону'),
+    .matches(/^[\p{L}0-9&_ -]{3,64}$/u, 'Не соответствует шаблону'),
+  [FORM_FIELDS.ORG_DESCRIPTION]: yup.string()
+    .matches(/^.{0,255}$/, 'Не соответствует шаблону'),
 });
 
 const CreateOrganizationForm: React.FC<CreateOrganizationFormProps> = (props) => {
-  const { className, onCreateHandler } = props;
+  const { className, onCreateHandler, validationListDirection = ValidationListDirections.ALL } = props;
   
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -32,7 +48,8 @@ const CreateOrganizationForm: React.FC<CreateOrganizationFormProps> = (props) =>
 
   const formik = useFormik({
     initialValues: {
-      orgName: '',
+      [FORM_FIELDS.ORG_NAME]: '',
+      [FORM_FIELDS.ORG_DESCRIPTION]: '',
     },
     validationSchema,
     validateOnChange: true,
@@ -55,8 +72,9 @@ const CreateOrganizationForm: React.FC<CreateOrganizationFormProps> = (props) =>
     formik.handleSubmit();
   }, [formik.handleSubmit]);
 
-  const organizationNameValidation = isOrganizationNameValid(formik.values.orgName);
-  
+  const organizationNameValidation = isOrganizationNameValid(formik.values[FORM_FIELDS.ORG_NAME]);
+  const organizationDescriptionValidation = isOrganizationDescriptionValid(formik.values[FORM_FIELDS.ORG_DESCRIPTION]);
+
   return (
     <div className={classNames(styles.CreateOrganizationForm, [className])}>
       <SvgIcon
@@ -69,36 +87,63 @@ const CreateOrganizationForm: React.FC<CreateOrganizationFormProps> = (props) =>
       <div className={styles.header}>
         <span className={styles.title}>Создайте свою организацию!</span>
         <span className={styles.subtitle}>
-          Объединяйте команду, управляйте проектами и контролируйте процессы в одном месте.
+          Объединяйте людей, управляйте проектами и контролируйте процессы в одном месте.
         </span>
       </div>
 
       <form className={classNames('form', [styles.form])} onSubmit={onSubmit}>
-        <FormControl
-          fullWidth
-          className="FieldWrapper"
-        >
+        <FormControl fullWidth className="FieldWrapper">
           <div className="label">
             {t('Название') as string}<br/>
-            {isFormikErrorVisible(formik, 'orgName', { checkTouched: false }) &&
-              <div className="fieldError">{t(formik.errors.orgName) as string}</div>
+            {isFormikErrorVisible(formik, FORM_FIELDS.ORG_NAME, { checkTouched: false }) &&
+              <div className="fieldError">{t(formik.errors[FORM_FIELDS.ORG_NAME]) as string}</div>
             }
           </div>
 
           <ValidationList
             items={organizationNameValidation}
-            hasError={isFormikErrorVisible(formik, 'orgName')}
+            hasError={isFormikErrorVisible(formik, FORM_FIELDS.ORG_NAME)}
+            direction={validationListDirection}
           >
             <CustomInput
-              id="orgName"
+              id={FORM_FIELDS.ORG_NAME}
               placeholder={t('Название')}
               fullWidth
               type="text"
-              name="orgName"
-              value={formik.values.orgName}
+              name={FORM_FIELDS.ORG_NAME}
+              value={formik.values[FORM_FIELDS.ORG_NAME]}
               onChange={formik.handleChange}
-              isError={isFormikErrorVisible(formik, 'orgName', { checkTouched: false })}
+              isError={isFormikErrorVisible(formik, FORM_FIELDS.ORG_NAME, { checkTouched: false })}
               onBlur={formik.handleBlur}
+              autoComplete="off"
+            />
+          </ValidationList>
+        </FormControl>
+
+        <FormControl fullWidth className="FieldWrapper">
+          <div className="label">
+            {t('Описание') as string}<br/>
+            {isFormikErrorVisible(formik, FORM_FIELDS.ORG_DESCRIPTION, { checkTouched: false }) &&
+              <div className="fieldError">{t(formik.errors[FORM_FIELDS.ORG_DESCRIPTION]) as string}</div>
+            }
+          </div>
+
+          <ValidationList
+            items={organizationDescriptionValidation}
+            hasError={isFormikErrorVisible(formik, FORM_FIELDS.ORG_DESCRIPTION)}
+            direction={validationListDirection}
+          >
+            <CustomTextarea
+              id={FORM_FIELDS.ORG_DESCRIPTION}
+              placeholder={t('Описание')}
+              name={FORM_FIELDS.ORG_DESCRIPTION}
+              value={formik.values[FORM_FIELDS.ORG_DESCRIPTION]}
+              onChange={formik.handleChange}
+              isError={isFormikErrorVisible(formik, FORM_FIELDS.ORG_DESCRIPTION, { checkTouched: false })}
+              onBlur={formik.handleBlur}
+              classes={{
+                wrapper: styles.textareaWrapper
+              }}
             />
           </ValidationList>
         </FormControl>

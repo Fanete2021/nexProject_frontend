@@ -25,6 +25,7 @@ const Sidebar: React.FC<SidebarProps> = (props: SidebarProps) => {
   const dispatch = useAppDispatch();
   const { isSidebarOpen, closeSidebar } = useSidebar();
   const windowWidth = useWindowWidth();
+
   const [ expanded, setExpanded ] = useState<boolean>(windowWidth <= TABLET_MAX_BREAKPOINT);
 
   const onMouseLeaveHandler = useCallback(() => {
@@ -40,10 +41,6 @@ const Sidebar: React.FC<SidebarProps> = (props: SidebarProps) => {
   useEffect(() => {
     setExpanded(isSidebarOpen);
   }, [isSidebarOpen]);
-
-  const mods: Record<string, boolean> = {
-    [styles.expanded]: expanded
-  };
 
   const links = useMemo(() => SidebarItemsList.map((item) => (
     <Link
@@ -72,9 +69,9 @@ const Sidebar: React.FC<SidebarProps> = (props: SidebarProps) => {
       </div>
 
       {expanded &&
-        <div className={styles.text}>
-          {t(item.text) as string}
-        </div>
+          <div className={styles.text}>
+            {t(item.text) as string}
+          </div>
       }
     </Link>
   )), [expanded, t, location]);
@@ -91,7 +88,9 @@ const Sidebar: React.FC<SidebarProps> = (props: SidebarProps) => {
 
   return (
     <div
-      className={classNames(styles.Sidebar, [className], mods)}
+      className={classNames(styles.Sidebar, [className], {
+        [styles.expanded]: expanded
+      })}
       onMouseEnter={() => setExpanded(true)}
       onMouseLeave={onMouseLeaveHandler}
     >

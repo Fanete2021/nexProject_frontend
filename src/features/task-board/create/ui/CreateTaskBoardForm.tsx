@@ -1,4 +1,4 @@
-import { CustomInput, icons, Loader, SvgIcon, ValidationList } from '@/shared/ui';
+import {CustomInput, icons, Loader, SvgIcon, ValidationList, ValidationListDirections} from '@/shared/ui';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { FormControl } from '@mui/material';
 import { isFormikErrorVisible } from '@/shared/lib/utils/isFormikErrorVisible.ts';
@@ -15,6 +15,7 @@ export interface CreateTaskBoardFormProps {
   teamId: string;
   className?: string;
   onCreateHandler?: () => void;
+  validationListDirection?: ValidationListDirections;
 }
 
 const validationSchema = yup.object({
@@ -24,7 +25,7 @@ const validationSchema = yup.object({
 });
 
 const CreateTaskBoardForm: React.FC<CreateTaskBoardFormProps> = (props) => {
-  const { className, onCreateHandler, teamId } = props;
+  const { className, onCreateHandler, teamId, validationListDirection = ValidationListDirections.ALL } = props;
 
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -71,7 +72,10 @@ const CreateTaskBoardForm: React.FC<CreateTaskBoardFormProps> = (props) => {
       />
 
       <div className={styles.header}>
-        <span className={styles.title}>Создайте свою доску!</span>
+        <span className={styles.title}>Создайте доску!</span>
+        <span className={styles.subtitle}>
+          Организуйте задачи, отслеживайте прогресс и оптимизируйте рабочие процессы с помощью Kanban-доски. Создавайте, назначайте и перемещайте задачи между этапами выполнения.
+        </span>
       </div>
 
       <form className={classNames('form', [styles.form])} onSubmit={onSubmit}>
@@ -89,6 +93,7 @@ const CreateTaskBoardForm: React.FC<CreateTaskBoardFormProps> = (props) => {
           <ValidationList
             items={boardNameValidation}
             hasError={isFormikErrorVisible(formik, 'boardName')}
+            direction={validationListDirection}
           >
             <CustomInput
               id="boardName"
@@ -100,6 +105,7 @@ const CreateTaskBoardForm: React.FC<CreateTaskBoardFormProps> = (props) => {
               onChange={formik.handleChange}
               isError={isFormikErrorVisible(formik, 'boardName', { checkTouched: false })}
               onBlur={formik.handleBlur}
+              autoComplete="off"
             />
           </ValidationList>
         </FormControl>

@@ -4,6 +4,7 @@ import { Organization } from '../types/organization.ts';
 
 interface CreateOrganizationProps {
   orgName: string;
+  orgDescription?: string;
 }
 
 export const createOrganization = createAsyncThunk<Organization, CreateOrganizationProps, ThunkConfig<string>> (
@@ -15,6 +16,8 @@ export const createOrganization = createAsyncThunk<Organization, CreateOrganizat
     } = thunkAPI;
 
     try {
+      if (!createOrganizationData.orgDescription) delete createOrganizationData.orgDescription;
+
       const response = await extra.api.post('/org/create', createOrganizationData);
 
       return response.data;

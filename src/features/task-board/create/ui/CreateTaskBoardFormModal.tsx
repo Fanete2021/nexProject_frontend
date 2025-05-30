@@ -1,4 +1,4 @@
-import { Modal } from '@/shared/ui';
+import { Modal, ValidationListDirections } from '@/shared/ui';
 import styles from './CreateTaskBoardForm.module.scss';
 import CreateTaskBoardForm, { CreateTaskBoardFormProps } from './CreateTaskBoardForm.tsx';
 
@@ -13,7 +13,7 @@ const CreateTaskBoardFormModal: React.FC<CreateTaskBoardFormModalProps> = (props
   return (
     <Modal onClose={onClose} isOpen={isOpen}>
       <div className={styles.CreateBoardFormModal}>
-        <CreateTaskBoardForm {...rest} />
+        <CreateTaskBoardForm {...rest} validationListDirection={ValidationListDirections.VERTICAL} />
       </div>
     </Modal>
   );

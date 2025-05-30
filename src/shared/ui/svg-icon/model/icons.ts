@@ -53,5 +53,12 @@ export enum icons {
   MEMBER_ADD = 'memberAdd',
   TEAM_ADD = 'teamAdd',
   TASK_BOARD = 'taskBoard',
-  RECORD = 'record'
+  RECORD = 'record',
+  ORGANIZATION_IDEAS = 'organizationIdeas',
+  PEOPLE = 'people',
+  ANALYTICS = 'analytics',
+  KANBAN_BOARD = 'kanbanBoard',
+  TASKS = 'tasks',
+  MEDIUM = 'medium',
+  TASK = 'task'
 }

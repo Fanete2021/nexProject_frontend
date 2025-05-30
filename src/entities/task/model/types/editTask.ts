@@ -1,4 +1,4 @@
-import {TaskPriorities} from "@/entities/task";
+import { TaskPriorities } from './taskPriorities.ts';
 
 export interface EditTask {
   taskId: string;

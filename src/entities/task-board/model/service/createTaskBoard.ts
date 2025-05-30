@@ -8,7 +8,7 @@ interface CreateTaskBoardProps {
 }
 
 export const createTaskBoard = createAsyncThunk<TaskBoard, CreateTaskBoardProps, ThunkConfig<string>> (
-  'board/createTaskBoard',
+  'taskBoard/createTaskBoard',
   async (createTaskBoardData, thunkAPI) => {
     const {
       extra,

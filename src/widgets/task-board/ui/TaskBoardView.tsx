@@ -6,17 +6,24 @@ import styles from './TaskBoardView.module.scss';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { ColumnType } from './model/types/column.ts';
 import Column from './components/column/Column.tsx';
-import { TaskInfo } from '@/entities/task';
+import { EditTask, editTask, fetchTaskInfo, TaskInfo } from '@/entities/task';
+import { TaskInfoCard } from '@/shared/ui/index.ts';
+import { Scrollbar } from '@/shared/ui';
+import { getUserData } from '@/entities/user';
+import { useSelector } from 'react-redux';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 
 export interface TaskBoardViewProps {
   taskBoard: TaskBoardInfo;
-  getTaskInfo: (taskId: string) => Promise<TaskInfo>;
-  changeStatus?: (taskId: string, newStatusId: string) => void;
+  setTaskBoard: (taskBoard: TaskBoardInfo) => void;
   className?: string;
 }
 
 const TaskBoardView: React.FC<TaskBoardViewProps> = (props) => {
-  const { taskBoard, className, changeStatus, getTaskInfo } = props;
+  const { taskBoard, setTaskBoard, className } = props;
+
+  const dispatch = useAppDispatch();
+  const user = useSelector(getUserData)!;
 
   const [columns, setColumns] = useState<ColumnType[]>([]);
   const [selectedTask, setSelectedTask] = useState<TaskInfo>();
@@ -33,84 +40,102 @@ const TaskBoardView: React.FC<TaskBoardViewProps> = (props) => {
     setColumns(newColumns);
   }, [taskBoard]);
 
-  const handleDrop = (taskId: string, newStatusId: string) => {
-    if (changeStatus) {
-      changeStatus(taskId, newStatusId);
+  const updateTask = async (updatedTask: EditTask) => {
+    const task = taskBoard.boardTasks.find(task => task.taskId === updatedTask.taskId);
+
+    if (!task || (task.status.statusId === updatedTask.newTaskStatusId)) {
+      return;
+    }
+
+    try {
+      const response = await dispatch(editTask({
+        editTask: updatedTask,
+        teamId: taskBoard.teamId,
+      })).unwrap();
+
+      const updatedTasks = taskBoard.boardTasks.map(task =>
+        task.taskId === updatedTask.taskId
+          ? response
+          : task
+      );
+
+      setTaskBoard({
+        ...taskBoard,
+        boardTasks: updatedTasks
+      });
+
+      if (selectedTask?.taskId === response.taskId) {
+        setSelectedTask(response);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
-  const onClickTaskHandler = async (taskId: string) => {
-    const taskInfo = await getTaskInfo(taskId);
-    setSelectedTask(taskInfo);
+  const handleDrop = (taskId: string, newStatusId: string) => {
+    updateTask({
+      taskId,
+      newTaskStatusId: newStatusId,
+    });
   };
 
-  console.log(selectedTask)
+  const onClickTaskHandler = async (taskId: string) => {
+    try {
+      const response = await dispatch(fetchTaskInfo({
+        taskId,
+        boardId: taskBoard.boardId,
+        teamId: taskBoard.teamId
+      }));
+
+      setSelectedTask(response.payload);
+      return response.payload;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const assignYourself = (taskId: string) => {
+    updateTask({
+      taskId,
+      newExecutorId: user.userId,
+    });
+  };
 
   return (
-    <div className={styles.TaskBoardView}>
-      <DndProvider backend={HTML5Backend}>
-        <div className={classNames(styles.columns, [className])}>
-          {columns.map((column) => (
-            <Column
-              key={column.status.statusId}
-              column={column}
-              onDrop={handleDrop}
-              className={styles.column}
-              onClickTask={onClickTaskHandler}
-            />
-          ))}
+    <div className={styles.TaskBoardViewWrapper}>
+      <div className={styles.filters}>
+        <div className={styles.title}>ФИЛЬТРЫ:</div>
+        <div className={styles.filter}>
+          Только мои задачи
         </div>
-      </DndProvider>
+      </div>
 
-      {selectedTask && (
-        <div className={styles.selectedTask}>
-          <div>
-            {selectedTask.taskName}
-          </div>
+      <div className={styles.TaskBoardView}>
+        <Scrollbar>
+          <DndProvider backend={HTML5Backend}>
+            <div className={classNames(styles.columns, [className])}>
+              {columns.map((column) => (
+                <Column
+                  key={column.status.statusId}
+                  column={column}
+                  onDrop={handleDrop}
+                  className={styles.column}
+                  onClickTask={onClickTaskHandler}
+                  selectedTask={selectedTask}
+                />
+              ))}
+            </div>
+          </DndProvider>
+        </Scrollbar>
 
-          <div>
-            {selectedTask.status.statusName}
-          </div>
-
-          <div>
-            {selectedTask.priority}
-          </div>
-
-          <div>
-            {selectedTask.taskDescription}
-          </div>
-
-          <div>
-            Автор: {selectedTask.authorName ? selectedTask.authorName : '-'}
-          </div>
-
-          <div>
-            Исполнитель: {selectedTask.executorName ? selectedTask.executorName : '-'}
-          </div>
-
-          <div>
-            {selectedTask.labels.map(label => (
-              <span key={label.labelId}>{label.labelName} </span>
-            ))}
-          </div>
-
-          <div>
-            Создана: {selectedTask.createdAt.toLocaleString()}
-          </div>
-
-          <div>
-            Обновлена: {selectedTask.updatedAt.toLocaleString() ? selectedTask.updatedAt.toLocaleString() : '-'}
-          </div>
-
-          <div>
-            Завершена: {selectedTask.completedAt ? selectedTask.completedAt.toLocaleString() : '-'}
-          </div>
-
-          <div>
-            Оценка сложности: {selectedTask.complexity ? selectedTask.complexity : '-'}
-          </div>
-        </div>
-      )}
+        {selectedTask && (
+          <TaskInfoCard
+            taskInfo={selectedTask}
+            className={styles.selectedTask}
+            assignYourself={assignYourself}
+          />
+        )}
+      </div>
     </div>
   );
 };

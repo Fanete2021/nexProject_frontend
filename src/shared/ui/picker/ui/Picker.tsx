@@ -1,6 +1,5 @@
-import React from 'react';
-import { usePopover } from '@/shared/lib/hooks/usePopover.ts';
-import { Arrow, ArrowDirections, Popover } from '@/shared/ui';
+import React, { useEffect, useRef, useState } from 'react';
+import { Arrow, ArrowDirections } from '@/shared/ui';
 import { PickerItem } from '../model/types/pickerItem.ts';
 import styles from './Picker.module.scss';
 import Item from './components/Item.tsx';
@@ -23,62 +22,115 @@ const Picker: React.FC<PickerProps> = (props) => {
 
   const selectedItem = items.find(item => selectedValue && item.value === selectedValue);
 
-  const { anchorEl, openPopover, isOpenPopover, closePopover } = usePopover();
+  const [isVisibleItems, setIsVisibleItems] = useState(false);
 
-  const onSelectHandler = (item: PickerItem) => {
-    closePopover();
+  const pickerRef = useRef<HTMLDivElement>(null);
+  const itemsContainerRef = useRef<HTMLDivElement>(null);
+  const mainItemRef = useRef<HTMLDivElement>(null);
 
-    if (item.onClick) {
-      item.onClick();
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        pickerRef.current &&
+        !pickerRef.current.contains(event.target as Node) &&
+        isVisibleItems
+      ) {
+        setIsVisibleItems(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    if (isVisibleItems) {
+      document.body.style.pointerEvents = 'none';
+      if (pickerRef.current) {
+        pickerRef.current.style.pointerEvents = 'auto';
+      }
+    } else {
+      document.body.style.pointerEvents = 'auto';
     }
 
-    if ((item.canChoose === undefined || item.canChoose) && item.value) {
-      onSelect?.(item.value);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.body.style.pointerEvents = 'auto';
+    };
+  }, [isVisibleItems]);
+
+  const resizePicker = () => {
+    if (!pickerRef.current || !itemsContainerRef.current || !mainItemRef.current) return;
+
+    if (!isVisibleItems) {
+      pickerRef.current.style.width = itemsContainerRef.current.clientWidth + 'px';
+      pickerRef.current.style.height = mainItemRef.current.clientHeight + 'px';
     }
   };
 
-  return (
-    <>
-      <Item
-        item={selectedItem ? selectedItem : defaultItem}
-        classes={classes}
-        onClick={openPopover}
-      >
-        <Arrow
-          className={classNames(styles.iconArrow, [classes?.iconArrow])}
-          direction={isOpenPopover ? ArrowDirections.UP : ArrowDirections.DOWN}
-        />
-      </Item>
+  useEffect(() => {
+    if (!itemsContainerRef.current || !mainItemRef.current) return;
 
-      <Popover
-        open={isOpenPopover}
-        anchorEl={anchorEl}
-        onClose={closePopover}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        classes={{
-          paper: styles.popover
-        }}
+    const observer = new ResizeObserver((entries) => {
+      entries.forEach((entry) => {
+        resizePicker();
+      });
+    });
+
+    observer.observe(itemsContainerRef.current);
+    observer.observe(mainItemRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [isVisibleItems]);
+
+  const onSelectHandler = (item: PickerItem) => {
+    setIsVisibleItems(false);
+    item.onClick?.();
+    if (item.canChoose !== false) onSelect?.(item.value);
+  };
+
+  return (
+    <div className={styles.Picker} ref={pickerRef}>
+      <div
+        className={classNames(
+          styles.itemsContainer,
+          [],
+          {
+            [styles.activeItemsContainer]: isVisibleItems
+          }
+        )}
+        ref={itemsContainerRef}
       >
-        {items
-          .filter(item => !selectedValue || (selectedValue && item.value !== selectedValue))
-          .map((item) => (
-            <Item
-              key={item.value + item.label}
-              item={item}
-              classes={classes}
-              onClick={() => onSelectHandler(item)}
-            />
-          ))
-        }
-      </Popover>
-    </>
+        <Item
+          item={selectedItem || defaultItem}
+          classes={classes}
+          isMain
+          onClick={() => setIsVisibleItems(!isVisibleItems)}
+          ref={mainItemRef}
+        >
+          <Arrow
+            className={classNames(styles.iconArrow, [classes?.iconArrow])}
+            direction={isVisibleItems ? ArrowDirections.UP : ArrowDirections.DOWN}
+          />
+        </Item>
+
+        <div
+          className={styles.items}
+          style={{ display: isVisibleItems ? 'block' : 'none' }}
+        >
+          {items
+            .filter(item => !selectedValue || item.value !== selectedValue)
+            .map((item) => (
+              <Item
+                key={item.value + item.label}
+                item={item}
+                classes={classes}
+                onClick={() => onSelectHandler(item)}
+                style={{ whiteSpace: 'nowrap' }}
+              />
+            ))}
+        </div>
+      </div>
+    </div>
   );
 };
 

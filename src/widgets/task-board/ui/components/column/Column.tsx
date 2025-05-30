@@ -4,16 +4,23 @@ import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { ColumnType } from '../../model/types/column.ts';
 import Task from '../task/Task.tsx';
 import styles from './Column.module.scss';
+import { useTranslation } from 'react-i18next';
+import { TaskInfo } from '@/entities/task';
 
 export interface ColumnProps {
   column: ColumnType;
   onDrop: (taskId: string, newStatusId: string) => void;
   className?: string;
   onClickTask: (taskId: string) => void;
+  selectedTask?: TaskInfo;
 }
 
 const Column: React.FC<ColumnProps> = (props) => {
-  const { column, onDrop, className, onClickTask  } = props;
+  const { column, onDrop, className, onClickTask, selectedTask  } = props;
+
+  const { status, tasks } = column;
+
+  const { t } = useTranslation();
 
   const [{ isOver }, drop] = useDrop({
     accept: 'TASK',
@@ -29,12 +36,20 @@ const Column: React.FC<ColumnProps> = (props) => {
       className={classNames(styles.column, [className], { [styles.isOver]: isOver })}
     >
       <div className={styles.header}>
-        {column.status.statusName}
+        {t(status.statusName) as string}
       </div>
 
       <div className={styles.tasks}>
-        {column.tasks.map((task) => (
-          <Task key={task.taskId} task={task} onDrop={onDrop} onClick={onClickTask}/>
+        {tasks.map((task) => (
+          <Task
+            key={task.taskId}
+            task={task}
+            onDrop={onDrop}
+            onClick={onClickTask}
+            className={classNames('', [], {
+              [styles.selectedTask]: task.taskId === selectedTask?.taskId
+            })}
+          />
         ))}
       </div>
     </div>
