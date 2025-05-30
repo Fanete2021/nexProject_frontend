@@ -73,8 +73,10 @@ const MessageInput: React.FC<MessageInputProps> = (props) => {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter') {
-      e.preventDefault();
-      sendHandler();
+      if (!e.shiftKey) {
+        e.preventDefault();
+        sendHandler();
+      }
     }
   };
 
