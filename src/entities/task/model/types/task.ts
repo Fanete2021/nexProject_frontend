@@ -6,6 +6,6 @@ export interface Task {
   taskName: string;
   status: TaskStatus;
   priority: TaskPriorities;
-  executorId: string;
-  executorName: string;
+  executorId?: string;
+  executorName?: string;
 }

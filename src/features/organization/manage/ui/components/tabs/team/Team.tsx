@@ -16,6 +16,7 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { OrganizationInfo } from '@/entities/organization';
 import { ContactPickerModal } from '@/widgets/pickers/contact-picker';
 import MemberList from '../../member-list/MemberList.tsx';
+import { AppRoutes } from '@/shared/config/routeConfig/routeConfig.tsx';
 
 const rolePriority = [
   TeamRoles.OWNER,
@@ -114,6 +115,10 @@ const Team: React.FC<TeamsProps> = (props) => {
   const canEditMember = (member: TeamMember) => {
     return member.userId !== user.userId && isAdminInTeam(myRole) && !isAdminInTeam(member.role);
   };
+
+  const generateLinkForMember = (memberId: string) => {
+    return `/${AppRoutes.TEAM_MEMBER_STATS}/${team.teamId}/${memberId}`;
+  };
   
   return (
     <div className={styles.Teams}>
@@ -123,6 +128,7 @@ const Team: React.FC<TeamsProps> = (props) => {
         canAddMember={isAdminInTeam(myRole)}
         members={sortedMembers}
         addMember={() => setIsOpenContactPicker(true)}
+        getLink={generateLinkForMember}
       >
         <div className={styles.header}>
           <Avatar

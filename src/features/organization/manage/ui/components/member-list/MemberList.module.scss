@@ -33,9 +33,20 @@
       align-items: center;
       min-width: 230px;
       padding: 10px;
+      transition: 0.3s;
+      color: var(--text-color);
+      text-decoration: none;
 
       &.myCard {
         background: var(--organization-member-my-card-bg-color);
+      }
+
+      &.link {
+        cursor: pointer;
+
+        &:hover {
+          background: var(--organization-member-card-hover-bg-color);
+        }
       }
 
       .info {

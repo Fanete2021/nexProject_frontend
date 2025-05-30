@@ -16,6 +16,7 @@ import { NotFoundPage } from '@/pages/not-found-page';
 import { AboutDevelopersPage } from '@/pages/about-developers-page';
 import { TestApiPage } from '@/pages/test-api-page';
 import { TasksPage } from '@/pages/tasks-page';
+import { TeamMemberStatsPage } from '@/pages/team-member-stats-page';
 
 export type AppRoutesProps = PathRouteProps & {
     authOnly?: boolean;
@@ -37,8 +38,10 @@ export enum AppRoutes {
   NEW_PASSWORD = 'newPassword',
   ABOUT_DEVELOPERS = 'aboutDevelopers',
   TASKS = 'tasks',
+  TEAM_MEMBER_STATS = 'teamMemberStats',
+
   NOT_FOUND = 'notFound',
-  TEST_API = 'testApi'
+  TEST_API = 'testApi',
 }
 
 export const RoutePath: Record<AppRoutes, string> = {
@@ -57,6 +60,9 @@ export const RoutePath: Record<AppRoutes, string> = {
   [AppRoutes.CHANGES]: `/${AppRoutes.CHANGES}`,
   [AppRoutes.ABOUT_DEVELOPERS]: `/${AppRoutes.ABOUT_DEVELOPERS}`,
   [AppRoutes.TASKS]: `/${AppRoutes.TASKS}`,
+  [AppRoutes.TEAM_MEMBER_STATS]: `/${AppRoutes.TEAM_MEMBER_STATS}/:teamId/:userId`,
+
+
   [AppRoutes.TEST_API]: `/${AppRoutes.TEST_API}`,
   [AppRoutes.NOT_FOUND]: '*'
 };
@@ -131,6 +137,12 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
     path: `${RoutePath.aboutDevelopers}`,
     element: <AboutDevelopersPage />,
   },
+  [AppRoutes.TEAM_MEMBER_STATS]: {
+    path: `${RoutePath.teamMemberStats}`,
+    element: <TeamMemberStatsPage />,
+    authOnly: true
+  },
+
   [AppRoutes.TEST_API]: {
     path: `${RoutePath.testApi}`,
     element: <TestApiPage />,
