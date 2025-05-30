@@ -12,10 +12,10 @@ import { TaskBoardView } from '@/widgets/task-board';
 import { Button, icons, SvgIcon } from '@/shared/ui';
 import { Tabs } from './components/tab-picker/model/tabs';
 import TabPicker from './components/tab-picker/TabPicker';
+import { TaskInfo } from '@/entities/task';
 
 const ManageTaskBoard = () => {
   const dispatch = useAppDispatch();
-  
   const teams = useSelector(getTeamData)!;
 
   const [taskBoards, setTaskBoards] = useState<TaskBoard[]>([]);
@@ -28,7 +28,6 @@ const ManageTaskBoard = () => {
     const setupBoards = async () => {
       try {
         const response = await dispatch(fetchMyTaskBoards({ teamId: selectedTeam!.teamId }));
-
         setTaskBoards(response.payload);
       } catch (error) {
         console.log(error);
@@ -49,14 +48,23 @@ const ManageTaskBoard = () => {
     setIsOpenCreatorTask(true);
   }, []);
 
-  const onCreateTaskHandler = useCallback(() => {
+  const onCreateTaskHandler = useCallback((newTask: TaskInfo) => {
+    if (selectedTaskBoard && selectedTeam) {
+      const updatedTaskBoard = {
+        ...selectedTaskBoard,
+        boardTasks: [...selectedTaskBoard.boardTasks, newTask]
+      };
+
+      setSelectedTaskBoard(updatedTaskBoard);
+    }
+
     closeCreatorTaskHandler();
-  }, []);
+  }, [selectedTaskBoard, selectedTeam]);
 
   return (
     <div className={styles.ManageBoard}>
       <div className={styles.header}>
-        <SidebarOpener className={styles.sidebarOpener}/>
+        <SidebarOpener className={styles.sidebarOpener} />
 
         <TeamPicker
           teams={teams}
@@ -125,6 +133,7 @@ const ManageTaskBoard = () => {
           {currentTab === Tabs.PANEL_KANBAN &&
             <TaskBoardView
               taskBoard={selectedTaskBoard}
+              setTaskBoard={setSelectedTaskBoard}
             />
           }
         </>

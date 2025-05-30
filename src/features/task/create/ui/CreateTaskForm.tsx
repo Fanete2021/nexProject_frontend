@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { useFormik } from 'formik';
 import { isTaskNameValid } from '@/shared/lib/utils/validation.ts';
-import { createTask, TaskPriorities } from '@/entities/task';
+import { createTask, TaskInfo, TaskPriorities } from '@/entities/task';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { CustomInput, icons, Loader, SvgIcon, ValidationList, ValidationListDirections } from '@/shared/ui';
 import { FormControl } from '@mui/material';
@@ -16,7 +16,7 @@ export interface CreateTaskFormProps {
   teamId: string;
   board: TaskBoardInfo;
   className?: string;
-  onCreateHandler?: () => void;
+  onCreateHandler?: (newTask: TaskInfo) => void;
   validationListDirection?: ValidationListDirections;
 }
 
@@ -43,8 +43,9 @@ const CreateTaskForm: React.FC<CreateTaskFormProps> = (props) => {
     validateOnBlur: true,
     onSubmit: async (values) => {
       setIsSubmitLoading(true);
+
       try {
-        await dispatch(createTask({
+        const response = await dispatch(createTask({
           teamId,
           newTask: {
             boardId: board.boardId,
@@ -53,7 +54,9 @@ const CreateTaskForm: React.FC<CreateTaskFormProps> = (props) => {
             ...values
           }
         })).unwrap();
-        onCreateHandler?.();
+
+        formik.resetForm();
+        onCreateHandler?.(response);
       } catch (error) {
         console.log(error);
       } finally {

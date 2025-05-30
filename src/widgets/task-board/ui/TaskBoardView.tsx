@@ -15,17 +15,16 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 
 export interface TaskBoardViewProps {
   taskBoard: TaskBoardInfo;
+  setTaskBoard: (taskBoard: TaskBoardInfo) => void;
   className?: string;
 }
 
 const TaskBoardView: React.FC<TaskBoardViewProps> = (props) => {
-  const { className } = props;
+  const { taskBoard, setTaskBoard, className } = props;
 
   const dispatch = useAppDispatch();
-
   const user = useSelector(getUserData)!;
 
-  const [taskBoard, setTaskBoard] = useState<TaskBoardInfo>(props.taskBoard);
   const [columns, setColumns] = useState<ColumnType[]>([]);
   const [selectedTask, setSelectedTask] = useState<TaskInfo>();
 
@@ -52,13 +51,11 @@ const TaskBoardView: React.FC<TaskBoardViewProps> = (props) => {
       const response = await dispatch(editTask({
         editTask: updatedTask,
         teamId: taskBoard.teamId,
-      }));
-
-      const editableTask: TaskInfo = response.payload;
+      })).unwrap();
 
       const updatedTasks = taskBoard.boardTasks.map(task =>
         task.taskId === updatedTask.taskId
-          ? editableTask
+          ? response
           : task
       );
 
@@ -66,6 +63,10 @@ const TaskBoardView: React.FC<TaskBoardViewProps> = (props) => {
         ...taskBoard,
         boardTasks: updatedTasks
       });
+
+      if (selectedTask?.taskId === response.taskId) {
+        setSelectedTask(response);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -104,7 +105,6 @@ const TaskBoardView: React.FC<TaskBoardViewProps> = (props) => {
     <div className={styles.TaskBoardViewWrapper}>
       <div className={styles.filters}>
         <div className={styles.title}>ФИЛЬТРЫ:</div>
-
         <div className={styles.filter}>
           Только мои задачи
         </div>
