@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Chat } from '../../../../../../model/types/chat.ts';
 import styles from './DialogItem.module.scss';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
@@ -41,7 +41,7 @@ const DialogItem: React.FC<DialogItemProps> = (props) => {
     }
   };
 
-  const clickHandler = useCallback(async () => {
+  const clickHandler = async () => {
     if (chatData && selectedChat?.chatId !== chatData.chatId) {
       setupSelectedChat(chatData.chatId);
     }
@@ -73,7 +73,7 @@ const DialogItem: React.FC<DialogItemProps> = (props) => {
         dispatch(chatActions.setSelectedChat(chatInfo));
       }
     }
-  }, []);
+  };
 
   return (
     <button

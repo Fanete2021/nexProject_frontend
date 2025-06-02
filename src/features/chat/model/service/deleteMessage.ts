@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ThunkConfig } from '@/app/providers/store-provider';
 
-interface DeleteMessageProps {
+export interface DeleteMessageProps {
   chatId: string;
   messageId: string;
 }

@@ -115,3 +115,10 @@
     display: none;
   }
 }
+
+.loader {
+  width: 30px;
+  height: 30px;
+  border-right-color: var(--text-color);
+  margin: 0 auto;
+}

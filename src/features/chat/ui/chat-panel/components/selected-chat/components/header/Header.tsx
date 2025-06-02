@@ -9,8 +9,8 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { chatActions } from '../../../../../../model/slice/chatSlice.ts';
 import { MOBILE_MAX_BREAKPOINT } from '@/shared/const/WindowBreakpoints.ts';
 import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
-import { isPublicChat } from '@/shared/lib/utils/isPublicChat.ts';
 import { videoActions } from '@/features/video';
+import { isPublicChat } from '../../../../../../utils/libs/isPublicChat.ts';
 
 export interface HeaderProps {
   chatInfo: ChatInfo;

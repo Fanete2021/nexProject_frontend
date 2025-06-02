@@ -1,7 +1,7 @@
 import { ChatPanelAsync } from './ui/chat-panel/ChatPanel.async.tsx';
 import { Chat, ChatSchema } from './model/types/chat.ts';
 import { ChatInfo } from './model/types/chatInfo.ts';
-import { Message, typesMessage } from './model/types/message.ts';
+import { Message, MessageTypes } from './model/types/message.ts';
 import { chatReducer, chatActions } from './model/slice/chatSlice.ts';
 import { getChatDialogs } from './model/selectors/getChatDialogs.ts';
 import { getChatIsLoadingDialogs } from './model/selectors/getChatIsLoadingDialogs.ts';
@@ -24,6 +24,7 @@ import { editMessage } from './model/service/editMessage.ts';
 import { getChatDialogsFilter } from './model/selectors/getChatDialogsFilter.ts';
 import { getChatIsLoadingSelectedChat } from './model/selectors/getChatIsLoadingSelectedChat.ts';
 import { deletePrivateChat } from './model/service/deletePrivateChat.ts';
+import { isPublicChat } from './utils/libs/isPublicChat.ts';
 
 export {
   ChatPanelAsync as ChatPanel,
@@ -52,7 +53,10 @@ export {
   deleteMessage,
   deletePrivateChat,
 
-  ChatTypes
+  ChatTypes,
+  MessageTypes,
+
+  isPublicChat
 };
 
 export type {
@@ -61,5 +65,4 @@ export type {
   ChatInfo,
   Message,
   NewMessage,
-  typesMessage
 };

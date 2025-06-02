@@ -3,10 +3,7 @@ import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { fetchChats } from '../../model/service/fetchChats.ts';
 import { useSelector } from 'react-redux';
-import { getAuthToken } from '@/features/account/auth';
 import ChatWebSocketService from '../../model/service/ChatWebSocketService.ts';
-import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
-import { Message, typesMessage } from '../../model/types/message.ts';
 import { chatActions } from '../../model/slice/chatSlice.ts';
 import { ChatNotification } from '../../model/types/chatNotifications.ts';
 import { fetchChatInfo } from '../../model/service/fetchChatInfo.ts';
@@ -15,7 +12,6 @@ import { ChatTypes } from '../../model/types/chatTypes.ts';
 import { getChatIsActiveInfoPanel } from '../../model/selectors/getChatIsActiveInfoPanel.ts';
 import { getChatSelectedChat } from '../../model/selectors/getChatSelectedChat.ts';
 import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
-import { isPublicChat } from '@/shared/lib/utils/isPublicChat.ts';
 import { MOBILE_MAX_BREAKPOINT } from '@/shared/const/WindowBreakpoints.ts';
 import { useResizablePanel } from '@/shared/lib/hooks/useResizablePanel.ts';
 import { getChatDialogsFilter } from '../../model/selectors/getChatDialogsFilter.ts';
@@ -25,6 +21,7 @@ import Dialogs from './components/dialogs/Dialogs.tsx';
 import SelectedChatSkeleton from './components/selected-chat/SelectedChatSkeleton.tsx';
 import InfoChat from './components/info-chat/InfoChat.tsx';
 import SelectedChat from './components/selected-chat/SelectedChat.tsx';
+import { isPublicChat } from '../../utils/libs/isPublicChat.ts';
 
 export interface ChatProps {
     className?: string;
@@ -38,9 +35,7 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
   
   const dispatch = useAppDispatch();
   const windowWidth = useWindowWidth();
-  
-  const token = useSelector(getAuthToken)!;
-  const user = useSelector(getUserData)!;
+
   const isActiveInfoPanel = useSelector(getChatIsActiveInfoPanel);
   const selectedChat = useSelector(getChatSelectedChat);
   const dialogsFilter = useSelector(getChatDialogsFilter);
@@ -63,31 +58,6 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
     direction: 'right',
     containerRef: panelRef,
   });
-
-
-  useEffect(() => {
-    ChatWebSocketService.connect(token, user.userId);
-
-    ChatWebSocketService.onMessageCallback = (message: Message) => {
-      switch (message.type) {
-        case typesMessage.NEW_MESSAGE:
-          dispatch(chatActions.addMessage(message));
-          break;
-        case typesMessage.EDIT_MESSAGE:
-          dispatch(chatActions.editMessage(message));
-          break;
-        case typesMessage.DELETE_MESSAGE:
-          dispatch(chatActions.deleteMessage(message));
-          break;
-        default: break;
-      }
-    };
-    
-    return () => {
-      ChatWebSocketService.onMessageCallback = () => {};
-      ChatWebSocketService.disconnect();
-    };
-  }, [token]);
 
   useEffect(() => {
     const subscribeChats = async () => {

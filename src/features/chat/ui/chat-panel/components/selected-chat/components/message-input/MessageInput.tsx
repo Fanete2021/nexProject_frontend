@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useRef } from 'react';
 import ChatWebSocketService from '../../../../../../model/service/ChatWebSocketService.ts';
 import { useSelector } from 'react-redux';
 import { getUserData } from '@/entities/user/model/selectors/getUserData.ts';
@@ -7,24 +7,25 @@ import { getChatSelectedChat } from '../../../../../../model/selectors/getChatSe
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import styles from './MessageInput.module.scss';
 import { CustomTextarea, icons, SvgIcon } from '@/shared/ui';
-import { isPublicChat } from '@/shared/lib/utils/isPublicChat.ts';
 import { useTranslation } from 'react-i18next';
 import { useDebouncedMessageDraft } from '../../../../../../model/hooks/useDebouncedMessageDraft.ts';
 import { getChatEditableMessage } from '../../../../../../model/selectors/getChatEditableMessage.ts';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { chatActions } from '../../../../../../model/slice/chatSlice.ts';
-import { editMessage } from '../../../../../../model/service/editMessage.ts';
+import { EditMessageProps } from '../../../../../../model/service/editMessage.ts';
 import { getChatIsLoadingSelectedChat } from '../../../../../../model/selectors/getChatIsLoadingSelectedChat.ts';
 import { SmilePicker } from '@/widgets/pickers/smile-picker';
+import { isPublicChat } from '../../../../../../utils/libs/isPublicChat.ts';
 
 export interface MessageInputProps {
-    className?: string;
+  className?: string;
+  changeMessage: (props: EditMessageProps) => void;
 }
 
 const MAX_LENGTH = 255;
 
 const MessageInput: React.FC<MessageInputProps> = (props) => {
-  const { className } = props;
+  const { className, changeMessage } = props;
 
   const user = useSelector(getUserData)!;
   const selectedChat = useSelector(getChatSelectedChat)!;
@@ -39,10 +40,13 @@ const MessageInput: React.FC<MessageInputProps> = (props) => {
   
   const currentMessageText = editableMessage ? localMessageText : messageText;
   const isMessageValid = Boolean(currentMessageText.trim());
+  
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (editableMessage) {
       setLocalMessageText(editableMessage.message);
+      textareaRef.current?.focus();
     }
   }, [editableMessage]);
 
@@ -50,11 +54,11 @@ const MessageInput: React.FC<MessageInputProps> = (props) => {
     if (!isMessageValid || isLoadingSelectedChat) return;
 
     if (editableMessage) {
-      dispatch(editMessage({
+      changeMessage({
         chatId: editableMessage.chatId,
         messageId: editableMessage.messageId,
         newMessage: currentMessageText
-      }));
+      });
       clearEditableMessage();
     } else {
       const newMessage: NewMessage = {
@@ -148,6 +152,7 @@ const MessageInput: React.FC<MessageInputProps> = (props) => {
           maxLength={255}
           onKeyDown={handleKeyDown}
           placeholder={t('Напишите сообщение...')}
+          ref={textareaRef}
         />
 
         <div className={styles.rightSide}>
