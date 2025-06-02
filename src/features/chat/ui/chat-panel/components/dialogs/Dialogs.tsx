@@ -3,7 +3,7 @@ import styles from './Dialogs.module.scss';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { useSelector } from 'react-redux';
 import { getChatDialogs } from '../../../../model/selectors/getChatDialogs.ts';
-import { ActionMenu, ActionMenuPosition, icons, Scrollbar, SvgIcon, Tabs } from '@/shared/ui';
+import { ActionMenu, ActionMenuPosition, icons, Loader, Scrollbar, SvgIcon, Tabs } from '@/shared/ui';
 import { getChatIsLoadingDialogs } from '../../../../model/selectors/getChatIsLoadingDialogs.ts';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { ChatTypes } from '../../../../model/types/chatTypes.ts';
@@ -73,22 +73,23 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
   }, []);
 
   const loadChats = async (shouldRewriteChats: boolean) => {
-    try {
-      const newCurrentPage = currentPageDialogs + 1;
+    if (isLoadingDialogs) return;
 
+    try {
       const response = await dispatch(fetchChats({
         filterMode: dialogsFilter,
         pageSize: DIALOGS_PAGE_SIZE,
-        pageNumber: shouldRewriteChats ? 1 : newCurrentPage
+        pageNumber: shouldRewriteChats ? 1 : currentPageDialogs + 1
       })).unwrap();
       setAllPagesDialogs(response.pageCount);
 
       if (shouldRewriteChats) {
         dispatch(chatActions.setDialogs(response.chats));
         setCurrentPageDialogs(1);
+        scrollbarRef.current.scrollToTop();
       } else {
         dispatch(chatActions.addDialogs(response.chats));
-        setCurrentPageDialogs(newCurrentPage);
+        setCurrentPageDialogs(prev => prev + 1);
       }
     } catch (error) {
       console.log(error);
@@ -110,7 +111,9 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
     const scrollHeight = scrollbarRef.current.getScrollHeight();
     const clientHeight = scrollbarRef.current.getClientHeight();
 
-    if (scrollTop + clientHeight >= scrollHeight && currentPageDialogs < allPagesDialogs) {
+    console.log(scrollTop + clientHeight, scrollHeight);
+
+    if (scrollHeight - scrollTop - clientHeight <= 150 && currentPageDialogs < allPagesDialogs) {
       loadChats(false);
     }
   };
@@ -171,7 +174,7 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
             onScroll={scrollHandler}
             ref={scrollbarRef}
           >
-            {((isLoadingSearch && searchedValue) || isLoadingDialogs) &&
+            {((isLoadingSearch && searchedValue) || (dialogs && isLoadingDialogs)) &&
               <>
                 {Array.from({ length: 15 }).map((_, index) => (
                   <DialogItemSkeleton key={index} className={styles.dialogSkeleton} />
@@ -179,7 +182,7 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
               </>
             }
 
-            {!searchedValue && !isLoadingDialogs &&
+            {(!searchedValue && dialogs) &&
               <>
                 {dialogs.map(dialog => (
                   <DialogItem
@@ -189,6 +192,8 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
                     openContextMenu={openActionMenuHandler}
                   />
                 ))}
+
+                {isLoadingDialogs && <Loader className={styles.loader}/>}
               </>
             }
 
