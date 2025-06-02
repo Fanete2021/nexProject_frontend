@@ -39,42 +39,65 @@ const Messages: React.FC<MessagesProps> = (props) => {
   const [actionMenuPosition, setActionMenuPosition] = useState<ActionMenuPosition | null>(null);
   const [selectedMessageId, setSelectedMessageId] = useState<string | null>(null);
   const [currentScrollTop, setCurrentScrollTop] = useState<number | null>(null);
+  const [lastAddedPosition, setLastAddedPosition] = useState<'top' | 'bottom'>('bottom');
+  const [lastFirstMessageId, setLastFirstMessageId] = useState<string | null>(null);
 
   const scrollbarRef = useRef<Scrollbars>(null);
   const messagesRef = useRef<HTMLDivElement>(null);
-  const isUserScrolling = useRef(false);
-  const scrollTimeout = useRef<NodeJS.Timeout>();
+  const prevScrollHeightRef = useRef<number | null>(null);
+  const prevScrollTopRef = useRef<number | null>(null);
 
   const user = useSelector(getUserData)!;
   const isLoadingMessages = useSelector(getChatIsLoadingMessages);
 
   useEffect(() => {
-    if (!scrollbarRef.current) return;
+    const findFirstMessage = () => {
+      for (const group of props.messages) {
+        if (group.type === GroupTypes.MESSAGE && group.messages?.[0]) {
+          return group.messages[group.messages.length - 1].messageId;
+        }
+      }
+      return null;
+    };
 
-    const scrollTop = scrollbarRef.current.getScrollTop();
+    const currentFirstId = findFirstMessage();
 
-    setCurrentScrollTop(scrollTop);
-  }, [scrollbarRef]);
+    if (currentFirstId && lastFirstMessageId && currentFirstId === lastFirstMessageId) {
+      setLastAddedPosition('top');
+    } else {
+      setLastAddedPosition('bottom');
+    }
 
-  useEffect(() => {
-    setMessages(props.messages);
+    setLastFirstMessageId(currentFirstId);
+
+    if (scrollbarRef.current && !isAtBottom) {
+      prevScrollHeightRef.current = scrollbarRef.current.getScrollHeight();
+      prevScrollTopRef.current = scrollbarRef.current.getScrollTop();
+    }
+
+    setMessages([...props.messages].reverse());
   }, [props.messages]);
 
   useLayoutEffect(() => {
     if (isAtBottom) {
-      requestAnimationFrame(() => {
-        scrollToBottom();
-      });
+      scrollToBottom();
     } else {
-      if (!isUserScrolling.current && scrollbarRef.current) {
-        const scrollTop = scrollbarRef.current.getScrollTop();
-        const scrollHeight = scrollbarRef.current.getScrollHeight();
-        const clientHeight = scrollbarRef.current.getClientHeight();
-        const shouldScrollToBottom = Math.abs(scrollHeight - scrollTop - clientHeight) < 50;
+      if (
+        scrollbarRef.current &&
+        prevScrollHeightRef.current !== null &&
+        prevScrollTopRef.current !== null
+      ) {
+        const newScrollHeight = scrollbarRef.current.getScrollHeight();
+        const heightDiff = newScrollHeight - prevScrollHeightRef.current;
 
-        if (shouldScrollToBottom) {
-          scrollToBottom();
-        }
+        const newScrollTop = lastAddedPosition === 'top'
+          ? prevScrollTopRef.current + heightDiff
+          : prevScrollTopRef.current;
+
+        scrollbarRef.current.scrollTop(newScrollTop);
+
+        prevScrollHeightRef.current = null;
+        prevScrollTopRef.current = null;
       }
     }
   }, [messages]);
@@ -94,9 +117,6 @@ const Messages: React.FC<MessagesProps> = (props) => {
   const scrollHandler = async () => {
     if (!scrollbarRef.current) return;
 
-    clearTimeout(scrollTimeout.current);
-    isUserScrolling.current = true;
-
     const scrollTop = scrollbarRef.current.getScrollTop();
     const scrollHeight = scrollbarRef.current.getScrollHeight();
     const clientHeight = scrollbarRef.current.getClientHeight();
@@ -105,10 +125,6 @@ const Messages: React.FC<MessagesProps> = (props) => {
     setIsAtBottom(userScrolledToBottom);
 
     setCurrentScrollTop(scrollTop);
-
-    scrollTimeout.current = setTimeout(() => {
-      isUserScrolling.current = false;
-    }, 200);
   };
 
   useDebounce(() => {
