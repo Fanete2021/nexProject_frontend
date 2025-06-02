@@ -41,29 +41,15 @@ export const chatSlice = createSlice({
         state.dialogs.splice(chatIndex, 1);
         state.dialogs.unshift(chat);
       }
-
-      if (state.selectedChat?.chatId === newMessage.chatId) {
-        state.selectedChat.lastMessages.unshift(newMessage);
-      }
-    },
-    deleteMessage: (state, action: PayloadAction<Message>) => {
-      const messageToDelete = action.payload;
-
-      if (state.selectedChat?.chatId === messageToDelete.chatId) {
-        state.selectedChat.lastMessages = state.selectedChat.lastMessages.filter(
-          message => message.messageId !== messageToDelete.messageId
-        );
-      }
     },
     editMessage: (state, action: PayloadAction<Message>) => {
       const editedMessage = action.payload;
 
-      if (state.selectedChat?.chatId === editedMessage.chatId) {
-        const messageIndex = state.selectedChat.lastMessages.findIndex(
-          message => message.messageId === editedMessage.messageId
-        );
-        if (messageIndex !== -1) {
-          state.selectedChat.lastMessages[messageIndex] = editedMessage;
+      const chatIndex = state.dialogs.findIndex((dialog) => dialog.chatId === editedMessage.chatId);
+      if (chatIndex !== -1) {
+        const chat = state.dialogs[chatIndex];
+        if (chat?.lastMessage?.messageId === editedMessage.messageId) {
+          chat.lastMessage = editedMessage;
         }
       }
     },
@@ -103,8 +89,7 @@ export const chatSlice = createSlice({
       .addCase(fetchMessages.pending, (state: ChatSchema) => {
         state.isLoadingMessages = true;
       })
-      .addCase(fetchMessages.fulfilled, (state: ChatSchema, action) => {
-        state.selectedChat?.lastMessages.push(...action.payload.messages);
+      .addCase(fetchMessages.fulfilled, (state: ChatSchema) => {
         state.isLoadingMessages = false;
       })
       .addCase(fetchMessages.rejected, (state: ChatSchema) => {

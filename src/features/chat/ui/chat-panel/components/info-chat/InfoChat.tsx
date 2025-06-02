@@ -4,13 +4,13 @@ import { getChatSelectedChat } from '../../../../model/selectors/getChatSelected
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { icons, SvgIcon } from '@/shared/ui';
 import { useTranslation } from 'react-i18next';
-import { isPublicChat } from '@/shared/lib/utils/isPublicChat.ts';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { chatActions } from '../../../../model/slice/chatSlice.ts';
 import React, { useEffect, useState } from 'react';
 import GroupMembers from './components/group-members/GroupMembers.tsx';
 import { fetchVideoTranscriptions, VideoTranscription } from '@/entities/video-transcription';
 import Transcriptions from './components/transcriptions/Transcriptions.tsx';
+import { isPublicChat } from '../../../../utils/libs/isPublicChat.ts';
 
 export interface InfoChatProps extends React.HTMLProps<HTMLDivElement> {
   className?: string;

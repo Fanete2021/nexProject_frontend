@@ -1,100 +1,63 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Message } from '../../../../../../model/types/message.ts';
-import { User } from '@/entities/user';
+import { getUserData } from '@/entities/user';
 import styles from './Messages.module.scss';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
-import { ActionMenu, ActionMenuPosition, Avatar, Scrollbar } from '@/shared/ui';
-import { formatDateLocalized } from '@/shared/lib/utils/formatDateLocalized.ts';
+import { ActionMenu, ActionMenuPosition, Avatar, Loader, Scrollbar } from '@/shared/ui';
 import { formatTimeLocalized } from '@/shared/lib/utils/formatTimeLocalized.ts';
 import { Scrollbars } from 'react-custom-scrollbars-2';
-import { useSelector } from 'react-redux';
-import { getChatIsLoadingMessages } from '../../../../../../model/selectors/getChatIsLoadingMessages.ts';
-import { fetchMessages } from '../../../../../../model/service/fetchMessages.ts';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { ChatTypes } from '../../../../../../model/types/chatTypes.ts';
-import { deleteMessage } from '../../../../../../model/service/deleteMessage.ts';
+import { DeleteMessageProps } from '../../../../../../model/service/deleteMessage.ts';
 import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
 import { MOBILE_MAX_BREAKPOINT } from '@/shared/const/WindowBreakpoints.ts';
 import { chatActions } from '../../../../../../model/slice/chatSlice.ts';
+import { GroupedMessage } from './model/types/groupedMessage.ts';
+import { GroupTypes } from './model/types/groupTypes.ts';
+import { useSelector } from 'react-redux';
+import { getChatIsLoadingMessages } from '../../../../../../model/selectors/getChatIsLoadingMessages.ts';
+import { findMessageById } from './libs/utils/findMessageById.ts';
+import { useDebounce } from '@/shared/lib/hooks/useDebounce.ts';
 
 export interface MessagesProps {
-  messages: Message[];
-  user: User;
+  messages: GroupedMessage[];
   className?: string;
   chatId: string;
-  messageCount: number;
   chatType: ChatTypes;
+  loadMessages: () => void;
+  deleteMessage: (props: DeleteMessageProps) => void;
 }
-
-enum GroupType {
-  DATE = 'date',
-  MESSAGE = 'message'
-}
-
-type GroupedMessage = {
-  type: GroupType;
-  date?: string;
-  messages?: Message[];
-};
-
-const groupMessages = (messages: Message[], timeGap = 10 * 60 * 1000): GroupedMessage[] => {
-  const grouped: GroupedMessage[] = [];
-  let lastDate = '';
-  let lastTimestamp = 0;
-  let lastSenderId = '';
-
-  const isNewGroup = (message: Message, timestamp: number): boolean => {
-    return (
-      timestamp - lastTimestamp > timeGap ||
-      message.senderId !== lastSenderId
-    );
-  };
-
-  messages.forEach((message) => {
-    const messageDate = formatDateLocalized(message.sendDate.toLocaleString());
-    const messageTimestamp = new Date(message.sendDate).getTime();
-
-    if (messageDate !== lastDate) {
-      grouped.push({ type: GroupType.DATE, date: messageDate });
-      lastDate = messageDate;
-      lastTimestamp = 0;
-      lastSenderId = '';
-    }
-
-    if (isNewGroup(message, messageTimestamp)) {
-      grouped.push({ type: GroupType.MESSAGE, messages: [message] });
-    } else {
-      grouped[grouped.length - 1].messages!.push(message);
-    }
-
-    lastTimestamp = messageTimestamp;
-    lastSenderId = message.senderId;
-  });
-
-  return grouped;
-};
-
-const COUNT_MESSAGE = 50;
 
 const Messages: React.FC<MessagesProps> = (props) => {
-  const { user, className, messageCount, chatId, chatType } = props;
+  const { className, chatId, chatType, loadMessages, deleteMessage } = props;
 
   const dispatch = useAppDispatch();
-
-  const [groupedMessages, setGroupedMessages] = useState<GroupedMessage[]>([]);
-  const [isAtBottom, setIsAtBottom] = useState(true);
-  const [currentPage, setCurrentPage] = useState<number>(2);
-
-  const scrollbarRef = useRef<Scrollbars>(null);
-
-  const isLoadingMessages = useSelector(getChatIsLoadingMessages);
-  const [actionMenuPosition, setActionMenuPosition] = useState<ActionMenuPosition | null>(null);
-  const [selectedMessageId, setSelectedMessageId] = useState<string | null>(null);
   const windowWidth = useWindowWidth();
 
+  const [messages, setMessages] = useState<GroupedMessage[]>([]);
+  const [isAtBottom, setIsAtBottom] = useState(true);
+
+  const [actionMenuPosition, setActionMenuPosition] = useState<ActionMenuPosition | null>(null);
+  const [selectedMessageId, setSelectedMessageId] = useState<string | null>(null);
+  const [currentScrollTop, setCurrentScrollTop] = useState<number | null>(null);
+
+  const scrollbarRef = useRef<Scrollbars>(null);
+  const messagesRef = useRef<HTMLDivElement>(null);
+  const isUserScrolling = useRef(false);
+  const scrollTimeout = useRef<NodeJS.Timeout>();
+
+  const user = useSelector(getUserData)!;
+  const isLoadingMessages = useSelector(getChatIsLoadingMessages);
+
   useEffect(() => {
-    const grouped = groupMessages([...props.messages].reverse());
-    setGroupedMessages(grouped);
+    if (!scrollbarRef.current) return;
+
+    const scrollTop = scrollbarRef.current.getScrollTop();
+
+    setCurrentScrollTop(scrollTop);
+  }, [scrollbarRef]);
+
+  useEffect(() => {
+    setMessages(props.messages);
   }, [props.messages]);
 
   useLayoutEffect(() => {
@@ -102,11 +65,24 @@ const Messages: React.FC<MessagesProps> = (props) => {
       requestAnimationFrame(() => {
         scrollToBottom();
       });
+    } else {
+      if (!isUserScrolling.current && scrollbarRef.current) {
+        const scrollTop = scrollbarRef.current.getScrollTop();
+        const scrollHeight = scrollbarRef.current.getScrollHeight();
+        const clientHeight = scrollbarRef.current.getClientHeight();
+        const shouldScrollToBottom = Math.abs(scrollHeight - scrollTop - clientHeight) < 50;
+
+        if (shouldScrollToBottom) {
+          scrollToBottom();
+        }
+      }
     }
-  }, [groupedMessages]);
+  }, [messages]);
 
   useEffect(() => {
     scrollToBottom();
+
+    dispatch(chatActions.setEditableMessage(undefined));
   }, [chatId]);
 
   const scrollToBottom = () => {
@@ -118,32 +94,28 @@ const Messages: React.FC<MessagesProps> = (props) => {
   const scrollHandler = async () => {
     if (!scrollbarRef.current) return;
 
+    clearTimeout(scrollTimeout.current);
+    isUserScrolling.current = true;
+
     const scrollTop = scrollbarRef.current.getScrollTop();
     const scrollHeight = scrollbarRef.current.getScrollHeight();
     const clientHeight = scrollbarRef.current.getClientHeight();
 
-    const userScrolledToBottom = Math.abs(scrollHeight - scrollTop - clientHeight) <= 5; // Погрешность проверки
+    const userScrolledToBottom = Math.abs(scrollHeight - scrollTop - clientHeight) < 100;
     setIsAtBottom(userScrolledToBottom);
 
-    if (scrollTop <= 0 && !isLoadingMessages && messageCount > props.messages.length) {
-      try {
-        dispatch(fetchMessages({
-          chatId: chatId,
-          pageNumber: currentPage,
-          pageSize: COUNT_MESSAGE,
-        }));
+    setCurrentScrollTop(scrollTop);
 
-        setCurrentPage(currentPage + 1);
-      } catch (error) {
-        console.error('Ошибка при загрузке сообщений:', error);
-      } 
-    }
+    scrollTimeout.current = setTimeout(() => {
+      isUserScrolling.current = false;
+    }, 200);
   };
 
-  useEffect(() => {
-    setCurrentPage(2);
-    dispatch(chatActions.setEditableMessage(undefined));
-  }, [chatId]);
+  useDebounce(() => {
+    if (currentScrollTop !== null && currentScrollTop < 350) {
+      loadMessages();
+    }
+  }, 100);
 
   const openActionMenuHandler = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, messageId: string) => {
     event.preventDefault();
@@ -157,13 +129,13 @@ const Messages: React.FC<MessagesProps> = (props) => {
   };
 
   const editMessageHandler = () => {
-    const editableMessage = props.messages.find(m => m.messageId === selectedMessageId!);
+    const editableMessage = findMessageById(messages, selectedMessageId!)!;
     dispatch(chatActions.setEditableMessage(editableMessage));
     closeActionMenuHandler();
   };
 
   const deleteMessageHandler = () => {
-    dispatch(deleteMessage({ messageId: selectedMessageId!, chatId: chatId }));
+    deleteMessage({ messageId: selectedMessageId!, chatId: chatId });
     closeActionMenuHandler();
   };
 
@@ -173,8 +145,11 @@ const Messages: React.FC<MessagesProps> = (props) => {
         onScroll={scrollHandler}
         ref={scrollbarRef}
       >
-        <div className={styles.Messages}>
-          {groupedMessages.map((group, index) => (
+        <div
+          className={styles.Messages}
+          ref={messagesRef}
+        >
+          {messages.map((group, index) => (
             <div
               key={index}
               className={classNames(
@@ -185,13 +160,13 @@ const Messages: React.FC<MessagesProps> = (props) => {
                 }
               )}
             >
-              {group.type === GroupType.DATE &&
+              {group.type === GroupTypes.DATE &&
                 <div className={styles.dateSeparator}>
                   {group.date}
                 </div>
               }
 
-              {group.type === GroupType.MESSAGE &&
+              {group.type === GroupTypes.MESSAGE &&
                 <>
                   <Avatar
                     text={group.messages![0].senderName}
@@ -242,6 +217,7 @@ const Messages: React.FC<MessagesProps> = (props) => {
               }
             </div>
           ))}
+          {isLoadingMessages && <Loader className={styles.loader} />}
         </div>
       </Scrollbar>
 

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, TextareaHTMLAttributes, useState } from 'react';
+import { useRef, useEffect, TextareaHTMLAttributes, forwardRef, useImperativeHandle } from 'react';
 import styles from './CustomTextarea.module.scss';
 import { classNames } from '@/shared/lib/utils/classNames';
 import { Scrollbar } from '@/shared/ui';
@@ -16,7 +16,7 @@ export interface CustomTextareaProps extends TextareaHTMLAttributes<TextareaAuto
 const PADDING_TOP = 14;
 const PADDING_BOTTOM = 13;
 
-const CustomTextarea: React.FC<CustomTextareaProps> = (props) => {
+const CustomTextarea = forwardRef<HTMLTextAreaElement, CustomTextareaProps>((props, ref) => {
   const {
     isError,
     value,
@@ -27,6 +27,8 @@ const CustomTextarea: React.FC<CustomTextareaProps> = (props) => {
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const scrollWrapperRef = useRef<HTMLDivElement>(null);
+
+  useImperativeHandle(ref, () => textareaRef.current as HTMLTextAreaElement, []);
 
   useEffect(() => {
     if (textareaRef.current && scrollWrapperRef.current) {
@@ -57,6 +59,7 @@ const CustomTextarea: React.FC<CustomTextareaProps> = (props) => {
       </Scrollbar>
     </div>
   );
-};
+});
 
+CustomTextarea.displayName = 'CustomTextarea';
 export default CustomTextarea;

@@ -3,7 +3,8 @@ import { ThunkConfig } from '@/app/providers/store-provider';
 import { Message } from '../types/message.ts';
 
 interface FetchMessageResponse {
-  messages: Message[],
+  messages: Message[];
+  pageCount: number;
 }
 
 interface FetchMessagesProps {
