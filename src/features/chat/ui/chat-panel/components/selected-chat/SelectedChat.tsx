@@ -39,6 +39,7 @@ const SelectedChat: React.FC<SelectedChatProps> = (props) => {
   
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [messageCount, setMessageCount] = useState(0);
   const [groupedMessages, setGroupedMessages] = useState<GroupedMessage[]>([]);
 
   useEffect(() => {
@@ -51,6 +52,7 @@ const SelectedChat: React.FC<SelectedChatProps> = (props) => {
 
           if (selectedChat?.chatId === message.chatId) {
             setMessages(prev => [message, ...prev]);
+            setMessageCount(prev => prev + 1);
           }
           break;
         case MessageTypes.EDIT_MESSAGE:
@@ -71,6 +73,7 @@ const SelectedChat: React.FC<SelectedChatProps> = (props) => {
         case MessageTypes.DELETE_MESSAGE:
           if (selectedChat?.chatId === message.chatId) {
             setMessages(prev => prev.filter(msg => msg.messageId !== message.messageId));
+            setMessageCount(prev => prev - 1);
           }
           break;
         default: break;
@@ -85,6 +88,7 @@ const SelectedChat: React.FC<SelectedChatProps> = (props) => {
 
   useEffect(() => {
     setCurrentPage(1);
+    setMessageCount(selectedChat?.messageCount || 0);
   }, [selectedChat]);
 
   useEffect(() => {
@@ -117,7 +121,7 @@ const SelectedChat: React.FC<SelectedChatProps> = (props) => {
   }
 
   const loadMessages = async () => {
-    if (!isLoadingMessages && selectedChat.messageCount > messages.length) {
+    if (!isLoadingMessages && messageCount > messages.length) {
       try {
         const response = await dispatch(fetchMessages({
           chatId: selectedChat.chatId,
