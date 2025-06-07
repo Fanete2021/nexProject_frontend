@@ -101,6 +101,9 @@ const MemberList: React.FC<MemberListProps> = (props) => {
                       [styles.myCard]: member.userId === user.userId,
                       [styles.link]: isLink
                     })}
+                    onContextMenu={canEditMember && canEditMember(member) &&
+                      ((e) => editMember?.(e, member.userId))
+                    }
                   >
                     <Avatar
                       width={50}
