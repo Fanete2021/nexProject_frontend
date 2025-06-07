@@ -129,45 +129,50 @@ const Team: React.FC<TeamsProps> = (props) => {
         members={sortedMembers}
         addMember={() => setIsOpenContactPicker(true)}
         getLink={generateLinkForMember}
+        membersType={'teamMember'}
       >
-        <div className={styles.header}>
-          <Avatar
-            width={40}
-            height={40}
-            text={team.teamName}
-          />
+        {(memberLength: number) =>
+          <>
+            <div className={styles.header}>
+              <Avatar
+                width={40}
+                height={40}
+                text={team.teamName}
+              />
 
-          {team.teamName}
-        </div>
-
-        <div className={styles.infoWrapper}>
-          <SvgIcon
-            iconName={icons.INFO}
-            applyHover={false}
-            important
-            className={styles.iconInfo}
-          />
-
-          <div className={styles.info}>
-            <div className={styles.infoHeader}>
-              <span className={styles.countMembers}>
-                {team.teamMembers.length} members
-              </span>
-
-              <span className={styles.tags}>
-                {team.teamTags.map((tag) => (
-                  <span key={tag.tagName}>#{tag.tagName}</span>
-                ))}
-              </span>
+              {team.teamName}
             </div>
 
-            {team.teamDescription &&
-              <span className={styles.description}>
-                {team.teamDescription}
-              </span>
-            }
-          </div>
-        </div>
+            <div className={styles.infoWrapper}>
+              <SvgIcon
+                iconName={icons.INFO}
+                applyHover={false}
+                important
+                className={styles.iconInfo}
+              />
+
+              <div className={styles.info}>
+                <div className={styles.infoHeader}>
+                  <span className={styles.countMembers}>
+                    {memberLength} участника
+                  </span>
+
+                  <span className={styles.tags}>
+                    {team.teamTags.map((tag) => (
+                      <span key={tag.tagName}>#{tag.tagName}</span>
+                    ))}
+                  </span>
+                </div>
+
+                {team.teamDescription &&
+                  <span className={styles.description}>
+                    {team.teamDescription}
+                  </span>
+                }
+              </div>
+            </div>
+          </>
+        }
       </MemberList>
 
       <ActionMenu

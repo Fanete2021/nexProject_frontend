@@ -116,12 +116,15 @@ const Members: React.FC<MembersProps> = (props) => {
         addMember={() => setIsOpenContactPicker(true)}
         canEditMember={canEditMember}
         editMember={openActionMenuHandler}
+        membersType={'organizationMember'}
       >
-        <div className={styles.infoWrapper}>
-          <span className={styles.countMembers}>
-            {organization.members.length} участников
-          </span>
-        </div>
+        {(memberLength: number) => 
+          <div className={styles.infoWrapper}>
+            <span className={styles.countMembers}>
+              {memberLength} участников
+            </span>
+          </div>
+        }
       </MemberList>
 
       <ActionMenu

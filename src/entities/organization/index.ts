@@ -28,15 +28,15 @@ export {
   getOrganizationIsLoading,
 
   getMyRole as getMyRoleInOrganization,
-  getRoleName as getOrganizationRoleName,
   isAdmin as isAdminInOrganization,
   isOwner as isOwnerInOrganization,
+
+  OrganizationRoles
 };
 
 export type {
   Organization,
   OrganizationSchema,
-  OrganizationRoles,
   OrganizationInfo,
   OrganizationMember
 };

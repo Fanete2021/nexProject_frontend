@@ -5,9 +5,9 @@ import { icons, SvgIcon } from '@/shared/ui';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 
 export interface CustomCheckboxProps extends React.ComponentPropsWithoutRef<'input'> {
-    label?: string;
-    className?: string;
-    setRounded?: boolean;
+  label?: string;
+  className?: string;
+  setRounded?: boolean;
 }
 
 const CustomCheckbox: React.FC<CustomCheckboxProps> = (props) => {

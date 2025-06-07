@@ -101,13 +101,10 @@
 
   .roles {
     display: flex;
+    flex-direction: column;
+    gap: 5px;
     font-size: 14px;
     line-height: 18px;
     gap: 5px;
-
-    .selectedRoles {
-      color: var(--text-secondary-color);
-      cursor: pointer;
-    }
   }
 }

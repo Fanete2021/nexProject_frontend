@@ -1,27 +1,25 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ThunkConfig } from '@/app/providers/store-provider';
-import { organizationActions } from '../slice/organizationSlice.ts';
 
 interface DeleteMemberFromOrganizationProps {
   organizationId: string;
   userId: string;
 }
 
-export const deleteMemberFromOrganization = createAsyncThunk<void, DeleteMemberFromOrganizationProps, ThunkConfig<string>> (
+export const deleteMemberFromOrganization = createAsyncThunk<
+  void,
+  DeleteMemberFromOrganizationProps,
+  ThunkConfig<string>
+> (
   'organization/deleteMemberFromOrganization',
   async (deleteMemberFromOrganizationData, thunkAPI) => {
     const {
       extra,
-      rejectWithValue,
-      dispatch
+      rejectWithValue
     } = thunkAPI;
 
     try {
       const response = await extra.api.delete('/org/deleteMember', { params: deleteMemberFromOrganizationData });
-
-      await dispatch(
-        organizationActions.removeMemberFromSelectedOrganizationById(deleteMemberFromOrganizationData.userId)
-      );
 
       return response;
     } catch (e) {
@@ -29,3 +27,4 @@ export const deleteMemberFromOrganization = createAsyncThunk<void, DeleteMemberF
     }
   }
 );
+

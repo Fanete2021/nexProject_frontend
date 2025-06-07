@@ -18,6 +18,7 @@ import { Picker, PickerProps, PickerItem } from './picker';
 import { TaskCard, TaskCardProps } from './task-card';
 import { CustomTextarea, CustomTextareaProps } from './custom-textarea';
 import { TaskInfoCard, TaskInfoCardProps } from './task-info-card';
+import { CheckList, CheckListProps } from './check-list';
 
 export type {
   SvgIconProps,
@@ -41,7 +42,8 @@ export type {
   PickerItem,
   TaskCardProps,
   CustomTextareaProps,
-  TaskInfoCardProps
+  TaskInfoCardProps,
+  CheckListProps
 };
 
 export {
@@ -67,5 +69,6 @@ export {
   TaskCard,
   CustomTextarea,
   TaskInfoCard,
-  ValidationListDirections
+  ValidationListDirections,
+  CheckList
 };
