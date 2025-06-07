@@ -165,6 +165,8 @@ const Messages: React.FC<MessagesProps> = (props) => {
           className={styles.Messages}
           ref={messagesRef}
         >
+          {isLoadingMessages && <Loader className={styles.loader} />}
+
           {messages.map((group, index) => (
             <div
               key={index}
@@ -233,7 +235,6 @@ const Messages: React.FC<MessagesProps> = (props) => {
               }
             </div>
           ))}
-          {isLoadingMessages && <Loader className={styles.loader} />}
         </div>
       </Scrollbar>
 
