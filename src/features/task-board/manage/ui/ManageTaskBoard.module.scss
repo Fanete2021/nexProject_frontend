@@ -1,9 +1,9 @@
 .ManageBoard {
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   width: 100%;
   gap: 20px;
+  position: relative;
 }
 
 .header {

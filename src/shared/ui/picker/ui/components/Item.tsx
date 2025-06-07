@@ -34,7 +34,7 @@ const Item = forwardRef<HTMLDivElement, ItemProps>((props, ref) => {
         {item.image}
       </span>
 
-      <span className={classes?.text}>
+      <span className={classNames(styles.text, [classes?.text])}>
         {item.label}
       </span>
 
