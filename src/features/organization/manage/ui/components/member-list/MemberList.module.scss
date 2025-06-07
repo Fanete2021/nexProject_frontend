@@ -24,6 +24,7 @@
     flex-wrap: wrap;
     gap: 10px;
     z-index: 1;
+    justify-content: center;
 
     .member {
       background: var(--organization-member-card-bg-color);
