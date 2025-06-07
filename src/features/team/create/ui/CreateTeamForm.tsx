@@ -10,6 +10,7 @@ import * as yup from 'yup';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { isTeamNameValid } from '@/shared/lib/utils/validation.ts';
 import { createTeam } from '@/entities/team';
+import { ApiError } from '@/shared/types/apiError.ts';
 
 export interface CreateTeamFormProps {
   className?: string;
@@ -31,6 +32,7 @@ const CreateTeamForm: React.FC<CreateTeamFormProps> = (props) => {
   const dispatch = useAppDispatch();
 
   const [isSubmitLoading, setIsSubmitLoading] = useState<boolean>(false);
+  const [error, setError] = useState<ApiError | null>(null);
 
   const formik = useFormik({
     initialValues: {
@@ -47,9 +49,10 @@ const CreateTeamForm: React.FC<CreateTeamFormProps> = (props) => {
           organizationId
         })).unwrap();
 
+        formik.resetForm();
         onCreateHandler?.();
       } catch (error) {
-        console.log(error);
+        setError(error);
       } finally {
         setIsSubmitLoading(false);
       }
@@ -80,6 +83,10 @@ const CreateTeamForm: React.FC<CreateTeamFormProps> = (props) => {
       </div>
 
       <form className={classNames('form', [styles.form])} onSubmit={onSubmit}>
+        {error &&
+          <div className="formError">{error.errDetails}</div>
+        }
+
         <FormControl
           fullWidth
           className="FieldWrapper"

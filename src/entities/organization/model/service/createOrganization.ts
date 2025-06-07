@@ -1,13 +1,14 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ThunkConfig } from '@/app/providers/store-provider';
 import { Organization } from '../types/organization.ts';
+import { ApiError } from '@/shared/types/apiError.ts';
 
 interface CreateOrganizationProps {
   orgName: string;
   orgDescription?: string;
 }
 
-export const createOrganization = createAsyncThunk<Organization, CreateOrganizationProps, ThunkConfig<string>> (
+export const createOrganization = createAsyncThunk<Organization, CreateOrganizationProps, ThunkConfig<ApiError>> (
   'organization/createOrganization',
   async (createOrganizationData, thunkAPI) => {
     const {
@@ -22,7 +23,7 @@ export const createOrganization = createAsyncThunk<Organization, CreateOrganizat
 
       return response.data;
     } catch (e) {
-      return rejectWithValue(e.response.data.message);
+      return rejectWithValue(e.response.data);
     }
   }
 );
