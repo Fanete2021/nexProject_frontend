@@ -135,8 +135,8 @@ const Team: React.FC<TeamsProps> = (props) => {
           <>
             <div className={styles.header}>
               <Avatar
-                width={40}
-                height={40}
+                width={50}
+                height={50}
                 text={team.teamName}
               />
 
