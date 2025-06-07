@@ -109,7 +109,6 @@ const Picker: React.FC<PickerProps> = (props) => {
     const positionX = pickerRef.current.getBoundingClientRect().left - pickerParent.getBoundingClientRect().left;
 
     setMaxWidth(pickerParent.getBoundingClientRect().width - positionX);
-    console.log(pickerParent.getBoundingClientRect().width - positionX)
   }, [windowWidth]);
 
   return (

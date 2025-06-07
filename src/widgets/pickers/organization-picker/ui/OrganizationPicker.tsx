@@ -12,6 +12,7 @@ import { classNames } from '@/shared/lib/utils/classNames.ts';
 
 export interface OrganizationPickerProps {
   hasCreateOrganization?: boolean;
+  defaultOrganizationId?: string;
   onSelect?: (selectedOrganization: OrganizationInfo) => void;
   organizations: Organization[];
   classes?: PickerProps['classes'] & {
@@ -29,20 +30,21 @@ const OrganizationPicker: React.FC<OrganizationPickerProps> = (props) => {
       image: styles.image
     },
     onSelect,
-    organizations
+    organizations,
+    defaultOrganizationId = '',
   } = props;
 
   const dispatch = useAppDispatch();
 
   const [isOpenCreatorOrganization, setIsOpenCreatorOrganization] = useState<boolean>(false);
   const [pickerItems, setPickerItems] = useState<PickerItem[]>([]);
-  const [selectedOrganizationId, setSelectedOrganizationId] = useState<string>();
+  const [selectedOrganizationId, setSelectedOrganizationId] = useState<string>(defaultOrganizationId);
 
   const onSelectHandler = async (organizationId: string) => {
     try {
-      const response = await dispatch(fetchOrganizationInfo({ organizationId }));
+      const response = await dispatch(fetchOrganizationInfo({ organizationId })).unwrap();
       setSelectedOrganizationId(organizationId);
-      onSelect?.(response.payload);
+      onSelect?.(response);
     } catch (error) {
       console.log(error);
     }

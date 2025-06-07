@@ -9,6 +9,7 @@ import { Team } from '@/entities/team';
 import { CreateTeamFormModal } from '@/features/team/create';
 import { useCallback, useState } from 'react';
 import { convertObjectToArray } from '@/shared/lib/utils/convertObjectToArray.ts';
+import { useParams } from 'react-router-dom';
 
 export interface TabPickerProps {
   currentTab: Tabs;
@@ -16,14 +17,15 @@ export interface TabPickerProps {
   selectedOrganization: OrganizationInfo;
   teams: Team[];
   selectTeam: (teamId: string) => void;
-  selectedTeamId?: string;
 }
 
 export const tabsArray = convertObjectToArray(tabs);
 
 const TabPicker: React.FC<TabPickerProps> = (props) => {
-  const { currentTab, changeTab, selectedOrganization, teams, selectTeam, selectedTeamId } = props;
+  const { currentTab, changeTab, selectedOrganization, teams, selectTeam } = props;
 
+  const { teamId } = useParams<{ teamId?: string }>();
+  
   const user = useSelector(getUserData)!;
 
   const canCreateTeam = isAdminInOrganization(getMyRoleInOrganization(selectedOrganization, user));
@@ -87,7 +89,7 @@ const TabPicker: React.FC<TabPickerProps> = (props) => {
                   <div
                     key={team.teamId}
                     className={classNames(styles.team, [styles.canSelected], {
-                      [styles.selected]: team.teamId === selectedTeamId,
+                      [styles.selected]: team.teamId === teamId,
                     })}
                     onClick={() => selectTeamHandler(team.teamId)}
                   >
