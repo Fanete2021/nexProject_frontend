@@ -1,5 +1,5 @@
 import { icons, SvgIcon, SvgIconProps } from './svg-icon';
-import { Loader, LoaderProps } from './loader';
+import { CircleLoader, CircleLoaderProps, EllipsesLoaderProps, EllipsesLoader } from './loader';
 import { Logo, LogoProps } from './logo';
 import { CustomCheckbox, CustomCheckboxProps } from './custom-checkbox';
 import { CustomInput, CustomInputProps } from './custom-input';
@@ -22,7 +22,7 @@ import { CheckList, CheckListProps } from './check-list';
 
 export type {
   SvgIconProps,
-  LoaderProps,
+  CircleLoaderProps,
   LogoProps,
   CustomCheckboxProps,
   CustomInputProps,
@@ -43,13 +43,14 @@ export type {
   TaskCardProps,
   CustomTextareaProps,
   TaskInfoCardProps,
-  CheckListProps
+  CheckListProps,
+  EllipsesLoaderProps
 };
 
 export {
   icons,
   SvgIcon,
-  Loader,
+  CircleLoader,
   Logo,
   CustomCheckbox,
   CustomInput,
@@ -70,5 +71,6 @@ export {
   CustomTextarea,
   TaskInfoCard,
   ValidationListDirections,
-  CheckList
+  CheckList,
+  EllipsesLoader
 };

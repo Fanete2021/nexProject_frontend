@@ -1,4 +1,4 @@
-import { CustomInput, icons, Loader, SvgIcon, ValidationList, ValidationListDirections } from '@/shared/ui';
+import { CustomInput, icons, CircleLoader, SvgIcon, ValidationList, ValidationListDirections } from '@/shared/ui';
 import styles from './CreateTeamForm.module.scss';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { FormControl } from '@mui/material';
@@ -125,7 +125,7 @@ const CreateTeamForm: React.FC<CreateTeamFormProps> = (props) => {
           disabled={isSubmitLoading}
         >
           {isSubmitLoading
-            ? <Loader className="submitLoader" />
+            ? <CircleLoader className="submitLoader" />
             : <>{t('Создать')}</>
           }
         </button>

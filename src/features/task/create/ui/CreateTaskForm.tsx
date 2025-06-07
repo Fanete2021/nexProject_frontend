@@ -6,7 +6,7 @@ import { useFormik } from 'formik';
 import { isTaskNameValid } from '@/shared/lib/utils/validation.ts';
 import { createTask, TaskInfo, TaskPriorities } from '@/entities/task';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
-import { CustomInput, icons, Loader, SvgIcon, ValidationList, ValidationListDirections } from '@/shared/ui';
+import { CustomInput, icons, CircleLoader, SvgIcon, ValidationList, ValidationListDirections } from '@/shared/ui';
 import { FormControl } from '@mui/material';
 import { isFormikErrorVisible } from '@/shared/lib/utils/isFormikErrorVisible.ts';
 import styles from './CreateTaskForm.module.scss';
@@ -124,7 +124,7 @@ const CreateTaskForm: React.FC<CreateTaskFormProps> = (props) => {
           disabled={isSubmitLoading}
         >
           {isSubmitLoading
-            ? <Loader className="submitLoader" />
+            ? <CircleLoader className="submitLoader" />
             : <>{t('Создать')}</>
           }
         </button>

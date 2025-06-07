@@ -3,7 +3,7 @@ import * as yup from 'yup';
 import { FormControl, InputAdornment } from '@mui/material';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { useTranslation } from 'react-i18next';
-import { CustomInput, icons, Loader, SvgIcon, ValidationList } from '@/shared/ui';
+import { CustomInput, icons, CircleLoader, SvgIcon, ValidationList } from '@/shared/ui';
 import { useCallback, useState } from 'react';
 import { isPasswordValid, isUsernameValid } from '@/shared/lib/utils/validation.ts';
 import { isFormikErrorVisible } from '@/shared/lib/utils/isFormikErrorVisible.ts';
@@ -241,7 +241,7 @@ const RegistrationForm = () => {
         disabled={isSubmitLoading}
       >
         {isSubmitLoading
-          ? <Loader className="submitLoader" />
+          ? <CircleLoader className="submitLoader" />
           : <>{t('Создать')}</>
         }
       </button>

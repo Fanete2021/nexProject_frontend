@@ -1,12 +1,12 @@
 import { FC, memo } from 'react';
-import './Loader.scss';
+import './CircleLoader.scss';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 
-export interface LoaderProps {
+export interface CircleLoaderProps {
   className?: string;
 }
 
-const Loader: FC<LoaderProps> = memo(({ className }) => {
+const CircleLoader: FC<CircleLoaderProps> = memo(({ className }) => {
   return (
     <span
       className={classNames('loader',[ className ])}
@@ -14,5 +14,5 @@ const Loader: FC<LoaderProps> = memo(({ className }) => {
   );
 });
 
-Loader.displayName = 'Loader';
-export default Loader;
+CircleLoader.displayName = 'CircleLoader';
+export default CircleLoader;

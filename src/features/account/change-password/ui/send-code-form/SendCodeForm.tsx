@@ -3,7 +3,7 @@ import * as yup from 'yup';
 import { FormControl, InputAdornment } from '@mui/material';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { useTranslation } from 'react-i18next';
-import { CustomInput, icons, Loader, SvgIcon } from '@/shared/ui';
+import { CustomInput, icons, CircleLoader, SvgIcon } from '@/shared/ui';
 import { useCallback, useState } from 'react';
 import { changePassword } from '../../model/service/changePassword.ts';
 import { isFormikErrorVisible } from '@/shared/lib/utils/isFormikErrorVisible.ts';
@@ -123,7 +123,7 @@ const SendCodeForm = () => {
         disabled={isSubmitLoading}
       >
         {isSubmitLoading
-          ? <Loader className="submitLoader" />
+          ? <CircleLoader className="submitLoader" />
           : <>{t('Сменить пароль')}</>
         }
       </button>

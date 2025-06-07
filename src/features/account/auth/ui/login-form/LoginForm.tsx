@@ -4,7 +4,7 @@ import { FormControl, InputAdornment } from '@mui/material';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import styles from './LoginForm.module.scss';
 import { useTranslation } from 'react-i18next';
-import { CustomCheckbox, CustomInput, icons, Loader, SvgIcon } from '@/shared/ui';
+import { CustomCheckbox, CustomInput, icons, CircleLoader, SvgIcon } from '@/shared/ui';
 import { useCallback, useEffect, useState } from 'react';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
 import { Link, useNavigate } from 'react-router-dom';
@@ -185,7 +185,7 @@ const LoginForm = () => {
         disabled={isAuthLoading}
       >
         {isAuthLoading
-          ? <Loader className="submitLoader" />
+          ? <CircleLoader className="submitLoader" />
           : <>{t('Войти')}</>
         }
       </button>

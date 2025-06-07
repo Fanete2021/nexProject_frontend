@@ -1,4 +1,4 @@
-import {CustomInput, icons, Loader, SvgIcon, ValidationList, ValidationListDirections} from '@/shared/ui';
+import {CustomInput, icons, CircleLoader, SvgIcon, ValidationList, ValidationListDirections} from '@/shared/ui';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { FormControl } from '@mui/material';
 import { isFormikErrorVisible } from '@/shared/lib/utils/isFormikErrorVisible.ts';
@@ -117,7 +117,7 @@ const CreateTaskBoardForm: React.FC<CreateTaskBoardFormProps> = (props) => {
           disabled={isSubmitLoading}
         >
           {isSubmitLoading
-            ? <Loader className="submitLoader" />
+            ? <CircleLoader className="submitLoader" />
             : <>{t('Создать')}</>
           }
         </button>

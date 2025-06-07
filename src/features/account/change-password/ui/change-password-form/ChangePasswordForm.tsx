@@ -3,7 +3,7 @@ import * as yup from 'yup';
 import { FormControl } from '@mui/material';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { useTranslation } from 'react-i18next';
-import { CustomInput, icons, Loader, SvgIcon, ValidationList } from '@/shared/ui';
+import { CustomInput, icons, CircleLoader, SvgIcon, ValidationList } from '@/shared/ui';
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
@@ -159,7 +159,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = (props) => {
         disabled={isSubmitLoading}
       >
         {isSubmitLoading
-          ? <Loader className="submitLoader" />
+          ? <CircleLoader className="submitLoader" />
           : <>{t('Изменить')}</>
         }
       </button>

@@ -2,7 +2,7 @@ import {
   CustomInput,
   CustomTextarea,
   icons,
-  Loader,
+  CircleLoader,
   SvgIcon,
   ValidationList,
   ValidationListDirections
@@ -162,7 +162,7 @@ const CreateOrganizationForm: React.FC<CreateOrganizationFormProps> = (props) =>
           disabled={isSubmitLoading}
         >
           {isSubmitLoading
-            ? <Loader className="submitLoader" />
+            ? <CircleLoader className="submitLoader" />
             : <>{t('Создать')}</>
           }
         </button>
