@@ -131,19 +131,21 @@ const Members: React.FC<MembersProps> = (props) => {
         deleteText={'Исключить'}
         deleteIcon={icons.CROSS}
       />
-      
-      <ContactPickerModal
-        onClose={onCloseContactPickerHandler}
-        isOpen={isOpenContactPicker}
-        setSelectedContacts={setSelectedContacts}
-        selectedContacts={selectedContacts}
-        headerText={
-          `Добавить участников ${selectedContacts.length ? `(+${selectedContacts.length})` : ''}`
-        }
-        filterIds={organization.members.map(m => m.userId)}
-        footerText='Добавить'
-        pickHandler={addMembers}
-      />
+
+      {isAdminInOrganization(myRole) &&
+        <ContactPickerModal
+          onClose={onCloseContactPickerHandler}
+          isOpen={isOpenContactPicker}
+          setSelectedContacts={setSelectedContacts}
+          selectedContacts={selectedContacts}
+          headerText={
+            `Добавить участников ${selectedContacts.length ? `(+${selectedContacts.length})` : ''}`
+          }
+          filterIds={organization.members.map(m => m.userId)}
+          footerText='Добавить'
+          pickHandler={addMembers}
+        />
+      }
     </div>
   );
 };
