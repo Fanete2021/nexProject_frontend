@@ -6,6 +6,16 @@
   justify-content: center;
   height: 100%;
   width: 100%;
+  position: relative;
+
+  .iconPeople {
+    position: absolute;
+    opacity: 0.2;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    transform: translate(-50%, -50%);
+  }
 }
 
 .SelectedChat {
