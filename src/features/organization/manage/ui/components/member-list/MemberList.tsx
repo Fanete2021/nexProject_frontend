@@ -44,7 +44,7 @@ const MemberList: React.FC<MemberListProps> = (props) => {
             <div className={styles.members}>
               {canAddMember &&
                 <button
-                  className={styles.member}
+                  className={classNames(styles.member, [styles.addMember])}
                   onClick={addMember}
                 >
                   <SvgIcon

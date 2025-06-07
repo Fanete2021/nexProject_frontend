@@ -69,6 +69,12 @@
         width: 50px;
       }
     }
+
+    .addMember {
+      &:hover {
+        background: var(--organization-member-card-hover-bg-color);
+      }
+    }
   }
 }
 
