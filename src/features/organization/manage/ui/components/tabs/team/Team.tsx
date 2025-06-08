@@ -7,7 +7,7 @@ import {
   getMyRoleInTeam,
   isAdminInTeam,
   TeamRoles,
-  TeamInfo, TeamMember
+  TeamInfo, TeamMember, editRoleInTeam, isOwnerInTeam
 } from '@/entities/team';
 import { Contact } from '@/entities/contact';
 import { getUserData } from '@/entities/user';
@@ -17,6 +17,7 @@ import { OrganizationInfo } from '@/entities/organization';
 import { ContactPickerModal } from '@/widgets/pickers/contact-picker';
 import MemberList from '../../member-list/MemberList.tsx';
 import { AppRoutes } from '@/shared/config/routeConfig/routeConfig.tsx';
+import { Roles } from '@/shared/ui/action-menu';
 
 const rolePriority = [
   TeamRoles.OWNER,
@@ -101,9 +102,9 @@ const Team: React.FC<TeamsProps> = (props) => {
           role: TeamRoles.VIEWER
         })),
         teamId: team.teamId
-      }));
+      })).unwrap();
 
-      changeTeam(response.payload);
+      changeTeam(response);
     } catch (error) {
       console.error(error);
     } finally {
@@ -118,6 +119,24 @@ const Team: React.FC<TeamsProps> = (props) => {
 
   const generateLinkForMember = (memberId: string) => {
     return `/${AppRoutes.TEAM_MEMBER_STATS}/${team.teamId}/${memberId}`;
+  };
+
+  const changeRole = async (role: string) => {
+    closeActionMenuHandler();
+
+    try {
+      const response = await dispatch(editRoleInTeam({
+        members: [{
+          userId: selectedMemberId!,
+          role: role as TeamRoles,
+        }],
+        teamId: team.teamId
+      })).unwrap();
+
+      changeTeam(response);
+    } catch (e) {
+      console.error(e);
+    }
   };
   
   return (
@@ -181,6 +200,8 @@ const Team: React.FC<TeamsProps> = (props) => {
         deleteHandler={deleteMember}
         deleteText={'Исключить'}
         deleteIcon={icons.CROSS}
+        changeRoleHandler={changeRole}
+        roles={isOwnerInTeam(myRole) ? Roles : Roles.filter(r => r.name !== TeamRoles.ADMIN)}
       />
 
       <ContactPickerModal

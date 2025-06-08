@@ -13,6 +13,7 @@ import { deleteMemberFromOrganization } from './model/service/deleteMemberFromOr
 import { addMembersToOrganization } from './model/service/addMembersToOrganization.ts';
 import { OrganizationInfo } from './model/types/organizationInfo.ts';
 import { OrganizationMember } from './model/types/organizationMember.ts';
+import { editRoleInOrganization } from './model/service/editRoleInOrganization.ts';
 
 export {
   createOrganization,
@@ -20,6 +21,7 @@ export {
   fetchOrganizationInfo,
   deleteMemberFromOrganization,
   addMembersToOrganization,
+  editRoleInOrganization,
 
   organizationActions,
   organizationReducer,

@@ -1,12 +1,12 @@
 import {
   addMembersToOrganization,
-  deleteMemberFromOrganization,
+  deleteMemberFromOrganization, editRoleInOrganization,
   getMyRoleInOrganization,
-  isAdminInOrganization, OrganizationInfo,
+  isAdminInOrganization, isOwnerInOrganization, OrganizationInfo,
 } from '@/entities/organization';
 import { useSelector } from 'react-redux';
 import styles from './Members.module.scss';
-import { ActionMenu, ActionMenuPosition, icons, Search, SvgIcon } from '@/shared/ui';
+import { ActionMenu, ActionMenuPosition, icons } from '@/shared/ui';
 import { getUserData } from '@/entities/user';
 import { OrganizationRoles } from '@/entities/organization/model/types/organizationRoles.ts';
 import React, { useState } from 'react';
@@ -15,6 +15,7 @@ import { Contact } from '@/entities/contact';
 import { ContactPickerModal } from '@/widgets/pickers/contact-picker';
 import { OrganizationMember } from '@/entities/organization/model/types/organizationMember.ts';
 import MemberList from '../../member-list/MemberList';
+import { Roles } from '@/shared/ui/action-menu';
 
 const rolePriority = [
   OrganizationRoles.OWNER,
@@ -91,9 +92,9 @@ const Members: React.FC<MembersProps> = (props) => {
           role: OrganizationRoles.VIEWER
         })),
         organizationId: organization.organizationId
-      }));
+      })).unwrap();
 
-      changeOrganization(response.payload);
+      changeOrganization(response);
     } catch (e) {
       console.error(e);
     } finally {
@@ -106,6 +107,24 @@ const Members: React.FC<MembersProps> = (props) => {
     return member.userId !== user.userId
       && isAdminInOrganization(myRole)
       && !isAdminInOrganization(member.role);
+  };
+
+  const changeRole = async (role: string) => {
+    closeActionMenuHandler();
+
+    try {
+      const response = await dispatch(editRoleInOrganization({
+        members: [{
+          userId: selectedMemberId!,
+          role: role as OrganizationRoles,
+        }],
+        organizationId: organization.organizationId
+      })).unwrap();
+
+      changeOrganization(response);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
@@ -133,6 +152,8 @@ const Members: React.FC<MembersProps> = (props) => {
         deleteHandler={deleteMember}
         deleteText={'Исключить'}
         deleteIcon={icons.CROSS}
+        changeRoleHandler={changeRole}
+        roles={isOwnerInOrganization(myRole) ? Roles : Roles.filter(r => r.name !== OrganizationRoles.ADMIN)}
       />
 
       {isAdminInOrganization(myRole) &&

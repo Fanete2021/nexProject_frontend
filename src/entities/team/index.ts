@@ -13,6 +13,8 @@ import { fetchMyTeams } from './model/service/fetchMyTeams.ts';
 import { fetchTeamInfo } from './model/service/fetchTeamInfo.ts';
 import { getMyRole } from './libs/utils/getMyRole.ts';
 import { isAdmin } from './libs/utils/isAdmin.ts';
+import { editRoleInTeam } from './model/service/editRoleInTeam.ts';
+import { isOwner } from './libs/utils/isOwner.ts';
 
 export type {
   Team, 
@@ -34,9 +36,11 @@ export {
   deleteMemberFromTeam,
   fetchMyTeams,
   fetchTeamInfo,
+  editRoleInTeam,
 
   getMyRole as getMyRoleInTeam,
   isAdmin as isAdminInTeam,
+  isOwner as isOwnerInTeam,
 
   TeamRoles
 };
