@@ -62,6 +62,7 @@ const CreateOrganizationForm: React.FC<CreateOrganizationFormProps> = (props) =>
         await dispatch(createOrganization(values)).unwrap();
         formik.resetForm();
         onCreateHandler?.();
+        setError(null);
       } catch (error) {
         setError(error);
       } finally {

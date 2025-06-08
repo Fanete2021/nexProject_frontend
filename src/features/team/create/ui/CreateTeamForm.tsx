@@ -51,6 +51,7 @@ const CreateTeamForm: React.FC<CreateTeamFormProps> = (props) => {
 
         formik.resetForm();
         onCreateHandler?.();
+        setError(null);
       } catch (error) {
         setError(error);
       } finally {
