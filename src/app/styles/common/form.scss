@@ -28,19 +28,35 @@
     align-items: center;
   }
 
-  .submit {
+  .submit, .delete {
     margin-top: 10px;
     width: 100%;
-    background: var(--button-bg-color);
-    color: var(--button-text-color);
     font-weight: bold;
     font-size: 16px;
     line-height: 18px;
     border-radius: 25px;
     height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  .submit {
+    background: var(--button-bg-color);
+    color: var(--button-text-color);
 
     &:hover:not(:disabled) {
       background: var(--button-bg-hover-color);
+    }
+  }
+
+  .delete {
+    border: 1px solid var(--button-bg-color);
+    color: var(--text-color);
+
+    &:hover:not(:disabled) {
+      border: 2px solid var(--button-bg-hover-color);
     }
   }
 
@@ -66,9 +82,13 @@
     color: var(--success-text-color);
   }
 
-  .submitLoader {
+  .submitLoader, .deleteLoader {
     width: 30px;
     height: 30px;
     margin: 0 auto;
+  }
+
+  .deleteLoader {
+    border-right-color: var(--text-color);
   }
 }

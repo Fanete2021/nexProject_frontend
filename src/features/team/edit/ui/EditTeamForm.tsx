@@ -1,4 +1,12 @@
-import { editTeam, isTeamDescriptionValid, isTeamNameValid, isTeamTagValid, TeamInfo } from '@/entities/team';
+import {
+  deleteTeam,
+  editTeam,
+  getMyRoleInTeam, isOwnerInTeam,
+  isTeamDescriptionValid,
+  isTeamNameValid,
+  isTeamTagValid,
+  TeamInfo
+} from '@/entities/team';
 import {
   CircleLoader,
   CustomInput,
@@ -18,12 +26,15 @@ import { FormControl } from '@mui/material';
 import { isFormikErrorVisible } from '@/shared/lib/utils/isFormikErrorVisible.ts';
 import { ApiError } from '@/shared/types/apiError.ts';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { getUserData } from '@/entities/user';
 
 export interface EditTeamFormProps {
   team: TeamInfo;
   onEditHandler: (newTeam: TeamInfo) => void;
   validationListDirection?: ValidationListDirections;
   className?: string;
+  onDeleteHandler: (teamId: string) => void;
 }
 
 const enum FORM_FIELDS {
@@ -41,13 +52,17 @@ const validationSchema = yup.object({
 });
 
 const EditTeamForm: React.FC<EditTeamFormProps> = (props) => {
-  const { team, onEditHandler, validationListDirection, className } = props;
+  const { team, onEditHandler, validationListDirection, className, onDeleteHandler } = props;
 
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   
-  const [isSubmitLoading, setIsSubmitLoading] = useState<boolean>(false);
+  const [isActionLoading, setIsActionLoading] = useState<boolean>(false);
   const [error, setError] = useState<ApiError | null>(null);
+  
+  const user = useSelector(getUserData)!;
+
+  const myRole = getMyRoleInTeam(team, user);
 
   const formik = useFormik({
     initialValues: {
@@ -59,10 +74,8 @@ const EditTeamForm: React.FC<EditTeamFormProps> = (props) => {
     validateOnChange: true,
     validateOnBlur: true,
     onSubmit: async (values) => {
-      setIsSubmitLoading(true);
+      setIsActionLoading(true);
       try {
-        console.log(values[FORM_FIELDS.NEW_TEAM_TAGS])
-
         const response = await dispatch(editTeam({
           teamId: team.teamId,
           newTeamName: values[FORM_FIELDS.NEW_TEAM_NAME],
@@ -76,7 +89,7 @@ const EditTeamForm: React.FC<EditTeamFormProps> = (props) => {
       } catch (error) {
         setError(error);
       } finally {
-        setIsSubmitLoading(false);
+        setIsActionLoading(false);
       }
     },
   });
@@ -100,6 +113,18 @@ const EditTeamForm: React.FC<EditTeamFormProps> = (props) => {
       [FORM_FIELDS.NEW_TEAM_TAGS]: tags
     });
   }, [formik]);
+
+  const deleteTeamHandler = useCallback(async () => {
+    try {
+      setIsActionLoading(true);
+      await dispatch(deleteTeam({ teamId: team.teamId })).unwrap();
+      onDeleteHandler(team.teamId);
+    } catch (error) {
+      setError(error);
+    } finally {
+      setIsActionLoading(false);
+    }
+  }, [dispatch]);
 
   const teamNameValid = isTeamNameValid(formik.values[FORM_FIELDS.NEW_TEAM_NAME]);
   const teamDescriptionValid = isTeamDescriptionValid(formik.values[FORM_FIELDS.NEW_TEAM_DESCRIPTION]);
@@ -216,17 +241,46 @@ const EditTeamForm: React.FC<EditTeamFormProps> = (props) => {
           </Scrollbar>
         </div>
 
-        <button
-          className="submit"
-          type={'submit'}
-          onClick={onSubmit}
-          disabled={isSubmitLoading}
-        >
-          {isSubmitLoading
-            ? <CircleLoader className="submitLoader" />
-            : <>{t('Сохранить')}</>
+        <div className={styles.actions}>
+          <button
+            className={classNames('submit', [], {
+              [styles.submit]: isOwnerInTeam(myRole)
+            })}
+            type={'submit'}
+            onClick={onSubmit}
+            disabled={isActionLoading}
+          >
+            {isActionLoading
+              ? <CircleLoader className="submitLoader" />
+              : <>{t('Сохранить')}</>
+            }
+          </button>
+
+          {isOwnerInTeam(myRole) &&
+            <button
+              className={classNames('delete', [styles.delete])}
+              onClick={deleteTeamHandler}
+              type={'button'}
+              disabled={isActionLoading}
+            >
+              {isActionLoading
+                ? <CircleLoader className="deleteLoader" />
+                :
+                <>
+                  {t('Удалить') as string}
+
+                  <SvgIcon
+                    iconName={icons.DELETE}
+                    applyStroke
+                    applyFill={false}
+                    important
+                    applyHover={false}
+                  />
+                </>
+              }
+            </button>
           }
-        </button>
+        </div>
       </form>
     </div>
   );

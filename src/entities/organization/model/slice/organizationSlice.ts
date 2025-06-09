@@ -14,6 +14,11 @@ export const organizationSlice = createSlice({
   reducers: {
     setData: (state, action: PayloadAction<Organization[]>) => {
       state.data = action.payload;
+    },
+    deleteOrganization: (state, action: PayloadAction<string>) => {
+      if (state.data) {
+        state.data = state.data.filter(org => org.organizationId !== action.payload);
+      }
     }
   },
   extraReducers: (builder) => {

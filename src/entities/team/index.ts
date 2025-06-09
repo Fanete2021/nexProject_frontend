@@ -17,6 +17,7 @@ import { editRoleInTeam } from './model/service/editRoleInTeam.ts';
 import { isOwner } from './libs/utils/isOwner.ts';
 import { editTeam } from './model/service/editTeam.ts';
 import { isTeamNameValid, isTeamTagValid, isTeamDescriptionValid } from './libs/utils/validation.ts';
+import { deleteTeam } from './model/service/deleteTeam.ts';
 
 export type {
   Team, 
@@ -40,6 +41,7 @@ export {
   fetchTeamInfo,
   editRoleInTeam,
   editTeam,
+  deleteTeam,
 
   getMyRole as getMyRoleInTeam,
   isAdmin as isAdminInTeam,

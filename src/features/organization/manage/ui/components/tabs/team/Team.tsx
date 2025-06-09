@@ -33,10 +33,11 @@ export interface TeamsProps {
   organization: OrganizationInfo;
   team: TeamInfo;
   changeTeam: (team: TeamInfo) => void;
+  deleteTeam: (teamId: string) => void;
 }
 
 const Team: React.FC<TeamsProps> = (props) => {
-  const { team, organization, changeTeam } = props;
+  const { team, organization, changeTeam, deleteTeam } = props;
 
   const dispatch = useAppDispatch();
   const windowWidth = useWindowWidth();
@@ -156,6 +157,11 @@ const Team: React.FC<TeamsProps> = (props) => {
     closeEditorTeamHandler();
     changeTeam(newTeam);
   };
+
+  const deleteTeamHandler = (teamId: string)=> {
+    closeEditorTeamHandler();
+    deleteTeam(teamId);
+  };
   
   return (
     <div className={styles.Teams}>
@@ -192,6 +198,7 @@ const Team: React.FC<TeamsProps> = (props) => {
                     isOpen={isOpenEditorTeam}
                     onClose={closeEditorTeamHandler}
                     onEditHandler={editTeamHandler}
+                    onDeleteHandler={deleteTeamHandler}
                   />
                 </>
               }

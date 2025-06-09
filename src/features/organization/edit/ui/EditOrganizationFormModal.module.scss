@@ -45,4 +45,15 @@
   .textareaWrapper {
     max-height: 200px;
   }
+
+  .actions {
+    display: flex;
+    gap: 10px;
+
+    .submit, .delete {
+      flex: 1;
+      flex-shrink: 0;
+      height: 40px;
+    }
+  }
 }

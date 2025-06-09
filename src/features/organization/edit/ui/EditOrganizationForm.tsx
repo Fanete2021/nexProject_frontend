@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import * as yup from 'yup';
 import {
   CircleLoader,
@@ -14,18 +14,22 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { ApiError } from '@/shared/types/apiError.ts';
 import { useFormik } from 'formik';
 import {
-  editOrganization,
+  deleteOrganization,
+  editOrganization, getMyRoleInOrganization,
   isOrganizationDescriptionValid,
-  isOrganizationNameValid, OrganizationInfo
+  isOrganizationNameValid, isOwnerInOrganization, OrganizationInfo
 } from '@/entities/organization';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import styles from './EditOrganizationFormModal.module.scss';
 import { FormControl } from '@mui/material';
 import { isFormikErrorVisible } from '@/shared/lib/utils/isFormikErrorVisible.ts';
+import { useSelector } from 'react-redux';
+import { getUserData } from '@/entities/user';
 
 export interface EditOrganizationFormProps {
   className?: string;
   onEditHandler?: (newOrganization: OrganizationInfo) => void;
+  onDeleteHandler?: (organizationId: string) => void;
   validationListDirection?: ValidationListDirections;
   organization: OrganizationInfo;
   hasMobileVersion: boolean;
@@ -50,14 +54,19 @@ const EditOrganizationForm: React.FC<EditOrganizationFormProps> = (props) => {
     onEditHandler,
     validationListDirection = ValidationListDirections.ALL,
     organization,
-    hasMobileVersion = true
+    hasMobileVersion = true,
+    onDeleteHandler
   } = props;
 
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
-  const [isSubmitLoading, setIsSubmitLoading] = useState<boolean>(false);
+  const [isActionLoading, setIsActionLoading] = useState<boolean>(false);
   const [error, setError] = useState<ApiError | null>(null);
+
+  const user = useSelector(getUserData)!;
+
+  const myRole = getMyRoleInOrganization(organization, user);
 
   const formik = useFormik({
     initialValues: {
@@ -68,7 +77,7 @@ const EditOrganizationForm: React.FC<EditOrganizationFormProps> = (props) => {
     validateOnChange: true,
     validateOnBlur: true,
     onSubmit: async (values) => {
-      setIsSubmitLoading(true);
+      setIsActionLoading(true);
       try {
         const response = await dispatch(editOrganization({
           organizationId: organization.organizationId,
@@ -82,7 +91,7 @@ const EditOrganizationForm: React.FC<EditOrganizationFormProps> = (props) => {
       } catch (error) {
         setError(error);
       } finally {
-        setIsSubmitLoading(false);
+        setIsActionLoading(false);
       }
     },
   });
@@ -98,6 +107,19 @@ const EditOrganizationForm: React.FC<EditOrganizationFormProps> = (props) => {
       [FORM_FIELDS.ORG_NAME]: organization.organizationName
     });
   }, [organization]);
+
+
+  const deleteOrganizationHandler = useCallback(async () => {
+    try {
+      setIsActionLoading(true);
+      await dispatch(deleteOrganization({ organizationId: organization.organizationId })).unwrap();
+      onDeleteHandler?.(organization.organizationId);
+    } catch (error) {
+      setError(error);
+    } finally {
+      setIsActionLoading(false);
+    }
+  }, [dispatch]);
 
   const organizationNameValidation = isOrganizationNameValid(formik.values[FORM_FIELDS.ORG_NAME]);
   const organizationDescriptionValidation = isOrganizationDescriptionValid(formik.values[FORM_FIELDS.ORG_DESCRIPTION]);
@@ -183,17 +205,46 @@ const EditOrganizationForm: React.FC<EditOrganizationFormProps> = (props) => {
           </ValidationList>
         </FormControl>
 
-        <button
-          className="submit"
-          type={'submit'}
-          onClick={onSubmit}
-          disabled={isSubmitLoading}
-        >
-          {isSubmitLoading
-            ? <CircleLoader className="submitLoader" />
-            : <>{t('Сохранить')}</>
+        <div className={styles.actions}>
+          <button
+            className={classNames('submit', [], {
+              [styles.submit]: isOwnerInOrganization(myRole)
+            })}
+            type={'submit'}
+            onClick={onSubmit}
+            disabled={isActionLoading}
+          >
+            {isActionLoading
+              ? <CircleLoader className="submitLoader" />
+              : <>{t('Сохранить')}</>
+            }
+          </button>
+
+          {isOwnerInOrganization(myRole) &&
+            <button
+              className={classNames('delete', [styles.delete])}
+              onClick={deleteOrganizationHandler}
+              type={'button'}
+              disabled={isActionLoading}
+            >
+              {isActionLoading
+                ? <CircleLoader className="deleteLoader" />
+                :
+                <>
+                  {t('Удалить') as string}
+
+                  <SvgIcon
+                    iconName={icons.DELETE}
+                    applyStroke
+                    applyFill={false}
+                    important
+                    applyHover={false}
+                  />
+                </>
+              }
+            </button>
           }
-        </button>
+        </div>
       </form>
     </div>
   );

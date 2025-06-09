@@ -21,6 +21,11 @@ export const teamSlice = createSlice({
       state.data = state.data.map(team =>
         team.teamId === action.payload.teamId ? action.payload : team
       );
+    },
+    deleteTeam: (state, action: PayloadAction<string>) => {
+      if (state.data) {
+        state.data = state.data.filter(team => team.teamId !== action.payload);
+      }
     }
   },
   extraReducers: (builder) => {

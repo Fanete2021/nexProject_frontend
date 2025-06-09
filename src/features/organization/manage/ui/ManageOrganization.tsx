@@ -1,5 +1,10 @@
 import styles from './ManageOrganization.module.scss';
-import { fetchOrganizationInfo, getOrganizationData, OrganizationInfo } from '@/entities/organization';
+import {
+  fetchOrganizationInfo,
+  getOrganizationData,
+  organizationActions,
+  OrganizationInfo
+} from '@/entities/organization';
 import TabPicker from './components/tab-picker/TabPicker.tsx';
 import { useSelector } from 'react-redux';
 import { Tabs } from './components/tab-picker/model/tabs.ts';
@@ -7,7 +12,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { SidebarOpener } from '@/widgets/sidebar-opener';
 import { OrganizationPicker } from '@/widgets/pickers/organization-picker';
 import { fetchTeamInfo, getTeamData, teamActions, TeamInfo } from '@/entities/team';
-import {Arrow, ArrowDirections, icons, SvgIcon} from '@/shared/ui';
+import { Arrow, ArrowDirections, icons, SvgIcon } from '@/shared/ui';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import Members from './components/tabs/members/Members.tsx';
 import Team from './components/tabs/team/Team.tsx';
@@ -15,7 +20,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
 import Settings from './components/tabs/settings/Settings.tsx';
 import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
-import {classNames} from "@/shared/lib/utils/classNames.ts";
+import { classNames } from '@/shared/lib/utils/classNames.ts';
 
 const ManageOrganization = () => {
   const { orgId, tab } = useParams<{ orgId?: string; tab?: string; }>();
@@ -131,6 +136,22 @@ const ManageOrganization = () => {
     dispatch(teamActions.updateTeam(team));
   };
 
+  const deleteOrganization = (organizationId: string) => {
+    if (organizationId === selectedOrganization?.organizationId) {
+      setSelectedOrganization(null);
+    }
+
+    dispatch(organizationActions.deleteOrganization(organizationId));
+  };
+
+  const deleteTeam = (teamId: string) => {
+    if (teamId === selectedTeam?.teamId) {
+      setSelectedTeam(null);
+    }
+
+    dispatch(teamActions.deleteTeam(teamId));
+  };
+
   return (
     <div className={styles.ManageOrganization}>
       <div className={styles.header}>
@@ -230,6 +251,7 @@ const ManageOrganization = () => {
                   organization={selectedOrganization}
                   team={selectedTeam}
                   changeTeam={updateTeamHandler}
+                  deleteTeam={deleteTeam}
                 />
               }
 
@@ -237,6 +259,7 @@ const ManageOrganization = () => {
                 <Settings
                   organization={selectedOrganization}
                   changeOrganization={setSelectedOrganization}
+                  deleteOrganization={deleteOrganization}
                 />
               }
             </div>
