@@ -8,6 +8,13 @@
   align-items: center;
   font-size: 18px;
   line-height: 24px;
+
+  .editTeam {
+    border-radius: 15px;
+    padding: 5px;
+    font-size: 14px;
+    line-height: 16px;
+  }
 }
 
 .infoWrapper {
@@ -19,6 +26,7 @@
   .iconInfo {
     width: 30px;
     height: 30px;
+    flex-shrink: 0;
   }
 
   .info {
@@ -44,6 +52,8 @@
       max-width: 800px;
       font-size: 14px;
       line-height: 18px;
+      word-break: break-word;
+      white-space: normal;
     }
   }
 }

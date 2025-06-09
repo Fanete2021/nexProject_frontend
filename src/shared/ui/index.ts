@@ -19,6 +19,7 @@ import { TaskCard, TaskCardProps } from './task-card';
 import { CustomTextarea, CustomTextareaProps } from './custom-textarea';
 import { TaskInfoCard, TaskInfoCardProps } from './task-info-card';
 import { CheckList, CheckListProps } from './check-list';
+import { ListInput, ListInputProps } from './list-input';
 
 export type {
   SvgIconProps,
@@ -44,7 +45,8 @@ export type {
   CustomTextareaProps,
   TaskInfoCardProps,
   CheckListProps,
-  EllipsesLoaderProps
+  EllipsesLoaderProps,
+  ListInputProps
 };
 
 export {
@@ -72,5 +74,6 @@ export {
   TaskInfoCard,
   ValidationListDirections,
   CheckList,
-  EllipsesLoader
+  EllipsesLoader,
+  ListInput
 };

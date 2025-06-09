@@ -5,7 +5,6 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { useTranslation } from 'react-i18next';
 import { CustomInput, icons, CircleLoader, SvgIcon, ValidationList } from '@/shared/ui';
 import { useCallback, useState } from 'react';
-import { isPasswordValid, isUsernameValid } from '@/shared/lib/utils/validation.ts';
 import { isFormikErrorVisible } from '@/shared/lib/utils/isFormikErrorVisible.ts';
 import { fetchUserData } from '@/entities/user';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
@@ -13,16 +12,24 @@ import { useNavigate } from 'react-router-dom';
 import { getMessageFromApiError } from '@/shared/lib/utils/getMessageFromApiError.ts';
 import { ApiError } from '@/shared/types/apiError.ts';
 import { registration } from '../../model/service/registration.ts';
+import { isPasswordValid, isUsernameValid } from '@/features/account/auth';
+
+const enum FORM_FIELDS {
+  EMAIL = 'email',
+  USERNAME = 'username',
+  PASSWORD = 'password',
+  CONFIRM_PASSWORD = 'confirmPassword',
+}
 
 const validationSchema = yup.object({
-  email: yup.string().email('Почта невалидна').required('Почта обязательна'),
-  username: yup.string()
+  [FORM_FIELDS.EMAIL]: yup.string().email('Почта невалидна').required('Почта обязательна'),
+  [FORM_FIELDS.USERNAME]: yup.string()
     .required('Имя пользователя обязательно')
     .matches(/^[a-zA-Z][a-zA-Z0-9-_]{2,14}$/,'Не соответствует шаблону'),
-  password: yup.string()
+  [FORM_FIELDS.PASSWORD]: yup.string()
     .required('Пароль обязателен')
     .matches(/^[a-zA-Z0-9!@#$%^&*-]{6,15}$/, 'Не соответствует шаблону'),
-  confirmPassword: yup.string()
+  [FORM_FIELDS.CONFIRM_PASSWORD]: yup.string()
     .required('Подтверждение пароля обязательно')
     .oneOf([yup.ref('password')], 'Пароли не совпадают'),
 });
@@ -39,10 +46,10 @@ const RegistrationForm = () => {
 
   const formik = useFormik({
     initialValues: {
-      email: '',
-      username: '',
-      password: '',
-      confirmPassword: ''
+      [FORM_FIELDS.EMAIL]: '',
+      [FORM_FIELDS.USERNAME]: '',
+      [FORM_FIELDS.PASSWORD]: '',
+      [FORM_FIELDS.CONFIRM_PASSWORD]: ''
     },
     validationSchema,
     validateOnChange: true,
@@ -55,16 +62,16 @@ const RegistrationForm = () => {
 
         navigate(RoutePath.emailConfirm);
       } catch (error: ApiError) {
-        setEmailError(getMessageFromApiError(error, 'email') || '');
-        setUsernameError(getMessageFromApiError(error, 'username') || '');
+        setEmailError(getMessageFromApiError(error, FORM_FIELDS.EMAIL) || '');
+        setUsernameError(getMessageFromApiError(error, FORM_FIELDS.USERNAME) || '');
       } finally {
         setIsSubmitLoading(false);
       }
     },
   });
 
-  const usernameValidation = isUsernameValid(formik.values.username);
-  const passwordValidation = isPasswordValid(formik.values.password);
+  const usernameValidation = isUsernameValid(formik.values[FORM_FIELDS.USERNAME]);
+  const passwordValidation = isPasswordValid(formik.values[FORM_FIELDS.PASSWORD]);
 
   const onSubmit = useCallback((e) => {
     e.preventDefault();
@@ -97,8 +104,8 @@ const RegistrationForm = () => {
       >
         <div className="label">
           {t('Почта') as string}<br/>
-          {(isFormikErrorVisible(formik, 'email') || emailError) &&
-            <div className="fieldError">{t(formik.errors.email || emailError) as string}</div>
+          {(isFormikErrorVisible(formik, FORM_FIELDS.EMAIL) || emailError) &&
+            <div className="fieldError">{t(formik.errors[FORM_FIELDS.EMAIL] || emailError) as string}</div>
           }
         </div>
 
@@ -113,14 +120,14 @@ const RegistrationForm = () => {
               />
             </InputAdornment>
           }
-          id="email"
+          id={FORM_FIELDS.EMAIL}
           placeholder={t('Почта')}
           fullWidth
           type="email"
-          name="email"
-          value={formik.values.email}
+          name={FORM_FIELDS.EMAIL}
+          value={formik.values[FORM_FIELDS.EMAIL]}
           onChange={handleChangeEmail}
-          isError={isFormikErrorVisible(formik, 'email') || Boolean(emailError)}
+          isError={isFormikErrorVisible(formik, FORM_FIELDS.EMAIL) || Boolean(emailError)}
           onBlur={formik.handleBlur}
         />
       </FormControl>
@@ -131,14 +138,14 @@ const RegistrationForm = () => {
       >
         <div className="label">
           {t('Имя пользователя') as string} <br/>
-          {(isFormikErrorVisible(formik, 'username') || usernameError) &&
-            <div className="fieldError">{t(formik.errors.username || usernameError) as string}</div>
+          {(isFormikErrorVisible(formik, FORM_FIELDS.USERNAME) || usernameError) &&
+            <div className="fieldError">{t(formik.errors[FORM_FIELDS.USERNAME] || usernameError) as string}</div>
           }
         </div>
 
         <ValidationList
           items={usernameValidation}
-          hasError={isFormikErrorVisible(formik, 'username')}
+          hasError={isFormikErrorVisible(formik, FORM_FIELDS.USERNAME)}
         >
           <CustomInput
             endAdornment={
@@ -150,13 +157,13 @@ const RegistrationForm = () => {
                 />
               </InputAdornment>
             }
-            id="username"
+            id={FORM_FIELDS.USERNAME}
             placeholder={t('Имя пользователя')}
             fullWidth
-            name="username"
+            name={FORM_FIELDS.USERNAME}
             value={formik.values.username}
             onChange={handleChangeUsername}
-            isError={isFormikErrorVisible(formik, 'username') || Boolean(usernameError)}
+            isError={isFormikErrorVisible(formik, FORM_FIELDS.USERNAME) || Boolean(usernameError)}
             autoComplete={'off'}
             onBlur={formik.handleBlur}
             type="text"
@@ -170,14 +177,14 @@ const RegistrationForm = () => {
       >
         <div className="label">
           {t('Пароль') as string}<br/>
-          {isFormikErrorVisible(formik,'password') &&
-            <div className="fieldError">{t(formik.errors.password) as string}</div>
+          {isFormikErrorVisible(formik, FORM_FIELDS.PASSWORD) &&
+            <div className="fieldError">{t(formik.errors[FORM_FIELDS.PASSWORD]) as string}</div>
           }
         </div>
 
         <ValidationList
           items={passwordValidation}
-          hasError={isFormikErrorVisible(formik, 'password')}
+          hasError={isFormikErrorVisible(formik, FORM_FIELDS.PASSWORD)}
         >
           <CustomInput
             endAdornment={
@@ -189,14 +196,14 @@ const RegistrationForm = () => {
                 />
               </button>
             }
-            id="password"
+            id={FORM_FIELDS.PASSWORD}
             placeholder={t('Пароль')}
             fullWidth
-            name="password"
-            value={formik.values.password}
+            name={FORM_FIELDS.PASSWORD}
+            value={formik.values[FORM_FIELDS.PASSWORD]}
             onChange={formik.handleChange}
             type={showPassword ? 'text' : 'password'}
-            isError={isFormikErrorVisible(formik, 'password')}
+            isError={isFormikErrorVisible(formik, FORM_FIELDS.PASSWORD)}
             onBlur={formik.handleBlur}
           />
         </ValidationList>
@@ -208,8 +215,8 @@ const RegistrationForm = () => {
       >
         <div className="label">
           {t('Подтверждение пароля') as string}<br/>
-          {isFormikErrorVisible(formik, 'confirmPassword') &&
-            <div className="fieldError">{t(formik.errors.confirmPassword) as string}</div>
+          {isFormikErrorVisible(formik, FORM_FIELDS.CONFIRM_PASSWORD) &&
+            <div className="fieldError">{t(formik.errors[FORM_FIELDS.CONFIRM_PASSWORD]) as string}</div>
           }
         </div>
         <CustomInput
@@ -222,14 +229,14 @@ const RegistrationForm = () => {
               />
             </button>
           }
-          id="confirmPassword"
+          id={FORM_FIELDS.CONFIRM_PASSWORD}
           placeholder={t('Повторите пароль')}
           fullWidth
-          name="confirmPassword"
-          value={formik.values.confirmPassword}
+          name={FORM_FIELDS.CONFIRM_PASSWORD}
+          value={formik.values[FORM_FIELDS.CONFIRM_PASSWORD]}
           onChange={formik.handleChange}
           type={showConfirmPassword ? 'text' : 'password'}
-          isError={isFormikErrorVisible(formik, 'confirmPassword')}
+          isError={isFormikErrorVisible(formik, FORM_FIELDS.CONFIRM_PASSWORD)}
           onBlur={formik.handleBlur}
         />
       </FormControl>

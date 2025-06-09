@@ -6,6 +6,7 @@ import { NewTask } from './model/types/newTask.ts';
 import { EditTask } from './model/types/editTask.ts';
 import { TaskPriorities } from './model/types/taskPriorities.ts';
 import { fetchTaskInfo } from './model/service/fetchTaskInfo.ts';
+import { isTaskNameValid } from './libs/utils/validation.ts';
 
 export type {
   Task,
@@ -19,5 +20,7 @@ export {
   editTask,
   fetchTaskInfo,
   
-  TaskPriorities
+  TaskPriorities,
+
+  isTaskNameValid
 };

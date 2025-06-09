@@ -30,7 +30,7 @@ const LoginForm = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState<ApiError>(null);
+  const [error, setError] = useState<ApiError | null>(null);
   const isAuthLoading = useSelector(getAuthIsLoading);
   const navigate = useNavigate();
   const user = useSelector(getUserData);

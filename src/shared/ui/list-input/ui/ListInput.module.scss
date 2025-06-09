@@ -1,0 +1,36 @@
+.ListInput {
+  width: 100%;
+}
+
+.list {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin-top: 8px;
+}
+
+.item {
+  transition: text-decoration 0.2s;
+  text-align: left;
+  white-space: normal;
+  word-break: break-word;
+  width: fit-content;
+
+  .deleteIcon {
+    height: 12px;
+    width: 12px;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-left: 3px;
+  }
+}
+
+.addTag {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .addIcon {
+    width: 20px;
+    height: 20px;
+  }
+}

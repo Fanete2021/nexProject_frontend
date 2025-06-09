@@ -8,8 +8,7 @@ import { useCallback, useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
-import { isTeamNameValid } from '@/shared/lib/utils/validation.ts';
-import { createTeam } from '@/entities/team';
+import { createTeam, isTeamNameValid } from '@/entities/team';
 import { ApiError } from '@/shared/types/apiError.ts';
 
 export interface CreateTeamFormProps {

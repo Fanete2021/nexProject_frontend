@@ -1,5 +1,5 @@
 import styles from './Team.module.scss';
-import { ActionMenu, ActionMenuPosition, Avatar, icons, SvgIcon } from '@/shared/ui';
+import { ActionMenu, ActionMenuPosition, Avatar, Button, icons, SvgIcon } from '@/shared/ui';
 import { useSelector } from 'react-redux';
 import {
   addMembersToTeam,
@@ -11,13 +11,14 @@ import {
 } from '@/entities/team';
 import { Contact } from '@/entities/contact';
 import { getUserData } from '@/entities/user';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { OrganizationInfo } from '@/entities/organization';
 import { ContactPickerModal } from '@/widgets/pickers/contact-picker';
 import MemberList from '../../member-list/MemberList.tsx';
 import { AppRoutes } from '@/shared/config/routeConfig/routeConfig.tsx';
 import { Roles } from '@/shared/ui/action-menu';
+import { EditTeamFormModal } from '@/features/team/edit';
 
 const rolePriority = [
   TeamRoles.OWNER,
@@ -43,8 +44,14 @@ const Team: React.FC<TeamsProps> = (props) => {
   const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null);
   const [selectedContacts, setSelectedContacts] = useState<Contact[]>([]);
   const [isOpenContactPicker, setIsOpenContactPicker] = useState<boolean>(false);
+  const [isOpenEditorTeam, setIsOpenEditorTeam] = useState<boolean>(false);
 
   const myRole = getMyRoleInTeam(team, user);
+
+  const closeEditorTeamHandler = useCallback(() => setIsOpenEditorTeam(false), []);
+  const openEditorTeamHandler = useCallback(() => {
+    setIsOpenEditorTeam(true);
+  }, []);
 
   const contactsInOrganization: Contact[] = organization.members.map((member) => ({
     name: member.name,
@@ -141,6 +148,11 @@ const Team: React.FC<TeamsProps> = (props) => {
       console.error(e);
     }
   };
+
+  const editTeamHandler = (newTeam: TeamInfo) => {
+    closeEditorTeamHandler();
+    changeTeam(newTeam);
+  };
   
   return (
     <div className={styles.Teams}>
@@ -162,7 +174,25 @@ const Team: React.FC<TeamsProps> = (props) => {
                 text={team.teamName}
               />
 
-              {team.teamName}
+              <span>{team.teamName}</span>
+
+              {isAdminInTeam(myRole) &&
+                <>
+                  <Button
+                    className={styles.editTeam}
+                    onClick={openEditorTeamHandler}
+                  >
+                    редактировать
+                  </Button>
+                  
+                  <EditTeamFormModal 
+                    team={team}
+                    isOpen={isOpenEditorTeam}
+                    onClose={closeEditorTeamHandler}
+                    onEditHandler={editTeamHandler}
+                  />
+                </>
+              }
             </div>
 
             <div className={styles.infoWrapper}>
