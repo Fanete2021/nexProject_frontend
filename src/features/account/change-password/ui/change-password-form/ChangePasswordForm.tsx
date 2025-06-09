@@ -7,10 +7,10 @@ import { CustomInput, icons, CircleLoader, SvgIcon, ValidationList } from '@/sha
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
-import { isPasswordValid } from '@/shared/lib/utils/validation.ts';
 import { isFormikErrorVisible } from '@/shared/lib/utils/isFormikErrorVisible.ts';
 import { ApiError } from '@/shared/types/apiError.ts';
 import { newPassword } from '../../model/service/newPassword.ts';
+import { isPasswordValid } from '@/features/account/auth';
 
 const validationSchema = yup.object({
   newPassword: yup.string()
