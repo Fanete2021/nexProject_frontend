@@ -1,13 +1,14 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ThunkConfig } from '@/app/providers/store-provider';
 import { Team } from '../types/team.ts';
+import { ApiError } from '@/shared/types/apiError.ts';
 
 interface CreateTeamProps {
   organizationId: string;
   teamName: string;
 }
 
-export const createTeam = createAsyncThunk<Team, CreateTeamProps, ThunkConfig<string>> (
+export const createTeam = createAsyncThunk<Team, CreateTeamProps, ThunkConfig<ApiError>> (
   'team/createTeam',
   async (createTeamData, thunkAPI) => {
     const {
@@ -24,7 +25,7 @@ export const createTeam = createAsyncThunk<Team, CreateTeamProps, ThunkConfig<st
 
       return response.data;
     } catch (e) {
-      return rejectWithValue(e.response.data.message);
+      return rejectWithValue(e.response.data);
     }
   }
 );

@@ -1,5 +1,5 @@
 import styles from './Team.module.scss';
-import { ActionMenu, ActionMenuPosition, Avatar, icons, SvgIcon } from '@/shared/ui';
+import { ActionMenu, ActionMenuPosition, Avatar, Button, icons, SvgIcon } from '@/shared/ui';
 import { useSelector } from 'react-redux';
 import {
   addMembersToTeam,
@@ -7,16 +7,20 @@ import {
   getMyRoleInTeam,
   isAdminInTeam,
   TeamRoles,
-  TeamInfo, TeamMember
+  TeamInfo, TeamMember, editRoleInTeam, isOwnerInTeam
 } from '@/entities/team';
 import { Contact } from '@/entities/contact';
 import { getUserData } from '@/entities/user';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { OrganizationInfo } from '@/entities/organization';
 import { ContactPickerModal } from '@/widgets/pickers/contact-picker';
 import MemberList from '../../member-list/MemberList.tsx';
 import { AppRoutes } from '@/shared/config/routeConfig/routeConfig.tsx';
+import { Roles } from '@/shared/ui/action-menu';
+import { EditTeamFormModal } from '@/features/team/edit';
+import { TABLET_MAX_BREAKPOINT } from '@/shared/const/WindowBreakpoints.ts';
+import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
 
 const rolePriority = [
   TeamRoles.OWNER,
@@ -29,12 +33,14 @@ export interface TeamsProps {
   organization: OrganizationInfo;
   team: TeamInfo;
   changeTeam: (team: TeamInfo) => void;
+  deleteTeam: (teamId: string) => void;
 }
 
 const Team: React.FC<TeamsProps> = (props) => {
-  const { team, organization, changeTeam } = props;
+  const { team, organization, changeTeam, deleteTeam } = props;
 
   const dispatch = useAppDispatch();
+  const windowWidth = useWindowWidth();
 
   const user = useSelector(getUserData)!;
 
@@ -42,8 +48,14 @@ const Team: React.FC<TeamsProps> = (props) => {
   const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null);
   const [selectedContacts, setSelectedContacts] = useState<Contact[]>([]);
   const [isOpenContactPicker, setIsOpenContactPicker] = useState<boolean>(false);
+  const [isOpenEditorTeam, setIsOpenEditorTeam] = useState<boolean>(false);
 
   const myRole = getMyRoleInTeam(team, user);
+
+  const closeEditorTeamHandler = useCallback(() => setIsOpenEditorTeam(false), []);
+  const openEditorTeamHandler = useCallback(() => {
+    setIsOpenEditorTeam(true);
+  }, []);
 
   const contactsInOrganization: Contact[] = organization.members.map((member) => ({
     name: member.name,
@@ -101,9 +113,9 @@ const Team: React.FC<TeamsProps> = (props) => {
           role: TeamRoles.VIEWER
         })),
         teamId: team.teamId
-      }));
+      })).unwrap();
 
-      changeTeam(response.payload);
+      changeTeam(response);
     } catch (error) {
       console.error(error);
     } finally {
@@ -113,11 +125,42 @@ const Team: React.FC<TeamsProps> = (props) => {
   };
 
   const canEditMember = (member: TeamMember) => {
-    return member.userId !== user.userId && isAdminInTeam(myRole) && !isAdminInTeam(member.role);
+    const myRolePriority = rolePriority.findIndex(r => r === myRole)!;
+    const memberRolePriority = rolePriority.findIndex(r => r === member.role)!;
+
+    return myRolePriority < memberRolePriority;
   };
 
   const generateLinkForMember = (memberId: string) => {
     return `/${AppRoutes.TEAM_MEMBER_STATS}/${team.teamId}/${memberId}`;
+  };
+
+  const changeRole = async (role: string) => {
+    closeActionMenuHandler();
+
+    try {
+      const response = await dispatch(editRoleInTeam({
+        members: [{
+          userId: selectedMemberId!,
+          role: role as TeamRoles,
+        }],
+        teamId: team.teamId
+      })).unwrap();
+
+      changeTeam(response);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const editTeamHandler = (newTeam: TeamInfo) => {
+    closeEditorTeamHandler();
+    changeTeam(newTeam);
+  };
+
+  const deleteTeamHandler = (teamId: string)=> {
+    closeEditorTeamHandler();
+    deleteTeam(teamId);
   };
   
   return (
@@ -129,45 +172,76 @@ const Team: React.FC<TeamsProps> = (props) => {
         members={sortedMembers}
         addMember={() => setIsOpenContactPicker(true)}
         getLink={generateLinkForMember}
+        membersType={'teamMember'}
       >
-        <div className={styles.header}>
-          <Avatar
-            width={40}
-            height={40}
-            text={team.teamName}
-          />
+        {(memberLength: number, filter: Element) =>
+          <>
+            <div className={styles.header}>
+              <Avatar
+                text={team.teamName}
+                className={styles.avatar}
+              />
 
-          {team.teamName}
-        </div>
+              <span>{team.teamName}</span>
 
-        <div className={styles.infoWrapper}>
-          <SvgIcon
-            iconName={icons.INFO}
-            applyHover={false}
-            important
-            className={styles.iconInfo}
-          />
-
-          <div className={styles.info}>
-            <div className={styles.infoHeader}>
-              <span className={styles.countMembers}>
-                {team.teamMembers.length} members
-              </span>
-
-              <span className={styles.tags}>
-                {team.teamTags.map((tag) => (
-                  <span key={tag.tagName}>#{tag.tagName}</span>
-                ))}
-              </span>
+              {isAdminInTeam(myRole) &&
+                <>
+                  <Button
+                    className={styles.editTeam}
+                    onClick={openEditorTeamHandler}
+                  >
+                    редактировать
+                  </Button>
+                  
+                  <EditTeamFormModal 
+                    team={team}
+                    isOpen={isOpenEditorTeam}
+                    onClose={closeEditorTeamHandler}
+                    onEditHandler={editTeamHandler}
+                    onDeleteHandler={deleteTeamHandler}
+                  />
+                </>
+              }
             </div>
 
-            {team.teamDescription &&
-              <span className={styles.description}>
-                {team.teamDescription}
-              </span>
-            }
-          </div>
-        </div>
+            <div className={styles.infoWrapper}>
+              <SvgIcon
+                iconName={icons.INFO}
+                applyHover={false}
+                important
+                className={styles.iconInfo}
+              />
+
+              <div className={styles.info}>
+                <div className={styles.infoHeader}>
+                  <div className={styles.wrapper}>
+                    <span className={styles.countMembers}>
+                      {memberLength} участника
+                    </span>
+
+                    {windowWidth <= TABLET_MAX_BREAKPOINT &&
+                      <div className={styles.filter}>
+                        {filter}
+                      </div>
+                    }
+                  </div>
+
+                  <span className={styles.tags}>
+                    {team.teamTags.map((tag) => (
+                      <span key={tag.tagName}>#{tag.tagName}</span>
+                    ))}
+                  </span>
+                </div>
+
+                {team.teamDescription &&
+                  <span className={styles.description}>
+                    {team.teamDescription}
+                  </span>
+                }
+              </div>
+            </div>
+          </>
+        }
       </MemberList>
 
       <ActionMenu
@@ -176,6 +250,8 @@ const Team: React.FC<TeamsProps> = (props) => {
         deleteHandler={deleteMember}
         deleteText={'Исключить'}
         deleteIcon={icons.CROSS}
+        changeRoleHandler={changeRole}
+        roles={isOwnerInTeam(myRole) ? Roles : Roles.filter(r => r.name !== TeamRoles.ADMIN)}
       />
 
       <ContactPickerModal

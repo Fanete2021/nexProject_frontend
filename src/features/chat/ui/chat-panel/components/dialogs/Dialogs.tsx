@@ -3,7 +3,7 @@ import styles from './Dialogs.module.scss';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { useSelector } from 'react-redux';
 import { getChatDialogs } from '../../../../model/selectors/getChatDialogs.ts';
-import { ActionMenu, ActionMenuPosition, icons, Loader, Scrollbar, SvgIcon, Tabs } from '@/shared/ui';
+import { ActionMenu, ActionMenuPosition, icons, CircleLoader, Scrollbar, SvgIcon, Tabs } from '@/shared/ui';
 import { getChatIsLoadingDialogs } from '../../../../model/selectors/getChatIsLoadingDialogs.ts';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { ChatTypes } from '../../../../model/types/chatTypes.ts';
@@ -111,8 +111,6 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
     const scrollHeight = scrollbarRef.current.getScrollHeight();
     const clientHeight = scrollbarRef.current.getClientHeight();
 
-    console.log(scrollTop + clientHeight, scrollHeight);
-
     if (scrollHeight - scrollTop - clientHeight <= 150 && currentPageDialogs < allPagesDialogs) {
       loadChats(false);
     }
@@ -193,7 +191,7 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
                   />
                 ))}
 
-                {isLoadingDialogs && <Loader className={styles.loader}/>}
+                {isLoadingDialogs && <CircleLoader className={styles.loader}/>}
               </>
             }
 

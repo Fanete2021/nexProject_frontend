@@ -13,6 +13,10 @@ import { deleteMemberFromOrganization } from './model/service/deleteMemberFromOr
 import { addMembersToOrganization } from './model/service/addMembersToOrganization.ts';
 import { OrganizationInfo } from './model/types/organizationInfo.ts';
 import { OrganizationMember } from './model/types/organizationMember.ts';
+import { editRoleInOrganization } from './model/service/editRoleInOrganization.ts';
+import { isOrganizationDescriptionValid, isOrganizationNameValid } from './libs/utils/validation.ts';
+import { editOrganization } from './model/service/editOrganization.ts';
+import { deleteOrganization } from './model/service/deleteOrganization.ts';
 
 export {
   createOrganization,
@@ -20,6 +24,9 @@ export {
   fetchOrganizationInfo,
   deleteMemberFromOrganization,
   addMembersToOrganization,
+  editRoleInOrganization,
+  editOrganization,
+  deleteOrganization,
 
   organizationActions,
   organizationReducer,
@@ -28,15 +35,18 @@ export {
   getOrganizationIsLoading,
 
   getMyRole as getMyRoleInOrganization,
-  getRoleName as getOrganizationRoleName,
   isAdmin as isAdminInOrganization,
   isOwner as isOwnerInOrganization,
+
+  OrganizationRoles,
+
+  isOrganizationDescriptionValid,
+  isOrganizationNameValid
 };
 
 export type {
   Organization,
   OrganizationSchema,
-  OrganizationRoles,
   OrganizationInfo,
   OrganizationMember
 };

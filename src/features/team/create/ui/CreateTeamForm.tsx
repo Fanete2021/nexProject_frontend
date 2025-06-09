@@ -1,4 +1,4 @@
-import { CustomInput, icons, Loader, SvgIcon, ValidationList, ValidationListDirections } from '@/shared/ui';
+import { CustomInput, icons, CircleLoader, SvgIcon, ValidationList, ValidationListDirections } from '@/shared/ui';
 import styles from './CreateTeamForm.module.scss';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { FormControl } from '@mui/material';
@@ -8,8 +8,8 @@ import { useCallback, useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
-import { isTeamNameValid } from '@/shared/lib/utils/validation.ts';
-import { createTeam } from '@/entities/team';
+import { createTeam, isTeamNameValid } from '@/entities/team';
+import { ApiError } from '@/shared/types/apiError.ts';
 
 export interface CreateTeamFormProps {
   className?: string;
@@ -31,6 +31,7 @@ const CreateTeamForm: React.FC<CreateTeamFormProps> = (props) => {
   const dispatch = useAppDispatch();
 
   const [isSubmitLoading, setIsSubmitLoading] = useState<boolean>(false);
+  const [error, setError] = useState<ApiError | null>(null);
 
   const formik = useFormik({
     initialValues: {
@@ -47,9 +48,11 @@ const CreateTeamForm: React.FC<CreateTeamFormProps> = (props) => {
           organizationId
         })).unwrap();
 
+        formik.resetForm();
         onCreateHandler?.();
+        setError(null);
       } catch (error) {
-        console.log(error);
+        setError(error);
       } finally {
         setIsSubmitLoading(false);
       }
@@ -80,6 +83,10 @@ const CreateTeamForm: React.FC<CreateTeamFormProps> = (props) => {
       </div>
 
       <form className={classNames('form', [styles.form])} onSubmit={onSubmit}>
+        {error &&
+          <div className="formError">{error.errDetails}</div>
+        }
+
         <FormControl
           fullWidth
           className="FieldWrapper"
@@ -118,7 +125,7 @@ const CreateTeamForm: React.FC<CreateTeamFormProps> = (props) => {
           disabled={isSubmitLoading}
         >
           {isSubmitLoading
-            ? <Loader className="submitLoader" />
+            ? <CircleLoader className="submitLoader" />
             : <>{t('Создать')}</>
           }
         </button>

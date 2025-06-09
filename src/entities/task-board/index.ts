@@ -4,6 +4,7 @@ import { TaskBoardStatus } from './model/types/taskBoardStatus.ts';
 import { fetchMyTaskBoards } from './model/service/fetchMyTaskBoards.ts';
 import { fetchTaskBoardInfo } from './model/service/fetchTaskBoardInfo.ts';
 import { createTaskBoard } from './model/service/createTaskBoard.ts';
+import { isTaskBoardNameValid } from './libs/utils/validation.ts';
 
 export type {
   TaskBoard,
@@ -14,5 +15,7 @@ export type {
 export {
   fetchMyTaskBoards,
   fetchTaskBoardInfo,
-  createTaskBoard
+  createTaskBoard,
+
+  isTaskBoardNameValid
 };

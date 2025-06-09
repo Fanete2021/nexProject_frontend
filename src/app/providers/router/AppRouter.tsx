@@ -2,7 +2,7 @@ import { memo, Suspense, useCallback } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { routeConfig, AppRoutesProps } from '@/shared/config/routeConfig/routeConfig.tsx';
 import RequireAuth from '@/app/providers/router/RequireAuth.tsx';
-import { Loader } from '@/shared/ui';
+import { CircleLoader } from '@/shared/ui';
 import GuestRoutes from '@/app/providers/router/GuestRoutes.tsx';
 
 const AppRouter = () => {
@@ -10,7 +10,7 @@ const AppRouter = () => {
     const { element } = route;
 
     const children = (
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={<CircleLoader />}>
         {element}
       </Suspense>
     );

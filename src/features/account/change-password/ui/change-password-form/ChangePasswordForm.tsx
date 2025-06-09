@@ -3,14 +3,14 @@ import * as yup from 'yup';
 import { FormControl } from '@mui/material';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { useTranslation } from 'react-i18next';
-import { CustomInput, icons, Loader, SvgIcon, ValidationList } from '@/shared/ui';
+import { CustomInput, icons, CircleLoader, SvgIcon, ValidationList } from '@/shared/ui';
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
-import { isPasswordValid } from '@/shared/lib/utils/validation.ts';
 import { isFormikErrorVisible } from '@/shared/lib/utils/isFormikErrorVisible.ts';
 import { ApiError } from '@/shared/types/apiError.ts';
 import { newPassword } from '../../model/service/newPassword.ts';
+import { isPasswordValid } from '@/features/account/auth';
 
 const validationSchema = yup.object({
   newPassword: yup.string()
@@ -159,7 +159,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = (props) => {
         disabled={isSubmitLoading}
       >
         {isSubmitLoading
-          ? <Loader className="submitLoader" />
+          ? <CircleLoader className="submitLoader" />
           : <>{t('Изменить')}</>
         }
       </button>

@@ -1,4 +1,4 @@
-import {CustomInput, icons, Loader, SvgIcon, ValidationList, ValidationListDirections} from '@/shared/ui';
+import { CustomInput, icons, CircleLoader, SvgIcon, ValidationList, ValidationListDirections } from '@/shared/ui';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { FormControl } from '@mui/material';
 import { isFormikErrorVisible } from '@/shared/lib/utils/isFormikErrorVisible.ts';
@@ -7,8 +7,7 @@ import { useCallback, useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
-import { isTaskBoardNameValid } from '@/shared/lib/utils/validation.ts';
-import { createTaskBoard } from '@/entities/task-board';
+import { createTaskBoard, isTaskBoardNameValid } from '@/entities/task-board';
 import styles from './CreateTaskBoardForm.module.scss';
 
 export interface CreateTaskBoardFormProps {
@@ -74,7 +73,8 @@ const CreateTaskBoardForm: React.FC<CreateTaskBoardFormProps> = (props) => {
       <div className={styles.header}>
         <span className={styles.title}>Создайте доску!</span>
         <span className={styles.subtitle}>
-          Организуйте задачи, отслеживайте прогресс и оптимизируйте рабочие процессы с помощью Kanban-доски. Создавайте, назначайте и перемещайте задачи между этапами выполнения.
+          Организуйте задачи, отслеживайте прогресс и оптимизируйте рабочие процессы с помощью Kanban-доски. Создавайте,
+          назначайте и перемещайте задачи между этапами выполнения.
         </span>
       </div>
 
@@ -117,7 +117,7 @@ const CreateTaskBoardForm: React.FC<CreateTaskBoardFormProps> = (props) => {
           disabled={isSubmitLoading}
         >
           {isSubmitLoading
-            ? <Loader className="submitLoader" />
+            ? <CircleLoader className="submitLoader" />
             : <>{t('Создать')}</>
           }
         </button>

@@ -13,6 +13,11 @@ import { fetchMyTeams } from './model/service/fetchMyTeams.ts';
 import { fetchTeamInfo } from './model/service/fetchTeamInfo.ts';
 import { getMyRole } from './libs/utils/getMyRole.ts';
 import { isAdmin } from './libs/utils/isAdmin.ts';
+import { editRoleInTeam } from './model/service/editRoleInTeam.ts';
+import { isOwner } from './libs/utils/isOwner.ts';
+import { editTeam } from './model/service/editTeam.ts';
+import { isTeamNameValid, isTeamTagValid, isTeamDescriptionValid } from './libs/utils/validation.ts';
+import { deleteTeam } from './model/service/deleteTeam.ts';
 
 export type {
   Team, 
@@ -34,9 +39,17 @@ export {
   deleteMemberFromTeam,
   fetchMyTeams,
   fetchTeamInfo,
+  editRoleInTeam,
+  editTeam,
+  deleteTeam,
 
   getMyRole as getMyRoleInTeam,
   isAdmin as isAdminInTeam,
+  isOwner as isOwnerInTeam,
 
-  TeamRoles
+  TeamRoles,
+
+  isTeamNameValid,
+  isTeamTagValid,
+  isTeamDescriptionValid
 };

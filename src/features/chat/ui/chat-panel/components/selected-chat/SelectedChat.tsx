@@ -7,7 +7,7 @@ import Header from './components/header/Header.tsx';
 import Messages from './components/messages/Messages.tsx';
 import MessageInput from './components/message-input/MessageInput.tsx';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { GroupedMessage } from './components/messages/model/types/groupedMessage.ts';
 import { groupMessages } from './components/messages/libs/utils/groupMessages.ts';
 import ChatWebSocketService from '../../../../model/service/ChatWebSocketService.ts';
@@ -20,6 +20,7 @@ import { Message, MessageTypes } from '../../../../model/types/message.ts';
 import { chatActions } from '../../../../model/slice/chatSlice.ts';
 import { fetchMessages } from '../../../../model/service/fetchMessages.ts';
 import { isPublicChat } from '../../../../utils/libs/isPublicChat.ts';
+import { icons, SvgIcon } from '@/shared/ui';
 
 export interface SelectedChatProps {
   className?: string;
@@ -115,6 +116,14 @@ const SelectedChat: React.FC<SelectedChatProps> = (props) => {
   if (!selectedChat) {
     return (
       <div className={styles.empty}>
+        <SvgIcon
+          iconName={icons.PEOPLE}
+          className={styles.iconPeople}
+          applyHover={false}
+          applyStroke
+          applyFill={false}
+        />
+
         Select a chat to start messaging
       </div>
     );

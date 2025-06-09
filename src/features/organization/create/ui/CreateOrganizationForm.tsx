@@ -2,7 +2,7 @@ import {
   CustomInput,
   CustomTextarea,
   icons,
-  Loader,
+  CircleLoader,
   SvgIcon,
   ValidationList,
   ValidationListDirections
@@ -16,8 +16,8 @@ import { useCallback, useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
-import { createOrganization } from '@/entities/organization';
-import { isOrganizationDescriptionValid, isOrganizationNameValid } from '../lib/utils/validation';
+import { createOrganization, isOrganizationDescriptionValid, isOrganizationNameValid } from '@/entities/organization';
+import { ApiError } from '@/shared/types/apiError.ts';
 
 export interface CreateOrganizationFormProps {
   className?: string;
@@ -45,6 +45,7 @@ const CreateOrganizationForm: React.FC<CreateOrganizationFormProps> = (props) =>
   const dispatch = useAppDispatch();
   
   const [isSubmitLoading, setIsSubmitLoading] = useState<boolean>(false);
+  const [error, setError] = useState<ApiError | null>(null);
 
   const formik = useFormik({
     initialValues: {
@@ -58,9 +59,11 @@ const CreateOrganizationForm: React.FC<CreateOrganizationFormProps> = (props) =>
       setIsSubmitLoading(true);
       try {
         await dispatch(createOrganization(values)).unwrap();
+        formik.resetForm();
         onCreateHandler?.();
+        setError(null);
       } catch (error) {
-        console.log(error);
+        setError(error);
       } finally {
         setIsSubmitLoading(false);
       }
@@ -92,6 +95,10 @@ const CreateOrganizationForm: React.FC<CreateOrganizationFormProps> = (props) =>
       </div>
 
       <form className={classNames('form', [styles.form])} onSubmit={onSubmit}>
+        {error &&
+          <div className="formError">{error.errDetails}</div>
+        }
+
         <FormControl fullWidth className="FieldWrapper">
           <div className="label">
             {t('Название') as string}<br/>
@@ -155,7 +162,7 @@ const CreateOrganizationForm: React.FC<CreateOrganizationFormProps> = (props) =>
           disabled={isSubmitLoading}
         >
           {isSubmitLoading
-            ? <Loader className="submitLoader" />
+            ? <CircleLoader className="submitLoader" />
             : <>{t('Создать')}</>
           }
         </button>

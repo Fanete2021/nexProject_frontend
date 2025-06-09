@@ -1,10 +1,12 @@
-import Loader from './ui/Loader.tsx';
-import { LoaderProps } from './ui/Loader.tsx';
+import CircleLoader, { CircleLoaderProps } from './ui/circle-loader/CircleLoader.tsx';
+import EllipsesLoader, { EllipsesLoaderProps } from './ui/ellipses-loader/EllipsesLoader.tsx';
 
 export {
-  Loader,
+  CircleLoader,
+  EllipsesLoader
 };
 
 export type {
-  LoaderProps
+  CircleLoaderProps,
+  EllipsesLoaderProps
 };

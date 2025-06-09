@@ -1,8 +1,5 @@
 import { Validation } from '@/shared/types/validation.ts';
 
-/**
- * Валидация для форм.
- */
 export const isPasswordValid = (password: string): Validation[] => {
   const lengthValid = /^.{6,15}$/.test(password);
   const charsValid = /^[a-zA-Z0-9!@#$%^&*-]+$/.test(password);
@@ -37,38 +34,5 @@ export const isUsernameValid = (username: string): Validation[] => {
       text: 'Начинается с буквы',
       isError: !startsWithLetterValid
     }
-  ];
-};
-
-export const isTeamNameValid = (orgName: string): Validation[] => {
-  const lengthValid = /^.{6,20}$/.test(orgName);
-
-  return [
-    {
-      text: 'От 6 до 20 символов',
-      isError: !lengthValid
-    },
-  ];
-};
-
-export const isTaskBoardNameValid = (taskBoardName: string): Validation[] => {
-  const lengthValid = /^.{6,20}$/.test(taskBoardName);
-
-  return [
-    {
-      text: 'От 6 до 20 символов',
-      isError: !lengthValid
-    },
-  ];
-};
-
-export const isTaskNameValid = (taskName: string): Validation[] => {
-  const lengthValid = /^.{6,20}$/.test(taskName);
-
-  return [
-    {
-      text: 'От 6 до 20 символов',
-      isError: !lengthValid
-    },
   ];
 };

@@ -60,5 +60,11 @@ export enum icons {
   KANBAN_BOARD = 'kanbanBoard',
   TASKS = 'tasks',
   MEDIUM = 'medium',
-  TASK = 'task'
+  TASK = 'task',
+  ROLE = 'role',
+  OWNER = 'owner',
+  VIEWER = 'viewer',
+  ADMIN = 'admin',
+  EDITOR = 'editor',
+  ADD = 'add'
 }

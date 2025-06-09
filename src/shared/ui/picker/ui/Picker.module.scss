@@ -9,12 +9,13 @@
 
 .activeItemsContainer {
   top: 0;
-  left: 0;
+  left: -5px;
   position: absolute;
   z-index: var(--modal-z-index);
   border-radius: 10px;
   animation: activeItemsContainerBorder 1s ease-in-out forwards;
   background: var(--bg-color);
+  padding: 0 5px 5px 5px;
 }
 
 .iconArrow {
@@ -45,6 +46,8 @@
 
 .items {
   animation: fadeIn 1s ease forwards;
+  flex-direction: column;
+  flex-wrap: nowrap;
 }
 
 @keyframes fadeIn {

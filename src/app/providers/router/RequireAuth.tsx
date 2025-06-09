@@ -4,7 +4,7 @@ import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import { useEffect, useState } from 'react';
 import { fetchUserData, getUserData } from '@/entities/user';
-import { Loader } from '@/shared/ui';
+import { EllipsesLoader } from '@/shared/ui';
 import useRefreshTokenTimer from '@/shared/lib/hooks/useRefreshTokenTimer';
 import { SidebarProvider } from '@/app/providers/sidebar-provider';
 import { AuthenticatedPageLayout } from '@/widgets/authenticated-page-layout';
@@ -47,7 +47,7 @@ function RequireAuth({ children }: { children: JSX.Element }) {
   }, []);
 
   if (isLoading) {
-    return <Loader />;
+    return <EllipsesLoader />;
   }
 
   if (!isAppReady) {

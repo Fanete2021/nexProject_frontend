@@ -15,6 +15,8 @@ import { ChatTypes } from '../../../../../../model/types/chatTypes.ts';
 import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
 import { MOBILE_MAX_BREAKPOINT } from '@/shared/const/WindowBreakpoints.ts';
 import { Contact } from '@/entities/contact';
+import {useNavigate} from "react-router-dom";
+import {RoutePath} from "@/shared/config/routeConfig/routeConfig.tsx";
 
 export interface DialogItemProps {
   chatData?: Chat;
@@ -25,20 +27,16 @@ export interface DialogItemProps {
 
 const DialogItem: React.FC<DialogItemProps> = (props) => {
   const { chatData, contactData, className, openContextMenu } = props;
+
   const dispatch = useAppDispatch();
+  const windowWidth = useWindowWidth();
+  const navigate = useNavigate();
+
   const user = useSelector(getUserData)!;
   const selectedChat = useSelector(getChatSelectedChat);
-  const windowWidth = useWindowWidth();
 
-  const setupSelectedChat = async (chatId: string) => {
-    try {
-      dispatch(chatActions.setIsLoadingSelectedChat(true));
-      const response = await dispatch(fetchChatInfo({ chatId: chatId })).unwrap();
-      dispatch(chatActions.setSelectedChat(response));
-      dispatch(chatActions.setIsLoadingSelectedChat(false));
-    } catch (error) {
-      console.log(error);
-    }
+  const setupSelectedChat = (chatId: string) => {
+    navigate(`${RoutePath.chats}/${chatId}`);
   };
 
   const clickHandler = async () => {

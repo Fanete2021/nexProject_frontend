@@ -1,35 +1,80 @@
-import React, { ReactNode } from 'react';
-import { Avatar, icons, Scrollbar, Search, SvgIcon } from '@/shared/ui';
-import { OrganizationMember } from '@/entities/organization';
+import React, { ReactNode, useEffect, useState } from 'react';
+import { Avatar, icons, Popover, Scrollbar, SvgIcon } from '@/shared/ui';
+import { OrganizationMember, OrganizationRoles } from '@/entities/organization';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import styles from './MemberList.module.scss';
-import { TeamMember } from '@/entities/team';
+import { TeamMember, TeamRoles } from '@/entities/team';
 import { useSelector } from 'react-redux';
 import { getUserData } from '@/entities/user';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
+import Filter from './components/filter/Filter.tsx';
+import { usePopover } from '@/shared/lib/hooks/usePopover.ts';
+import {DESKTOP_MIN_BREAKPOINT, TABLET_MAX_BREAKPOINT} from "@/shared/const/WindowBreakpoints.ts";
 
 export interface MemberListProps {
-  members: OrganizationMember[] | TeamMember[];
+  members: (OrganizationMember | TeamMember)[];
+  membersType: 'organizationMember' | 'teamMember';
   canAddMember?: boolean;
   addMember?: () => void;
   canEditMember?: ((member: OrganizationMember) => boolean) | ((member: TeamMember) => boolean);
   editMember?: (event: React.MouseEvent<HTMLElement, MouseEvent>, memberId: string) => void;
-  children: ReactNode;
+  children: (memberLength: number, iconFilter: Element) => ReactNode;
   getLink?: (memberId: string) => string;
 }
 
 const MemberList: React.FC<MemberListProps> = (props) => {
-  const { members, canAddMember = false, addMember, canEditMember, editMember, children, getLink } = props;
+  const { members, canAddMember = false, addMember, canEditMember, editMember, children, getLink, membersType } = props;
 
   const { t } = useTranslation();
+  const windowWidth = useWindowWidth();
   
   const user = useSelector(getUserData)!;
+  
+  const [searchedMember, setSearcherMember] = useState<string>('');
+  const [filteredMembers, setFilteredMembers] = useState<typeof members>([]);
+  const [selectedRoles, setSelectedRoles] = useState<{ label: string, value: boolean }[]>([]);
+
+  const { anchorEl, openPopover, isOpenPopover, closePopover } = usePopover();
+
+  useEffect(() => {
+    const roles = membersType === 'organizationMember' ? OrganizationRoles : TeamRoles;
+    const modifiedRoles = Object.values(roles).map((item) => ({
+      label: item, value: true
+    }));
+
+    setSelectedRoles(modifiedRoles);
+  }, [membersType, members]);
+
+  useEffect(() => {
+    const activeRoles = selectedRoles
+      .filter((role) => role.value)
+      .map((role) => role.label);
+
+    setFilteredMembers(members.filter(
+      (member) => member.name.includes(searchedMember) && activeRoles.includes(member.role)
+    ));
+  }, [searchedMember, members, selectedRoles]);
+
+  const iconFilter = () => {
+    return (
+      <SvgIcon
+        iconName={icons.FILTER}
+        applyFill={false}
+        applyHover={false}
+        applyStroke
+        className={styles.iconFilter}
+        onClick={openPopover}
+        important={Boolean(searchedMember) || selectedRoles.filter(role => !role.value).length > 0}
+      />
+    );
+  };
 
   return (
     <div className={styles.MemberList}>
       <div className={styles.list}>
-        {children}
+        {children(filteredMembers.length, iconFilter())}
 
         <div className={styles.MemberList}>
           <SvgIcon
@@ -44,7 +89,7 @@ const MemberList: React.FC<MemberListProps> = (props) => {
             <div className={styles.members}>
               {canAddMember &&
                 <button
-                  className={styles.member}
+                  className={classNames(styles.member, [styles.addMember])}
                   onClick={addMember}
                 >
                   <SvgIcon
@@ -60,7 +105,7 @@ const MemberList: React.FC<MemberListProps> = (props) => {
                 </button>
               }
 
-              {members.map(member => {
+              {filteredMembers.map(member => {
                 const isLink = Boolean(getLink);
 
                 const MemberWrapper = isLink ? Link : 'div';
@@ -77,11 +122,13 @@ const MemberList: React.FC<MemberListProps> = (props) => {
                       [styles.myCard]: member.userId === user.userId,
                       [styles.link]: isLink
                     })}
+                    onContextMenu={canEditMember && canEditMember(member) &&
+                      ((e) => editMember?.(e, member.userId))
+                    }
                   >
                     <Avatar
-                      width={50}
-                      height={50}
                       text={member.name}
+                      className={styles.avatar}
                     />
 
                     <div className={styles.info}>
@@ -106,33 +153,41 @@ const MemberList: React.FC<MemberListProps> = (props) => {
         </div>
       </div>
 
-      <div className={styles.filter}>
-        <div className={styles.header}>
-          Фильтры
+      {windowWidth >= DESKTOP_MIN_BREAKPOINT &&
+        <Filter
+          setSearcherMember={setSearcherMember}
+          searchedMember={searchedMember}
+          selectedRoles={selectedRoles}
+          setSelectedRoles={setSelectedRoles}
+        />
+      }
 
-          <SvgIcon
-            iconName={icons.FILTER}
-            applyFill={false}
-            applyHover={false}
-            applyStroke
-            className={styles.iconFilter}
+      {windowWidth <= TABLET_MAX_BREAKPOINT &&
+        <Popover
+          open={isOpenPopover}
+          anchorEl={anchorEl}
+          onClose={closePopover}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+          classes={{
+            paper: styles.paper,
+            root: styles.root
+          }}
+        >
+          <Filter
+            setSearcherMember={setSearcherMember}
+            searchedMember={searchedMember}
+            selectedRoles={selectedRoles}
+            setSelectedRoles={setSelectedRoles}
           />
-        </div>
-
-        <div className={styles.searchWrapper}>
-          <Search />
-        </div>
-
-        <div className={styles.roles}>
-          <span>
-            Отображаемые роли:
-          </span>
-
-          <span className={styles.selectedRoles}>
-            Все
-          </span>
-        </div>
-      </div>
+        </Popover>
+      }
     </div>
   );
 };

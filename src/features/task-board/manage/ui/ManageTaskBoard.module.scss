@@ -1,9 +1,9 @@
 .ManageBoard {
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   width: 100%;
   gap: 20px;
+  position: relative;
 }
 
 .header {
@@ -13,7 +13,7 @@
   flex-wrap: wrap;
 
   .createTask {
-    padding: 5px;
+    padding: 5px 15px;
     border-radius: 15px;
   }
 }

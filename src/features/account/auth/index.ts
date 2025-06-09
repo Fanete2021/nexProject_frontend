@@ -7,6 +7,7 @@ import { getAuthIsAuth } from './model/selectors/getAuthIsAuth.ts';
 import { getAuthToken } from './model/selectors/getAuthToken.ts';
 import { getAuthIsLoading } from './model/selectors/getAuthIsLoading.ts';
 import { logout } from './model/service/logout.ts';
+import { isPasswordValid, isUsernameValid } from './lib/utils/validation.ts';
 
 export type {
   AuthSchema
@@ -24,5 +25,8 @@ export {
 
   getAuthIsAuth,
   getAuthToken,
-  getAuthIsLoading
+  getAuthIsLoading,
+
+  isPasswordValid,
+  isUsernameValid
 };

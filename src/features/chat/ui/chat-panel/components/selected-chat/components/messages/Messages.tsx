@@ -2,7 +2,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { getUserData } from '@/entities/user';
 import styles from './Messages.module.scss';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
-import { ActionMenu, ActionMenuPosition, Avatar, Loader, Scrollbar } from '@/shared/ui';
+import { ActionMenu, ActionMenuPosition, Avatar, CircleLoader, Scrollbar } from '@/shared/ui';
 import { formatTimeLocalized } from '@/shared/lib/utils/formatTimeLocalized.ts';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
@@ -165,6 +165,8 @@ const Messages: React.FC<MessagesProps> = (props) => {
           className={styles.Messages}
           ref={messagesRef}
         >
+          {isLoadingMessages && <CircleLoader className={styles.loader} />}
+
           {messages.map((group, index) => (
             <div
               key={index}
@@ -233,7 +235,6 @@ const Messages: React.FC<MessagesProps> = (props) => {
               }
             </div>
           ))}
-          {isLoadingMessages && <Loader className={styles.loader} />}
         </div>
       </Scrollbar>
 

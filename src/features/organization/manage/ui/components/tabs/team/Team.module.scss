@@ -5,8 +5,40 @@
 .header {
   display: flex;
   gap: 5px;
-  justify-content: center;
   align-items: center;
+  font-size: 18px;
+  line-height: 24px;
+
+  @media screen and (max-width: 768px) {
+    font-size: 16px;
+    line-height: 21px;
+  }
+
+  @media screen and (max-width: 640px) {
+    justify-content: center;
+  }
+
+  .avatar {
+    width: 50px;
+    height: 50px;
+
+    @media screen and (max-width: 768px) {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  .editTeam {
+    border-radius: 15px;
+    padding: 5px;
+    font-size: 14px;
+    line-height: 16px;
+
+    @media screen and (max-width: 768px) {
+      font-size: 12px;
+      line-height: 14px;
+    }
+  }
 }
 
 .infoWrapper {
@@ -15,9 +47,19 @@
   margin-top: 5px;
   margin-bottom: 10px;
 
+  @media screen and (max-width: 640px) {
+    justify-content: center;
+    gap: 10px;
+  }
+
   .iconInfo {
     width: 30px;
     height: 30px;
+    flex-shrink: 0;
+
+    @media screen and (max-width: 640px) {
+      display: none;
+    }
   }
 
   .info {
@@ -28,14 +70,40 @@
 
     .infoHeader {
       display: flex;
-      gap: 5px;
+      gap: 20px;
       font-size: 16px;
       line-height: 21px;
 
+      @media screen and (max-width: 640px) {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+      }
+
+      .wrapper {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+      }
+
       .tags {
         display: flex;
+        flex-wrap: wrap;
         gap: 5px;
         color: var(--text-secondary-color);
+        align-items: center;
+
+        @media screen and (max-width: 640px) {
+          font-size: 14px;
+          line-height: 18px;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+
+      .filter, .countMembers {
+        flex-shrink: 0;
       }
     }
 
@@ -43,6 +111,8 @@
       max-width: 800px;
       font-size: 14px;
       line-height: 18px;
+      word-break: break-word;
+      white-space: normal;
     }
   }
 }
