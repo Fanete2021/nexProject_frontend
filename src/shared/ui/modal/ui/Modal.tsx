@@ -1,7 +1,8 @@
 import React, { FC, useCallback, useEffect } from 'react';
 import styles from './Modal.module.scss';
 import { classNames, Mods } from '@/shared/lib/utils/classNames.ts';
-import { Portal } from '@/shared/ui';
+import {icons, Portal, SvgIcon} from '@/shared/ui';
+import {MOBILE_MAX_BREAKPOINT} from "@/shared/const/WindowBreakpoints.ts";
 
 export interface ModalProps {
   className?: string;
@@ -9,6 +10,7 @@ export interface ModalProps {
   onClose?: () => void;
   children?: React.ReactNode;
   hasOverlayBlackout?: boolean;
+  hasCross?: boolean;
 }
 
 export const Modal: FC<ModalProps> = (props) => {
@@ -17,7 +19,8 @@ export const Modal: FC<ModalProps> = (props) => {
     isOpen = false,
     onClose,
     children,
-    hasOverlayBlackout = true
+    hasOverlayBlackout = true,
+    hasCross = true
   } = props;
 
   const onKeyDown = useCallback((e: KeyboardEvent) => {
@@ -57,6 +60,17 @@ export const Modal: FC<ModalProps> = (props) => {
             className={styles.content}
             onClick={onContentClick}
           >
+            {hasCross &&
+              <SvgIcon
+                iconName={icons.CROSS}
+                important
+                applyStroke
+                applyFill={false}
+                className={styles.iconClose}
+                onClick={onClose}
+              />
+            }
+
             {children}
           </div>
         </div>

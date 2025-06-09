@@ -136,7 +136,7 @@ const VideoCallModal = () => {
   }
   
   return (
-    <Modal isOpen={isOpen}>
+    <Modal isOpen={isOpen} hasCross={false}>
       <div className={styles.VideoCallModal}>
         <div className={styles.header}>
           <div className={styles.title}>Название</div>

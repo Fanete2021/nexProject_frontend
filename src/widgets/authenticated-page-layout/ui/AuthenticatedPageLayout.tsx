@@ -24,7 +24,7 @@ const AuthenticatedPageLayout: React.FC<AuthenticatedPageLayoutProps> = (props) 
         ?
         <Sidebar className={styles.sidebar} />
         :
-        <Modal isOpen={isSidebarOpen} onClose={closeSidebar} hasOverlayBlackout={false}>
+        <Modal isOpen={isSidebarOpen} onClose={closeSidebar} hasOverlayBlackout={false} hasCross={false}>
           <Sidebar className={styles.sidebar} />
         </Modal>
       }

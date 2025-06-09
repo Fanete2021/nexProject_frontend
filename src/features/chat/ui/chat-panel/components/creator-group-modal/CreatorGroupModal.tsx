@@ -50,6 +50,7 @@ const CreatorGroupModal: React.FC<CreatorGroupProps> = (props) => {
     <Modal
       onClose={closeHandler}
       isOpen={isOpen}
+      hasCross={false}
     >
       {isOpen && 
         <div className={styles.CreatorGroup}>
