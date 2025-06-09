@@ -1,5 +1,5 @@
 import styles from './ManageOrganization.module.scss';
-import { fetchOrganizationInfo, getOrganizationData, OrganizationInfo, } from '@/entities/organization';
+import { fetchOrganizationInfo, getOrganizationData, OrganizationInfo } from '@/entities/organization';
 import TabPicker from './components/tab-picker/TabPicker.tsx';
 import { useSelector } from 'react-redux';
 import { Tabs } from './components/tab-picker/model/tabs.ts';
@@ -13,13 +13,14 @@ import Members from './components/tabs/members/Members.tsx';
 import Team from './components/tabs/team/Team.tsx';
 import { useNavigate, useParams } from 'react-router-dom';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
+import Settings from './components/tabs/settings/Settings.tsx';
 
 const ManageOrganization = () => {
-  const { orgId, teamId } = useParams<{ orgId?: string, teamId?: string }>();
+  const { orgId, tab } = useParams<{ orgId?: string; teamId?: string; tab?: string; }>();
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  
+
   const organizations = useSelector(getOrganizationData)!;
   const teams = useSelector(getTeamData)!;
 
@@ -28,63 +29,95 @@ const ManageOrganization = () => {
   const [currentTab, setCurrentTab] = useState<Tabs>(Tabs.MEMBERS);
 
   useEffect(() => {
-    const init = async () => {
+    if (tab) {
+      if (tab === Tabs.SETTINGS.toLowerCase()) {
+        setCurrentTab(Tabs.SETTINGS);
+      } else {
+        setCurrentTab(Tabs.TEAMS);
+      }
+    } else {
+      setCurrentTab(Tabs.MEMBERS);
+    }
+  }, [tab, tab]);
+
+  useEffect(() => {
+    const loadOrganization = async () => {
+      if (!orgId) {
+        navigate(RoutePath.organization);
+        return;
+      }
+
       try {
-        const response = await dispatch(fetchOrganizationInfo({ organizationId: orgId! })).unwrap();
-
+        const response = await dispatch(
+          fetchOrganizationInfo({ organizationId: orgId })
+        ).unwrap();
         setSelectedOrganization(response);
-
-        if (teamId) {
-          await onSelectTeamHandler(teamId);
-          setCurrentTab(Tabs.TEAMS);
-        }
       } catch (error) {
-        console.log(error);
+        console.error(error);
+        navigate(RoutePath.organization);
       }
     };
 
-    if (orgId) {
-      init();
-    }
-  }, []);
+    loadOrganization();
+  }, [orgId, dispatch, navigate]);
 
   useEffect(() => {
-    setCurrentTab(Tabs.MEMBERS);
-  }, [selectedOrganization]);
+    const loadTeam = async () => {
+      if (!tab || !orgId || tab === Tabs.SETTINGS.toLowerCase()) return;
 
-  useEffect(() => {
-    if (!selectedOrganization) {
-      navigate(`${RoutePath.organization}`);
-      setSelectedTeam(null);
-      return;
-    }
+      try {
+        const response = await dispatch(fetchTeamInfo({ teamId: tab })).unwrap();
 
-    switch (currentTab) {
-      case Tabs.MEMBERS:
-        navigate(`${RoutePath.organization}/${selectedOrganization?.organizationId}`);
-        break;
-      case Tabs.TEAMS:
-        navigate(`${RoutePath.organization}/${selectedOrganization?.organizationId}/${selectedTeam?.teamId}`);
-        break;
+        setSelectedTeam(response);
+      } catch (error) {
+        console.error(error);
+        navigate(`${RoutePath.organization}/${orgId}`);
+      }
+    };
+
+    if (currentTab === Tabs.TEAMS) {
+      loadTeam();
     }
-  }, [currentTab, selectedOrganization, selectedTeam]);
-  
+  }, [tab, orgId, currentTab, dispatch, navigate]);
+
   const changeTab = useCallback((tab: Tabs) => {
+    if (!selectedOrganization) return;
+
+    let path = `${RoutePath.organization}/${selectedOrganization.organizationId}`;
+
+    switch (tab) {
+      case Tabs.TEAMS:
+        if (selectedTeam) {
+          path += `/${selectedTeam.teamId}`;
+        }
+        break;
+      case Tabs.SETTINGS:
+        path += `/${Tabs.SETTINGS.toLowerCase()}`;
+        break;
+    }
+
+    navigate(path);
     setCurrentTab(tab);
-  }, []);
+  }, [selectedOrganization, selectedTeam, navigate]);
+
+  const selectOrganization = (org: OrganizationInfo) => {
+    navigate(`${RoutePath.organization}/${org.organizationId}`);
+    setSelectedOrganization(org);
+    setSelectedTeam(null);
+  };
 
   const onSelectTeamHandler = async (teamId: string) => {
+    if (!selectedOrganization) return;
+
     try {
       const response = await dispatch(fetchTeamInfo({ teamId })).unwrap();
 
       setSelectedTeam(response);
+      navigate(`${RoutePath.organization}/${selectedOrganization.organizationId}/${teamId}`);
+      setCurrentTab(Tabs.TEAMS);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
-  };
-
-  const selectOrganization = (org: OrganizationInfo) => {
-    setSelectedOrganization(org);
   };
 
   return (
@@ -156,6 +189,13 @@ const ManageOrganization = () => {
                   organization={selectedOrganization}
                   team={selectedTeam}
                   changeTeam={setSelectedTeam}
+                />
+              }
+
+              {currentTab === Tabs.SETTINGS &&
+                <Settings
+                  organization={selectedOrganization}
+                  changeOrganization={setSelectedOrganization}
                 />
               }
             </div>
