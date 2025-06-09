@@ -104,9 +104,10 @@ const Members: React.FC<MembersProps> = (props) => {
   };
 
   const canEditMember = (member: OrganizationMember): boolean => {
-    return member.userId !== user.userId
-      && isAdminInOrganization(myRole)
-      && !isAdminInOrganization(member.role);
+    const myRolePriority = rolePriority.findIndex(r => r === myRole)!;
+    const memberRolePriority = rolePriority.findIndex(r => r === member.role)!;
+
+    return myRolePriority < memberRolePriority;
   };
 
   const changeRole = async (role: string) => {

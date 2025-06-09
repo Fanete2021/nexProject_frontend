@@ -114,7 +114,10 @@ const Team: React.FC<TeamsProps> = (props) => {
   };
 
   const canEditMember = (member: TeamMember) => {
-    return member.userId !== user.userId && isAdminInTeam(myRole) && !isAdminInTeam(member.role);
+    const myRolePriority = rolePriority.findIndex(r => r === myRole)!;
+    const memberRolePriority = rolePriority.findIndex(r => r === member.role)!;
+
+    return myRolePriority < memberRolePriority;
   };
 
   const generateLinkForMember = (memberId: string) => {
