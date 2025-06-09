@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { getMyRoleInOrganization, isAdminInOrganization, OrganizationInfo } from '@/entities/organization';
 import { getUserData } from '@/entities/user';
 import styles from './TabPicker.module.scss';
-import { Avatar, icons, SvgIcon } from '@/shared/ui';
+import { Avatar, icons, Scrollbar, SvgIcon } from '@/shared/ui';
 import { tabs, Tabs } from './model/tabs.ts';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { Team } from '@/entities/team';
@@ -84,44 +84,46 @@ const TabPicker: React.FC<TabPickerProps> = (props) => {
             </div>
 
             {tab.id === Tabs.TEAMS && (
-              <div className={styles.teams}>
-                {filteredTeams.map((team: Team) => (
-                  <div
-                    key={team.teamId}
-                    className={classNames(styles.team, [styles.canSelected], {
-                      [styles.selected]: team.teamId === teamId,
-                    })}
-                    onClick={() => selectTeamHandler(team.teamId)}
-                  >
-                    <Avatar
-                      text={team.teamName}
-                      width={30}
-                      height={30}
-                    />
+              <Scrollbar autoHeight autoHeightMax={300}>
+                <div className={styles.teams}>
+                  {filteredTeams.map((team: Team) => (
+                    <div
+                      key={team.teamId}
+                      className={classNames(styles.team, [styles.canSelected], {
+                        [styles.selected]: team.teamId === teamId,
+                      })}
+                      onClick={() => selectTeamHandler(team.teamId)}
+                    >
+                      <Avatar
+                        text={team.teamName}
+                        width={30}
+                        height={30}
+                      />
 
-                    <div className={styles.name}>
-                      {team.teamName}
+                      <div className={styles.name}>
+                        {team.teamName}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
 
-                {canCreateTeam &&
-                  <div
-                    className={classNames(styles.team)}
-                    onClick={openCreatorTeamHandler}
-                  >
-                    <SvgIcon
-                      iconName={icons.TEAM_ADD}
-                      applyHover={false}
-                      className={styles.iconAddTeam}
-                    />
+                  {canCreateTeam &&
+                    <div
+                      className={classNames(styles.team)}
+                      onClick={openCreatorTeamHandler}
+                    >
+                      <SvgIcon
+                        iconName={icons.TEAM_ADD}
+                        applyHover={false}
+                        className={styles.iconAddTeam}
+                      />
 
-                    <div className={styles.name}>
-                      Создать команду
+                      <div className={styles.name}>
+                        Создать команду
+                      </div>
                     </div>
-                  </div>
-                }
-              </div>
+                  }
+                </div>
+              </Scrollbar>
             )}
           </div>
         ))
