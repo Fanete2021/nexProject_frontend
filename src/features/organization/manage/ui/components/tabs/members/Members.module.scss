@@ -5,8 +5,10 @@
 .infoWrapper {
   display: flex;
   height: 30px;
+  gap: 5px;
 
   .countMembers {
+    display: flex;
     align-self: center;
     margin: 0 auto;
     font-size: 20px;

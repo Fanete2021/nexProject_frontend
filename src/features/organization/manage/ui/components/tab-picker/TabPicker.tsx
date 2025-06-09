@@ -7,9 +7,11 @@ import { tabs, Tabs } from './model/tabs.ts';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { Team } from '@/entities/team';
 import { CreateTeamFormModal } from '@/features/team/create';
-import { useCallback, useState } from 'react';
+import {useCallback, useRef, useState} from 'react';
 import { convertObjectToArray } from '@/shared/lib/utils/convertObjectToArray.ts';
 import { useParams } from 'react-router-dom';
+import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
+import useClickOutside from "@/shared/lib/hooks/useClickOutside.ts";
 
 export interface TabPickerProps {
   currentTab: Tabs;
@@ -24,13 +26,17 @@ export const tabsArray = convertObjectToArray(tabs);
 const TabPicker: React.FC<TabPickerProps> = (props) => {
   const { currentTab, changeTab, selectedOrganization, teams, selectTeam } = props;
 
-  const { teamId } = useParams<{ teamId?: string }>();
+  const { tab: teamId } = useParams<{ tab?: string }>();
   
   const user = useSelector(getUserData)!;
+  const windowWidth = useWindowWidth();
 
   const canCreateTeam = isAdminInOrganization(getMyRoleInOrganization(selectedOrganization, user));
 
   const [isOpenCreatorTeam, setIsOpenCreatorTeam] = useState<boolean>(false);
+  const [isOpenTeamTab, setIsOpenTeamTab] = useState<boolean>(false);
+
+  const teamsRef = useRef<HTMLDivElement>([]);
 
   const filteredTeams = teams.filter((team) =>
     team.organizationId === selectedOrganization.organizationId
@@ -41,8 +47,8 @@ const TabPicker: React.FC<TabPickerProps> = (props) => {
   };
 
   const selectTeamHandler = (teamId: string) => {
-    changeTab(Tabs.TEAMS);
     selectTeam(teamId);
+    setIsOpenTeamTab(false);
   };
 
   const closeCreatorTeamHandler = useCallback(() => setIsOpenCreatorTeam(false), []);
@@ -53,6 +59,54 @@ const TabPicker: React.FC<TabPickerProps> = (props) => {
   const onCreateTeamHandler = useCallback(() => {
     closeCreatorTeamHandler();
   }, []);
+
+  useClickOutside(teamsRef, isOpenTeamTab, () => setIsOpenTeamTab(false));
+
+  const teamList = () => {
+    return (
+      <div className={styles.scrollbarWrapper}>
+        <Scrollbar autoHeight autoHeightMax={300}>
+          <div className={styles.teams} ref={teamsRef}>
+            {filteredTeams.map((team: Team) => (
+              <div
+                key={team.teamId}
+                className={classNames(styles.team, [styles.canSelected], {
+                  [styles.selected]: team.teamId === teamId,
+                })}
+                onClick={() => selectTeamHandler(team.teamId)}
+              >
+                <Avatar
+                  text={team.teamName}
+                  className={styles.avatar}
+                />
+
+                <div className={styles.name}>
+                  {team.teamName}
+                </div>
+              </div>
+            ))}
+
+            {canCreateTeam &&
+              <div
+                className={classNames(styles.team)}
+                onClick={openCreatorTeamHandler}
+              >
+                <SvgIcon
+                  iconName={icons.TEAM_ADD}
+                  applyHover={false}
+                  className={styles.iconAddTeam}
+                />
+
+                <div className={styles.name}>
+                  Создать команду
+                </div>
+              </div>
+            }
+          </div>
+        </Scrollbar>
+      </div>
+    );
+  };
 
   return (
     <div className={styles.TabPicker}>
@@ -65,9 +119,13 @@ const TabPicker: React.FC<TabPickerProps> = (props) => {
             <div
               className={classNames(styles.tab, [], {
                 [styles.selected]: currentTab === tab.id,
-                [styles.canSelected]: tab.id !== Tabs.TEAMS
+                [styles.canSelected]: tab.id !== Tabs.TEAMS,
+                [styles.openedTeamTab]: tab.id === Tabs.TEAMS && isOpenTeamTab
               })}
-              onClick={tab.id !== Tabs.TEAMS ? () => onClickHandler(tab.id) : undefined}
+              onClick={tab.id !== Tabs.TEAMS
+                ? () => onClickHandler(tab.id)
+                : () => setIsOpenTeamTab(true)
+              }
             >
               <div className={styles.iconWrapper}>
                 <SvgIcon
@@ -83,48 +141,7 @@ const TabPicker: React.FC<TabPickerProps> = (props) => {
               </span>
             </div>
 
-            {tab.id === Tabs.TEAMS && (
-              <Scrollbar autoHeight autoHeightMax={300}>
-                <div className={styles.teams}>
-                  {filteredTeams.map((team: Team) => (
-                    <div
-                      key={team.teamId}
-                      className={classNames(styles.team, [styles.canSelected], {
-                        [styles.selected]: team.teamId === teamId,
-                      })}
-                      onClick={() => selectTeamHandler(team.teamId)}
-                    >
-                      <Avatar
-                        text={team.teamName}
-                        width={30}
-                        height={30}
-                      />
-
-                      <div className={styles.name}>
-                        {team.teamName}
-                      </div>
-                    </div>
-                  ))}
-
-                  {canCreateTeam &&
-                    <div
-                      className={classNames(styles.team)}
-                      onClick={openCreatorTeamHandler}
-                    >
-                      <SvgIcon
-                        iconName={icons.TEAM_ADD}
-                        applyHover={false}
-                        className={styles.iconAddTeam}
-                      />
-
-                      <div className={styles.name}>
-                        Создать команду
-                      </div>
-                    </div>
-                  }
-                </div>
-              </Scrollbar>
-            )}
+            {tab.id === Tabs.TEAMS && (windowWidth > 640 || isOpenTeamTab) && teamList()}
           </div>
         ))
       }

@@ -6,20 +6,23 @@ import { Tabs } from './components/tab-picker/model/tabs.ts';
 import { useCallback, useEffect, useState } from 'react';
 import { SidebarOpener } from '@/widgets/sidebar-opener';
 import { OrganizationPicker } from '@/widgets/pickers/organization-picker';
-import {fetchTeamInfo, getTeamData, teamActions, TeamInfo} from '@/entities/team';
-import { icons, SvgIcon } from '@/shared/ui';
+import { fetchTeamInfo, getTeamData, teamActions, TeamInfo } from '@/entities/team';
+import {Arrow, ArrowDirections, icons, SvgIcon} from '@/shared/ui';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import Members from './components/tabs/members/Members.tsx';
 import Team from './components/tabs/team/Team.tsx';
 import { useNavigate, useParams } from 'react-router-dom';
 import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
 import Settings from './components/tabs/settings/Settings.tsx';
+import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
+import {classNames} from "@/shared/lib/utils/classNames.ts";
 
 const ManageOrganization = () => {
-  const { orgId, tab } = useParams<{ orgId?: string; teamId?: string; tab?: string; }>();
+  const { orgId, tab } = useParams<{ orgId?: string; tab?: string; }>();
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const windowWidth = useWindowWidth();
 
   const organizations = useSelector(getOrganizationData)!;
   const teams = useSelector(getTeamData)!;
@@ -27,6 +30,7 @@ const ManageOrganization = () => {
   const [selectedOrganization, setSelectedOrganization] = useState<OrganizationInfo | null>(null);
   const [selectedTeam, setSelectedTeam] = useState<TeamInfo | null>(null);
   const [currentTab, setCurrentTab] = useState<Tabs>(Tabs.MEMBERS);
+  const [isShowDescription, setIsShowDescription] = useState<boolean>(false);
 
   useEffect(() => {
     if (tab) {
@@ -94,6 +98,7 @@ const ManageOrganization = () => {
         break;
       case Tabs.SETTINGS:
         path += `/${Tabs.SETTINGS.toLowerCase()}`;
+        setSelectedTeam(null);
         break;
     }
 
@@ -136,6 +141,12 @@ const ManageOrganization = () => {
           organizations={organizations}
           onSelect={selectOrganization}
           defaultOrganizationId={orgId}
+          classes={{
+            container: styles.containerPicker,
+            text: styles.text,
+            image: styles.image,
+            iconArrow: styles.arrow
+          }}
         />
       </div>
 
@@ -148,9 +159,33 @@ const ManageOrganization = () => {
             className={styles.iconInfo}
           />
 
-          <div className={styles.text}>
-            {selectedOrganization?.organizationDescription}
-          </div>
+          {windowWidth > 640
+            ?
+            <div className={styles.text}>
+              {selectedOrganization?.organizationDescription}
+            </div>
+            :
+            <div className={styles.descriptionWrapper}>
+              <div
+                className={classNames(styles.showDescription, [], {
+                  [styles.activeShowDescription]: isShowDescription
+                })}
+                onClick={() => setIsShowDescription(prev => !prev)}
+              >
+                Описание
+                <Arrow
+                  className={styles.iconArrow}
+                  direction={isShowDescription ? ArrowDirections.UP : ArrowDirections.DOWN}
+                />
+              </div>
+
+              <div className={classNames(styles.text, [], {
+                [styles.showText]: isShowDescription
+              })}>
+                {selectedOrganization?.organizationDescription}
+              </div>
+            </div>
+          }
         </div>
       }
 

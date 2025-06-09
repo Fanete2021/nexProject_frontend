@@ -111,8 +111,6 @@ const Dialogs: React.FC<ChatListProps> = (props) => {
     const scrollHeight = scrollbarRef.current.getScrollHeight();
     const clientHeight = scrollbarRef.current.getClientHeight();
 
-    console.log(scrollTop + clientHeight, scrollHeight);
-
     if (scrollHeight - scrollTop - clientHeight <= 150 && currentPageDialogs < allPagesDialogs) {
       loadChats(false);
     }

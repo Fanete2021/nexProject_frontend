@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Arrow, ArrowDirections, Scrollbar } from '@/shared/ui';
 import { PickerItem } from '../model/types/pickerItem.ts';
 import styles from './Picker.module.scss';
 import Item from './components/Item.tsx';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
+import useClickOutside from '@/shared/lib/hooks/useClickOutside.ts';
 
 export interface PickerProps {
   selectedValue?: string;
@@ -33,33 +34,7 @@ const Picker: React.FC<PickerProps> = (props) => {
 
   const windowWidth = useWindowWidth();
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        pickerRef.current &&
-        !pickerRef.current.contains(event.target as Node) &&
-        isVisibleItems
-      ) {
-        setIsVisibleItems(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-
-    if (isVisibleItems) {
-      document.body.style.pointerEvents = 'none';
-      if (pickerRef.current) {
-        pickerRef.current.style.pointerEvents = 'auto';
-      }
-    } else {
-      document.body.style.pointerEvents = 'auto';
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.body.style.pointerEvents = 'auto';
-    };
-  }, [isVisibleItems]);
+  useClickOutside(pickerRef, isVisibleItems, () => setIsVisibleItems(false));
 
   const resizePicker = () => {
     if (!pickerRef.current || !itemsContainerRef.current || !mainItemRef.current) return;
@@ -102,13 +77,21 @@ const Picker: React.FC<PickerProps> = (props) => {
     if (item.canChoose !== false) onSelect?.(item.value);
   };
 
-  useEffect(() => {
-    if (!pickerRef.current || !itemsContainerRef.current || !mainItemRef.current) return;
+  useLayoutEffect(() => {
+    if (!pickerRef.current) return;
 
-    const pickerParent = pickerRef.current.parentElement!;
-    const positionX = pickerRef.current.getBoundingClientRect().left - pickerParent.getBoundingClientRect().left;
+    const observer = new ResizeObserver(() => {
+      const pickerParent = pickerRef.current!.parentElement!;
+      const positionX = pickerRef.current!.getBoundingClientRect().left - pickerParent.getBoundingClientRect().left;
+      setMaxWidth(pickerParent.getBoundingClientRect().width - positionX);
+    });
 
-    setMaxWidth(pickerParent.getBoundingClientRect().width - positionX);
+    observer.observe(pickerRef.current);
+    observer.observe(pickerRef.current.parentElement!);
+
+    return () => {
+      observer.disconnect();
+    };
   }, [windowWidth]);
 
   return (

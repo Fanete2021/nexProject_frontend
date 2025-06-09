@@ -1,4 +1,4 @@
-import {editTeam, isTeamDescriptionValid, isTeamNameValid, isTeamTagValid, TeamInfo} from '@/entities/team';
+import { editTeam, isTeamDescriptionValid, isTeamNameValid, isTeamTagValid, TeamInfo } from '@/entities/team';
 import {
   CircleLoader,
   CustomInput,
@@ -51,9 +51,9 @@ const EditTeamForm: React.FC<EditTeamFormProps> = (props) => {
 
   const formik = useFormik({
     initialValues: {
-      [FORM_FIELDS.NEW_TEAM_NAME]: team.teamName || '',
-      [FORM_FIELDS.NEW_TEAM_DESCRIPTION]: team.teamDescription || '',
-      [FORM_FIELDS.NEW_TEAM_TAGS]: team.teamTags.map(tag => tag.tagName) || []
+      [FORM_FIELDS.NEW_TEAM_NAME]: '',
+      [FORM_FIELDS.NEW_TEAM_DESCRIPTION]: '',
+      [FORM_FIELDS.NEW_TEAM_TAGS]: []
     },
     validationSchema,
     validateOnChange: true,
@@ -61,6 +61,8 @@ const EditTeamForm: React.FC<EditTeamFormProps> = (props) => {
     onSubmit: async (values) => {
       setIsSubmitLoading(true);
       try {
+        console.log(values[FORM_FIELDS.NEW_TEAM_TAGS])
+
         const response = await dispatch(editTeam({
           teamId: team.teamId,
           newTeamName: values[FORM_FIELDS.NEW_TEAM_NAME],
@@ -81,7 +83,7 @@ const EditTeamForm: React.FC<EditTeamFormProps> = (props) => {
 
   useEffect(() => {
     formik.setValues({
-      [FORM_FIELDS.NEW_TEAM_DESCRIPTION]: team.teamDescription,
+      [FORM_FIELDS.NEW_TEAM_DESCRIPTION]: team.teamDescription || '',
       [FORM_FIELDS.NEW_TEAM_NAME]: team.teamName,
       [FORM_FIELDS.NEW_TEAM_TAGS]: team.teamTags.map(tag => tag.tagName)
     });
@@ -189,7 +191,7 @@ const EditTeamForm: React.FC<EditTeamFormProps> = (props) => {
               className="FieldWrapper"
             >
               <div className="label">
-                {t('Теги') as string}<br/>
+                {t('Теги') as string} ({formik.values[FORM_FIELDS.NEW_TEAM_TAGS].length} шт.)<br/>
                 {isFormikErrorVisible(formik, FORM_FIELDS.NEW_TEAM_TAGS, { checkTouched: false }) &&
                   <div className="fieldError">{t(formik.errors[FORM_FIELDS.NEW_TEAM_TAGS]) as string}</div>
                 }

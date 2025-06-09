@@ -16,6 +16,8 @@ import { ContactPickerModal } from '@/widgets/pickers/contact-picker';
 import { OrganizationMember } from '@/entities/organization/model/types/organizationMember.ts';
 import MemberList from '../../member-list/MemberList';
 import { Roles } from '@/shared/ui/action-menu';
+import useWindowWidth from "@/shared/lib/hooks/useWindowWidth.ts";
+import {MOBILE_MAX_BREAKPOINT, TABLET_MAX_BREAKPOINT} from "@/shared/const/WindowBreakpoints.ts";
 
 const rolePriority = [
   OrganizationRoles.OWNER,
@@ -33,6 +35,7 @@ const Members: React.FC<MembersProps> = (props) => {
   const { organization, changeOrganization } = props;
 
   const dispatch = useAppDispatch();
+  const windowWidth = useWindowWidth();
 
   const user = useSelector(getUserData)!;
   
@@ -138,10 +141,14 @@ const Members: React.FC<MembersProps> = (props) => {
         editMember={openActionMenuHandler}
         membersType={'organizationMember'}
       >
-        {(memberLength: number) => 
+        {(memberLength: number, filter: Element) =>
           <div className={styles.infoWrapper}>
             <span className={styles.countMembers}>
               {memberLength} участников
+
+              {windowWidth <= TABLET_MAX_BREAKPOINT &&
+                filter
+              }
             </span>
           </div>
         }

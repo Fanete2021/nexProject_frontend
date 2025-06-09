@@ -1,6 +1,6 @@
 import { OrganizationInfo } from '@/entities/organization';
 import { EditOrganizationForm } from '@/features/organization/edit';
-import { icons, SvgIcon } from '@/shared/ui';
+import {icons, Scrollbar, SvgIcon} from '@/shared/ui';
 import styles from './Settings.module.scss';
 
 export interface SettingsProps {
@@ -12,20 +12,22 @@ const Settings: React.FC<SettingsProps> = (props) => {
   const { organization, changeOrganization } = props;
 
   return (
-    <div className={styles.Settings}>
-      <SvgIcon
-        iconName={icons.ORGANIZATION_IDEAS}
-        className={styles.iconOrganizationIdeas}
-        important
-        applyHover={false}
-      />
+    <Scrollbar>
+      <div className={styles.Settings}>
+        <SvgIcon
+          iconName={icons.ORGANIZATION_IDEAS}
+          className={styles.iconOrganizationIdeas}
+          important
+          applyHover={false}
+        />
 
-      <EditOrganizationForm
-        organization={organization}
-        onEditHandler={changeOrganization}
-        className={styles.form}
-      />
-    </div>
+        <EditOrganizationForm
+          organization={organization}
+          onEditHandler={changeOrganization}
+          className={styles.form}
+        />
+      </div>
+    </Scrollbar>
   );
 };
 

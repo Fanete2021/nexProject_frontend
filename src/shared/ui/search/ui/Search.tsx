@@ -3,15 +3,20 @@ import { CustomInput, icons, SvgIcon } from '@/shared/ui';
 import { InputAdornment } from '@mui/material';
 import styles from './Search.module.scss';
 import { useTranslation } from 'react-i18next';
+import { classNames } from '@/shared/lib/utils/classNames.ts';
 
 export interface SearchProps {
   value: string;
   changeValue: (value: string) => void;
+  classes?: {
+    searchWrapper?: string;
+    searchInput?: string;
+  }
 }
 
 const Search: React.FC<SearchProps> = (props) => {
   const { t } = useTranslation();
-  const { value, changeValue } = props;
+  const { value, changeValue, classes } = props;
 
   const clearSearch = useCallback(() => {
     changeValue('');
@@ -50,8 +55,8 @@ const Search: React.FC<SearchProps> = (props) => {
       placeholder={t('Поиск') as string}
       fullWidth
       classes={{
-        root: styles.searchWrapper,
-        input: styles.searchInput
+        root: classNames(styles.searchWrapper, [classes?.searchWrapper]),
+        input: classNames(styles.searchInput, [classes?.searchInput])
       }}
       value={value}
       onChange={changeHandler}

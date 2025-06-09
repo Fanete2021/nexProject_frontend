@@ -28,6 +28,7 @@ export interface EditOrganizationFormProps {
   onEditHandler?: (newOrganization: OrganizationInfo) => void;
   validationListDirection?: ValidationListDirections;
   organization: OrganizationInfo;
+  hasMobileVersion: boolean;
 }
 
 const enum FORM_FIELDS {
@@ -44,7 +45,13 @@ const validationSchema = yup.object({
 });
 
 const EditOrganizationForm: React.FC<EditOrganizationFormProps> = (props) => {
-  const { className, onEditHandler, validationListDirection = ValidationListDirections.ALL, organization } = props;
+  const {
+    className,
+    onEditHandler,
+    validationListDirection = ValidationListDirections.ALL,
+    organization,
+    hasMobileVersion = true
+  } = props;
 
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -87,7 +94,7 @@ const EditOrganizationForm: React.FC<EditOrganizationFormProps> = (props) => {
 
   useEffect(() => {
     formik.setValues({
-      [FORM_FIELDS.ORG_DESCRIPTION]: organization.organizationDescription,
+      [FORM_FIELDS.ORG_DESCRIPTION]: organization.organizationDescription || '',
       [FORM_FIELDS.ORG_NAME]: organization.organizationName
     });
   }, [organization]);
@@ -104,11 +111,18 @@ const EditOrganizationForm: React.FC<EditOrganizationFormProps> = (props) => {
         important
       />
 
-      <div className={styles.header}>
+      <div className={classNames(styles.header, [], {
+        [styles.mobileHeader]: hasMobileVersion
+      })}>
         <span className={styles.title}>Редактирование организации<br/> {organization.organizationName}</span>
       </div>
 
-      <form className={classNames('form', [styles.form])} onSubmit={onSubmit}>
+      <form
+        className={classNames('form', [styles.form], {
+          [styles.mobileForm]: hasMobileVersion,
+        })}
+        onSubmit={onSubmit}
+      >
         {error &&
           <div className="formError">{error.errDetails}</div>
         }

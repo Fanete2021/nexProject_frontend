@@ -23,11 +23,11 @@ export const isTeamDescriptionValid = (teamDescription: string): Validation[] =>
 };
 
 export const isTeamTagValid = (teamTag: string): Validation[] => {
-  const lengthValid = /^.{0,50}$/.test(teamTag);
+  const lengthValid = /^.{0,16}$/.test(teamTag);
 
   return [
     {
-      text: 'до 50 символов',
+      text: 'до 16 символов',
       isError: !lengthValid
     }
   ];

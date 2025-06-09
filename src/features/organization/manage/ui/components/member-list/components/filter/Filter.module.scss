@@ -1,0 +1,33 @@
+.Filter {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 210px;
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    gap: 5px;
+    font-size: 20px;
+    line-height: 26px;
+
+    .iconFilter {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  .roles {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 14px;
+    line-height: 18px;
+  }
+}
+
+.searchWrapper {
+  height: 30px !important;
+}

@@ -23,12 +23,7 @@ export interface OrganizationPickerProps {
 const OrganizationPicker: React.FC<OrganizationPickerProps> = (props) => {
   const {
     hasCreateOrganization = false,
-    classes = {
-      container: styles.organization,
-      text: styles.title,
-      iconArrow: styles.iconArrow,
-      image: styles.image
-    },
+    classes,
     onSelect,
     organizations,
     defaultOrganizationId = '',
@@ -66,7 +61,7 @@ const OrganizationPicker: React.FC<OrganizationPickerProps> = (props) => {
       image: (
         <Avatar
           text={org.organizationName}
-          className={classNames(styles.image, [classes.image])}
+          className={classNames(styles.image, [classes?.image])}
         />
       )
     }));
@@ -81,7 +76,7 @@ const OrganizationPicker: React.FC<OrganizationPickerProps> = (props) => {
             iconName={icons.ORGANIZATION}
             important
             applyHover={false}
-            className={classNames(styles.image, [classes.image])}
+            className={classNames(styles.image, [classes?.image])}
           />
         ),
       });
@@ -97,7 +92,7 @@ const OrganizationPicker: React.FC<OrganizationPickerProps> = (props) => {
         iconName={icons.ORGANIZATION}
         important
         applyHover={false}
-        className={classNames(styles.image, [classes.image])}
+        className={classNames(styles.image, [classes?.image])}
       />
     ),
   }), []);
@@ -105,7 +100,11 @@ const OrganizationPicker: React.FC<OrganizationPickerProps> = (props) => {
   return (
     <>
       <Picker
-        classes={classes}
+        classes={{
+          container: classNames(styles.organization, [classes?.container]),
+          text: classNames(styles.title, [classes?.text]),
+          iconArrow: classNames(styles.iconArrow, [classes?.iconArrow])
+        }}
         items={pickerItems}
         onSelect={onSelectHandler}
         defaultItem={defaultItemPicker}

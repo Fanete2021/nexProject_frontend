@@ -19,6 +19,8 @@ import MemberList from '../../member-list/MemberList.tsx';
 import { AppRoutes } from '@/shared/config/routeConfig/routeConfig.tsx';
 import { Roles } from '@/shared/ui/action-menu';
 import { EditTeamFormModal } from '@/features/team/edit';
+import { TABLET_MAX_BREAKPOINT } from '@/shared/const/WindowBreakpoints.ts';
+import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
 
 const rolePriority = [
   TeamRoles.OWNER,
@@ -37,6 +39,7 @@ const Team: React.FC<TeamsProps> = (props) => {
   const { team, organization, changeTeam } = props;
 
   const dispatch = useAppDispatch();
+  const windowWidth = useWindowWidth();
 
   const user = useSelector(getUserData)!;
 
@@ -165,13 +168,12 @@ const Team: React.FC<TeamsProps> = (props) => {
         getLink={generateLinkForMember}
         membersType={'teamMember'}
       >
-        {(memberLength: number) =>
+        {(memberLength: number, filter: Element) =>
           <>
             <div className={styles.header}>
               <Avatar
-                width={50}
-                height={50}
                 text={team.teamName}
+                className={styles.avatar}
               />
 
               <span>{team.teamName}</span>
@@ -205,9 +207,17 @@ const Team: React.FC<TeamsProps> = (props) => {
 
               <div className={styles.info}>
                 <div className={styles.infoHeader}>
-                  <span className={styles.countMembers}>
-                    {memberLength} участника
-                  </span>
+                  <div className={styles.wrapper}>
+                    <span className={styles.countMembers}>
+                      {memberLength} участника
+                    </span>
+
+                    {windowWidth <= TABLET_MAX_BREAKPOINT &&
+                      <div className={styles.filter}>
+                        {filter}
+                      </div>
+                    }
+                  </div>
 
                   <span className={styles.tags}>
                     {team.teamTags.map((tag) => (

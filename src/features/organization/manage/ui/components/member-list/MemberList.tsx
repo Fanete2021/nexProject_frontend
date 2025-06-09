@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import { Avatar, CheckList, icons, Scrollbar, Search, SvgIcon } from '@/shared/ui';
+import { Avatar, icons, Popover, Scrollbar, SvgIcon } from '@/shared/ui';
 import { OrganizationMember, OrganizationRoles } from '@/entities/organization';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import styles from './MemberList.module.scss';
@@ -8,6 +8,10 @@ import { useSelector } from 'react-redux';
 import { getUserData } from '@/entities/user';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
+import Filter from './components/filter/Filter.tsx';
+import { usePopover } from '@/shared/lib/hooks/usePopover.ts';
+import {DESKTOP_MIN_BREAKPOINT, TABLET_MAX_BREAKPOINT} from "@/shared/const/WindowBreakpoints.ts";
 
 export interface MemberListProps {
   members: (OrganizationMember | TeamMember)[];
@@ -16,7 +20,7 @@ export interface MemberListProps {
   addMember?: () => void;
   canEditMember?: ((member: OrganizationMember) => boolean) | ((member: TeamMember) => boolean);
   editMember?: (event: React.MouseEvent<HTMLElement, MouseEvent>, memberId: string) => void;
-  children: (memberLength: number) => ReactNode;
+  children: (memberLength: number, iconFilter: Element) => ReactNode;
   getLink?: (memberId: string) => string;
 }
 
@@ -24,12 +28,15 @@ const MemberList: React.FC<MemberListProps> = (props) => {
   const { members, canAddMember = false, addMember, canEditMember, editMember, children, getLink, membersType } = props;
 
   const { t } = useTranslation();
+  const windowWidth = useWindowWidth();
   
   const user = useSelector(getUserData)!;
   
   const [searchedMember, setSearcherMember] = useState<string>('');
   const [filteredMembers, setFilteredMembers] = useState<typeof members>([]);
   const [selectedRoles, setSelectedRoles] = useState<{ label: string, value: boolean }[]>([]);
+
+  const { anchorEl, openPopover, isOpenPopover, closePopover } = usePopover();
 
   useEffect(() => {
     const roles = membersType === 'organizationMember' ? OrganizationRoles : TeamRoles;
@@ -50,10 +57,24 @@ const MemberList: React.FC<MemberListProps> = (props) => {
     ));
   }, [searchedMember, members, selectedRoles]);
 
+  const iconFilter = () => {
+    return (
+      <SvgIcon
+        iconName={icons.FILTER}
+        applyFill={false}
+        applyHover={false}
+        applyStroke
+        className={styles.iconFilter}
+        onClick={openPopover}
+        important={Boolean(searchedMember) || selectedRoles.filter(role => !role.value).length > 0}
+      />
+    );
+  };
+
   return (
     <div className={styles.MemberList}>
       <div className={styles.list}>
-        {children(filteredMembers.length)}
+        {children(filteredMembers.length, iconFilter())}
 
         <div className={styles.MemberList}>
           <SvgIcon
@@ -106,9 +127,8 @@ const MemberList: React.FC<MemberListProps> = (props) => {
                     }
                   >
                     <Avatar
-                      width={50}
-                      height={50}
                       text={member.name}
+                      className={styles.avatar}
                     />
 
                     <div className={styles.info}>
@@ -133,37 +153,41 @@ const MemberList: React.FC<MemberListProps> = (props) => {
         </div>
       </div>
 
-      <div className={styles.filter}>
-        <div className={styles.header}>
-          Фильтры
+      {windowWidth >= DESKTOP_MIN_BREAKPOINT &&
+        <Filter
+          setSearcherMember={setSearcherMember}
+          searchedMember={searchedMember}
+          selectedRoles={selectedRoles}
+          setSelectedRoles={setSelectedRoles}
+        />
+      }
 
-          <SvgIcon
-            iconName={icons.FILTER}
-            applyFill={false}
-            applyHover={false}
-            applyStroke
-            className={styles.iconFilter}
+      {windowWidth <= TABLET_MAX_BREAKPOINT &&
+        <Popover
+          open={isOpenPopover}
+          anchorEl={anchorEl}
+          onClose={closePopover}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+          classes={{
+            paper: styles.paper,
+            root: styles.root
+          }}
+        >
+          <Filter
+            setSearcherMember={setSearcherMember}
+            searchedMember={searchedMember}
+            selectedRoles={selectedRoles}
+            setSelectedRoles={setSelectedRoles}
           />
-        </div>
-
-        <div className={styles.searchWrapper}>
-          <Search 
-            value={searchedMember}
-            changeValue={setSearcherMember}
-          />
-        </div>
-
-        <div className={styles.roles}>
-          <div className={styles.title}>
-            Отображаемые роли:
-          </div>
-
-          <CheckList
-            items={selectedRoles}
-            onChange={setSelectedRoles}
-          />
-        </div>
-      </div>
+        </Popover>
+      }
     </div>
   );
 };
