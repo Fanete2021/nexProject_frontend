@@ -1,11 +1,9 @@
 import { TeamTag } from './teamTag.ts';
 import { TeamMember } from './teamMember.ts';
+import { Team } from './team.ts';
 
-export interface TeamInfo {
-  teamId: string;
-  organizationId: string;
+export interface TeamInfo extends Omit<Team, 'role'> {
   organizationName: string;
-  teamName: string;
   teamDescription: string;
   teamManagerId: string;
   teamManagerName: string;

@@ -14,6 +14,13 @@ export const teamSlice = createSlice({
   reducers: {
     setData: (state, action: PayloadAction<Team[]>) => {
       state.data = action.payload;
+    },
+    updateTeam: (state, action: PayloadAction<Team>) => {
+      if (!state.data) return;
+
+      state.data = state.data.map(team =>
+        team.teamId === action.payload.teamId ? action.payload : team
+      );
     }
   },
   extraReducers: (builder) => {

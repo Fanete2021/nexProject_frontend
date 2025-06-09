@@ -6,7 +6,7 @@ import { Tabs } from './components/tab-picker/model/tabs.ts';
 import { useCallback, useEffect, useState } from 'react';
 import { SidebarOpener } from '@/widgets/sidebar-opener';
 import { OrganizationPicker } from '@/widgets/pickers/organization-picker';
-import { fetchTeamInfo, getTeamData, TeamInfo } from '@/entities/team';
+import {fetchTeamInfo, getTeamData, teamActions, TeamInfo} from '@/entities/team';
 import { icons, SvgIcon } from '@/shared/ui';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
 import Members from './components/tabs/members/Members.tsx';
@@ -121,6 +121,11 @@ const ManageOrganization = () => {
     }
   };
 
+  const updateTeamHandler = (team: TeamInfo) => {
+    setSelectedTeam(team);
+    dispatch(teamActions.updateTeam(team));
+  };
+
   return (
     <div className={styles.ManageOrganization}>
       <div className={styles.header}>
@@ -189,7 +194,7 @@ const ManageOrganization = () => {
                 <Team
                   organization={selectedOrganization}
                   team={selectedTeam}
-                  changeTeam={setSelectedTeam}
+                  changeTeam={updateTeamHandler}
                 />
               }
 
