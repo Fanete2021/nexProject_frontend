@@ -14,6 +14,8 @@ import { addMembersToOrganization } from './model/service/addMembersToOrganizati
 import { OrganizationInfo } from './model/types/organizationInfo.ts';
 import { OrganizationMember } from './model/types/organizationMember.ts';
 import { editRoleInOrganization } from './model/service/editRoleInOrganization.ts';
+import { isOrganizationDescriptionValid, isOrganizationNameValid } from './libs/utils/validation.ts';
+import { editOrganization } from './model/service/editOrganization.ts';
 
 export {
   createOrganization,
@@ -22,6 +24,7 @@ export {
   deleteMemberFromOrganization,
   addMembersToOrganization,
   editRoleInOrganization,
+  editOrganization,
 
   organizationActions,
   organizationReducer,
@@ -33,7 +36,10 @@ export {
   isAdmin as isAdminInOrganization,
   isOwner as isOwnerInOrganization,
 
-  OrganizationRoles
+  OrganizationRoles,
+
+  isOrganizationDescriptionValid,
+  isOrganizationNameValid
 };
 
 export type {

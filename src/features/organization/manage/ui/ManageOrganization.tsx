@@ -38,7 +38,7 @@ const ManageOrganization = () => {
     } else {
       setCurrentTab(Tabs.MEMBERS);
     }
-  }, [tab, tab]);
+  }, [tab]);
 
   useEffect(() => {
     const loadOrganization = async () => {
@@ -51,6 +51,7 @@ const ManageOrganization = () => {
         const response = await dispatch(
           fetchOrganizationInfo({ organizationId: orgId })
         ).unwrap();
+
         setSelectedOrganization(response);
       } catch (error) {
         console.error(error);

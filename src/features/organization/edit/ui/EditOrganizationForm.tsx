@@ -1,28 +1,33 @@
+import React, {useCallback, useEffect, useState} from 'react';
+import * as yup from 'yup';
 import {
+  CircleLoader,
   CustomInput,
   CustomTextarea,
   icons,
-  CircleLoader,
   SvgIcon,
   ValidationList,
   ValidationListDirections
 } from '@/shared/ui';
-import styles from './CreateOrganizationForm.module.scss';
+import { useTranslation } from 'react-i18next';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
+import { ApiError } from '@/shared/types/apiError.ts';
+import { useFormik } from 'formik';
+import {
+  editOrganization,
+  isOrganizationDescriptionValid,
+  isOrganizationNameValid, OrganizationInfo
+} from '@/entities/organization';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
+import styles from './EditOrganizationFormModal.module.scss';
 import { FormControl } from '@mui/material';
 import { isFormikErrorVisible } from '@/shared/lib/utils/isFormikErrorVisible.ts';
-import { useTranslation } from 'react-i18next';
-import { useCallback, useState } from 'react';
-import { useFormik } from 'formik';
-import * as yup from 'yup';
-import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch.ts';
-import { createOrganization, isOrganizationDescriptionValid, isOrganizationNameValid } from '@/entities/organization';
-import { ApiError } from '@/shared/types/apiError.ts';
 
-export interface CreateOrganizationFormProps {
+export interface EditOrganizationFormProps {
   className?: string;
-  onCreateHandler?: () => void;
+  onEditHandler?: (newOrganization: OrganizationInfo) => void;
   validationListDirection?: ValidationListDirections;
+  organization: OrganizationInfo;
 }
 
 const enum FORM_FIELDS {
@@ -38,19 +43,19 @@ const validationSchema = yup.object({
     .matches(/^.{0,255}$/, 'Не соответствует шаблону'),
 });
 
-const CreateOrganizationForm: React.FC<CreateOrganizationFormProps> = (props) => {
-  const { className, onCreateHandler, validationListDirection = ValidationListDirections.ALL } = props;
-  
+const EditOrganizationForm: React.FC<EditOrganizationFormProps> = (props) => {
+  const { className, onEditHandler, validationListDirection = ValidationListDirections.ALL, organization } = props;
+
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  
+
   const [isSubmitLoading, setIsSubmitLoading] = useState<boolean>(false);
   const [error, setError] = useState<ApiError | null>(null);
 
   const formik = useFormik({
     initialValues: {
-      [FORM_FIELDS.ORG_NAME]: '',
-      [FORM_FIELDS.ORG_DESCRIPTION]: '',
+      [FORM_FIELDS.ORG_NAME]: organization.organizationName,
+      [FORM_FIELDS.ORG_DESCRIPTION]: organization.organizationDescription,
     },
     validationSchema,
     validateOnChange: true,
@@ -58,9 +63,14 @@ const CreateOrganizationForm: React.FC<CreateOrganizationFormProps> = (props) =>
     onSubmit: async (values) => {
       setIsSubmitLoading(true);
       try {
-        await dispatch(createOrganization(values)).unwrap();
+        const response = await dispatch(editOrganization({
+          organizationId: organization.organizationId,
+          organizationName: values[FORM_FIELDS.ORG_NAME],
+          organizationDescription: values[FORM_FIELDS.ORG_DESCRIPTION],
+        })).unwrap();
+
         formik.resetForm();
-        onCreateHandler?.();
+        onEditHandler?.(response);
         setError(null);
       } catch (error) {
         setError(error);
@@ -75,11 +85,18 @@ const CreateOrganizationForm: React.FC<CreateOrganizationFormProps> = (props) =>
     formik.handleSubmit();
   }, [formik.handleSubmit]);
 
+  useEffect(() => {
+    formik.setValues({
+      [FORM_FIELDS.ORG_DESCRIPTION]: organization.organizationDescription,
+      [FORM_FIELDS.ORG_NAME]: organization.organizationName
+    });
+  }, [organization]);
+
   const organizationNameValidation = isOrganizationNameValid(formik.values[FORM_FIELDS.ORG_NAME]);
   const organizationDescriptionValidation = isOrganizationDescriptionValid(formik.values[FORM_FIELDS.ORG_DESCRIPTION]);
 
   return (
-    <div className={classNames(styles.CreateOrganizationForm, [className])}>
+    <div className={classNames(styles.EditOrganizationForm, [className])}>
       <SvgIcon
         iconName={icons.ORGANIZATION}
         className={styles.iconOrganization}
@@ -88,10 +105,7 @@ const CreateOrganizationForm: React.FC<CreateOrganizationFormProps> = (props) =>
       />
 
       <div className={styles.header}>
-        <span className={styles.title}>Создайте свою организацию!</span>
-        <span className={styles.subtitle}>
-          Объединяйте людей, управляйте проектами и контролируйте процессы в одном месте.
-        </span>
+        <span className={styles.title}>Редактирование организации<br/> {organization.organizationName}</span>
       </div>
 
       <form className={classNames('form', [styles.form])} onSubmit={onSubmit}>
@@ -163,7 +177,7 @@ const CreateOrganizationForm: React.FC<CreateOrganizationFormProps> = (props) =>
         >
           {isSubmitLoading
             ? <CircleLoader className="submitLoader" />
-            : <>{t('Создать')}</>
+            : <>{t('Сохранить')}</>
           }
         </button>
       </form>
@@ -171,4 +185,4 @@ const CreateOrganizationForm: React.FC<CreateOrganizationFormProps> = (props) =>
   );
 };
 
-export default CreateOrganizationForm;
+export default EditOrganizationForm;
