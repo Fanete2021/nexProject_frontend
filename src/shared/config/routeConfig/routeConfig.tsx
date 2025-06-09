@@ -28,6 +28,7 @@ export enum AppRoutes {
   EMAIL_CONFIRM = 'emailConfirm',
   MAIN = 'main',
   CHATS = 'chats',
+  CHATS_DETAILS = 'chatsDetails',
   ORGANIZATION = 'organization',
   ORGANIZATION_DETAILS = 'organizationDetails',
   ORGANIZATION_TAB = 'organizationSettings',
@@ -54,6 +55,7 @@ export const RoutePath: Record<AppRoutes, string> = {
   [AppRoutes.NEW_PASSWORD]: `/${AppRoutes.NEW_PASSWORD}/:token`,
   [AppRoutes.MAIN]: '/',
   [AppRoutes.CHATS]: `/${AppRoutes.CHATS}`,
+  [AppRoutes.CHATS_DETAILS]: `/${AppRoutes.CHATS}/:chatId`,
   [AppRoutes.ORGANIZATION]: `/${AppRoutes.ORGANIZATION}`,
   [AppRoutes.ORGANIZATION_TAB]: `/${AppRoutes.ORGANIZATION}/:orgId/:tab`,
   [AppRoutes.ORGANIZATION_DETAILS]: `/${AppRoutes.ORGANIZATION}/:orgId`,
@@ -99,6 +101,11 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   },
   [AppRoutes.CHATS]: {
     path: `${RoutePath.chats}`,
+    element: <ChatsPage />,
+    authOnly: true,
+  },
+  [AppRoutes.CHATS_DETAILS]: {
+    path: `${RoutePath.chatsDetails}`,
     element: <ChatsPage />,
     authOnly: true,
   },

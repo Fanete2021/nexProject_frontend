@@ -11,6 +11,8 @@ import { MOBILE_MAX_BREAKPOINT } from '@/shared/const/WindowBreakpoints.ts';
 import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
 import { videoActions } from '@/features/video';
 import { isPublicChat } from '../../../../../../utils/libs/isPublicChat.ts';
+import {RoutePath} from "@/shared/config/routeConfig/routeConfig.tsx";
+import {useNavigate} from "react-router-dom";
 
 export interface HeaderProps {
   chatInfo: ChatInfo;
@@ -19,9 +21,13 @@ export interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = (props) => {
   const { chatInfo, className } = props;
-  const isActiveInfoPanel = useSelector(getChatIsActiveInfoPanel);
+
   const dispatch = useAppDispatch();
   const windowWidth = useWindowWidth();
+  const navigate = useNavigate();
+
+  const isActiveInfoPanel = useSelector(getChatIsActiveInfoPanel);
+
   const isPublic = isPublicChat(chatInfo);
 
   const toggleInfoPanel = () => {
@@ -30,7 +36,8 @@ const Header: React.FC<HeaderProps> = (props) => {
 
   const clearSelectedChat = useCallback(() => {
     dispatch(chatActions.setSelectedChat(undefined));
-  }, []);
+    navigate(`${RoutePath.chats}`);
+  }, [navigate]);
   
   const videoCallHandler = () => {
     dispatch(videoActions.setRoomId(chatInfo.chatId));

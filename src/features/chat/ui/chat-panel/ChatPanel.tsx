@@ -22,6 +22,8 @@ import SelectedChatSkeleton from './components/selected-chat/SelectedChatSkeleto
 import InfoChat from './components/info-chat/InfoChat.tsx';
 import SelectedChat from './components/selected-chat/SelectedChat.tsx';
 import { isPublicChat } from '../../utils/libs/isPublicChat.ts';
+import { useNavigate, useParams } from 'react-router-dom';
+import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
 
 export interface ChatProps {
     className?: string;
@@ -33,8 +35,11 @@ const MAX_PANEL_WIDTH = 400;
 const ChatPanel: React.FC<ChatProps> = (props) => {
   const { className } = props;
   
+  const { chatId } = useParams<{ chatId: string }>();
+  
   const dispatch = useAppDispatch();
   const windowWidth = useWindowWidth();
+  const navigate = useNavigate();
 
   const isActiveInfoPanel = useSelector(getChatIsActiveInfoPanel);
   const selectedChat = useSelector(getChatSelectedChat);
@@ -58,6 +63,30 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
     direction: 'right',
     containerRef: panelRef,
   });
+
+  useEffect(() => {
+    if (!chatId) {
+      dispatch(chatActions.setSelectedChat(undefined));
+      return;
+    }
+
+    const setupSelectedChat = async (chatId: string) => {
+      try {
+        dispatch(chatActions.setIsLoadingSelectedChat(true));
+        const response = await dispatch(fetchChatInfo({ chatId: chatId })).unwrap();
+        dispatch(chatActions.setSelectedChat(response));
+      } catch (error) {
+        navigate(`${RoutePath.chats}`);
+        console.log(error);
+      } finally {
+        dispatch(chatActions.setIsLoadingSelectedChat(false));
+      }
+    };
+
+    if (!selectedChat || selectedChat?.chatId) {
+      setupSelectedChat(chatId);
+    }
+  }, [chatId, dispatch]);
 
   useEffect(() => {
     const subscribeChats = async () => {
@@ -104,6 +133,7 @@ const ChatPanel: React.FC<ChatProps> = (props) => {
 
         //При выборе пустого диалога chatId = ''
         if (selectedChat && !selectedChat.chatId) {
+          navigate(`${RoutePath.chats}/${response.chatId}`);
           dispatch(chatActions.setSelectedChat(response));
         }
       } catch (error) {
