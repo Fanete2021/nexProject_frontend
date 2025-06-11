@@ -3,13 +3,18 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: 14px;
+  line-height: 16px;
+
+  @media screen and (max-width: 768px) {
+    font-size: 16px;
+    line-height: 18px;
+  }
 }
 
 .item {
   user-select: none;
   position: relative;
-  font-size: 14px;
-  line-height: 16px;
   color: var(--link-text-color);
   cursor: pointer;
   transition: color 0.3s;
@@ -20,11 +25,6 @@
 
   &.active {
     color: var(--link-text-hover-color);
-  }
-
-  @media screen and (max-width: 768px) {
-    font-size: 16px;
-    line-height: 18px;
   }
 }
 
