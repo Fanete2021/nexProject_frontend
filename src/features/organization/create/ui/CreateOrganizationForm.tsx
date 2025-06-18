@@ -33,7 +33,7 @@ const enum FORM_FIELDS {
 const validationSchema = yup.object({
   [FORM_FIELDS.ORG_NAME]: yup.string()
     .required('Название обязательно')
-    .matches(/^[\p{L}0-9&_ -]{3,64}$/u, 'Не соответствует шаблону'),
+    .matches(/^[\p{L}0-9&_ -]{3,48}$/u, 'Не соответствует шаблону'),
   [FORM_FIELDS.ORG_DESCRIPTION]: yup.string()
     .matches(/^.{0,255}$/, 'Не соответствует шаблону'),
 });
