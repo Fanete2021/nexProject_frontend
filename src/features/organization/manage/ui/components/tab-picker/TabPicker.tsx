@@ -3,15 +3,15 @@ import { getMyRoleInOrganization, isAdminInOrganization, OrganizationInfo } from
 import { getUserData } from '@/entities/user';
 import styles from './TabPicker.module.scss';
 import { Avatar, icons, Scrollbar, SvgIcon } from '@/shared/ui';
-import { tabs, Tabs } from './model/tabs.ts';
+import { TabProps, tabs, Tabs } from './model/tabs.ts';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
 import { Team } from '@/entities/team';
 import { CreateTeamFormModal } from '@/features/team/create';
-import {useCallback, useRef, useState} from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { convertObjectToArray } from '@/shared/lib/utils/convertObjectToArray.ts';
 import { useParams } from 'react-router-dom';
 import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
-import useClickOutside from "@/shared/lib/hooks/useClickOutside.ts";
+import useClickOutside from '@/shared/lib/hooks/useClickOutside.ts';
 
 export interface TabPickerProps {
   currentTab: Tabs;
@@ -21,7 +21,7 @@ export interface TabPickerProps {
   selectTeam: (teamId: string) => void;
 }
 
-export const tabsArray = convertObjectToArray(tabs);
+export const tabsArray: Array<TabProps & { id: string }> = convertObjectToArray(tabs);
 
 const TabPicker: React.FC<TabPickerProps> = (props) => {
   const { currentTab, changeTab, selectedOrganization, teams, selectTeam } = props;
@@ -31,6 +31,7 @@ const TabPicker: React.FC<TabPickerProps> = (props) => {
   const user = useSelector(getUserData)!;
   const windowWidth = useWindowWidth();
 
+  const myRole = getMyRoleInOrganization(selectedOrganization, user);
   const canCreateTeam = isAdminInOrganization(getMyRoleInOrganization(selectedOrganization, user));
 
   const [isOpenCreatorTeam, setIsOpenCreatorTeam] = useState<boolean>(false);
@@ -40,6 +41,11 @@ const TabPicker: React.FC<TabPickerProps> = (props) => {
 
   const filteredTeams = teams.filter((team) =>
     team.organizationId === selectedOrganization.organizationId
+  );
+  const filteredTabs = tabsArray.filter((tab) =>
+    tab.access
+      ? tab.access.includes(myRole)
+      : tab
   );
 
   const onClickHandler = (newTab: Tabs) => {
@@ -112,11 +118,16 @@ const TabPicker: React.FC<TabPickerProps> = (props) => {
 
   return (
     <div className={styles.TabPicker}>
-      {tabsArray
+      {filteredTabs
         .map((tab) => (
           <div
             key={tab.id}
             className={classNames(styles.tabWrapper)}
+            style={{
+              display: tab.id !== Tabs.TEAMS || (tab.id === Tabs.TEAMS && (canCreateTeam || filteredTeams.length))
+                ? 'flex'
+                : 'none',
+            }}
           >
             <div
               className={classNames(styles.tab, [], {
@@ -125,7 +136,7 @@ const TabPicker: React.FC<TabPickerProps> = (props) => {
                 [styles.openedTeamTab]: windowWidth <= 640 && tab.id === Tabs.TEAMS && isOpenTeamTab
               })}
               onClick={tab.id !== Tabs.TEAMS
-                ? () => onClickHandler(tab.id)
+                ? () => onClickHandler(tab.id as Tabs)
                 : () => setIsOpenTeamTab(windowWidth <= 640)
               }
             >
