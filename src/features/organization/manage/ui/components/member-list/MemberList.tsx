@@ -137,13 +137,17 @@ const MemberList: React.FC<MemberListProps> = (props) => {
                     </div>
 
                     {canEditMember && canEditMember(member) &&
-                      <SvgIcon
-                        iconName={icons.ACTION_MENU}
-                        applyStroke
-                        applyFill={false}
-                        className={styles.iconActionMenu}
+                      <div
+                        className={styles.wrapperIconActionMenu}
                         onClick={(e) => editMember?.(e, member.userId)}
-                      />
+                      >
+                        <SvgIcon
+                          iconName={icons.ACTION_MENU}
+                          applyStroke
+                          applyFill={false}
+                          className={styles.iconActionMenu}
+                        />
+                      </div>
                     }
                   </MemberWrapper>
                 );

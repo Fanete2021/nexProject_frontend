@@ -69,12 +69,20 @@
         line-height: 21px;
       }
 
-      .iconActionMenu {
+      .wrapperIconActionMenu {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 15px;
+        height: 30px;
         margin-left: auto;
         cursor: pointer;
+        margin-right: 10px;
+      }
+
+      .iconActionMenu {
         width: 5px;
         height: 20px;
-        margin-right: 10px;
       }
 
       .iconMemberAdd, .avatar {
