@@ -6,7 +6,7 @@ import ChatWebSocketService from '../../model/service/ChatWebSockerService.ts';
 import { useSelector } from 'react-redux';
 import { getAuthToken } from '@/features/account/auth';
 import { getUserData } from '@/entities/user';
-import { NewMessage } from '@/features/chat';
+import NewMessageForm from './components/NewMessageForm/NewMessageForm.tsx';
 
 type Config = {
   token?: string;
@@ -18,7 +18,9 @@ type Config = {
 const Chat = () => {
   const [token, setToken] = useState(useSelector(getAuthToken));
   const [userId, setUserId] = useState(useSelector(getUserData)?.userId);
-  const [connectionURL, setConnectionURL] = useState(`${import.meta.env.VITE_API}/ws`);
+  const [connectionURL, setConnectionURL] = useState(() => {
+    return localStorage.getItem('connectionURL') || `${import.meta.env.VITE_API}/ws`;
+  });
   const [topics, setTopics] = useState<string[]>([
     '/exchange/amq.direct/reply',
     '/topic/chat.group.messages',
@@ -30,10 +32,6 @@ const Chat = () => {
   });
   const [isConnected, setIsConnectedToChat] = useState<boolean>(false);
   const [isFirstSubscribe, setIsFirstSubscribe] = useState<boolean>(true);
-  const [recipientId, setRecipientId] = useState<string>('');
-  const [chatId, setChatId] = useState<string>('');
-  const [topicId, setTopicId] = useState<string>('');
-  const [message, setMessage] = useState<string>('');
 
   const changeTopic = (value, index) => {
     const changedTopics = topics.map((topic, i) => i === index ? value : topic);
@@ -102,19 +100,9 @@ const Chat = () => {
     };
   }, [config]);
 
-  const sendMessage = () => {
-    if (!config.userId) return;
-
-    const newMessage: NewMessage = {
-      message: message,
-      senderId: config.userId,
-      recipientId: recipientId,
-      chatId: chatId,
-      topicId: topicId,
-    };
-    ChatWebSocketService.sendMessage(newMessage);
-    setMessage('');
-  };
+  useEffect(() => {
+    localStorage.setItem('connectionURL', connectionURL);
+  }, [connectionURL]);
 
   return (
     <div className={styles.Chat}>
@@ -140,7 +128,7 @@ const Chat = () => {
             </div>
 
             <CustomInput
-              classes={{root: styles.input}}
+              classes={{ root: styles.input }}
               placeholder="Url для подключения"
               value={connectionURL}
               onChange={(e) => setConnectionURL(e.target.value)}
@@ -153,7 +141,7 @@ const Chat = () => {
             </div>
 
             <CustomInput
-              classes={{root: styles.input}}
+              classes={{ root: styles.input }}
               placeholder="Токен"
               value={token}
               onChange={(e) => setToken(e.target.value)}
@@ -166,7 +154,7 @@ const Chat = () => {
             </div>
 
             <CustomInput
-              classes={{root: styles.input}}
+              classes={{ root: styles.input }}
               placeholder="Идентификатор"
               value={userId}
               onChange={(e) => setUserId(e.target.value)}
@@ -193,65 +181,7 @@ const Chat = () => {
             </span>
           </div>
 
-          <FormControl className="FieldWrapper">
-            <div className="label">
-              recipientId
-            </div>
-
-            <CustomInput
-              classes={{root: styles.input}}
-              placeholder="recipientId"
-              value={recipientId}
-              onChange={(e) => setRecipientId(e.target.value)}
-            />
-          </FormControl>
-
-          <FormControl className="FieldWrapper">
-            <div className="label">
-              chatId
-            </div>
-
-            <CustomInput
-              classes={{root: styles.input}}
-              placeholder="chatId"
-              value={chatId}
-              onChange={(e) => setChatId(e.target.value)}
-            />
-          </FormControl>
-
-          <FormControl className="FieldWrapper">
-            <div className="label">
-              topicId
-            </div>
-
-            <CustomInput
-              classes={{root: styles.input}}
-              placeholder="topicId"
-              value={topicId}
-              onChange={(e) => setTopicId(e.target.value)}
-            />
-          </FormControl>
-
-          <FormControl className="FieldWrapper">
-            <div className="label">
-              message
-            </div>
-
-            <CustomInput
-              classes={{root: styles.input}}
-              placeholder="message"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-            />
-          </FormControl>
-
-          <Button
-            className={styles.button}
-            onClick={sendMessage}
-            disabled={(!recipientId && !chatId) || !message || !config.userId}
-          >
-            Отправить
-          </Button>
+          <NewMessageForm userId={config.userId} isConnected={isConnected} />
         </div>
 
         <div className={styles.panel}>
@@ -270,11 +200,11 @@ const Chat = () => {
           </div>
 
           <div className={styles.topics}>
-            {Array.from({length: 3}, (_, i) => i).map((num) => (
+            {Array.from({ length: 3 }, (_, i) => i).map((num) => (
               <div className={styles.topic} key={num}>
                 <FormControl className="FieldWrapper">
                   <CustomInput
-                    classes={{root: styles.input}}
+                    classes={{ root: styles.input }}
                     placeholder={`${num + 1} топик`}
                     value={topics[num]}
                     onChange={(e) => changeTopic(e.target.value, num)}
