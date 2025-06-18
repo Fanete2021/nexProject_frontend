@@ -120,7 +120,7 @@ const TabPicker: React.FC<TabPickerProps> = (props) => {
               className={classNames(styles.tab, [], {
                 [styles.selected]: currentTab === tab.id,
                 [styles.canSelected]: tab.id !== Tabs.TEAMS,
-                [styles.openedTeamTab]: tab.id === Tabs.TEAMS && isOpenTeamTab
+                [styles.openedTeamTab]: windowWidth <= 640 && tab.id === Tabs.TEAMS && isOpenTeamTab
               })}
               onClick={tab.id !== Tabs.TEAMS
                 ? () => onClickHandler(tab.id)
