@@ -63,6 +63,8 @@ const TabPicker: React.FC<TabPickerProps> = (props) => {
   useClickOutside(teamsRef, isOpenTeamTab, () => setIsOpenTeamTab(false));
 
   const teamList = () => {
+    if (!filteredTeams.length && !canCreateTeam) return;
+
     return (
       <div className={styles.scrollbarWrapper}>
         <Scrollbar autoHeight autoHeightMax={300}>
@@ -124,7 +126,7 @@ const TabPicker: React.FC<TabPickerProps> = (props) => {
               })}
               onClick={tab.id !== Tabs.TEAMS
                 ? () => onClickHandler(tab.id)
-                : () => setIsOpenTeamTab(true)
+                : () => setIsOpenTeamTab(windowWidth <= 640)
               }
             >
               <div className={styles.iconWrapper}>
