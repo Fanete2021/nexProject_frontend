@@ -249,7 +249,7 @@ const Team: React.FC<TeamsProps> = (props) => {
         position={actionMenuPosition}
         deleteHandler={deleteMember}
         deleteText={'Исключить'}
-        deleteIcon={icons.CROSS}
+        deleteIcon={icons.EXCLUDE}
         changeRoleHandler={changeRole}
         roles={isOwnerInTeam(myRole) ? Roles : Roles.filter(r => r.name !== TeamRoles.ADMIN)}
       />

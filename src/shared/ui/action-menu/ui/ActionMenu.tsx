@@ -14,7 +14,7 @@ export interface ActionMenuProps {
   editHandler?: () => void,
   deleteHandler?: () => void,
   deleteText?: string;
-  deleteIcon?: icons.DELETE | icons.CROSS;
+  deleteIcon?: icons.DELETE | icons.EXCLUDE;
   roles?: Role[];
   changeRoleHandler?: (role: string) => void;
 }
@@ -117,7 +117,7 @@ const ActionMenu: React.FC<ActionMenuProps> = (props) => {
                   applyStroke
                   applyFill={false}
                   applyHover={false}
-                  className={styles.icon}
+                  className={styles.roleIcon}
                 />
 
                 {t(role.name) as string}
