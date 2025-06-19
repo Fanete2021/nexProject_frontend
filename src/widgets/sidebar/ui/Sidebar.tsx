@@ -46,7 +46,11 @@ const Sidebar: React.FC<SidebarProps> = (props: SidebarProps) => {
     <Link
       className={classNames(
         styles.linkWrapper,
-        [location.pathname === item.path && styles.activeLinkWrapper]
+        [],
+        {
+          [styles.activeLinkWrapper]: location.pathname === item.path ||
+            (item.path !== '/' && location.pathname.startsWith(item.path))
+        }
       )}
       to={item.path}
       key={item.path}
