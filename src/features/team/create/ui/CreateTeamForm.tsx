@@ -18,8 +18,12 @@ export interface CreateTeamFormProps {
   validationListDirection?: ValidationListDirections;
 }
 
+const enum FORM_FIELDS {
+  TEAM_NAME = 'teamName',
+}
+
 const validationSchema = yup.object({
-  teamName: yup.string()
+  [FORM_FIELDS.TEAM_NAME]: yup.string()
     .required('Название обязательно')
     .matches(/^.{6,20}$/, 'Не соответствует шаблону'),
 });
@@ -35,7 +39,7 @@ const CreateTeamForm: React.FC<CreateTeamFormProps> = (props) => {
 
   const formik = useFormik({
     initialValues: {
-      teamName: '',
+      [FORM_FIELDS.TEAM_NAME]: '',
     },
     validationSchema,
     validateOnChange: true,
@@ -64,7 +68,7 @@ const CreateTeamForm: React.FC<CreateTeamFormProps> = (props) => {
     formik.handleSubmit();
   }, [formik.handleSubmit]);
 
-  const teamNameValid = isTeamNameValid(formik.values.teamName);
+  const teamNameValid = isTeamNameValid(formik.values[FORM_FIELDS.TEAM_NAME]);
 
   return (
     <div className={classNames(styles.CreateTeamForm, [className])}>
@@ -93,25 +97,25 @@ const CreateTeamForm: React.FC<CreateTeamFormProps> = (props) => {
         >
           <div className="label">
             {t('Название') as string}<br/>
-            {isFormikErrorVisible(formik, 'teamName', { checkTouched: false }) &&
-              <div className="fieldError">{t(formik.errors.teamName) as string}</div>
+            {isFormikErrorVisible(formik, FORM_FIELDS.TEAM_NAME, { checkTouched: false }) &&
+              <div className="fieldError">{t(formik.errors[FORM_FIELDS.TEAM_NAME]) as string}</div>
             }
           </div>
 
           <ValidationList
             items={teamNameValid}
-            hasError={isFormikErrorVisible(formik, 'teamName')}
+            hasError={isFormikErrorVisible(formik, FORM_FIELDS.TEAM_NAME)}
             direction={validationListDirection}
           >
             <CustomInput
-              id="teamName"
+              id={FORM_FIELDS.TEAM_NAME}
               placeholder={t('Название')}
               fullWidth
               type="text"
-              name="teamName"
-              value={formik.values.teamName}
+              name={FORM_FIELDS.TEAM_NAME}
+              value={formik.values[FORM_FIELDS.TEAM_NAME]}
               onChange={formik.handleChange}
-              isError={isFormikErrorVisible(formik, 'teamName', { checkTouched: false })}
+              isError={isFormikErrorVisible(formik, FORM_FIELDS.TEAM_NAME, { checkTouched: false })}
               onBlur={formik.handleBlur}
               autoComplete="off"
             />

@@ -49,25 +49,13 @@
   }
 }
 
-
 .button {
-  background: var(--button-bg-color);
-  color: var(--button-text-color);
-  margin-top: 10px;
   width: 100%;
   font-weight: bold;
   font-size: 16px;
   line-height: 18px;
   border-radius: 25px;
   height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-
-  &:hover:not(:disabled) {
-    background: var(--button-bg-hover-color);
-  }
 }
 
 .topics {

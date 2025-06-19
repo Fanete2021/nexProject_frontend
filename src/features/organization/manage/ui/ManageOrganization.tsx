@@ -1,13 +1,13 @@
 import styles from './ManageOrganization.module.scss';
 import {
-  fetchOrganizationInfo,
+  fetchOrganizationInfo, getMyRoleInOrganization,
   getOrganizationData,
   organizationActions,
   OrganizationInfo
 } from '@/entities/organization';
 import TabPicker from './components/tab-picker/TabPicker.tsx';
 import { useSelector } from 'react-redux';
-import { Tabs } from './components/tab-picker/model/tabs.ts';
+import { Tabs, tabs } from './components/tab-picker/model/tabs.ts';
 import { useCallback, useEffect, useState } from 'react';
 import { SidebarOpener } from '@/widgets/sidebar-opener';
 import { OrganizationPicker } from '@/widgets/pickers/organization-picker';
@@ -21,6 +21,7 @@ import { RoutePath } from '@/shared/config/routeConfig/routeConfig.tsx';
 import Settings from './components/tabs/settings/Settings.tsx';
 import useWindowWidth from '@/shared/lib/hooks/useWindowWidth.ts';
 import { classNames } from '@/shared/lib/utils/classNames.ts';
+import { getUserData } from '@/entities/user';
 
 const ManageOrganization = () => {
   const { orgId, tab } = useParams<{ orgId?: string; tab?: string; }>();
@@ -29,6 +30,7 @@ const ManageOrganization = () => {
   const navigate = useNavigate();
   const windowWidth = useWindowWidth();
 
+  const user = useSelector(getUserData)!;
   const organizations = useSelector(getOrganizationData)!;
   const teams = useSelector(getTeamData)!;
 
@@ -38,16 +40,22 @@ const ManageOrganization = () => {
   const [isShowDescription, setIsShowDescription] = useState<boolean>(false);
 
   useEffect(() => {
-    if (tab) {
-      if (tab === Tabs.SETTINGS.toLowerCase()) {
-        setCurrentTab(Tabs.SETTINGS);
+    if (tab && selectedOrganization) {
+      const myRole = getMyRoleInOrganization(selectedOrganization, user);
+
+      if (tab === Tabs.SETTINGS.toLowerCase() && selectedOrganization) {
+        if (tabs.SETTINGS.access?.includes(myRole)) {
+          setCurrentTab(Tabs.SETTINGS);
+        } else {
+          navigate(`${RoutePath.organization}/${orgId}`);
+        }
       } else {
         setCurrentTab(Tabs.TEAMS);
       }
     } else {
       setCurrentTab(Tabs.MEMBERS);
     }
-  }, [tab]);
+  }, [tab, selectedOrganization]);
 
   useEffect(() => {
     const loadOrganization = async () => {

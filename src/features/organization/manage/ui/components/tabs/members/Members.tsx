@@ -159,7 +159,7 @@ const Members: React.FC<MembersProps> = (props) => {
         position={actionMenuPosition}
         deleteHandler={deleteMember}
         deleteText={'Исключить'}
-        deleteIcon={icons.CROSS}
+        deleteIcon={icons.EXCLUDE}
         changeRoleHandler={changeRole}
         roles={isOwnerInOrganization(myRole) ? Roles : Roles.filter(r => r.name !== OrganizationRoles.ADMIN)}
       />

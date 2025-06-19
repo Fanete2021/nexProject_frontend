@@ -66,5 +66,6 @@ export enum icons {
   VIEWER = 'viewer',
   ADMIN = 'admin',
   EDITOR = 'editor',
-  ADD = 'add'
+  ADD = 'add',
+  EXCLUDE = 'exclude'
 }

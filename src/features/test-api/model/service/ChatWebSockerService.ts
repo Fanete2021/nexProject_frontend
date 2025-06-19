@@ -1,6 +1,6 @@
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
-import { NewMessage } from '@/features/chat';
+import { NewMessage } from '../types/NewMessage.ts';
 
 class ChatWebSocketService {
   private client: Client | null = null;
@@ -75,10 +75,10 @@ class ChatWebSocketService {
     }
   }
 
-  sendMessage(newMessage: NewMessage) {
+  sendMessage(newMessage: NewMessage, destination: string) {
     if (this.client?.connected) {
       this.client.publish({
-        destination: '/app/chat',
+        destination: destination,
         body: JSON.stringify(newMessage)
       });
     }
